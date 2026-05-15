@@ -1,11 +1,15 @@
 ---
 title: Ask Leida
-description: SaaS platform designed for skin care practitioners to manage clients, products, recommendations, and advice.
+description: 
 order: 1 
 slug: /
-icon: logo
+icon: down
 ---
 
-[PageLink icon="design" url="/palette" title="Palette" description="Suggested by AI" ] 
+> [CleverText text="For skin care practitioners to manage clients, products, recommendations, and advice."]
 
-> [CleverText text="Welcome to NX°"]
+[PageLink icon="warning" url="/about/stumbling-blocks" title="Stumbling Blocks" description="Key legal, regulatory and architectural risks which must be resolved before the first paying user goes live" ] 
+
+[PageLink icon="agile" url="/stories" title="User Stories" description="Agile user stories from Notion" ] 
+
+[PageLink icon="agile" url="/stories/add-new-client" title="CLIENT 01" description="Add a New Client" ] 

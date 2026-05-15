@@ -223,7 +223,7 @@ export default function RenderMarkdown({
                   color={theme.palette.text.primary}
                   underline="none"
                 >
-                  <strong>{children}</strong>
+                  {children ?? ''}
                 </MuiLink>
               );
             },

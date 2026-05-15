@@ -1,0 +1,72 @@
+{
+    "brand": "Ask Leida",
+    "modes": {
+        "light": {
+            "primary": {
+                "main": "#5F8F87",
+                "hover": "#507972",
+                "soft": "#E6F0EE"
+            },
+            "background": {
+                "base": "#F7F5F2",
+                "surface": "#FFFFFF",
+                "surfaceAlt": "#F0ECE6"
+            },
+            "border": "#D8D2CA",
+            "text": {
+                "primary": "#1E2423",
+                "secondary": "#5E6664"
+            },
+            "accent": {
+                "warm": "#C78E5B",
+                "gold": "#D8B36A",
+                "rose": "#B97C85",
+                "plum": "#5B435C"
+            },
+            "status": {
+                "success": "#4D8B68",
+                "warning": "#C08A3E",
+                "error": "#B75C5C",
+                "info": "#5B84B2"
+            }
+        },
+        "dark": {
+            "primary": {
+                "main": "#7FB2AA",
+                "hover": "#90C1BA",
+                "soft": "#203432"
+            },
+            "background": {
+                "base": "#121716",
+                "surface": "#1B2221",
+                "surfaceAlt": "#26302E"
+            },
+            "border": "#384543",
+            "text": {
+                "primary": "#F3F1ED",
+                "secondary": "#B7BDBB"
+            },
+            "accent": {
+                "warm": "#C78E5B",
+                "gold": "#D8B36A",
+                "rose": "#B97C85",
+                "plum": "#5B435C"
+            },
+            "status": {
+                "success": "#69B387",
+                "warning": "#E0AE63",
+                "error": "#D98181",
+                "info": "#7EA8D8"
+            }
+        }
+    },
+    "typography": {
+        "heading": [
+            "Cormorant Garamond",
+            "Fraunces"
+        ],
+        "body": [
+            "Inter"
+        ]
+    }
+}

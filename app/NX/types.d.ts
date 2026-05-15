@@ -53,18 +53,28 @@ export type T_Config = {
             themeSwitching: boolean;
             defaultTheme: string;
             themes: {
-                [key: string]: {
-                    mode: string;
-                    primary: string;
-                    secondary: string;
-                    background: string;
-                    paper: string;
-                    text: string;
-                };
+                [key: string]: T_Theme;
             };
         };
     };
 }
+
+// Theme type for DesignSystem themes (light/dark)
+export type T_Theme = {
+    mode: string;
+    primary: string | { main: string; [key: string]: any };
+    secondary: string | { main: string; [key: string]: any };
+    background: string | { base: string; [key: string]: any };
+    paper: string;
+    border?: string;
+    text: string | { primary: string; secondary?: string; [key: string]: any };
+    accent?: Record<string, string>;
+    status?: Record<string, string>;
+    typography?: {
+        heading?: string[];
+        body?: string[];
+    };
+};
 
 export type T_Meta = {
     siteName?: string;
@@ -362,6 +372,7 @@ export type I_Icon = {
     | 'geo'
     | 'docker'
     | 'scuba'
+    | 'agile'
     | 'js'
     | 'javascript'
     | 'oliver'

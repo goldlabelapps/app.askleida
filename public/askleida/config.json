@@ -1,0 +1,46 @@
+{
+    "tenant": "askleida",
+    "siteName": "Ask Leida",
+    "description": "SaaS platform designed for skin care practitioners to manage clients, products, recommendations, and advice.",
+    "url": "https://askleida.goldlabel.pro",
+    "owner": {
+        "name": "Millie",
+        "email": "hello@askleida.com"
+    },
+    "favicon": "/askleida/svg/favicon.svg",
+    "avatars": {
+        "light": "/askleida/svg/avatarLight.svg",
+        "dark": "/askleida/svg/avatarDark.svg"
+    },
+    "images": {
+        "light": "/askleida/png/python.png",
+        "dark": "/askleida/png/python.png"
+    },
+    "cartridges": {
+        "paywall": {
+            "enabled": false
+        },
+        "designSystem": {
+            "themeSwitching": true,
+            "defaultTheme": "light",
+            "themes": {
+                "light": {
+                    "mode": "light",
+                    "primary": "#364450",
+                    "secondary": "#364450",
+                    "background": "#eaf0f5",
+                    "paper": "#EEF7FF",
+                    "text": "#000"
+                },
+                "dark": {
+                    "mode": "dark",
+                    "primary": "#ffd849",
+                    "secondary": "#ffd849",
+                    "background": "#364450",
+                    "paper": "#364450",
+                    "text": "#fff"
+                }
+            }
+        }
+    }
+}

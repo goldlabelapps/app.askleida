@@ -26,9 +26,10 @@ import {
 import { RenderMarkdown } from '../NX/Shortcodes';
 
 export async function generateMetadata({ params }: { params: any }): Promise<Metadata> {
+
+    const tenant = process.env.NEXT_PUBLIC_TENANT || "nx";
     const resolvedParams = typeof params.then === 'function' ? await params : params;
     const slugArr = resolvedParams?.slug || [];
-    const tenant = process.env.NEXT_PUBLIC_TENANT || "nx";
     const { config } = getTenant(tenant as T_Tenant);
     const filePath = serverUseMDBySlug(slugArr, tenant);
     let frontmatter: T_Frontmatter = {};

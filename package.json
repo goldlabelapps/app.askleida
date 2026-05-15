@@ -1,8 +1,8 @@
 {
-  "name": "goldlabelpro",
-  "version": "2.1.8",
+  "name": "askleida",
+  "version": "1.0.0",
   "scripts": {
-    "dev": "yarn kill && yarn install && rm -rf .next && next dev -p 2027 --webpack",
+    "dev": "yarn kill && yarn install && rm -rf .next && next dev -p 1888 --webpack",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",

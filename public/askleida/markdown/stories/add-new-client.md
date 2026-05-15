@@ -1,6 +1,6 @@
 ---
 title: CLIENT 01
-description: Add a New Client
+description: Add New Client
 order: 220
 slug: /stories/add-new-client
 icon: agile

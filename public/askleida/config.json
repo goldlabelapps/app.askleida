@@ -1,7 +1,7 @@
 {
     "tenant": "askleida",
     "siteName": "Ask Leida",
-    "description": "SaaS platform designed for skin care practitioners to manage clients, products, recommendations, and advice.",
+    "description": "Where skin care practitioners can manage clients, products, recommendations, and advice",
     "url": "https://askleida.goldlabel.pro",
     "owner": {
         "name": "Millie",
@@ -18,7 +18,7 @@
     },
     "cartridges": {
         "paywall": {
-            "enabled": false
+            "enabled": true
         },
         "designSystem": {
             "themeSwitching": true,
@@ -26,19 +26,61 @@
             "themes": {
                 "light": {
                     "mode": "light",
-                    "primary": "#364450",
-                    "secondary": "#364450",
-                    "background": "#eaf0f5",
-                    "paper": "#EEF7FF",
-                    "text": "#000"
+                    "primary": {
+                        "main": "#5F8F87",
+                        "hover": "#507972",
+                        "soft": "#E6F0EE"
+                    },
+                    "light": {
+                        "mode": "light",
+                        "primary": {
+                            "main": "#5F8F87",
+                            "hover": "#507972",
+                            "soft": "#E6F0EE"
+                        },
+                        "secondary": "#364450",
+                        "background": {
+                            "base": "#F7F5F2",
+                            "surface": "#FFFFFF",
+                            "surfaceAlt": "#F0ECE6"
+                        },
+                        "paper": "#EEF7FF",
+                        "border": "#D8D2CA",
+                        "text": {
+                            "primary": "#1E2423",
+                            "secondary": "#5E6664"
+                        },
+                        "accent": {
+                            "warm": "#C78E5B",
+                            "gold": "#D8B36A",
+                            "rose": "#B97C85",
+                            "plum": "#5B435C"
+                        },
+                        "status": {
+                            "success": "#4D8B68",
+                            "warning": "#C08A3E",
+                            "error": "#B75C5C",
+                            "info": "#5B84B2"
+                        }
+                    },
+                    "dark": {
+                        "mode": "dark",
+                        "primary": "#ffd849",
+                        "secondary": "#ffd849",
+                        "background": "#364450",
+                        "paper": "#364450",
+                        "text": "#fff"
+                    }
                 },
-                "dark": {
-                    "mode": "dark",
-                    "primary": "#ffd849",
-                    "secondary": "#ffd849",
-                    "background": "#364450",
-                    "paper": "#364450",
-                    "text": "#fff"
+                "typography": {
+                    "heading": [
+                        "Cormorant Garamond",
+                        "Fraunces"
+                    ],
+                    "body": [
+                        "Cormorant Garamond",
+                        "Fraunces"
+                    ]
                 }
             }
         }

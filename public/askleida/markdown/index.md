@@ -8,4 +8,4 @@ icon: logo
 
 [PageLink icon="design" url="/palette" title="Palette" description="Suggested by AI" ] 
 
-> # [CleverText text="Welcome to NX°"]
+> [CleverText text="Welcome to NX°"]

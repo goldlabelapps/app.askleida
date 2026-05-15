@@ -86,7 +86,16 @@ export default async function Page(props: any) {
     while (slugArr.length > 1 && slugArr[slugArr.length - 1] === "") slugArr.pop();
     const tenant = process.env.NEXT_PUBLIC_TENANT || "nx";
     const { config: rawConfig } = getTenant(tenant as T_Tenant);
-    const config = { ...rawConfig, tenant: tenant as T_Tenant };
+    // Ensure config is a plain object and tenant is set
+    let config: any = rawConfig;
+    if (typeof rawConfig !== 'object' || Array.isArray(rawConfig)) {
+        throw new Error('Config is not a valid object. Check config.json export.');
+    }
+    if (!('tenant' in config)) {
+        config = { ...config, tenant };
+    }
+    // Debug: Uncomment to inspect config structure
+    // console.log('Config:', config);
     const filePath = serverUseMDBySlug(slugArr, tenant);
     if (!filePath || !fs.existsSync(filePath)) notFound();
     let title = tenant.toUpperCase();

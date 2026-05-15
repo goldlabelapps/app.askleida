@@ -2,15 +2,17 @@ import { createTheme } from '@mui/material';
 import { T_Theme } from '../../types';
 
 export function useMUITheme(t: T_Theme) {
+  
   if (!t) return;
-  // Support both string and object for t.primary, t.secondary, t.background, t.text
+ 
   const getMain = (val: any, fallback: string = '#1976d2') => {
     if (typeof val === 'string') return val;
     if (val && typeof val.main === 'string') return val.main;
     return fallback;
   };
-  // Typography fontFamily from config (typography.heading, typography.body)
-  // If t.typography exists, use it for fontFamily
+
+  
+  
   const headingFont = t?.typography?.heading?.join(', ') || 'Cormorant Garamond, Fraunces, serif';
   const bodyFont = t?.typography?.body?.join(', ') || 'Inter, sans-serif';
   return createTheme({
@@ -18,22 +20,20 @@ export function useMUITheme(t: T_Theme) {
       mode: (t.mode as 'light' | 'dark') ?? 'light',
       primary: { main: getMain(t.primary) },
       secondary: { main: getMain(t.secondary) },
-      success: { main: getMain(t.background) },
-      info: { main: getMain(t.text, '#1976d2') },
-      // warning: { main: getMain(t.background) },
-      // error: { main: getMain(t.background) },
-      // divider: t.border,
       background: {
         default: typeof t.background === 'string' ? t.background : t.background?.base,
         paper: t.paper,
       },
       text: {
         primary: typeof t.text === 'string' ? t.text : t.text?.primary,
-        secondary: typeof t.text === 'string' ? t.primary : t.text?.secondary,
+        secondary:
+          typeof t.text === 'string'
+            ? (typeof t.primary === 'string' ? t.primary : t.primary?.main)
+            : t.text?.secondary,
       },
     },
     typography: {
-      fontSize: 18, // base font size (default is 14)
+      fontSize: 20,
       fontFamily: bodyFont,
       h1: { fontSize: '5rem', fontWeight: 'normal', fontFamily: headingFont },
       h2: { fontSize: '4rem', fontWeight: 'normal', fontFamily: headingFont },
@@ -70,28 +70,28 @@ export function useMUITheme(t: T_Theme) {
           h4: { fontWeight: "normal" },
           h5: { fontWeight: "normal" },
           h6: { fontWeight: "normal" },
-          subtitle1: { color: t.primary },
-          subtitle2: { color: t.primary },
+          subtitle1: { color: typeof t.primary === 'string' ? t.primary : t.primary?.main },
+          subtitle2: { color: typeof t.primary === 'string' ? t.primary : t.primary?.main },
         },
       },
       MuiFormLabel: {
         styleOverrides: {
-          root: { color: t.primary },
+          root: { color: typeof t.primary === 'string' ? t.primary : t.primary?.main },
         },
       },
       MuiInputLabel: {
         styleOverrides: {
-          root: { color: t.primary },
+          root: { color: typeof t.primary === 'string' ? t.primary : t.primary?.main },
         },
       },
       MuiOutlinedInput: {
         styleOverrides: {
-          notchedOutline: { borderColor: t.primary },
+          notchedOutline: { borderColor: typeof t.primary === 'string' ? t.primary : t.primary?.main },
         },
       },
       MuiFormHelperText: {
         styleOverrides: {
-          root: { color: t.primary },
+          root: { color: typeof t.primary === 'string' ? t.primary : t.primary?.main },
         },
       },
     },

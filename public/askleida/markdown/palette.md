@@ -1,5 +1,5 @@
 ---
-title: Colours
+title: Palette
 description: AI Generated
 order: 10
 slug: /palette

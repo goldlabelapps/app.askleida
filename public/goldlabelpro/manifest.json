@@ -1,0 +1,26 @@
+{
+  "short_name": "Goldlabel°",
+  "name": "Goldlabel°",
+  "theme_color": "#364450",
+  "background_color": "#364450",
+  "display": "fullscreen",
+  "orientation": "any",
+  "scope": "/",
+  "start_url": "/",
+  "splash_pages": null,
+  "icons": [
+    {
+      "src": "/goldlabelpro/png/favicon.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/goldlabelpro/svg/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512",
+      "purpose": "any"
+    }
+  ]
+}
+

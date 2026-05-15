@@ -1,18 +1,16 @@
 ﻿---
 title: Stumbling Blocks
 description: Key legal, regulatory and architectural risks 
-order: 200
-slug: /stumbling-blocks
+order: 110
+slug: /about/stumbling-blocks
 icon: warning
 ---
 
-This document identifies the key legal, regulatory and architectural risks that must be designed against from day one. Each risk has a mitigation action. Status should be updated as build progresses. Priority items must be resolved before the first real user goes live.
+> [CleverText text="Nothing here is optional. Every Critical item must be resolved before the first paying user goes live."]
 
-Nothing here is optional. Every Critical item must be resolved before the first paying user goes live. This document will be reviewed with a specialist Data Protection Solicitor and updated after that review.
+This document should be reviewed with a specialist Data Protection Solicitor and updated after that review.
 
-# Stumbling Blocks: Risk Register
-
-## Data Consent Architecture
+#### Data Consent Architecture
 
 - **Existential Risk:** Consent not structured at point of collection to permit secondary use of anonymised data. Retrofitting consent after users are live destroys data asset value in due diligence.
 
@@ -22,7 +20,7 @@ Nothing here is optional. Every Critical item must be resolved before the first 
 - **Priority:** High
 - **Status:** Not started
 
-## Medical Device Boundary (SaMD)
+#### Medical Device Boundary (SaMD)
 
 - **Existential Risk:** If marketing claims or PDF language implies Leida diagnoses conditions or acts as Clinical Decision Support, it triggers MHRA Software as a Medical Device classification, ASA enforcement and potential FDA scrutiny if expanding to US.
 
@@ -32,7 +30,7 @@ Nothing here is optional. Every Critical item must be resolved before the first 
 - **Priority:** Medium
 - **Status:** Not started
 
-## GDPR & Data Governance
+#### GDPR & Data Governance
 
 - **Existential Risk:** Skin type, concerns and treatment data is special category data under UK GDPR. Mishandled sensitive data destroys enterprise value overnight — see 23andMe bankruptcy and GoodRx FTC action. Pseudonymised data is still personal data.
 
@@ -42,7 +40,7 @@ Nothing here is optional. Every Critical item must be resolved before the first 
 - **Priority:** High
 - **Status:** Not started
 
-## Anthropic DPA & Sub-Processor Chain
+#### Anthropic DPA & Sub-Processor Chain
 
 - **Existential Risk:** Client skin data and concerns passed raw to the Claude API may constitute special category data. This creates a GDPR sub-processor obligation and potential data breach risk if not handled correctly.
 
@@ -52,7 +50,7 @@ Nothing here is optional. Every Critical item must be resolved before the first 
 - **Priority:** High
 - **Status:** Not started
 
-## AI Liability & Hallucination Disclaimers
+#### AI Liability & Hallucination Disclaimers
 
 - **Existential Risk:** A practitioner relies on a Leida recommendation that causes client harm and claims Leida acted as clinical decision support. One hallucinated contraindication destroys trust and triggers regulatory scrutiny.
 
@@ -63,7 +61,7 @@ Nothing here is optional. Every Critical item must be resolved before the first 
 - **Status:** Not started
 - **Note:** FUTURE PHASE FEATURE
 
-## Audit Logging & Data Integrity
+#### Audit Logging & Data Integrity
 
 - **Existential Risk:** A strategic acquirer will require evidence that recommendation records have integrity — that timestamps are reliable and records haven't been modified after the fact. Missing or retrofitted audit logs are a due diligence red flag that can crater exit valuation.
 
@@ -73,7 +71,7 @@ Nothing here is optional. Every Critical item must be resolved before the first 
 - **Priority:** High
 - **Status:** Not started
 
-## Data Portability & Deletion Pipeline
+#### Data Portability & Deletion Pipeline
 
 - **Existential Risk:** Under UK GDPR, practitioners have the right to export their data and request full deletion. A practitioner leaving who cannot retrieve their compliance records — or whose data cannot be cleanly deleted — is both a regulatory breach and a reputational risk.
 
@@ -83,7 +81,7 @@ Nothing here is optional. Every Critical item must be resolved before the first 
 - **Priority:** High
 - **Status:** Not started
 
-## Affiliate Disclosure Compliance
+#### Affiliate Disclosure Compliance
 
 - **Existential Risk:** ASA rules require clear affiliate disclosure — "affiliate link" or "ad" — visible to the consumer. Disclosure only in the PDF footer may not satisfy the requirement. Non-compliance triggers ASA enforcement and undermines practitioner trust.
 
@@ -93,7 +91,7 @@ Nothing here is optional. Every Critical item must be resolved before the first 
 - **Priority:** Medium
 - **Status:** Not started
 
-## Database Architecture & Data Taxonomy
+#### Database Architecture & Data Taxonomy
 
 - **Existential Risk:** A poorly architected database — fragmented records, inconsistent taxonomy, unextractable data — costs millions at exit because the data asset cannot be cleanly verified or licensed. This is the single biggest technical risk to long-term valuation.
 
@@ -103,7 +101,7 @@ Nothing here is optional. Every Critical item must be resolved before the first 
 - **Priority:** High
 - **Status:** Not started
 
-## Neutrality & Conflict of Interest
+#### Neutrality & Conflict of Interest
 
 - **Existential Risk:** Deep alignment with a single brand (e.g. Wish) or an affiliate model without transparency creates a perceived conflict of interest. This deters other brands and practitioners and undermines the trust that makes the data asset valuable.
 
@@ -114,7 +112,7 @@ Nothing here is optional. Every Critical item must be resolved before the first 
 - **Status:** Not started
 - **Note:** FUTURE PHASE FEATURE
 
-## International Expansion Compliance
+#### International Expansion Compliance
 
 - **Existential Risk:** Crossing borders triggers complex data localisation requirements, different consent regimes and potentially HIPAA obligations in the US. Moving too fast internationally before UK architecture is hardened creates compounding compliance debt.
 

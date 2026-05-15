@@ -1,0 +1,26 @@
+{
+  "short_name": "Ask Leida",
+  "name": "Ask Leida",
+  "theme_color": "#FFFFFF",
+  "background_color": "#FFFFFF",
+  "display": "fullscreen",
+  "orientation": "any",
+  "scope": "/",
+  "start_url": "/",
+  "splash_pages": null,
+  "icons": [
+    {
+      "src": "/askleida/png/favicon.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/askleida/svg/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512",
+      "purpose": "any"
+    }
+  ]
+}
+

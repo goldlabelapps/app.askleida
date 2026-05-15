@@ -362,6 +362,7 @@ export type I_Icon = {
     | 'geo'
     | 'docker'
     | 'scuba'
+    | 'agile'
     | 'js'
     | 'javascript'
     | 'oliver'

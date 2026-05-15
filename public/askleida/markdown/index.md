@@ -1,11 +1,9 @@
 ---
 title: Ask Leida
-description: SaaS platform designed for skin care practitioners to manage clients, products, recommendations, and advice.
+description: For skin care practitioners to manage clients, products, recommendations, and advice.
 order: 1 
 slug: /
-icon: logo
+icon: down
 ---
 
-[PageLink icon="design" url="/palette" title="Palette" description="Suggested by AI" ] 
-
-> [CleverText text="Welcome to NX°"]
+[PageLink icon="agile" url="/stories" title="User Stories" description="Agile user stories from Notion" ] 

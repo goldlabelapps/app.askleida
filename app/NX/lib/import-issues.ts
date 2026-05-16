@@ -7,8 +7,16 @@ import path from 'path';
 import csv from 'csv-parser';
 import axios from 'axios';
 
+
 const GITHUB_API = 'https://api.github.com';
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+// const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const GITHUB_TOKEN = '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';
+
+
+if (!GITHUB_TOKEN) {
+  console.error('Error: GITHUB_TOKEN environment variable is not set. Please set it before running this script.');
+  process.exit(1);
+}
 
 
 async function delay(ms: number) {
@@ -86,6 +94,8 @@ function parseCSVFile(filePath: string): Promise<Array<{ title: string; body: st
 
 async function processDirectory(dir: string, token: string, owner: string, repo: string): Promise<void> {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
+  let failedLookups = 0;
+  const MAX_FAILED_LOOKUPS = 3;
   for (const entry of entries) {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory()) {
@@ -97,22 +107,40 @@ async function processDirectory(dir: string, token: string, owner: string, repo:
         await delay(500);
         if (existing) {
           console.log(`Issue already exists: ${title} (ID: ${existing.number})`);
+          failedLookups = 0;
         } else {
-          await createIssue(token, owner, repo, title, body);
+          const created = await createIssue(token, owner, repo, title, body);
+          if (!created) {
+            failedLookups++;
+            if (failedLookups >= MAX_FAILED_LOOKUPS) {
+              console.error(`Too many consecutive unsuccessful lookups. Exiting gracefully.`);
+              process.exit(0);
+            }
+          } else {
+            failedLookups = 0;
+          }
         }
         await delay(500);
         fs.unlinkSync(fullPath);
       } else if (entry.name.endsWith('.csv')) {
         const issues = await parseCSVFile(fullPath);
-        let anyCreated = false;
         for (const issue of issues) {
           const existing = await getIssueByTitle(token, owner, repo, issue.title);
           await delay(500);
           if (existing) {
             console.log(`Issue already exists: ${issue.title} (ID: ${existing.number})`);
+            failedLookups = 0;
           } else {
-            await createIssue(token, owner, repo, issue.title, issue.body);
-            anyCreated = true;
+            const created = await createIssue(token, owner, repo, issue.title, issue.body);
+            if (!created) {
+              failedLookups++;
+              if (failedLookups >= MAX_FAILED_LOOKUPS) {
+                console.error(`Too many consecutive unsuccessful lookups. Exiting gracefully.`);
+                process.exit(0);
+              }
+            } else {
+              failedLookups = 0;
+            }
           }
           await delay(500);
         }

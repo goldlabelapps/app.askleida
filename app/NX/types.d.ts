@@ -371,6 +371,8 @@ export type I_Icon = {
     | 'legal'
     | 'geo'
     | 'docker'
+    | 'askleida'
+    | 'leida'
     | 'scuba'
     | 'agile'
     | 'js'

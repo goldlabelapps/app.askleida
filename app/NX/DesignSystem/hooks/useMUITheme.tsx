@@ -17,7 +17,7 @@ export function useMUITheme(t: T_Theme) {
   const bodyFont = t?.typography?.body?.join(', ') || 'Inter, sans-serif';
   // Increase all font sizes by 25%
   const scale = 1.25;
-  function scaleSize(size) {
+  function scaleSize(size: string | number): string | number {
     if (typeof size === 'string' && size.endsWith('rem')) {
       const num = parseFloat(size);
       return (num * scale) + 'rem';
@@ -45,7 +45,7 @@ export function useMUITheme(t: T_Theme) {
       },
     },
     typography: {
-      fontSize: scaleSize(20),
+      fontSize: scaleSize(20) as number,
       fontFamily: bodyFont,
       h1: { fontSize: scaleSize('5rem'), fontWeight: 'normal', fontFamily: headingFont },
       h2: { fontSize: scaleSize('4rem'), fontWeight: 'normal', fontFamily: headingFont },

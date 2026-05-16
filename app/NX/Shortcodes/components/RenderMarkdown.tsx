@@ -169,7 +169,6 @@ export default function RenderMarkdown({
                   ml: 0,
                   my: 2,
                   color: theme.palette.text.secondary,
-                  fontStyle: 'italic',
                   backgroundColor:
                     theme.palette.mode === 'dark'
                       ? alpha(theme.palette.primary.main, 0.05)

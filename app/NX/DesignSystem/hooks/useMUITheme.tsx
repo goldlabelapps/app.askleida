@@ -15,6 +15,18 @@ export function useMUITheme(t: T_Theme) {
   
   const headingFont = t?.typography?.heading?.join(', ') || 'Cormorant Garamond, Fraunces, serif';
   const bodyFont = t?.typography?.body?.join(', ') || 'Inter, sans-serif';
+  // Increase all font sizes by 25%
+  const scale = 1.25;
+  function scaleSize(size: string | number): string | number {
+    if (typeof size === 'string' && size.endsWith('rem')) {
+      const num = parseFloat(size);
+      return (num * scale) + 'rem';
+    }
+    if (typeof size === 'number') {
+      return size * scale;
+    }
+    return size;
+  }
   return createTheme({
     palette: {
       mode: (t.mode as 'light' | 'dark') ?? 'light',
@@ -33,21 +45,21 @@ export function useMUITheme(t: T_Theme) {
       },
     },
     typography: {
-      fontSize: 20,
+      fontSize: scaleSize(20) as number,
       fontFamily: bodyFont,
-      h1: { fontSize: '5rem', fontWeight: 'normal', fontFamily: headingFont },
-      h2: { fontSize: '4rem', fontWeight: 'normal', fontFamily: headingFont },
-      h3: { fontSize: '3rem', fontWeight: 'normal', fontFamily: headingFont },
-      h4: { fontSize: '2.5rem', fontWeight: 'normal', fontFamily: headingFont },
-      h5: { fontSize: '2rem', fontWeight: 'normal', fontFamily: headingFont },
-      h6: { fontSize: '1.5rem', fontWeight: 'normal', fontFamily: headingFont },
-      body1: { fontSize: '1.15rem', fontFamily: bodyFont },
-      body2: { fontSize: '1rem', fontFamily: bodyFont },
-      subtitle1: { fontSize: '1.1rem', color: getMain(t.primary), fontFamily: headingFont },
-      subtitle2: { fontSize: '1rem', color: getMain(t.primary), fontFamily: headingFont },
-      button: { fontSize: '1rem', fontFamily: bodyFont },
-      caption: { fontSize: '0.95rem', fontFamily: bodyFont },
-      overline: { fontSize: '0.95rem', fontFamily: bodyFont },
+      h1: { fontSize: scaleSize('5rem'), fontWeight: 'normal', fontFamily: headingFont },
+      h2: { fontSize: scaleSize('4rem'), fontWeight: 'normal', fontFamily: headingFont },
+      h3: { fontSize: scaleSize('3rem'), fontWeight: 'normal', fontFamily: headingFont },
+      h4: { fontSize: scaleSize('2.5rem'), fontWeight: 'normal', fontFamily: headingFont },
+      h5: { fontSize: scaleSize('2rem'), fontWeight: 'normal', fontFamily: headingFont },
+      h6: { fontSize: scaleSize('1.5rem'), fontWeight: 'normal', fontFamily: headingFont },
+      body1: { fontSize: scaleSize('1.15rem'), fontFamily: bodyFont },
+      body2: { fontSize: scaleSize('1rem'), fontFamily: bodyFont },
+      subtitle1: { fontSize: scaleSize('1.1rem'), color: getMain(t.primary), fontFamily: headingFont },
+      subtitle2: { fontSize: scaleSize('1rem'), color: getMain(t.primary), fontFamily: headingFont },
+      button: { fontSize: scaleSize('1rem'), fontFamily: bodyFont },
+      caption: { fontSize: scaleSize('0.95rem'), fontFamily: bodyFont },
+      overline: { fontSize: scaleSize('0.95rem'), fontFamily: bodyFont },
     },
     components: {
       MuiButton: {

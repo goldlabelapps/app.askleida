@@ -191,6 +191,7 @@ import InstallIcon from '@mui/icons-material/InstallDesktop';
 import StopIcon from '@mui/icons-material/Stop';
 import RandomIcon from '@mui/icons-material/Shuffle';
 import AgileIcon from '@mui/icons-material/Badge';
+import LeidaIcon from '@mui/icons-material/SupportAgent';
 
 
 export default function Icon({ icon, color }: I_Icon) {
@@ -199,6 +200,12 @@ export default function Icon({ icon, color }: I_Icon) {
   switch (icon) {
     case 'agile':
       iconFragment = <AgileIcon color={color} />;
+      break;
+    case 'askleida':
+      iconFragment = <LeidaIcon color={color} />;
+      break;
+    case 'leida':
+      iconFragment = <LeidaIcon color={color} />;
       break;
     case 'stop':
       iconFragment = <StopIcon color={color} />;

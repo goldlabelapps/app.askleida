@@ -10,7 +10,7 @@
             "background": {
                 "base": "#F7F5F2",
                 "surface": "#FFFFFF",
-                "surfaceAlt": "#F0ECE6"
+                "surfaceAlt": "#FFF"
             },
             "border": "#D8D2CA",
             "text": {

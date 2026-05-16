@@ -6,6 +6,9 @@ import { DesignSystem, Feedback } from './DesignSystem';
 import { useDispatch } from './Uberedux';
 import { setDesignSystem, useDesignSystem } from './DesignSystem';
 
+// Import global fonts
+import './fonts.css';
+
 const NX: React.FC<I_NX> = ({
     children,
     config,

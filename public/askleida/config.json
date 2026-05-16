@@ -2,7 +2,7 @@
     "tenant": "askleida",
     "siteName": "Ask Leida",
     "description": "Where skin care practitioners can manage clients, products, recommendations, and advice",
-    "url": "https://askleida.goldlabel.pro",
+    "url": "https://askleida.vercel.app/",
     "owner": {
         "name": "Millie",
         "email": "hello@askleida.com"
@@ -13,11 +13,12 @@
         "dark": "/askleida/svg/avatarDark.svg"
     },
     "images": {
-        "light": "/askleida/jpg/target.jpg",
-        "dark": "/askleida/jpg/target.jpg"
+        "light": "/askleida/png/palette.png",
+        "dark": "/askleida/png/palette.png"
     },
     "cartridges": {
         "paywall": {
+            "provider": "supabase",
             "enabled": true
         },
         "designSystem": {
@@ -34,14 +35,14 @@
                     "secondary": "#364450",
                     "background": {
                         "base": "#F7F5F2",
-                        "surface": "#FFFFFF",
-                        "surfaceAlt": "#F0ECE6"
+                        "surface": "#F7F5F2",
+                        "surfaceAlt": "#F7F5F2"
                     },
-                    "paper": "#EEF7FF",
-                    "border": "#D8D2CA",
+                    "paper": "#FFF",
+                    "border": "#5F8F87",
                     "text": {
-                        "primary": "#1E2423",
-                        "secondary": "#5E6664"
+                        "primary": "#000",
+                        "secondary": "#000"
                     },
                     "accent": {
                         "warm": "#C78E5B",

@@ -20,6 +20,8 @@
     "@mui/x-data-grid": "^8.28.0",
     "@mui/x-tree-view": "^8.28.3",
     "@reduxjs/toolkit": "^2.11.2",
+    "axios": "^1.16.1",
+    "csv-parser": "^3.2.1",
     "firebase": "^12.10.0",
     "firebase-admin": "^13.6.0",
     "gray-matter": "^4.0.3",

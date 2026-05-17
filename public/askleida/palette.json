@@ -3,7 +3,7 @@
     "modes": {
         "light": {
             "primary": {
-                "main": "#5F8F87",
+                "main": "#5d465f",
                 "hover": "#507972",
                 "soft": "#E6F0EE"
             },
@@ -32,7 +32,7 @@
         },
         "dark": {
             "primary": {
-                "main": "#7FB2AA",
+                "main": "#5d465f",
                 "hover": "#90C1BA",
                 "soft": "#203432"
             },

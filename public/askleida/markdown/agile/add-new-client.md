@@ -2,7 +2,7 @@
 title: CLIENT 01
 description: Add New Client
 order: 220
-slug: /stories/add-new-client
+slug: /agile/add-new-client
 icon: agile
 tags: Clients
 ---

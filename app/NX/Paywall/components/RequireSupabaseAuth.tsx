@@ -1,13 +1,26 @@
 "use client";
-import React from 'react';
+
+import React, { useState } from 'react';
 import { useSupabaseAuth } from '../hooks/useSupabaseAuth';
 import SupabasePlaceholder from './SupabasePlaceholder';
 import { Backdrop, CircularProgress, Box, Typography } from '@mui/material';
+import { supabase } from '../../lib/supabase';
+
 
 export default function RequireSupabaseAuth({ children, publicUrl }: { children: React.ReactNode; publicUrl: string }) {
   const { user, loading } = useSupabaseAuth();
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
 
-  if (loading) return (
+  const handleSupabaseLogin = async (email: string, password: string) => {
+    setPending(true);
+    setError(null);
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) setError(error.message);
+    setPending(false);
+  };
+
+  if (loading || pending) return (
     <Backdrop open sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, color: '#fff' }}>
       <Box display="flex" flexDirection="column" alignItems="center">
         <CircularProgress color="inherit" />
@@ -17,6 +30,6 @@ export default function RequireSupabaseAuth({ children, publicUrl }: { children:
       </Box>
     </Backdrop>
   );
-  if (!user) return <SupabasePlaceholder publicUrl={publicUrl} />;
+  if (!user) return <SupabasePlaceholder publicUrl={publicUrl} onSupabaseLogin={handleSupabaseLogin} error={error} />;
   return <>{children}</>;
 }

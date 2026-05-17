@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: { params: any }): Promise<Met
     let title = config.siteName || "";
     let description = config.description || "";
     let image = config.images?.[themeMode] || config.images?.light || "";
-    let icon = null;
+    // let icon = null;
     if (filePath && fs.existsSync(filePath)) {
         const md = fs.readFileSync(filePath, "utf-8");
         const { data } = matter(md);
@@ -53,9 +53,9 @@ export async function generateMetadata({ params }: { params: any }): Promise<Met
         if (typeof data?.image === 'string' && data.image.trim()) {
             image = data.image;
         }
-        if (typeof data?.icon === 'string' && data.icon.trim()) {
-            icon = data.icon;
-        }
+        // if (typeof data?.icon === 'string' && data.icon.trim()) {
+        //     icon = data.icon;
+        // }
     }
     const slugPath = Array.isArray(slugArr) && slugArr.length ? slugArr.join("/") : "";
     const pageUrl = url.replace(/\/$/, "") + (slugPath ? `/${slugPath}` : "");
@@ -104,7 +104,7 @@ export default async function Page(props: any) {
     const { content, data } = matter(md);
     if (data.title) title = data.title;
     if (data.description) description = data.description;
-    const icon = (typeof data.icon === 'string' && data.icon.trim()) ? data.icon : null;
+    // const icon = (typeof data.icon === 'string' && data.icon.trim()) ? data.icon : null;
     const navItems = await serverUseNav();
     const themeMode: 'light' | 'dark' = (config?.cartridges?.designSystem?.defaultTheme 
             === 'dark') ? 'dark' : 'light';

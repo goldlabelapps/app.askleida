@@ -59,3 +59,7 @@ export {
     useIsAuthed,
     useFirebaseAuthListener,
 };
+
+// Supabase Auth
+export { useSupabaseAuth } from './hooks/useSupabaseAuth';
+export { default as RequireSupabaseAuth } from './components/RequireSupabaseAuth';

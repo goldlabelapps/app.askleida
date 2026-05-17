@@ -3,7 +3,6 @@ title: Ask Leida
 description: Manage clients, products, tips & advice
 order: 1
 slug: /
-icon: leida
 image: /askleida/png/palette.png
 tags: practitioners
 ---

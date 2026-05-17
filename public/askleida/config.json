@@ -28,7 +28,7 @@
                 "light": {
                     "mode": "light",
                     "primary": {
-                        "main": "#5F8F87",
+                        "main": "#5D465F",
                         "hover": "#507972",
                         "soft": "#E6F0EE"
                     },
@@ -59,7 +59,7 @@
                 },
                 "dark": {
                     "mode": "dark",
-                    "primary": "#ffd849",
+                    "primary": "#5D465F",
                     "secondary": "#ffd849",
                     "background": "#364450",
                     "paper": "#364450",

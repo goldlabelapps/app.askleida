@@ -63,3 +63,4 @@ export {
 // Supabase Auth
 export { useSupabaseAuth } from './hooks/useSupabaseAuth';
 export { default as RequireSupabaseAuth } from './components/RequireSupabaseAuth';
+export { default as SupabaseLogin } from './components/SupabaseLogin';

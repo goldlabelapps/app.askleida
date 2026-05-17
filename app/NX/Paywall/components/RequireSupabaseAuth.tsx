@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useSupabaseAuth } from '../hooks/useSupabaseAuth';
-import SupabasePlaceholder from './SupabasePlaceholder';
+import SupabaseLogin from './SupabaseLogin';
 import { Backdrop, CircularProgress, Box, Typography } from '@mui/material';
 import { supabase } from '../../lib/supabase';
 
@@ -30,6 +30,6 @@ export default function RequireSupabaseAuth({ children, publicUrl }: { children:
       </Box>
     </Backdrop>
   );
-  if (!user) return <SupabasePlaceholder publicUrl={publicUrl} onSupabaseLogin={handleSupabaseLogin} error={error} />;
+  if (!user) return <SupabaseLogin publicUrl={publicUrl} onSupabaseLogin={handleSupabaseLogin} error={error} />;
   return <>{children}</>;
 }

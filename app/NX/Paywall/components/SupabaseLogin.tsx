@@ -1,15 +1,15 @@
+"use client";
 import React, { useState } from "react";
 import { Typography, Box, TextField, Button, InputAdornment, IconButton, Paper } from "@mui/material";
 import { Icon } from '../../DesignSystem';
 
-
-export interface I_SupabasePlaceholder {
+export interface I_SupabaseLogin {
   publicUrl: string;
   onSupabaseLogin?: (email: string, password: string) => void;
   error?: string | null;
 }
 
-export default function SupabasePlaceholder({ publicUrl, onSupabaseLogin, error: externalError }: I_SupabasePlaceholder) {
+export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: externalError }: I_SupabaseLogin) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -31,12 +31,10 @@ export default function SupabasePlaceholder({ publicUrl, onSupabaseLogin, error:
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="40vh">
-      
       <Paper elevation={3} sx={{ p: 3, minWidth: 320 }}>
         <Typography variant="h5" color="textSecondary" align="center" sx={{ mb: 2 }}>
           Only Supabase-authenticated users authed to <b>{publicUrl}</b> can access this url.
         </Typography>
-
         <form onSubmit={handleSubmit}>
           <TextField
             label="Email"

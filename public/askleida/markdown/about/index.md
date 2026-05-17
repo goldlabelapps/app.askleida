@@ -4,6 +4,7 @@ description: Designed to grow quickly from day one.
 order: 100
 slug: /about
 icon: about
+image: /askleida/png/palette.png
 ---
 
 [PageLink icon="warning" url="/about/stumbling-blocks" title="Stumbling Blocks" description="Key legal, regulatory and architectural risks which must be resolved before the first paying user goes live" ] 

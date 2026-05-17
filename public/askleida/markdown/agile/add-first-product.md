@@ -2,7 +2,7 @@
 title: ONBOARD 02
 description: Add First Products
 order: 260
-slug: /stories/add-first-product
+slug: /agile/add-first-product
 icon: agile
 tags: Onboarding
 ---

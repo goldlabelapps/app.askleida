@@ -18,14 +18,12 @@ import { logout } from './actions/logout';
 
 // Hooks
 import { useUID } from './hooks/useUID';
-    // Supabase placeholder
-    default as SupabasePlaceholder
+// Supabase placeholder (no implementation)
 import { useAuthed } from './hooks/useAuthed';
 import { usePaywall } from './hooks/usePaywall';
 import { useAccount } from './hooks/useAccount';
 import { useIsAuthed } from './hooks/useIsAuthed';
 import { useFirebaseAuthListener } from './hooks/useFirebaseAuthListener';
-
 
 
 // Components

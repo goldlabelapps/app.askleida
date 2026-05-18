@@ -40,7 +40,9 @@ export default function Footer({
 				<Container maxWidth="lg">
 					<Toolbar>
 						<Related />
+						
 						<Box sx={{ flexGrow: 1 }} />
+						
 						{children}
 						<Box sx={{ display: 'flex', }}>
 							<Box sx={{ my: 1, mr: 0 }}>

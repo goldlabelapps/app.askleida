@@ -1,7 +1,15 @@
 "use client";
 import React, { useState } from "react";
-import { Typography, Box, TextField, Button, InputAdornment, IconButton, Paper } from "@mui/material";
-import { Icon } from '../../DesignSystem';
+import { 
+  Typography, 
+  Box, 
+  TextField, 
+  Button, 
+  InputAdornment, 
+  IconButton, 
+  Paper,
+} from "@mui/material";
+import { Icon, useConfig } from '../../DesignSystem';
 
 export interface I_SupabaseLogin {
   publicUrl: string;
@@ -14,6 +22,9 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+
+  const config = useConfig();
+  console.log('config', config);
 
   function isValidEmail(email: string) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -32,6 +43,7 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
   return (
     <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="40vh">
       <Paper elevation={3} sx={{ p: 3, minWidth: 320 }}>
+        {/* Millie */}
         <Typography variant="h5" color="textSecondary" align="center" sx={{ mb: 2 }}>
           Only Supabase-authenticated users authed to <b>{publicUrl}</b> can access this url.
         </Typography>

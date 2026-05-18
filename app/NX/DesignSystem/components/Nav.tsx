@@ -21,6 +21,7 @@ import {
 } from '../../DesignSystem';
 import { useDispatch } from '../../Uberedux';
 import { Share } from '../../../Virus';
+import { SignOutBtn } from '../../Paywall';
 
 function sortNavItems(items: any[]) {
     return [...items].sort((a, b) => {
@@ -156,6 +157,11 @@ const Nav: React.FC<I_Nav> = ({
                         role="presentation">
                         <TreeNav navItems={navItems}/>
                         <Box sx={{ mt: 'auto', display: 'flex' }}>
+
+                            <Box sx={{ pb: 1.5, ml: 2 }}>
+                                <SignOutBtn />
+                            </Box>
+                            
                             {themeSwitching && <>
                                 <Box sx={{ pb: 1.5, ml:2 }}>
                                     <IconButton onClick={handleThemeModeToggle}>

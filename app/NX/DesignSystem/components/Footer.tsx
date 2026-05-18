@@ -13,9 +13,6 @@ import {
 	Related,
 } from '../../DesignSystem';
 
-// Import the SignOutBtn from Paywall
-import { SignOutBtn } from '../../Paywall';
-
 export interface I_Footer {
 	children?: React.ReactNode;
 	frontmatter?: T_Frontmatter;
@@ -45,8 +42,7 @@ export default function Footer({
 						<Related />
 						
 						<Box sx={{ flexGrow: 1 }} />
-						{/* Logout button using Paywall SignOutBtn */}
-						<SignOutBtn />
+						
 						{children}
 						<Box sx={{ display: 'flex', }}>
 							<Box sx={{ my: 1, mr: 0 }}>

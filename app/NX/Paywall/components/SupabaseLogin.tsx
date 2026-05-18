@@ -42,11 +42,15 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="40vh">
-      <Paper elevation={3} sx={{ p: 3, minWidth: 320 }}>
-        {/* Millie */}
+      <Paper elevation={3} sx={{ p: 3, width: 320 }}>
+        {/* Millie 
+        Access to this page is restricted to users who have signed in with Supabase and are authorized for <b>{publicUrl}</b>.
+        */}
+
         <Typography variant="h5" color="textSecondary" align="center" sx={{ mb: 2 }}>
-          Only Supabase-authenticated users authed to <b>{publicUrl}</b> can access this url.
+          Access to this page is restricted to users who have signed in with Supabase and are authorized for <b>{publicUrl}</b>.
         </Typography>
+
         <form onSubmit={handleSubmit}>
           <TextField
             label="Email"

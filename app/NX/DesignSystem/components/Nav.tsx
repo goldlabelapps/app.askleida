@@ -35,7 +35,6 @@ function sortNavItems(items: any[]) {
 const Nav: React.FC<I_Nav> = ({
     navItems,
     mode = 'desktop',
-    frontmatter,
 }) => {
 
     const router = useRouter();
@@ -45,6 +44,7 @@ const Nav: React.FC<I_Nav> = ({
     const designSystem = useDesignSystem();
     const currentThemeMode = designSystem?.themeMode ?? 'light';
     const { themeSwitching } = designSystem || {};
+    const { sharing } = designSystem || {};
 
     const handleThemeModeToggle = () => {
         const nextMode = currentThemeMode === 'light' ? 'dark' : 'light';
@@ -54,7 +54,6 @@ const Nav: React.FC<I_Nav> = ({
 
     const { navigateTo } = require('../../../NX/DesignSystem');
 
-
     function handleNavClick(slug?: string) {
         if (typeof slug === 'string' && slug.trim().length > 0) {
             dispatch(navigateTo(router, slug));
@@ -62,16 +61,6 @@ const Nav: React.FC<I_Nav> = ({
         } else {
             console.log('No valid slug for nav item:', slug);
         }
-    }
-
-    // function handleHomeClick() {
-    //         dispatch(navigateTo(router, '/'));
-    //         setDrawerOpen(false);
-    // }
-
-    function handleGithubClick() {
-        dispatch(navigateTo(router, '/account'));
-        setDrawerOpen(false);
     }
 
     function renderNavItems(
@@ -135,32 +124,29 @@ const Nav: React.FC<I_Nav> = ({
                     open={drawerOpen}
                     onClose={() => setDrawerOpen(false)}>
 
-                    <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+                    {sharing && <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
                         <Share size="small" />
-                    </Box>
-
-                    {/* <ListItemButton onClick={handleGithubClick} sx={{ m: 2 }}>
-                        <ListItemIcon>
-                            <Icon icon={'user'} color="primary" />
-                        </ListItemIcon>
-                        <ListItemText primary={'Account'} />
-                    </ListItemButton> */}
+                    </Box>}
                     
                     <Box
+                        role="presentation"
                         sx={{
                             height: '100vh',
                             display: 'flex',
                             flexDirection: 'column',
                             p: 1,
                             minWidth: 310,
-                        }}
-                        role="presentation">
+                        }}>
                         <TreeNav navItems={navItems}/>
                         <Box sx={{ mt: 'auto', display: 'flex' }}>
 
-                            <Box sx={{ pb: 1.5, ml: 2 }}>
-                                <SignOutBtn />
+                            <Box sx={{ mt: 3, ml: 3 }}>
+                                <Typography variant='body2'>
+                                    vs {pJSON.version}
+                                </Typography>
                             </Box>
+
+                            <Box sx={{ flexGrow: 1 }} />
                             
                             {themeSwitching && <>
                                 <Box sx={{ pb: 1.5, ml:2 }}>
@@ -170,11 +156,8 @@ const Nav: React.FC<I_Nav> = ({
                                 </Box>
                             </>}
                             
-                            <Box sx={{ flexGrow: 1 }} />
-                            <Box sx={{mt: 1}}>
-                                <Typography variant='caption' fontSize={10}>
-                                    NX° {pJSON.version}
-                                </Typography>
+                            <Box sx={{ pb: 1.5, mr: 2 }}>
+                                <SignOutBtn />
                             </Box>
                         </Box>
                         

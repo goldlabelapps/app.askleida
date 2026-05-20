@@ -5,12 +5,16 @@ import { useSupabaseAuth } from '../hooks/useSupabaseAuth';
 import SupabaseLogin from './SupabaseLogin';
 import { Backdrop, CircularProgress, Box, Typography } from '@mui/material';
 import { supabase } from '../../lib/supabase';
-
+import { NX } from '../../../NX';
+import { getTenant } from '../../../NX/lib/getTenant';
 
 export default function RequireSupabaseAuth({ children, publicUrl }: { children: React.ReactNode; publicUrl: string }) {
   const { user, loading } = useSupabaseAuth();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+
+  // Get config for NX wrapper
+  const { config } = getTenant();
 
   const handleSupabaseLogin = async (email: string, password: string) => {
     setPending(true);
@@ -20,16 +24,22 @@ export default function RequireSupabaseAuth({ children, publicUrl }: { children:
     setPending(false);
   };
 
-  if (loading || pending) return (
-    <Backdrop open sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, color: '#fff' }}>
-      <Box display="flex" flexDirection="column" alignItems="center">
-        <CircularProgress color="inherit" />
-        <Typography variant="h6" sx={{ mt: 2 }}>
-          Checking Supabase credentials...
-        </Typography>
-      </Box>
-    </Backdrop>
+  return (
+    <NX config={config}>
+      {loading || pending ? (
+        <Backdrop open sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, color: '#fff' }}>
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <CircularProgress color="inherit" />
+            <Typography variant="h6" sx={{ mt: 2 }}>
+              Checking Supabase credentials...
+            </Typography>
+          </Box>
+        </Backdrop>
+      ) : !user ? (
+        <SupabaseLogin publicUrl={publicUrl} onSupabaseLogin={handleSupabaseLogin} error={error} />
+      ) : (
+        <>{children}</>
+      )}
+    </NX>
   );
-  if (!user) return <SupabaseLogin publicUrl={publicUrl} onSupabaseLogin={handleSupabaseLogin} error={error} />;
-  return <>{children}</>;
 }

@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 import withPWA from "@ducanh2912/next-pwa";
 
+
 const nextConfig: NextConfig = {
   devIndicators: false,
   images: {
@@ -10,6 +11,15 @@ const nextConfig: NextConfig = {
         hostname: 'live.staticflickr.com',
       }
     ],
+  },
+  // Suppress critical dependency warning for protobufjs dynamic require
+  webpack: (config) => {
+    config.ignoreWarnings = [
+      {
+        message: /Critical dependency: the request of a dependency is an expression/,
+      },
+    ];
+    return config;
   },
 };
 

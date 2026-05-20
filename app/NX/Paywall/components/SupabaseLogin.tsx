@@ -1,13 +1,16 @@
 "use client";
 import React, { useState } from "react";
-import { 
-  Typography, 
-  Box, 
-  TextField, 
-  Button, 
-  InputAdornment, 
-  IconButton, 
-  Paper,
+import {
+  Typography,
+  Box,
+  TextField,
+  Button,
+  InputAdornment,
+  IconButton,
+  Card,
+  CardHeader,
+  Avatar,
+  CardContent
 } from "@mui/material";
 import { Icon, useConfig } from '../../DesignSystem';
 
@@ -22,9 +25,7 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-
   const config = useConfig();
-  console.log('config', config);
 
   function isValidEmail(email: string) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -40,63 +41,73 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
     if (onSupabaseLogin) onSupabaseLogin(email, password);
   };
 
+  // Use config for siteName and avatar (logo)
+  const siteName = config?.siteName || "Sign In";
+  const avatarUrl = config?.avatars?.light || config?.avatars?.dark || null;
+
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="40vh">
-      <Paper elevation={3} sx={{ p: 3, width: 320 }}>
-        {/* Millie 
-        Access to this page is restricted to users who have signed in with Supabase and are authorized for <b>{publicUrl}</b>.
-        */}
-
-        <Typography variant="h5" color="textSecondary" align="center" sx={{ mb: 2 }}>
-          Access to this page is restricted to users who have signed in with Supabase and are authorized for <b>{publicUrl}</b>.
-        </Typography>
-
-        <form onSubmit={handleSubmit}>
-          <TextField
-            label="Email"
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            fullWidth
-            required
-            margin="normal"
-          />
-          <TextField
-            label="Password"
-            type={showPassword ? 'text' : 'password'}
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            fullWidth
-            required
-            margin="normal"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
-                    onClick={() => setShowPassword((show) => !show)}
-                    edge="end"
-                  >
-                    <Icon icon={showPassword ? 'hide' : 'show'} />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          {(error || externalError) && (
-            <Typography color="error" sx={{ mt: 1 }}>{externalError || error}</Typography>
+    <Box display="flex" alignItems="center" justifyContent="center" minHeight="100vh" sx={{ bgcolor: 'background.default' }}>
+      <Card variant="outlined" sx={{ width: 360, maxWidth: '90vw', p: 1 }}>
+        <CardHeader
+          avatar={avatarUrl ? (
+            <Avatar src={avatarUrl} alt={siteName} />
+          ) : (
+            <Avatar><Icon icon="user" /></Avatar>
           )}
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 2 }}
-            endIcon={<Icon icon="signin" />}
-          >
-            Sign In
-          </Button>
-        </form>
-      </Paper>
+          title={siteName}
+          subheader={config?.description || "Welcome, please sign in"}
+        />
+        <CardContent>
+          <Typography variant="body2" color="textSecondary" align="center" sx={{ mb: 2 }}>
+            Access to this page is restricted to users who have signed in with Supabase and are authorized for <b>{publicUrl}</b>.
+          </Typography>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              label="Email"
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              fullWidth
+              required
+              margin="normal"
+            />
+            <TextField
+              label="Password"
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              fullWidth
+              required
+              margin="normal"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      onClick={() => setShowPassword((show) => !show)}
+                      edge="end"
+                    >
+                      <Icon icon={showPassword ? 'hide' : 'show'} />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            {(error || externalError) && (
+              <Typography color="error" sx={{ mt: 1 }}>{externalError || error}</Typography>
+            )}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 2 }}
+              endIcon={<Icon icon="signin" />}
+            >
+              Sign In
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </Box>
   );
 }

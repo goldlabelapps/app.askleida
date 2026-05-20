@@ -13,8 +13,8 @@
         "dark": "/askleida/svg/avatarDark.svg"
     },
     "images": {
-        "light": "/askleida/png/palette.png",
-        "dark": "/askleida/png/palette.png"
+        "light": "/askleida/png/banner/light.png",
+        "dark": "/askleida/png/banner/dark.png"
     },
     "cartridges": {
         "paywall": {

@@ -68,13 +68,12 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
           maxWidth: '90vw',
         }}>
         <CardHeader
-          title={siteName}
+          title={<Typography variant="h6">{siteName}</Typography>}
           avatar={avatarUrl ? (
             <Avatar src={avatarUrl} alt={siteName} />
           ) : (
             <Avatar><Icon icon="user" /></Avatar>
           )}
-
         />
         <CardContent>
           <form onSubmit={handleSubmit}>

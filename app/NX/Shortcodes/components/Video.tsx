@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-// import { useRouter } from 'next/navigation';
 import {
   Box,
   Button,
@@ -67,6 +66,30 @@ export default function VideoPlayer({ src }: VideoPlayerProps) {
         width={'100%'}
         src={src}
       />
+      <Box mt={2} display="flex" gap={2} justifyContent="center">
+        <Button
+          startIcon={<Icon icon="left" />}
+          onClick={() => jumpTo(0)}
+          sx={{ minWidth: 140 }}
+        >
+          Restart
+        </Button>
+        <Button
+          startIcon={<Icon icon="up" />}
+          onClick={() => jumpTo(22)}
+          sx={{ minWidth: 140 }}
+        >
+          Be Sensible
+        </Button>
+        <Button
+          endIcon={<Icon icon="right" />} 
+          onClick={() => jumpTo(66)}
+          sx={{ minWidth: 140 }}
+        >
+          Call To Action
+        </Button>
+      </Box>
+
       <Box mt={2} display="flex" gap={2}>
         <Button
           fullWidth
@@ -77,31 +100,6 @@ export default function VideoPlayer({ src }: VideoPlayerProps) {
           {playing ? "Pause" : "Play"}
         </Button>
       </Box>
-      
-
-      <Box mt={2} display="flex" gap={2}>
-        <Button
-          fullWidth
-          variant="outlined"
-          startIcon={<Icon icon="left" />}
-          onClick={() => jumpTo(0)}
-        >
-          Back to start
-        </Button>
-        <Button
-        fullWidth
-          variant="outlined"
-          endIcon={<Icon icon="right" />}
-          onClick={() => jumpTo(66)}
-        >
-          Skip to Punchline
-        </Button>
-      </Box>
     </div>
   );
 }
-
-/*
-punchline: 1:04
-
-*/

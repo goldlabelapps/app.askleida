@@ -1,6 +1,6 @@
 ---
 title: Video
-description: Build into NX°
+description: An NX° Feature
 order: 300
 slug: /video
 icon: film

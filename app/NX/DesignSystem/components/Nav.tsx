@@ -137,6 +137,7 @@ const Nav: React.FC<I_Nav> = ({
                             p: 1,
                             minWidth: 310,
                         }}>
+                        <Box sx={{ flexGrow: 1 }} />
                         <TreeNav navItems={navItems}/>
                         <Box sx={{ mt: 'auto', display: 'flex' }}>
 

@@ -1,10 +1,9 @@
 "use client";
 import type { T_Config, T_Frontmatter, T_NavItem } from '../../types';
-import * as React from 'react';
+
 import Image from 'next/image';
-import {
-	Box,
-} from '@mui/material';
+import React from 'react';
+import { Box, useTheme } from '@mui/material';
 
 export type T_Hero = {
 	children?: React.ReactNode;
@@ -17,14 +16,24 @@ export default function Hero({
 	frontmatter,
 }: T_Hero) {
 
-	// const aspectRatio = 1200 / 630;
-
+	// Use MUI theme
+	const theme = useTheme();
+	const themeMode = theme?.palette?.mode || 'light';
 
 	let src = null;
 	if (frontmatter && frontmatter.image) {
-		src = frontmatter.image;
+		const image = frontmatter.image;
+		// Check if image ends with a known image extension
+		const isImageFile = /\.(png|jpe?g|svg|webp|gif|avif|bmp)$/i.test(image);
+		if (!isImageFile) {
+			// Treat as directory path, append light.png or dark.png
+			src = image.replace(/\/$/, '') + `/${themeMode}.png`;
+		} else {
+			src = image;
+		}
 	}
 	if (!src) return null;
+
 	return (
 		<Box sx={{
 			my: 2,
@@ -53,7 +62,6 @@ export default function Hero({
 					priority
 				/>
 			</Box>
-
 		</Box>
 	);
 }

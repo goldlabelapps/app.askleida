@@ -12,7 +12,8 @@ import {
   Avatar,
   CardContent
 } from "@mui/material";
-import { Icon, useConfig } from '../../DesignSystem';
+import { Icon } from '../../DesignSystem';
+import { useDesignSystem } from '../../DesignSystem/hooks/useDesignSystem';
 
 export interface I_SupabaseLogin {
   publicUrl: string;
@@ -25,7 +26,7 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-  const config = useConfig();
+  const designSystem = useDesignSystem();
 
   function isValidEmail(email: string) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -41,9 +42,13 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
     if (onSupabaseLogin) onSupabaseLogin(email, password);
   };
 
-  // Use config for siteName and avatar (logo)
-  const siteName = config?.siteName || "Sign In";
-  const avatarUrl = config?.avatars?.light || config?.avatars?.dark || null;
+  // Use designSystem for siteName and avatar (logo)
+  // You can get theme mode from MUI if needed, or default to 'light'
+  const themeMode = 'dark'; // Replace with MUI theme if available
+
+  const siteName = designSystem?.config?.siteName || "Sign In";
+  const avatarUrl = designSystem?.config?.avatars?.[themeMode] || designSystem?.avatar || '';
+  
 
   return (
     <Box 
@@ -63,13 +68,13 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
           maxWidth: '90vw',
         }}>
         <CardHeader
+          title={siteName}
           avatar={avatarUrl ? (
             <Avatar src={avatarUrl} alt={siteName} />
           ) : (
             <Avatar><Icon icon="user" /></Avatar>
           )}
-          title={siteName}
-          subheader={"Hi, please sign in"}
+
         />
         <CardContent>
           <form onSubmit={handleSubmit}>

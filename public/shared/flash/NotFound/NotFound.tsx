@@ -92,10 +92,10 @@ export const NotFound: React.FC<{
                     maxWidth={'90%'}
                     zIndex={800}>
                     <Button
-                        color="success"
+                        fullWidth
                         sx={{ m: 0 }}
                         startIcon={<Icon icon="home" />}
-                        variant="contained"
+                        variant="outlined"
                         onClick={() => window.location.href = '/?restart'}
                     >
                         Home

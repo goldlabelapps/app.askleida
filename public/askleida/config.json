@@ -1,7 +1,7 @@
 {
     "tenant": "askleida",
     "siteName": "Ask Leida",
-    "description": "Where skin care practitioners can manage clients, products, recommendations, and advice",
+    "description": "",
     "url": "https://askleida.vercel.app/",
     "owner": {
         "name": "Millie",
@@ -28,11 +28,12 @@
             "themes": {
                 "dark": {
                     "mode": "dark",
-                    "primary": "#ffd849",
-                    "secondary": "#ffd849",
+                    "primary": "#F7F5F2",
+                    "secondary": "#F7F5F2",
                     "background": "#5D465F",
-                    "paper": "#000",
-                    "text": "#fff"
+                    "paper": "#554056",
+                    "text": "#fff",
+                    "border": "#F7F5F2"
                 },
                 "light": {
                     "mode": "light",

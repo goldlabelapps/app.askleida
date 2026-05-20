@@ -89,32 +89,12 @@ export default function Video({ src }: VideoProps) {
           controls={false}
           width={'100%'}
           src={src}
-          style={{ display: 'block', width: '100%' }}
+          style={{ display: 'block', width: '100%', cursor: 'pointer' }}
+          onClick={togglePlaying}
         />
         <Button
           variant="contained"
           onClick={toggleFullscreen}
-          sx={{
-            position: 'absolute',
-            right: 16,
-            bottom: 88, // 16px above play button (56 + 16)
-            minWidth: 56,
-            minHeight: 56,
-            borderRadius: '50%',
-            backgroundColor: 'rgba(0,0,0,0.75)',
-            color: '#fff',
-            zIndex: 3,
-            boxShadow: '0 4px 16px rgba(0,0,0,0.25)',
-            border: '2px solid rgba(255,255,255,0.25)',
-            backdropFilter: 'blur(2px)',
-            '&:hover': { backgroundColor: 'rgba(0,0,0,0.9)' },
-          }}
-        >
-          <Icon icon={isFullscreen ? 'fullscreen' : 'fullscreen'} />
-        </Button>
-        <Button
-          variant="contained"
-          onClick={togglePlaying}
           sx={{
             position: 'absolute',
             right: 16,
@@ -126,12 +106,11 @@ export default function Video({ src }: VideoProps) {
             color: '#fff',
             zIndex: 3,
             boxShadow: '0 4px 16px rgba(0,0,0,0.25)',
-            border: '2px solid rgba(255,255,255,0.25)',
             backdropFilter: 'blur(2px)',
             '&:hover': { backgroundColor: 'rgba(0,0,0,0.9)' },
           }}
         >
-          <Icon icon={playing ? "pause" : "play"} />
+          <Icon icon={isFullscreen ? 'fullscreen' : 'fullscreen'} />
         </Button>
       </Box>
       <Box mt={6} display="flex" gap={2} justifyContent="center">
@@ -140,21 +119,21 @@ export default function Video({ src }: VideoProps) {
           onClick={() => jumpTo(0)}
           sx={{ minWidth: 140 }}
         >
-          Restart
+          Start
         </Button>
         <Button
           startIcon={<Icon icon="up" />}
           onClick={() => jumpTo(22)}
           sx={{ minWidth: 140 }}
         >
-          Be Sensible
+          Sensible
         </Button>
         <Button
           endIcon={<Icon icon="right" />} 
           onClick={() => jumpTo(66)}
           sx={{ minWidth: 140 }}
         >
-          Call To Action
+          CTA
         </Button>
       </Box>
     </Box>

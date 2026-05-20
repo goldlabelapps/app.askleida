@@ -6,7 +6,7 @@ slug: /
 image: /askleida/png/banner/
 icon: dashboard
 ---
-
+[PageLink icon="film" url="/video" title="Video" description="An NX° Feature" ]  
 
 [PageLink icon="user" url="/account" title="Account" description="Manage your settings" ]  
 

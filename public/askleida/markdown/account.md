@@ -1,11 +1,13 @@
 ---
 title: Account
-description: Manage your settings and stuff
+description: Manage settings and stuff
 order: 100
 slug: /account
 image: /askleida/png/banner/
 icon: user
 ---
+
+[PageLink icon="cash" url="/products" title="Products" description="Manage products" ] 
 
 > Your account
 

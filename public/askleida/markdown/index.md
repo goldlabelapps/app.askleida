@@ -1,6 +1,6 @@
 ---
 title: Ask Leida
-description: Manage clients, products, tips & advice
+description: Dashboard
 order: 1
 slug: /
 image: /askleida/png/banner/

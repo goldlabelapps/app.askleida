@@ -7,4 +7,6 @@ image: /askleida/png/banner/
 icon: cash
 ---
 
+[PageLink icon="dashboard" url="/" title="Dashboard" description="Start again" ] 
+
 > List of products saved in Supabase products table

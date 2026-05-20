@@ -23,6 +23,7 @@
         },
         "designSystem": {
             "themeSwitching": true,
+            "sharing": false,
             "defaultTheme": "dark",
             "themes": {
                 "dark": {

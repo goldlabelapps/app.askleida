@@ -8,6 +8,7 @@ import RenderMarkdown from "./components/RenderMarkdown";
 import PageLink from "./components/PageLink";
 import LinkedInPrompt from "./components/LinkedInPrompt";
 import {GithubProfile} from "./components/GithubProfile";
+import Video from "./components/Video";
 
 export {
     LinkedInPrompt,
@@ -19,4 +20,5 @@ export {
     ContentCard,
     PageLink,
     GithubProfile,
+    Video,
 };

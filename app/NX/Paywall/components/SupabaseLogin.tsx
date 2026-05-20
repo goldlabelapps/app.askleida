@@ -34,7 +34,7 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!isValidEmail(email) || password.length < 6) {
-      setError("Please enter a valid email and password.");
+      setError("Invalid email or password.");
       return;
     }
     setError("");
@@ -46,8 +46,22 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
   const avatarUrl = config?.avatars?.light || config?.avatars?.dark || null;
 
   return (
-    <Box display="flex" alignItems="center" justifyContent="center" minHeight="100vh" sx={{ bgcolor: 'background.default' }}>
-      <Card variant="outlined" sx={{ width: 360, maxWidth: '90vw', p: 1 }}>
+    <Box 
+      display="flex" 
+      alignItems="center" 
+      justifyContent="center" 
+      minHeight="100vh" 
+      sx={{ 
+        bgcolor: 'none' 
+      }}
+    >
+
+      <Card 
+        variant="outlined" 
+        sx={{ 
+          width: 360, 
+          maxWidth: '90vw',
+        }}>
         <CardHeader
           avatar={avatarUrl ? (
             <Avatar src={avatarUrl} alt={siteName} />
@@ -55,12 +69,9 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
             <Avatar><Icon icon="user" /></Avatar>
           )}
           title={siteName}
-          subheader={config?.description || "Welcome, please sign in"}
+          subheader={"Hi, please sign in"}
         />
         <CardContent>
-          <Typography variant="body2" color="textSecondary" align="center" sx={{ mb: 2 }}>
-            Access to this page is restricted to users who have signed in with Supabase and are authorized for <b>{publicUrl}</b>.
-          </Typography>
           <form onSubmit={handleSubmit}>
             <TextField
               label="Email"
@@ -94,7 +105,7 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
               }}
             />
             {(error || externalError) && (
-              <Typography color="error" sx={{ mt: 1 }}>{externalError || error}</Typography>
+              <Typography color="text.secondary" sx={{ mt: 1 }}>{externalError || error}</Typography>
             )}
             <Button
               type="submit"

@@ -6,11 +6,12 @@ import {
 } from "@mui/material";
 import { Icon } from '../../DesignSystem';
 
-type VideoPlayerProps = {
+export type VideoProps = {
   src: string;
 };
 
-export default function VideoPlayer({ src }: VideoPlayerProps) {
+export default function Video({ src }: VideoProps) {
+  const [isFullscreen, setIsFullscreen] = React.useState(false);
   const videoRef = React.useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = React.useState(false);
 
@@ -34,7 +35,30 @@ export default function VideoPlayer({ src }: VideoPlayerProps) {
     }
   };
 
-  // On mount, jump to 20s and play
+  const toggleFullscreen = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (!document.fullscreenElement) {
+      video.requestFullscreen?.();
+      if (video.paused || video.ended) {
+        video.play();
+        setPlaying(true);
+      }
+    } else {
+      document.exitFullscreen?.();
+    }
+  };
+
+  React.useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+
   React.useEffect(() => {
     const video = videoRef.current;
     if (video) {
@@ -44,7 +68,6 @@ export default function VideoPlayer({ src }: VideoPlayerProps) {
     }
   }, []);
 
-  // Keep state in sync if user uses native controls
   React.useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -59,14 +82,59 @@ export default function VideoPlayer({ src }: VideoPlayerProps) {
   }, []);
 
   return (
-    <div>
-      <video
-        ref={videoRef}
-        controls={false}
-        width={'100%'}
-        src={src}
-      />
-      <Box mt={2} display="flex" gap={2} justifyContent="center">
+    <Box sx={{ position: 'relative', width: '100%' }}>
+      <Box sx={{ position: 'relative', width: '100%', display: 'inline-block' }}>
+        <video
+          ref={videoRef}
+          controls={false}
+          width={'100%'}
+          src={src}
+          style={{ display: 'block', width: '100%' }}
+        />
+        <Button
+          variant="contained"
+          onClick={toggleFullscreen}
+          sx={{
+            position: 'absolute',
+            right: 16,
+            bottom: 88, // 16px above play button (56 + 16)
+            minWidth: 56,
+            minHeight: 56,
+            borderRadius: '50%',
+            backgroundColor: 'rgba(0,0,0,0.75)',
+            color: '#fff',
+            zIndex: 3,
+            boxShadow: '0 4px 16px rgba(0,0,0,0.25)',
+            border: '2px solid rgba(255,255,255,0.25)',
+            backdropFilter: 'blur(2px)',
+            '&:hover': { backgroundColor: 'rgba(0,0,0,0.9)' },
+          }}
+        >
+          <Icon icon={isFullscreen ? 'fullscreen' : 'fullscreen'} />
+        </Button>
+        <Button
+          variant="contained"
+          onClick={togglePlaying}
+          sx={{
+            position: 'absolute',
+            right: 16,
+            bottom: 16,
+            minWidth: 56,
+            minHeight: 56,
+            borderRadius: '50%',
+            backgroundColor: 'rgba(0,0,0,0.75)',
+            color: '#fff',
+            zIndex: 3,
+            boxShadow: '0 4px 16px rgba(0,0,0,0.25)',
+            border: '2px solid rgba(255,255,255,0.25)',
+            backdropFilter: 'blur(2px)',
+            '&:hover': { backgroundColor: 'rgba(0,0,0,0.9)' },
+          }}
+        >
+          <Icon icon={playing ? "pause" : "play"} />
+        </Button>
+      </Box>
+      <Box mt={6} display="flex" gap={2} justifyContent="center">
         <Button
           startIcon={<Icon icon="left" />}
           onClick={() => jumpTo(0)}
@@ -89,17 +157,6 @@ export default function VideoPlayer({ src }: VideoPlayerProps) {
           Call To Action
         </Button>
       </Box>
-
-      <Box mt={2} display="flex" gap={2}>
-        <Button
-          fullWidth
-          variant="outlined"
-          startIcon={<Icon icon={playing ? "pause" : "play"} />}
-          onClick={togglePlaying}
-        >
-          {playing ? "Pause" : "Play"}
-        </Button>
-      </Box>
-    </div>
+    </Box>
   );
 }

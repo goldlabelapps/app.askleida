@@ -114,7 +114,7 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
             <Button
               type="submit"
               fullWidth
-              variant="contained"
+              variant="outlined"
               sx={{ mt: 2 }}
               endIcon={<Icon icon="signin" />}
             >

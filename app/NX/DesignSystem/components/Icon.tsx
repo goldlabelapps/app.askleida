@@ -192,6 +192,8 @@ import StopIcon from '@mui/icons-material/Stop';
 import RandomIcon from '@mui/icons-material/Shuffle';
 import AgileIcon from '@mui/icons-material/Badge';
 import LeidaIcon from '@mui/icons-material/SupportAgent';
+import PlayIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
 
 
 export default function Icon({ icon, color }: I_Icon) {
@@ -200,6 +202,12 @@ export default function Icon({ icon, color }: I_Icon) {
   switch (icon) {
     case 'agile':
       iconFragment = <AgileIcon color={color} />;
+      break;
+    case 'play':
+      iconFragment = <PlayIcon color={color} />;
+      break;
+    case 'pause':
+      iconFragment = <PauseIcon color={color} />;
       break;
     case 'askleida':
       iconFragment = <LeidaIcon color={color} />;

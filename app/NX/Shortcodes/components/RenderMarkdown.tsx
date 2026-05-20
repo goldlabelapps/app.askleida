@@ -18,6 +18,8 @@ import {
   PageLink,
   LinkedInPrompt,
   GithubProfile,
+  Video,
+
 } from '../../Shortcodes';
 
 export type I_RenderMarkdown = {
@@ -93,6 +95,10 @@ export default function RenderMarkdown({
     // GithubProfile
     const githubProfile = parseShortcode(/\[GithubProfile\s+(.*?)\]/, GithubProfile);
     if (githubProfile) return githubProfile;
+
+    // Video
+    const video = parseShortcode(/\[Video\s+(.*?)\]/, Video);
+    if (video) return video;
 
     // fallback: simply return text
     return text;

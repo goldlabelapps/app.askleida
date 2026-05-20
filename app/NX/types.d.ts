@@ -491,6 +491,11 @@ export type I_Icon = {
     | 'orders'
     | 'staroff'
     | 'staron'
+
+    | 'play'
+    | 'pause'
+
+
     | 'bouncer';
     color?: any;
 };

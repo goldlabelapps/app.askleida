@@ -7,4 +7,7 @@ image: /askleida/png/banner/
 icon: dashboard
 ---
 
-[PageLink icon="user" url="/account" title="Account" description="Manage your settings" ] 
+
+[PageLink icon="user" url="/account" title="Account" description="Manage your settings" ]  
+
+[PageLink icon="cash" url="/products" title="Products" description="Sell stuff" ]  

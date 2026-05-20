@@ -29,10 +29,11 @@ export default function RequireSupabaseAuth({ children, publicUrl }: { children:
       {loading || pending ? (
         <Backdrop open sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, color: '#fff' }}>
           <Box display="flex" flexDirection="column" alignItems="center">
-            <CircularProgress color="inherit" />
-            <Typography variant="h6" sx={{ mt: 2 }}>
-              Checking Supabase credentials...
+            
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              Checking Supabase ...
             </Typography>
+            <CircularProgress color="inherit" />
           </Box>
         </Backdrop>
       ) : !user ? (

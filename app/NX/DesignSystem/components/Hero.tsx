@@ -25,6 +25,10 @@ export default function Hero({
 		src = frontmatter.image;
 	}
 	if (!src) return null;
+
+	
+
+
 	return (
 		<Box sx={{
 			my: 2,
@@ -39,6 +43,7 @@ export default function Hero({
 					borderRadius: 2,
 				}}
 			>
+				
 				<Image
 					src={src}
 					alt={frontmatter?.title || 'Hero Image'}

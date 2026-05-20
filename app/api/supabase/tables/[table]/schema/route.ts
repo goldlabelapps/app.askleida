@@ -7,9 +7,19 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const tenant = process.env.NEXT_PUBLIC_TENANT;
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+
+// Helper to get table name from the URL
+function getTableNameFromUrl(req: Request) {
+  const url = new URL(req.url);
+  // /api/supabase/tables/[table]/schema
+  const parts = url.pathname.split('/');
+  // Find the table name as the second-to-last segment
+  return parts[parts.length - 2];
+}
+
 // GET: Get table schema
-export async function GET(req: Request, { params }: { params: { table: string } }) {
-  const table = params.table;
+export async function GET(req: Request) {
+  const table = getTableNameFromUrl(req);
   // Query information_schema.columns for schema
   const { data, error } = await supabase.rpc('get_table_schema', { table_name: table });
   if (error) {
@@ -21,8 +31,8 @@ export async function GET(req: Request, { params }: { params: { table: string } 
 }
 
 // PATCH: Alter table structure (expects { sql })
-export async function PATCH(req: Request, { params }: { params: { table: string } }) {
-  const table = params.table;
+export async function PATCH(req: Request) {
+  const table = getTableNameFromUrl(req);
   const { sql } = await req.json();
   if (!sql) {
     const res = makeRes({ tenant, message: 'SQL statement required', severity: 'error' });

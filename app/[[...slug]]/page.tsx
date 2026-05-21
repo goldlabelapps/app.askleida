@@ -169,7 +169,7 @@ export default async function Page(props: any) {
                 )}
                 <footer>
                     <Footer
-                        meta={meta as any}
+                        // meta={meta as any}
                         frontmatter={data}
                         navItems={navItems as I_NestedNav["navItems"]}
                     >

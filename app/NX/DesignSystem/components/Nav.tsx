@@ -113,16 +113,21 @@ const Nav: React.FC<I_Nav> = ({
     if (mode === 'mobile') {
         return (
             <>
-                <IconButton
-                    color="primary"
-                    onClick={() => setDrawerOpen(true)} aria-label="Open Menu">
-                    <Icon icon='menu' />
-                </IconButton>
+                {!drawerOpen && (
+                    <IconButton
+                        color="primary"
+                        onClick={() => setDrawerOpen(true)} aria-label="Open Menu">
+                        <Icon icon='menu' />
+                    </IconButton>
+                )}
 
                 <Drawer
                     anchor="right"
                     open={drawerOpen}
-                    onClose={() => setDrawerOpen(false)}>
+                    onClose={() => setDrawerOpen(false)}
+                    sx={{
+                        zIndex: (theme) => (theme.zIndex?.modal ?? 1300) + 200,
+                    }}>
 
                     {sharing && <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
                         <Share size="small" />
@@ -157,7 +162,7 @@ const Nav: React.FC<I_Nav> = ({
                                 </Box>
                             </>}
                             
-                            <Box sx={{ pb: 1.5, mr: 2 }}>
+                            <Box sx={{ pb: 1.5, mr: 2, }}>
                                 <SignOutBtn />
                             </Box>
                         </Box>

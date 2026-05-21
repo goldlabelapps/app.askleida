@@ -62,7 +62,7 @@ export default function Video({ src }: VideoProps) {
   React.useEffect(() => {
     const video = videoRef.current;
     if (video) {
-      video.currentTime = 22;
+      video.currentTime = 0;
       // video.play();
       // setPlaying(true);
     }
@@ -83,13 +83,13 @@ export default function Video({ src }: VideoProps) {
 
   return (
     <Box sx={{ position: 'relative', width: '100%' }}>
-      <Box sx={{ position: 'relative', width: '100%', display: 'inline-block' }}>
+      <Box sx={{ position: 'relative', width: '100%', display: 'inline-block', maxHeight: 'calc(100vh - 200px)' }}>
         <video
           ref={videoRef}
-          controls={false}
+          controls={true}
           width={'100%'}
           src={src}
-          style={{ display: 'block', width: '100%', cursor: 'pointer' }}
+          style={{ display: 'block', width: '100%', cursor: 'pointer', maxHeight: 'calc(100vh - 200px)', objectFit: 'contain' }}
           onClick={togglePlaying}
         />
         <Button
@@ -113,6 +113,12 @@ export default function Video({ src }: VideoProps) {
           <Icon icon={isFullscreen ? 'fullscreen' : 'fullscreen'} />
         </Button>
       </Box>
+    </Box>
+  );
+}
+
+
+/*
       <Box mt={6} display="flex" gap={2} justifyContent="center">
         <Button
           startIcon={<Icon icon="left" />}
@@ -136,6 +142,4 @@ export default function Video({ src }: VideoProps) {
           CTA
         </Button>
       </Box>
-    </Box>
-  );
-}
+*/

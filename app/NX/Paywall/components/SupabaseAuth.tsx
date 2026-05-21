@@ -15,9 +15,7 @@ import {
 import { 
     usePaywall, 
     setPaywall,
-    firebaseLogout,
     updateAccount,
-    ChooseAvatar,
 } from '../../Paywall';
 import { useDispatch } from '../../Uberedux';
 import { Icon, EditableStr } from '../../DesignSystem';
@@ -45,7 +43,6 @@ export default function SupabaseAuth() {
     return (<>
         <Box>
             <CardHeader
-                avatar={<ChooseAvatar onSave={onAvatarSave} />}
                 title={<EditableStr 
                     id="account-name"
                     dialogTitle='Change your name'

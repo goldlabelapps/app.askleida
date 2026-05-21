@@ -4,9 +4,7 @@ import SignIn from './components/SignIn';
 import SupabaseAuth from './components/SupabaseAuth';
 import SimpleSignIn from './components/SimpleSignIn';
 import Register from './components/Register';
-import ChooseAvatar from './components/ChooseAvatar';
 import SignOutBtn from './components/SignOutBtn';
-import MiniAccount from './components/MiniAccount';
 // Actions
 import { setPaywall } from './actions/setPaywall';
 import { avatarsByUID } from './actions/avatarsByUID';
@@ -26,8 +24,6 @@ export {
     SignOutBtn,
     SupabaseAuth,
     Register,
-    ChooseAvatar,
-    MiniAccount,
 };
 
 // Actions

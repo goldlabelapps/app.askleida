@@ -44,7 +44,7 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
 
   // Use designSystem for siteName and avatar (logo)
   // You can get theme mode from MUI if needed, or default to 'light'
-  const themeMode = 'dark'; // Replace with MUI theme if available
+  const themeMode = 'light'; // Replace with MUI theme if available
 
   const siteName = designSystem?.config?.siteName || "Sign In";
   const avatarUrl = designSystem?.config?.avatars?.[themeMode] || designSystem?.avatar || '';
@@ -67,15 +67,11 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
           width: 360, 
           maxWidth: '90vw',
         }}>
-        <CardHeader
-          title={<Typography variant="h6">{siteName}</Typography>}
-          avatar={avatarUrl ? (
-            <Avatar src={avatarUrl} alt={siteName} />
-          ) : (
-            <Avatar><Icon icon="user" /></Avatar>
-          )}
-        />
+        
         <CardContent>
+          <Box display="flex" justifyContent="center" alignItems="center" sx={{ py: 2 }}>
+            <Avatar src={avatarUrl} alt={siteName} sx={{ width: 50, height: 50 }} />
+          </Box>
           <form onSubmit={handleSubmit}>
             <TextField
               label="Email"
@@ -102,7 +98,7 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
                       onClick={() => setShowPassword((show) => !show)}
                       edge="end"
                     >
-                      <Icon icon={showPassword ? 'hide' : 'show'} />
+                      <Icon icon={showPassword ? 'hide' : 'show'} color="primary" />
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -113,8 +109,9 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
             )}
             <Button
               type="submit"
+              size="large"
               fullWidth
-              variant="outlined"
+              variant="contained"
               sx={{ mt: 2 }}
               endIcon={<Icon icon="signin" />}
             >

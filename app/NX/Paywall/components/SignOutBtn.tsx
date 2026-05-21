@@ -7,10 +7,8 @@ import { Icon } from '../../DesignSystem';
 import { useDispatch } from '../../Uberedux';
 import {
     setPaywall,
-    firebaseLogout,
     useSupabaseAuth,
 } from '../../Paywall';
-
 import { supabase } from '../../lib/supabase';
 
 export default function SignOutBtn() {
@@ -19,13 +17,8 @@ export default function SignOutBtn() {
     const { user: supabaseUser } = useSupabaseAuth();
 
     const handleSignout = async () => {
-        if (supabaseUser) {
-            await supabase.auth.signOut();
-        } else {
-            await firebaseLogout();
-        }
-        dispatch(setPaywall('user', null));
-        dispatch(setPaywall('account', null));
+        await supabase.auth.signOut();
+        dispatch(setPaywall('supabaseAuth', null));
     }
 
     return (

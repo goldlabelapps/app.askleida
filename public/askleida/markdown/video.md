@@ -6,4 +6,4 @@ slug: /video
 icon: film
 ---
 
-[Video src="/askleida/mp4/video.mp4"]
+[Video src="/askleida/mp4/video.mp4"]  

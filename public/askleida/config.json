@@ -24,7 +24,7 @@
         "designSystem": {
             "themeSwitching": true,
             "sharing": false,
-            "defaultTheme": "dark",
+            "defaultTheme": "light",
             "themes": {
                 "dark": {
                     "mode": "dark",
@@ -37,7 +37,7 @@
                 },
                 "light": {
                     "mode": "light",
-                    "primary": "#5D465F",
+                    "primary": "#c93379",
                     "secondary": "#364450",
                     "background": "#F7F5F2",
                     "paper": "#FFF",

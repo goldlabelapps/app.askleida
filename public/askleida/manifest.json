@@ -1,8 +1,8 @@
 {
   "short_name": "Ask Leida",
   "name": "Ask Leida",
-  "theme_color": "#5D465F",
-  "background_color": "#5D465F",
+  "theme_color": "#F7F5F2",
+  "background_color": "#F7F5F2",
   "display": "fullscreen",
   "orientation": "any",
   "scope": "/",

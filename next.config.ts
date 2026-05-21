@@ -52,6 +52,18 @@ export default withPWA({
         },
       },
       {
+        // Cache the specific video file
+        urlPattern: /\/askleida\/mp4\/video\.mp4$/,
+        handler: "CacheFirst",
+        options: {
+          cacheName: "videos",
+          expiration: {
+            maxEntries: 4,
+            maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+          },
+        },
+      },
+      {
         urlPattern: /^https?.*\.(?:woff2?|ttf|otf|eot)$/,
         handler: "CacheFirst",
         options: {

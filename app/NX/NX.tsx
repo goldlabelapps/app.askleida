@@ -1,19 +1,21 @@
 "use client";
+// Import global fonts
+import './fonts.css';
 import React from 'react';
 import { I_NX, T_Theme } from './types';
 import { Box } from '@mui/material';
 import { DesignSystem, Feedback } from './DesignSystem';
-import { useDispatch } from './Uberedux';
+import { useDispatch, useSlice } from './Uberedux';
 import { setDesignSystem, useDesignSystem } from './DesignSystem';
-
-// Import global fonts
-import './fonts.css';
+import { usePaywall } from './Paywall';
 
 const NX: React.FC<I_NX> = ({
     children,
     config,
 }) => {
+    
     const dispatch = useDispatch();
+    const paywall = usePaywall();
     const designSystem = useDesignSystem();
     const defaultTheme = config?.cartridges?.designSystem?.defaultTheme;
     const themeSwitching = config?.cartridges?.designSystem?.themeSwitching;
@@ -31,6 +33,10 @@ const NX: React.FC<I_NX> = ({
         const mode: 'light' | 'dark' = themeMode === 'dark' ? 'dark' : 'light';
         theme = { ...theme, mode };
     }
+
+    // React.useEffect(() => {
+    //     console.log("paywall", paywall);
+    // }, [dispatch, paywall]);
 
     if (!theme) {
         return (

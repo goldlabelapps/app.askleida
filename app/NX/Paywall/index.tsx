@@ -1,11 +1,10 @@
 import { firebaseLogin, firebaseLogout } from './actions/firebaseAuth';
 // Components
 import SignIn from './components/SignIn';
-import AccountCard from './components/AccountCard';
+import SupabaseAuth from './components/SupabaseAuth';
 import SimpleSignIn from './components/SimpleSignIn';
 import Register from './components/Register';
 import ChooseAvatar from './components/ChooseAvatar';
-import UserSpot from './components/UserSpot';
 import SignOutBtn from './components/SignOutBtn';
 import MiniAccount from './components/MiniAccount';
 // Actions
@@ -17,13 +16,7 @@ import { login } from './actions/login';
 import { logout } from './actions/logout';
 
 // Hooks
-import { useUID } from './hooks/useUID';
-// Supabase placeholder (no implementation)
-import { useAuthed } from './hooks/useAuthed';
 import { usePaywall } from './hooks/usePaywall';
-import { useAccount } from './hooks/useAccount';
-import { useIsAuthed } from './hooks/useIsAuthed';
-import { useFirebaseAuthListener } from './hooks/useFirebaseAuthListener';
 
 
 // Components
@@ -31,10 +24,9 @@ export {
     SignIn,
     SimpleSignIn,
     SignOutBtn,
-    AccountCard,
+    SupabaseAuth,
     Register,
     ChooseAvatar,
-    UserSpot,
     MiniAccount,
 };
 
@@ -52,12 +44,7 @@ export {
 
 // Hooks
 export {
-    useUID,
-    useAuthed,
     usePaywall,
-    useAccount,
-    useIsAuthed,
-    useFirebaseAuthListener,
 };
 
 // Supabase Auth

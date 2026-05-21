@@ -22,7 +22,7 @@ import {
 import { useDispatch } from '../../Uberedux';
 import { Icon, EditableStr } from '../../DesignSystem';
 
-export default function AccountCard() {
+export default function SupabaseAuth() {
 
     const dispatch = useDispatch();
     const paywall = usePaywall();

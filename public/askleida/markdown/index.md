@@ -3,7 +3,6 @@ title: Ask Leida
 description: Dashboard
 order: 1
 slug: /
-image: /askleida/png/banner/
 icon: dashboard
 ---
 [PageLink icon="film" url="/video" title="Video" description="An NX° Feature" ]  

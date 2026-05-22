@@ -5,7 +5,7 @@ export const setKey =
   (key: string, value: any): any =>
     async (dispatch: T_UbereduxDispatch, getState: () => T_RootState) => {
       try {
-        const current = getState().redux.orders;
+        const current = getState().redux.products;
         let updated;
         if (["bus", "busLoading", "busError"].includes(key)) {
           updated = {
@@ -18,7 +18,7 @@ export const setKey =
             [key]: value,
           };
         }
-        dispatch(setUbereduxKey({ key: 'orders', value: updated }));
+        dispatch(setUbereduxKey({ key: 'products', value: updated }));
       } catch (e: unknown) {
         const msg = e instanceof Error ? e.message : String(e);
         dispatch(setUbereduxKey({ key: 'error', value: msg }));

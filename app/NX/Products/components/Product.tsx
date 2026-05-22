@@ -6,7 +6,7 @@ import {
     Typography,
 } from '@mui/material';
 import { useDispatch } from '../../../NX/Uberedux';
-import { Thumbnail } from '../../Orders';
+import { Thumbnail } from '../../Products';
 
 interface I_Product {
     data: any; // Replace 'any' with a specific type if available

@@ -1,25 +1,21 @@
 'use client';
 import * as React from 'react';
 import type { FC } from 'react';
-import { useRouter } from 'next/navigation';
 import {
-    Box,
     Card,
     CardHeader,
     Typography,
     ButtonBase,
-    CardMedia,
     Dialog,
     DialogContent,
     DialogActions,
-    DialogTitle,
     Button,
     useMediaQuery,
     useTheme,
 } from '@mui/material';
 import { useDispatch } from '../../../NX/Uberedux';
 import { Icon } from '../../DesignSystem';
-import { Product, Thumbnail } from '../../Orders';
+import { Product, Thumbnail } from '../../Products';
 import he from 'he';
 
 
@@ -34,9 +30,9 @@ const Order: FC<I_Order> = ({ data }) => {
     const {
         name,
         price,
-        attribute_set_code,
         thumbnail_image,
     } = data || {};
+
     // React.useEffect(() => {
     //     if (!initted) {
     //         dispatch(init());
@@ -45,11 +41,10 @@ const Order: FC<I_Order> = ({ data }) => {
 
     const src = `/shared/jpg/magento/${thumbnail_image}`;
     const decodedName = name ? he.decode(name) : '';
-
-    const thumbSize = 75;
     const [open, setOpen] = React.useState(false);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    
     return (
         <>
             <ButtonBase

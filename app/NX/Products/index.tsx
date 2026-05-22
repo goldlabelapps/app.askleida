@@ -1,4 +1,4 @@
-import Orders from './Orders';
+import Products from './Products';
 import Order from './components/Order';
 import Product from './components/Product';
 import Thumbnail from './components/Thumbnail';
@@ -9,7 +9,7 @@ import {useBus} from './hooks/useBus';
 import {useState} from './hooks/useState';
 
 export {
-    Orders,
+    Products,
     Order,
     Product,
     Thumbnail,

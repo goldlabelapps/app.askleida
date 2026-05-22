@@ -1,6 +1,6 @@
 import type { T_UbereduxDispatch } from '../../types';
 import { setUbereduxKey } from '../../Uberedux';
-import { setKey } from '../../Orders';
+import { setKey } from '../../Products';
 
 async function fetchJson(endpoint: string) {
     const res = await fetch(endpoint);

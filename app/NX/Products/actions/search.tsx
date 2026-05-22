@@ -8,7 +8,7 @@ export const defaultOrderSearchParams = {
 import type { T_UbereduxDispatch, T_RootState } from '../../types';
 import { setUbereduxKey } from '../../Uberedux';
 import { setFeedback } from '../../DesignSystem';
-import { setKey } from '../../Orders';
+import { setKey } from '../../Products';
 
 export const search = () => async (
     dispatch: T_UbereduxDispatch, 
@@ -16,7 +16,7 @@ export const search = () => async (
 ) => {
     try {
         dispatch(setKey('loading', true));
-        const state = getState().redux.orders;
+        const state = getState().redux.products;
         const params = state?.searchParams || defaultOrderSearchParams;
         const query = new URLSearchParams({
             s: params.s || '',
@@ -24,7 +24,7 @@ export const search = () => async (
             limit: String(params.limit || 10),
             // ...(params.hideflagged !== undefined ? { hideflagged: String(params.hideflagged) } : {})
         }).toString();
-        const endpoint = `${process.env.NEXT_PUBLIC_PYTHON_URL}orders?${query}`;
+        const endpoint = `${process.env.NEXT_PUBLIC_PYTHON_URL}products?${query}`;
         const res = await fetch(endpoint);
         if (!res.ok) throw new Error(`Failed to fetch: ${endpoint}`);
         const data = await res.json();

@@ -22,9 +22,8 @@ export const search = () => async (
             s: params.s || '',
             page: String(params.page || 1),
             limit: String(params.limit || 10),
-            // ...(params.hideflagged !== undefined ? { hideflagged: String(params.hideflagged) } : {})
         }).toString();
-        const endpoint = `${process.env.NEXT_PUBLIC_PYTHON_URL}products?${query}`;
+        const endpoint = `/api/products?${query}`;
         const res = await fetch(endpoint);
         if (!res.ok) throw new Error(`Failed to fetch: ${endpoint}`);
         const data = await res.json();
@@ -36,7 +35,6 @@ export const search = () => async (
             dispatch(setKey('results', []));
             dispatch(setKey('pagination', null));
             dispatch(setKey('search', null));
-            
         }
         dispatch(setKey('loading', false));
     } catch (e: unknown) {

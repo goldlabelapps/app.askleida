@@ -1,13 +1,11 @@
 "use client";
-// Import global fonts
 import './fonts.css';
 import React from 'react';
 import { I_NX, T_Theme } from './types';
 import { Box } from '@mui/material';
 import { DesignSystem, Feedback } from './DesignSystem';
-import { useDispatch, useSlice } from './Uberedux';
+import { useDispatch } from './Uberedux';
 import { setDesignSystem, useDesignSystem } from './DesignSystem';
-import { usePaywall } from './Paywall';
 
 const NX: React.FC<I_NX> = ({
     children,
@@ -15,7 +13,6 @@ const NX: React.FC<I_NX> = ({
 }) => {
     
     const dispatch = useDispatch();
-    const paywall = usePaywall();
     const designSystem = useDesignSystem();
     const defaultTheme = config?.cartridges?.designSystem?.defaultTheme;
     const themeSwitching = config?.cartridges?.designSystem?.themeSwitching;

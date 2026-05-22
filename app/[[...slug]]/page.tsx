@@ -86,7 +86,6 @@ export default async function Page(props: any) {
     while (slugArr.length > 1 && slugArr[slugArr.length - 1] === "") slugArr.pop();
     const tenant = process.env.NEXT_PUBLIC_TENANT || "nx";
     const { config: rawConfig } = getTenant(tenant as T_Tenant);
-    // Ensure config is a plain object and tenant is set
     let config: any = rawConfig;
     if (typeof rawConfig !== 'object' || Array.isArray(rawConfig)) {
         throw new Error('Config is not a valid object. Check config.json export.');
@@ -94,8 +93,6 @@ export default async function Page(props: any) {
     if (!('tenant' in config)) {
         config = { ...config, tenant };
     }
-    // Debug: Uncomment to inspect config structure
-    // console.log('Config:', config);
     const filePath = serverUseMDBySlug(slugArr, tenant);
     if (!filePath || !fs.existsSync(filePath)) notFound();
     let title = tenant.toUpperCase();
@@ -104,13 +101,9 @@ export default async function Page(props: any) {
     const { content, data } = matter(md);
     if (data.title) title = data.title;
     if (data.description) description = data.description;
-    // const icon = (typeof data.icon === 'string' && data.icon.trim()) ? data.icon : null;
     const navItems = await serverUseNav();
-    const themeMode: 'light' | 'dark' = (config?.cartridges?.designSystem?.defaultTheme 
-            === 'dark') ? 'dark' : 'light';
+    const themeMode: 'light' | 'dark' = (config?.cartridges?.designSystem?.defaultTheme === 'dark') ? 'dark' : 'light';
     const themedImage = config?.images?.[themeMode] || config?.images?.light || null;
-
-    // Use data.image if it's a non-empty string, otherwise fallback to themedImage
     const meta = getMeta({
         siteName: config.siteName,
         title,
@@ -119,62 +112,88 @@ export default async function Page(props: any) {
         image: (typeof data.image === 'string' && data.image.trim()) ? data.image : themedImage,
     });
 
-    return (
+    // If the route is /products, render the Products component instead of markdown
+    const isProductsRoute = slugArr.length === 1 && slugArr[0] === 'products';
+    // Optionally, handle /products/ as well
+    const isProductsRouteAlt = slugArr.length === 0 && data.slug === '/products';
+
+    if (isProductsRoute || isProductsRouteAlt) {
+        const { Products } = await import('../NX/Products');
+        return (
             <NX config={config} frontmatter={data}>
                 <Header config={config} frontmatter={data} />
-                {data.cartridge ? (
-                    data.cartridge === 'virus' ? null : (
-                        <Container id="main" maxWidth="lg" sx={{ mt: '100px', pb: '90px' }}>
-                            <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
-                                <Typography variant="h4" color="primary" sx={{ mb: 2 }}>
-                                    {data.title || title} (CARTRIDGE)
-                                </Typography>
-                                <Box>
-                                    <RenderMarkdown config={config}>
-                                        {content}
-                                    </RenderMarkdown>
-                                </Box>
-                            </Box>
-                        </Container>
-                    )
-                ) : (
-                    <Container id="main" maxWidth="lg" 
-                        sx={{ mt: '100px', pb: '90px' }}>
-                        <Box sx={{ width: '100%', display: 'flex', gap: 1 }}>
-                            <Box sx={{ display: { xs: 'none', sm: 'flex' }, flexDirection: 'column' }}>
-                                <Box sx={{ flexGrow: 1, minHeight: 0, minWidth: 200 }}>
-                                    <TreeNav navItems={navItems}/>
-                                </Box>
-                            </Box>
-                            <Box component="main" sx={{ gridColumn: { lg: '1' }, width: '100%', minWidth: 0, pr: { xs: 2, lg: 3 }, pl: { xs: 2, lg: 0 }, flexGrow: 1 }}>
-                                <Typography sx={{ display: 'flex', mt: 1 }} color='secondary' variant="h6" component="h2">
-                                    <Box sx={{ display: 'flex', width: '100%' }}>
-                                        {data.icon && <Box sx={{ mx: 2 }}><Icon icon={data.icon} color="primary" /></Box>}
-                                        <Box sx={{ flexGrow: 1 }}>
-                                            {description}
-                                        </Box>
-                                    </Box>
-                                </Typography>
-                                <Hero
-                                    config={config}
-                                    frontmatter={data}
-                                    navItems={navItems as I_NestedNav["navItems"]}
-                                />
-                                <RenderMarkdown config={config}>
-                                    {content}
-                                </RenderMarkdown>
-                            </Box>
-                        </Box>
-                    </Container>
-                )}
+                <Container id="main" maxWidth="lg" sx={{ mt: '100px', pb: '90px' }}>
+                    <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
+                        <Products />
+                    </Box>
+                </Container>
                 <footer>
                     <Footer
-                        // meta={meta as any}
                         frontmatter={data}
                         navItems={navItems as I_NestedNav["navItems"]}
                     >
                     </Footer>
                 </footer>
             </NX>
+        );
+    }
+
+    // fallback to original rendering for all other routes
+    return (
+        <NX config={config} frontmatter={data}>
+            <Header config={config} frontmatter={data} />
+            {data.cartridge ? (
+                data.cartridge === 'virus' ? null : (
+                    <Container id="main" maxWidth="lg" sx={{ mt: '100px', pb: '90px' }}>
+                        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
+                            <Typography variant="h4" color="primary" sx={{ mb: 2 }}>
+                                {data.title || title} (CARTRIDGE)
+                            </Typography>
+                            <Box>
+                                <RenderMarkdown config={config}>
+                                    {content}
+                                </RenderMarkdown>
+                            </Box>
+                        </Box>
+                    </Container>
+                )
+            ) : (
+                <Container id="main" maxWidth="lg" 
+                    sx={{ mt: '100px', pb: '90px' }}>
+                    <Box sx={{ width: '100%', display: 'flex', gap: 1 }}>
+                        <Box sx={{ display: { xs: 'none', sm: 'flex' }, flexDirection: 'column' }}>
+                            <Box sx={{ flexGrow: 1, minHeight: 0, minWidth: 200 }}>
+                                <TreeNav navItems={navItems}/>
+                            </Box>
+                        </Box>
+                        <Box component="main" sx={{ gridColumn: { lg: '1' }, width: '100%', minWidth: 0, pr: { xs: 2, lg: 3 }, pl: { xs: 2, lg: 0 }, flexGrow: 1 }}>
+                            <Typography sx={{ display: 'flex', mt: 1 }} color='secondary' variant="h6" component="h2">
+                                <Box sx={{ display: 'flex', width: '100%' }}>
+                                    {data.icon && <Box sx={{ mx: 2 }}><Icon icon={data.icon} color="primary" /></Box>}
+                                    <Box sx={{ flexGrow: 1 }}>
+                                        {description}
+                                    </Box>
+                                </Box>
+                            </Typography>
+                            <Hero
+                                config={config}
+                                frontmatter={data}
+                                navItems={navItems as I_NestedNav["navItems"]}
+                            />
+                            <RenderMarkdown config={config}>
+                                {content}
+                            </RenderMarkdown>
+                        </Box>
+                    </Box>
+                </Container>
+            )}
+            <footer>
+                <Footer
+                    frontmatter={data}
+                    navItems={navItems as I_NestedNav["navItems"]}
+                >
+                </Footer>
+            </footer>
+        </NX>
     );
 }

@@ -30,6 +30,8 @@ export default function Products() {
     results,
   } = state || {};
 
+  
+
   React.useEffect(() => {
     if (!initted) {
           dispatch(init());

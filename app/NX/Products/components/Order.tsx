@@ -24,12 +24,13 @@ interface I_Order {
 }
 
 const Order: FC<I_Order> = ({ data }) => {
-
+    console.log('data', data);
     const dispatch = useDispatch();
 
     const {
         name,
         price,
+        image_url,
         thumbnail_image,
     } = data || {};
 
@@ -39,7 +40,6 @@ const Order: FC<I_Order> = ({ data }) => {
     //     }
     // }, [initted, dispatch]);
 
-    const src = `/shared/jpg/magento/${thumbnail_image}`;
     const decodedName = name ? he.decode(name) : '';
     const [open, setOpen] = React.useState(false);
     const theme = useTheme();
@@ -61,12 +61,15 @@ const Order: FC<I_Order> = ({ data }) => {
                         subheader={<Typography variant="h6" color="primary" sx={{ mt: 1 }}>
                                         {new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(price)}
                                     </Typography>}
-                        action={<Thumbnail src={src} alt={decodedName} size={50}/>} 
+                        action={<Thumbnail src={image_url} alt={decodedName} size={50}/>} 
                     />
                 </Card>
             </ButtonBase>
             <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth fullScreen={isMobile}>
                 <DialogContent>
+                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}>
+                        <Thumbnail src={image_url || thumbnail_image} alt={decodedName} size={120} />
+                    </div>
                     <Product data={data} />
                 </DialogContent>
                 <DialogActions>

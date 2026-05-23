@@ -15,6 +15,6 @@ export function makeRes({ severity, message, data, tenant }: I_MakeRes) {
         
     };
     return data !== undefined
-        ? { meta, data, tenant }
+        ? { meta, data }
         : { meta };
 };

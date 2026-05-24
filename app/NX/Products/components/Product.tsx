@@ -55,9 +55,8 @@ const Product: FC<I_Product> = (data) => {
                         display: 'flex',
                         justifyContent: { xs: 'center', sm: 'flex-start' },
                         mb: { xs: 2, sm: 0 },
-                        
                     }}>
-                        <Thumbnail src={image_url as string} alt={decodedtitle} size={"100%"} />
+                        <Thumbnail src={image_url as string} alt={decodedtitle} size={100} />
                     </Grid>
                 )}
                 <Grid 

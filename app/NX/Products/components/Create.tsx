@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from 'react';
 import { useDispatch } from '../../../NX/Uberedux';
 import { T_Product } from '../exampleProduct';

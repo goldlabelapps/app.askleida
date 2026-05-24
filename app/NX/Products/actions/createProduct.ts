@@ -1,10 +1,15 @@
-import { T_Product } from '../exampleProduct';
+import type { Dispatch } from 'redux';
+import { setUbereduxKey } from '../../Uberedux';
 
-export const CREATE_PRODUCT = 'CREATE_PRODUCT';
-
-export function createProduct(product: T_Product) {
-  return {
-    type: CREATE_PRODUCT,
-    payload: product,
-  };
-}
+export const createProduct = (
+    key: string,
+    value: any,
+    successMsg?: string
+): any =>
+    async (dispatch: Dispatch, getState: () => any) => {
+        try {
+        } catch (e: unknown) {
+            const msg = e instanceof Error ? e.message : String(e);
+            dispatch(setUbereduxKey({ key: 'error', value: msg }));
+        }
+    };

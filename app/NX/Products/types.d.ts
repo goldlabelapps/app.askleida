@@ -24,6 +24,7 @@ export interface I_Product {
     is_verified?: boolean | null;
     is_seeded?: boolean | null;
     price?: number | null;
+    slug?: string | null;
 }
 
 

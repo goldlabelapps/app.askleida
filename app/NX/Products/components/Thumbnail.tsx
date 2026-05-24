@@ -10,7 +10,7 @@ import {
 interface I_Thumbnail {
     src: string;
     alt?: string;
-    size?: number;
+    size?: number | string;
 }
 
 const Thumbnail: FC<I_Thumbnail> = ({ src, alt, size = 75 }) => {

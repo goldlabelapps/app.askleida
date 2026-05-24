@@ -7,12 +7,11 @@ import {
     Card,
     CardHeader,
     Typography,
-    useMediaQuery,
-    useTheme,
     Grid,
+    CardActionArea,
+    Collapse,
 } from '@mui/material';
 import { useDispatch } from '../../../NX/Uberedux';
-import { Icon, navigateTo } from '../../DesignSystem';
 import { Thumbnail } from '../../Products';
 import he from 'he';
 
@@ -29,24 +28,29 @@ const Product: FC<I_Product> = (data) => {
 
     const decodedtitle = title ? he.decode(title) : '';
 
+    const [open, setOpen] = React.useState(false);
     const handleCardClick = () => {
-      dispatch(navigateTo(router, `/products/${data.product_id}`));
+        setOpen((prev) => !prev);
     };
     
     return (
         <Card variant="outlined" sx={{ width: '100%' }}>
-            <CardHeader
-                avatar={<Icon icon="products" color="primary" />}
-                title={decodedtitle}
-                subheader={
-                    <Typography variant="h6" color="primary" sx={{ mt: 1 }}>
-                        {typeof price === 'number'
-                            ? new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(price)
-                            : '--'}
-                    </Typography>
-                }
-            />
-
+            <CardActionArea onClick={handleCardClick}>
+                <CardHeader
+                    sx={{ width: '100%' }}
+                    title={<Typography variant="h6" sx={{ textAlign: 'left' }} color="text.secondary">
+                        {decodedtitle}
+                    </Typography>}
+                    subheader={
+                        <>
+                            <Typography variant="subtitle1" sx={{ mb: 1 }} color="text.secondary">
+                                {data.description}
+                            </Typography>
+                        </>
+                    }
+                />
+            </CardActionArea>
+            <Collapse in={open} timeout="auto" unmountOnExit>
             <Grid container spacing={2}>
                 {image_url && (
                     <Grid
@@ -55,21 +59,20 @@ const Product: FC<I_Product> = (data) => {
                         display: 'flex',
                         justifyContent: { xs: 'center', sm: 'flex-start' },
                         mb: { xs: 2, sm: 0 },
+                        
                     }}>
-                        <Thumbnail src={image_url as string} alt={decodedtitle} size={100} />
+                        <Thumbnail src={image_url as string} alt={decodedtitle} size={'100%'} />
                     </Grid>
                 )}
                 <Grid 
                     size={{ xs: 12, sm: 6 }} >
-                    <Typography variant="subtitle1" sx={{ mb: 1 }} color="text.secondary">
-                        {data.description}
-                    </Typography>
+                    
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                        {data.slug && (
+                            <li><Typography variant="body2"><b>Slug:</b> {data.slug}</Typography></li>
+                        )}
                         {data.brand && (
                             <li><Typography variant="body2"><b>Brand:</b> {data.brand}</Typography></li>
-                        )}
-                        {data.price !== undefined && data.price !== null && (
-                            <li><Typography variant="body2"><b>Price:</b> £{data.price}</Typography></li>
                         )}
                         {data.routine_step && (
                             <li><Typography variant="body2"><b>Routine Step:</b> {data.routine_step}</Typography></li>
@@ -116,12 +119,18 @@ const Product: FC<I_Product> = (data) => {
                         {typeof data.is_seeded === 'boolean' && (
                             <li><Typography variant="body2"><b>Seeded:</b> {data.is_seeded ? 'Yes' : 'No'}</Typography></li>
                         )}
-                        {data.slug && (
-                            <li><Typography variant="body2"><b>Slug:</b> {data.slug}</Typography></li>
-                        )}
+                        
                     </ul>
+
+                    <Typography variant="h6" color="primary" sx={{ mt: 1 }}>
+                        {typeof price === 'number'
+                            ? new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(price)
+                            : '--'}
+                    </Typography>
+
                 </Grid>
             </Grid>
+            </Collapse>
         </Card>
     );
 };

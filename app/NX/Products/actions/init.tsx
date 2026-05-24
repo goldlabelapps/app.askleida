@@ -1,28 +1,18 @@
 import type { T_UbereduxDispatch } from '../../types';
 import { setUbereduxKey } from '../../Uberedux';
-import { setKey } from '../../Products';
-
-async function fetchJson(endpoint: string) {
-    const res = await fetch(endpoint);
-    if (!res.ok) throw new Error(`Failed to fetch: ${endpoint}`);
-    let data = null;
-    try {
-        data = await res.json();
-    } catch {
-        data = null;
-    }
-    return data;
-}
+import { setKey, search } from '../../Products';
 
 export const init = () =>
     async (dispatch: T_UbereduxDispatch) => {
         try {
             dispatch(setKey('loading', true));
-            const { defaultOrderSearchParams } = await import('./search');
-            dispatch(setKey('searchParams', defaultOrderSearchParams));
-
-            // Optionally, you could check /api/products for health, but we'll just try to fetch products
-            const { search } = await import('./search');
+            // Set default search params
+            dispatch(setKey('searchParams', {
+                s: '',
+                page: 1,
+                limit: 25,
+            }));
+            // Fetch products
             await dispatch(search());
             dispatch(setKey('initted', true));
             dispatch(setKey('loading', false));

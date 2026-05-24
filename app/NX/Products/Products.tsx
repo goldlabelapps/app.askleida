@@ -1,25 +1,19 @@
 'use client';
 import * as React from 'react';
-import { 
-  Box, 
+import {
   Alert,
   Button,
   Container,
   Typography,
+  Box,
+  Collapse,
 } from '@mui/material';
-import { 
-  init, 
-  useState,
-  Product,
-} from '../../NX/Products';
+import { init, useState, Product, Create } from '../../NX/Products';
 import { useDispatch } from '../../NX/Uberedux';
-import {
-  Icon,
-} from '../DesignSystem';
 
 export default function Products() {
-
-  const dispatch = useDispatch(); 
+  const [showCreate, setShowCreate] = React.useState(false);
+  const dispatch = useDispatch();
   const state = useState();
   const {
     error,
@@ -29,15 +23,13 @@ export default function Products() {
     results,
   } = state || {};
 
-  
-
   React.useEffect(() => {
     if (!initted) {
-          dispatch(init());
-      }
+      dispatch(init());
+    }
   }, [initted, dispatch]);
 
-  if (!initted) return null
+  if (!initted) return null;
 
   if (error) {
     return (
@@ -45,7 +37,6 @@ export default function Products() {
         <Alert severity="info" sx={{ my: 2 }}
           action={
             <Button
-              startIcon={<Icon icon="reset" />}
               variant="contained"
               color="primary"
               onClick={() => window.location.reload()}
@@ -59,9 +50,21 @@ export default function Products() {
       </Container>
     );
   }
-  
-  return (<>
+
+  return (
+    <>
       <Box>
+        <Button
+          variant={showCreate ? 'outlined' : 'contained'}
+          color="primary"
+          sx={{ mb: 2 }}
+          onClick={() => setShowCreate((v) => !v)}
+        >
+          {showCreate ? 'Close Create Form' : 'Add Product'}
+        </Button>
+        <Collapse in={showCreate} sx={{ mb: 3 }}>
+          <Create />
+        </Collapse>
         {pagination && (
           <Typography variant="subtitle1" sx={{ mb: 2 }} align="center">
             {(() => {
@@ -93,7 +96,6 @@ export default function Products() {
             ))}
           </>
         )}
-        
       </Box>
     </>
   );

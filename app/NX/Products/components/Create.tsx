@@ -34,7 +34,7 @@ export default function Create() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-    dispatch(createProduct("products", form as T_Product));
+    dispatch(createProduct(form as T_Product));
     setSuccess(true);
     setForm(initialState);
   };

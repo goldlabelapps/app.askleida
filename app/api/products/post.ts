@@ -36,11 +36,18 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 // POST /api/products - Create a new product
 export async function POST(req: Request) {
+
   let body: T_Product;
   try {
     body = await req.json();
   } catch {
     const res = makeRes({ tenant, message: 'Invalid JSON body', severity: 'error' });
+    return NextResponse.json(res, { status: 400 });
+  }
+
+  // Ensure body is a non-null object and not an array
+  if (typeof body !== 'object' || body === null || Array.isArray(body)) {
+    const res = makeRes({ tenant, message: 'Request body must be a JSON object', severity: 'error' });
     return NextResponse.json(res, { status: 400 });
   }
 

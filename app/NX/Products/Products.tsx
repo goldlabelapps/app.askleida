@@ -11,7 +11,7 @@ import {
 import { 
   init, 
   useState,
-  Order,
+  Product,
 } from '../../NX/Products';
 import { useDispatch } from '../../NX/Uberedux';
 import {
@@ -96,7 +96,7 @@ export default function Products() {
                 md: 4,
                 lg: 3,
               }} key={`order_${idx}`}>
-                <Order data={order} />
+                <Product {...order} />
               </Grid>
             ))}
           </Grid>

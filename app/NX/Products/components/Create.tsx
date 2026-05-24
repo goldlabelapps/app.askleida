@@ -34,7 +34,9 @@ export default function Create() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-    dispatch(createProduct(form as T_Product));
+    // Auto-generate slug from title
+    const slug = form.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    dispatch(createProduct({ ...form, slug } as T_Product));
     setSuccess(true);
     setForm(initialState);
   };

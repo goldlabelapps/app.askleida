@@ -2,10 +2,12 @@
 import * as React from 'react';
 import { 
   Box, 
+  Button, 
   Typography,
 } from '@mui/material';
 import { 
-  init, 
+  init,
+  setKey, 
   useState,
 } from '../../NX/Dashboard';
 import { useDispatch } from '../../NX/Uberedux';
@@ -24,13 +26,26 @@ export default function Dashboard() {
       }
   }, [initted, dispatch]);
 
-  if (!initted) return null
+  const handleBtnClick = () => {
+    dispatch(setKey('handleBtnClick', true));
+  };
+
+  if (!initted) return null;
   
   return (<>
       <Box>
         <Typography variant="h4" gutterBottom>
           Dashboard
-        </Typography>        
+        </Typography>       
+        <Button 
+          variant="contained" 
+          color="primary" 
+          onClick={handleBtnClick}
+        >
+        handleBtnClick
+        </Button>
+
+        <pre>{JSON.stringify(state, null, 2)} </pre> 
       </Box>
     </>
   );

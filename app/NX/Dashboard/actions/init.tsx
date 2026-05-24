@@ -1,6 +1,6 @@
 import type { T_UbereduxDispatch } from '../../types';
 import { setUbereduxKey } from '../../Uberedux';
-import { setKey } from '../../Products';
+import { setKey } from '../../Dashboard';
 
 export const init = () =>
     async (dispatch: T_UbereduxDispatch) => {

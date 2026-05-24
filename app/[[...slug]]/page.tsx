@@ -23,6 +23,9 @@ import {
     Footer,
     TreeNav,
 } from '../NX/DesignSystem';
+import {
+    Dashboard,
+} from '../NX/Dashboard';
 import { RenderMarkdown } from '../NX/Shortcodes';
 
 export async function generateMetadata({ params }: { params: any }): Promise<Metadata> {
@@ -116,6 +119,28 @@ export default async function Page(props: any) {
     const isProductsRoute = slugArr.length === 1 && slugArr[0] === 'products';
     // Optionally, handle /products/ as well
     const isProductsRouteAlt = slugArr.length === 0 && data.slug === '/products';
+    // If the route is the main dashboard ("/"), render Dashboard
+    const isDashboardRoute = slugArr.length === 0 || (slugArr.length === 1 && slugArr[0] === '');
+
+    if (isDashboardRoute) {
+        return (
+            <NX config={config} frontmatter={data}>
+                <Header config={config} frontmatter={data} />
+                <Container id="main" maxWidth="lg" sx={{ mt: '100px', pb: '90px' }}>
+                    <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
+                        <Dashboard />
+                    </Box>
+                </Container>
+                <footer>
+                    <Footer
+                        frontmatter={data}
+                        navItems={navItems as I_NestedNav["navItems"]}
+                    >
+                    </Footer>
+                </footer>
+            </NX>
+        );
+    }
 
     if (isProductsRoute || isProductsRouteAlt) {
         const { Products } = await import('../NX/Products');

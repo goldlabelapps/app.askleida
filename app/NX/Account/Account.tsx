@@ -13,33 +13,33 @@ import {
 import { useDispatch } from '../../NX/Uberedux';
 import { useSupabaseAuth } from '../../NX/Paywall';
 
-export default function Dashboard() {
 
+export default function Account() {
   const router = useRouter();
-  const { user, loading } = useSupabaseAuth();
-  const dispatch = useDispatch(); 
+  const { user } = useSupabaseAuth();
+  const dispatch = useDispatch();
   const state = useState();
-  const {
-    initted,
-  } = state || {};
+  const { initted, user_id } = state || {};
 
   React.useEffect(() => {
-    if (!initted) {
-          dispatch(init());
-      }
-  }, [initted, dispatch]);
+    if (!initted && user?.id) {
+      dispatch(init());
+      dispatch(setKey('user_id', user.id));
+    }
+  }, [initted, user, dispatch]);
 
-  const handleBtnClick = () => {
-    dispatch(setKey('account', {}));
-  };
-
-  if (!initted) return null;
-  
-  return (<>
-      <Box sx={{mx:2}}>
-        <pre>{JSON.stringify(user, null, 2)} </pre> 
+  if (!initted) {
+    return (
+      <Box sx={{ mx: 2 }}>
+        <pre>Loading account...</pre>
       </Box>
-    </>
+    );
+  }
+
+  return (
+    <Box sx={{ mx: 2 }}>
+      <pre>state: {JSON.stringify(state, null, 2)}</pre>
+    </Box>
   );
 }
 

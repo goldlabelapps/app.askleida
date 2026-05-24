@@ -117,7 +117,7 @@ import FeatureIcon from '@mui/icons-material/RocketLaunchOutlined';
 import SitemapIcon from '@mui/icons-material/AccountTree';
 import GoodfitIcon from '@mui/icons-material/InterpreterMode';
 import SpeakwriteIcon from '@mui/icons-material/KeyboardVoice';
-import ProductsIcon from '@mui/icons-material/Store';
+import ProductsIcon from '@mui/icons-material/LibraryBooks';
 import UbereduxIcon from '@mui/icons-material/StorageOutlined';
 import CoreIcon from '@mui/icons-material/BarcodeReader';
 import CopyIcon from '@mui/icons-material/CopyAllOutlined';

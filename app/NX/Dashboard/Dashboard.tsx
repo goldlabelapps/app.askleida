@@ -2,11 +2,10 @@
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { 
-  Box, 
-  Button, 
-  Typography,
+  Box,
   List,
   ListItem,
+  ListItemIcon,
   ListItemButton,
   ListItemText
 } from '@mui/material';
@@ -16,7 +15,7 @@ import {
   useState,
 } from '../../NX/Dashboard';
 import { useDispatch } from '../../NX/Uberedux';
-import { navigateTo } from '../../NX/DesignSystem';
+import { navigateTo, Icon } from '../../NX/DesignSystem';
 
 export default function Dashboard() {
 
@@ -40,23 +39,21 @@ export default function Dashboard() {
   if (!initted) return null;
   
   return (<>
-      <Box>
-        <Typography variant="h4" gutterBottom>
-          Dashboard
-        </Typography>  
+      <Box sx={{mx:2}}>
 
         <List>
           
           <ListItemButton
             onClick={() => dispatch(navigateTo(router, '/products'))}
           >
+            <ListItemIcon><Icon icon="products" color="primary" /></ListItemIcon>
               <ListItemText primary="Products" />
           </ListItemButton>
 
         <ListItem>
           <ListItemText primary="Onboarding" />
         </ListItem>
-        
+
           <ListItem>
             <ListItemText primary="Clients" />
           </ListItem>

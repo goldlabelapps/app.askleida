@@ -1,6 +1,5 @@
 ---
-title: Ask Leida
-description: Dashboard
+title: Dashboard
 order: 1
 slug: /
 icon: dashboard

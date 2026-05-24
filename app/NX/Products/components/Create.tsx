@@ -1,11 +1,13 @@
 "use client";
 import React, { useState } from 'react';
 import { useDispatch } from '../../../NX/Uberedux';
-import { T_Product } from '../exampleProduct';
-import { createProduct } from '../actions/createProduct';
+import type { I_Product } from '../types.d.ts';
+import { createProduct } from '../../Products';
+
+import { Icon } from '../../DesignSystem';
 import { Button, TextField, Box, Typography } from '@mui/material';
 
-const initialState: Partial<T_Product> = {
+const initialState: Partial<I_Product> = {
   title: '',
   description: '',
   brand: '',
@@ -14,7 +16,7 @@ const initialState: Partial<T_Product> = {
 
 export default function Create() {
   const dispatch = useDispatch();
-  const [form, setForm] = useState<Partial<T_Product>>(initialState);
+  const [form, setForm] = useState<Partial<I_Product>>(initialState);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
@@ -36,7 +38,7 @@ export default function Create() {
     if (!validate()) return;
     // Auto-generate slug from title
     const slug = form.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-    dispatch(createProduct({ ...form, slug } as T_Product));
+    dispatch(createProduct({ ...form, slug } as I_Product));
     setSuccess(true);
     setForm(initialState);
   };
@@ -81,8 +83,15 @@ export default function Create() {
       />
       {error && <Typography color="error" mt={1}>{error}</Typography>}
       {success && <Typography color="primary" mt={1}>Product created!</Typography>}
-      <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
-        Submit
+      <Button 
+        fullWidth
+        type="submit" 
+        variant="contained" 
+        color="primary" 
+        sx={{ mt: 2 }}
+        startIcon={<Icon icon="tick" />}
+      >
+        Add 
       </Button>
     </Box>
   );

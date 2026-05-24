@@ -2,18 +2,18 @@ import type { Dispatch } from 'redux';
 import { setUbereduxKey } from '../../Uberedux';
 import { setFeedback } from '../../DesignSystem';
 import { setKey, search } from '../../Products';
-import type { T_Product } from '../exampleProduct';
 
 export const deleteProduct = (product_id: number): any =>
     async (dispatch: Dispatch, getState: () => any) => {
         try {
             dispatch(setKey('loading', true));
-            const res = await fetch('/api/products/delete', {
+            const res = await fetch('/api/products', {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ product_id }),
             });
             const data = await res.json();
+
             if (!res.ok || data?.severity === 'error') {
                 dispatch(setFeedback({
                     title: data?.message || 'Failed to delete product',

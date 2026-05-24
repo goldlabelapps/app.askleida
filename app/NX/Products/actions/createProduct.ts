@@ -2,9 +2,9 @@ import type { Dispatch } from 'redux';
 import { setUbereduxKey } from '../../Uberedux';
 import { setFeedback } from '../../DesignSystem';
 import { setKey, search } from '../../Products';
-import type { T_Product } from '../exampleProduct';
+import type { I_Product } from '../types.d.ts';
 
-export const createProduct = (product: T_Product): any =>
+export const createProduct = (product: I_Product): any =>
     async (dispatch: Dispatch, getState: () => any) => {
         try {
             dispatch(setKey('loading', true));

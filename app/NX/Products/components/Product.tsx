@@ -20,7 +20,6 @@ import {
 import { useDispatch } from '../../../NX/Uberedux';
 import { Thumbnail } from '../../Products';
 import { Icon, ConfirmAction } from '../../DesignSystem';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { deleteProduct } from '../actions/deleteProduct';
 import he from 'he';
 
@@ -52,6 +51,7 @@ const Product: FC<I_Product> = (data) => {
     const handleConfirmDelete = () => {
         setConfirmOpen(false);
         if (data.product_id) {
+            // console.log('Deleting product with ID:', data.product_id);
             dispatch(deleteProduct(data.product_id));
         }
     };

@@ -48,7 +48,7 @@ export default function Header({
 					boxShadow: 0,
 					background: theme.palette?.background?.default || 'inherit',
 				}}>
-				<Container maxWidth="lg">
+				<Container maxWidth="md">
 					<CardHeader
 						title={<Typography
 							color='secondary'

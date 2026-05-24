@@ -6,7 +6,6 @@ import {
   Button,
   Container,
   Typography,
-  Grid,
 } from '@mui/material';
 import { 
   init, 
@@ -88,18 +87,11 @@ export default function Products() {
         )}
 
         {results && results.length > 0 && (
-          <Grid container spacing={2} sx={{ mb: 2 }}>
+          <>
             {results.map((order: any, idx: number) => (
-              <Grid size={{
-                xs: 12,
-                sm: 6,
-                md: 4,
-                lg: 3,
-              }} key={`order_${idx}`}>
-                <Product {...order} />
-              </Grid>
+              <Product {...order} key={`order_${idx}`} />
             ))}
-          </Grid>
+          </>
         )}
         
       </Box>

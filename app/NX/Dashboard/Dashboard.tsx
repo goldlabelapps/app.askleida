@@ -7,7 +7,8 @@ import {
   ListItem,
   ListItemIcon,
   ListItemButton,
-  ListItemText
+  ListItemText,
+  Grid,
 } from '@mui/material';
 import { 
   init,
@@ -40,30 +41,38 @@ export default function Dashboard() {
   
   return (<>
       <Box sx={{mx:2}}>
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <List>
 
-        <List>
-          
-          <ListItemButton
-            onClick={() => dispatch(navigateTo(router, '/products'))}
-          >
-            <ListItemIcon><Icon icon="products" color="primary" /></ListItemIcon>
-              <ListItemText primary="Products" />
-          </ListItemButton>
+              <ListItemButton
+                onClick={() => dispatch(navigateTo(router, '/products'))}
+              >
+                <ListItemIcon><Icon icon="products" color="primary" /></ListItemIcon>
+                <ListItemText primary="Products" />
+              </ListItemButton>
 
-        <ListItem>
-          <ListItemText primary="Onboarding" />
-        </ListItem>
+              <ListItem>
+                <ListItemText primary="Onboarding" />
+              </ListItem>
 
-          <ListItem>
-            <ListItemText primary="Clients" />
-          </ListItem>
-        <ListItem>
-          <ListItemText primary="Recommendations" />
-        </ListItem>
-          <ListItem>
-            <ListItemText primary="Tips" />
-          </ListItem>
-        </List>
+              <ListItem>
+                <ListItemText primary="Clients" />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="Recommendations" />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="Tips" />
+              </ListItem>
+            </List>
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 6 }}>
+            
+          </Grid>
+        </Grid>
+        
 {/* 
         <Button 
           variant="contained" 

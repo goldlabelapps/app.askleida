@@ -13,7 +13,6 @@ import {
 import { useDispatch } from '../../NX/Uberedux';
 import { useSupabaseAuth } from '../../NX/Paywall';
 
-
 export default function Account() {
   const router = useRouter();
   const { user } = useSupabaseAuth();
@@ -23,8 +22,7 @@ export default function Account() {
 
   React.useEffect(() => {
     if (!initted && user?.id) {
-      dispatch(init());
-      dispatch(setKey('user_id', user.id));
+      dispatch(init(user?.id));
     }
   }, [initted, user, dispatch]);
 
@@ -38,19 +36,7 @@ export default function Account() {
 
   return (
     <Box sx={{ mx: 2 }}>
-      <pre>state: {JSON.stringify(state, null, 2)}</pre>
+      <pre>account: {JSON.stringify(state?.account, null, 2)}</pre>
     </Box>
   );
 }
-
-/*
-<Button 
-          variant="contained" 
-          color="primary" 
-          onClick={handleBtnClick}
-        >
-        handleBtnClick
-        </Button>
-
-        
-*/

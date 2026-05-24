@@ -126,7 +126,7 @@ export default async function Page(props: any) {
         return (
             <NX config={config} frontmatter={data}>
                 <Header config={config} frontmatter={data} />
-                <Container id="main" maxWidth="lg" sx={{ mt: '100px', pb: '90px' }}>
+                <Container id="main" maxWidth="md" sx={{ mt: '100px', pb: '90px' }}>
                     <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
                         <Dashboard />
                     </Box>
@@ -147,7 +147,7 @@ export default async function Page(props: any) {
         return (
             <NX config={config} frontmatter={data}>
                 <Header config={config} frontmatter={data} />
-                <Container id="main" maxWidth="lg" sx={{ mt: '100px', pb: '90px' }}>
+                <Container id="main" maxWidth="md" sx={{ mt: '100px', pb: '90px' }}>
                     <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
                         <Products />
                     </Box>
@@ -169,7 +169,7 @@ export default async function Page(props: any) {
             <Header config={config} frontmatter={data} />
             {data.cartridge ? (
                 data.cartridge === 'virus' ? null : (
-                    <Container id="main" maxWidth="lg" sx={{ mt: '100px', pb: '90px' }}>
+                    <Container id="main" maxWidth="md" sx={{ mt: '100px', pb: '90px' }}>
                         <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
                             <Typography variant="h4" color="primary" sx={{ mb: 2 }}>
                                 {data.title || title} (CARTRIDGE)
@@ -183,7 +183,7 @@ export default async function Page(props: any) {
                     </Container>
                 )
             ) : (
-                <Container id="main" maxWidth="lg" 
+                <Container id="main" maxWidth="md" 
                     sx={{ mt: '100px', pb: '90px' }}>
                     <Box sx={{ width: '100%', display: 'flex', gap: 1 }}>
                         <Box sx={{ display: { xs: 'none', sm: 'flex' }, flexDirection: 'column' }}>

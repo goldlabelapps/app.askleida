@@ -8,18 +8,13 @@ const tenant = process.env.NEXT_PUBLIC_TENANT;
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 // GET /api/accounts/:id - Get account by user_id
+
+
 export async function GET(
   req: Request,
-  context?: { params?: { id?: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
-  let id = context?.params?.id;
-  // Fallback: extract id from URL if not present in params
-  if (!id && req.url) {
-    const match = req.url.match(/\/accounts\/(.*?)($|\?|#)/);
-    if (match && match[1]) {
-      id = match[1];
-    }
-  }
+  const { id } = await context.params;
   if (!id) {
     const res = makeRes({ tenant, message: 'Missing id parameter', severity: 'error' });
     return NextResponse.json(res, { status: 400 });

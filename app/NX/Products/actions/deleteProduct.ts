@@ -2,32 +2,30 @@ import type { Dispatch } from 'redux';
 import { setUbereduxKey } from '../../Uberedux';
 import { setFeedback } from '../../DesignSystem';
 import { setKey, search } from '../../Products';
-import type { I_Product } from '../types.d.ts';
 
-export const createProduct = (product: I_Product): any =>
+export const deleteProduct = (product_id: number): any =>
     async (dispatch: Dispatch, getState: () => any) => {
         try {
             dispatch(setKey('loading', true));
-            // POST to API
             const res = await fetch('/api/products', {
-                method: 'POST',
+                method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(product),
+                body: JSON.stringify({ product_id }),
             });
             const data = await res.json();
+
             if (!res.ok || data?.severity === 'error') {
                 dispatch(setFeedback({
-                    title: data?.message || 'Failed to create product',
+                    title: data?.message || 'Failed to delete product',
                     severity: 'error',
                 }));
                 dispatch(setKey('loading', false));
                 return;
             }
             dispatch(setFeedback({
-                title: 'Product created successfully',
+                title: 'Product deleted successfully',
                 severity: 'success',
             }));
-            // Optionally, clear form or do other UI updates here
             // Refresh products
             dispatch(search() as any);
             dispatch(setKey('loading', false));

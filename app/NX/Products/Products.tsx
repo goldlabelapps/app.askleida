@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { init, useState, Product, Create } from '../../NX/Products';
 import { useDispatch } from '../../NX/Uberedux';
+import { Icon } from '../../NX/DesignSystem';
 
 export default function Products() {
   const [showCreate, setShowCreate] = React.useState(false);
@@ -55,6 +56,8 @@ export default function Products() {
     <>
       <Box>
         <Button
+          fullWidth
+          startIcon={<Icon icon={'add'} />}
           variant={showCreate ? 'outlined' : 'contained'}
           color="primary"
           sx={{ mb: 2 }}

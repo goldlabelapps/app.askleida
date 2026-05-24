@@ -10,9 +10,17 @@ import {
     Grid,
     CardActionArea,
     Collapse,
+    AppBar,
+    Toolbar,
+    IconButton,
+    Tooltip,
+    Divider,
+    Box,
 } from '@mui/material';
 import { useDispatch } from '../../../NX/Uberedux';
 import { Thumbnail } from '../../Products';
+import { Icon, ConfirmAction } from '../../DesignSystem';
+import { deleteProduct } from '../actions/deleteProduct';
 import he from 'he';
 
 const Product: FC<I_Product> = (data) => {
@@ -32,9 +40,27 @@ const Product: FC<I_Product> = (data) => {
     const handleCardClick = () => {
         setOpen((prev) => !prev);
     };
+
+
+    // Confirm dialog state
+    const [confirmOpen, setConfirmOpen] = React.useState(false);
+    const handleDeleteClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setConfirmOpen(true);
+    };
+    const handleConfirmDelete = () => {
+        setConfirmOpen(false);
+        if (data.product_id) {
+            // console.log('Deleting product with ID:', data.product_id);
+            dispatch(deleteProduct(data.product_id));
+        }
+    };
+    const handleCloseConfirm = () => setConfirmOpen(false);
     
     return (
         <Card variant="outlined" sx={{ width: '100%' }}>
+
+            {/* Card header and action area always visible */}
             <CardActionArea onClick={handleCardClick}>
                 <CardHeader
                     sx={{ width: '100%' }}
@@ -50,8 +76,25 @@ const Product: FC<I_Product> = (data) => {
                     }
                 />
             </CardActionArea>
+
+            {/* AppBar at the top of the collapsed area */}
             <Collapse in={open} timeout="auto" unmountOnExit>
-            <Grid container spacing={2}>
+                <AppBar 
+                    position="static" 
+                    color="primary" 
+                    variant="outlined" 
+                    >
+                    <Toolbar variant="dense" sx={{ minHeight: 40, px: 1 }}>
+                        <Box sx={{ flexGrow: 1 }} />
+                        <Tooltip title="Delete Product">
+                            <IconButton color="inherit" size="small" onClick={handleDeleteClick} edge="end">
+                                <Icon icon="delete" />
+                            </IconButton>
+                        </Tooltip>
+                    </Toolbar>
+                </AppBar>
+                <Divider sx={{ mb: 2 }} />
+                <Grid container spacing={2}>
                 {image_url && (
                     <Grid
                         size={{ xs: 12, sm: 6 }}
@@ -129,8 +172,18 @@ const Product: FC<I_Product> = (data) => {
                     </Typography>
 
                 </Grid>
-            </Grid>
+                </Grid>
             </Collapse>
+            {/* ConfirmAction dialog for hard delete */}
+            <ConfirmAction
+                open={confirmOpen}
+                icon="delete"
+                title="Delete Product?"
+                body={<>This is a <b>hard delete</b>. Are you sure you want to permanently remove this product?</>}
+                handleConfirm={handleConfirmDelete}
+                handleClose={handleCloseConfirm}
+            />
+
         </Card>
     );
 };

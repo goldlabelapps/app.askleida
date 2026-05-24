@@ -61,7 +61,7 @@ const Product: FC<I_Product> = (data) => {
                         mb: { xs: 2, sm: 0 },
                         
                     }}>
-                        <Thumbnail src={image_url as string} alt={decodedtitle} size={"100%"} />
+                        <Thumbnail src={image_url as string} alt={decodedtitle} size={'100%'} />
                     </Grid>
                 )}
                 <Grid 

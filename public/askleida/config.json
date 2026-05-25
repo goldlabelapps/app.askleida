@@ -24,7 +24,7 @@
         "designSystem": {
             "themeSwitching": true,
             "sharing": false,
-            "defaultTheme": "light",
+            "defaultTheme": "dark",
             "themes": {
                 "dark": {
                     "mode": "dark",

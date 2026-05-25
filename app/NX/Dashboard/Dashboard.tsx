@@ -44,7 +44,9 @@ export default function Dashboard() {
       <Box sx={{mx:2}}>
         <Grid container spacing={2}>
           
-          
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <Account />
+          </Grid>
 
           <Grid size={{ xs: 12, sm: 6 }}>
             <List>
@@ -56,7 +58,7 @@ export default function Dashboard() {
                 <ListItemText primary="Products" />
               </ListItemButton>
 
-              <ListItem>
+              {/* <ListItem>
                 <ListItemText primary="Onboarding" />
               </ListItem>
 
@@ -68,13 +70,12 @@ export default function Dashboard() {
               </ListItem>
               <ListItem>
                 <ListItemText primary="Tips" />
-              </ListItem>
+              </ListItem> */}
+
             </List>
           </Grid>
 
-        <Grid size={{ xs: 12, sm: 6 }}>
-          <Account />
-        </Grid>
+        
           
         </Grid>
         

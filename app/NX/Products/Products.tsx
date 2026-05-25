@@ -1,9 +1,9 @@
 'use client';
 import * as React from 'react';
 import {
-  Button,
+  Card,
+  CardContent,
   Box,
-  Collapse,
   Typography,
 } from '@mui/material';
 import { init, useState, Product, Create } from '../../NX/Products';
@@ -30,16 +30,14 @@ export default function Products({ slug }: { slug?: string }) {
   return (
     <>
       <Box>
-        <Typography variant="h4" mb={2}>
-          Product Feature
-        </Typography>
-        <Typography variant="subtitle1" color="text.secondary" mb={2}>
-          Confidential — May 2026
-        </Typography>
-        <Typography variant="h6" mt={3} mb={1}>1. Developer Brief</Typography>
-        <Typography paragraph>
-          Build a UI to allow practitioners to fully manage (CRUD) their product records in Supabase via the Next.js API endpoints. The UI must cover all the following requirements:
-        </Typography>
+        <Card>
+          <CardContent>
+            <Typography variant="h4" mt={3} mb={1}>Github Task</Typography>
+            <Typography paragraph>
+              Build a UI to allow practitioners to fully manage (CRUD) their product records in Supabase via the Next.js API endpoints. The UI must cover all the following requirements:
+            </Typography>
+          </CardContent>
+        </Card>
         <Typography variant="h6" mt={3} mb={1}>Requirements</Typography>
         <Typography variant="subtitle1" mt={2} mb={1}>1. Product Search</Typography>
         <Typography component="ul" sx={{ pl: 3 }}>

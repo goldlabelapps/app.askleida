@@ -30,8 +30,8 @@
                     "mode": "dark",
                     "primary": "#F7F5F2",
                     "secondary": "#F7F5F2",
-                    "background": "#5D465F",
-                    "paper": "#554056",
+                    "background": "#c93379",
+                    "paper": "#c93379",
                     "text": "#fff",
                     "border": "#F7F5F2"
                 },

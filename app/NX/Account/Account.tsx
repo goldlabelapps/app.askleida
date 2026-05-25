@@ -51,30 +51,27 @@ function AccountCard({ account }: { account: any }) {
   if (!account) return null;
   const { name, email, avatar, level, created_at } = account;
   return (
-    <Card variant="outlined">
+    <Card>
       <CardHeader
         avatar={<Avatar src={avatar} alt={name} sx={{ width: 75, height: 75 }} />}
         title={<Typography variant="h6">{name}</Typography>}
-        subheader={<Typography variant="body2" color="text.secondary">{email}</Typography>}
+        subheader={<Typography variant="body1" color="text.secondary">{email}</Typography>}
         action={<SignOutBtn />}
       />
       <CardContent>
         <Stack direction="row" spacing={2} alignItems="center">
-          
           <Box>
-            
-            
-
             <>
-
               {[...Array(5)].map((_, i) => (
-                <Icon key={i} icon={i < (typeof level === 'number' ? level : 0) ? 'staron' : 'staroff'} color={i < (typeof level === 'number' ? level : 0) ? 'prinary' : 'disabled'} />
+                <Icon key={i} icon={i < (typeof level === 'number' ? level : 0) ? 'staron' : 'staroff'} color={i < (typeof level === 'number' ? level : 0) ? 'primary' : 'disabled'} />
               ))}
             </>
           </Box>
+          
         </Stack>
-        
-        
+        <Typography variant="body1">
+          Access level: {level === 5 ? 'Founder' : 'Paying Customer'}
+        </Typography>
       </CardContent>
     </Card>
   );

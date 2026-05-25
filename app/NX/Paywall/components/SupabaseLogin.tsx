@@ -62,7 +62,6 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
     >
 
       <Card 
-        variant="outlined" 
         sx={{ 
           width: 360, 
           maxWidth: '90vw',
@@ -72,6 +71,7 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
           <Box display="flex" justifyContent="center" alignItems="center" sx={{ pt: 2 }}>
             <Avatar src={avatarUrl} alt={siteName}  />
           </Box>
+          <Box sx={{mx:2}}>
           <form onSubmit={handleSubmit}>
             <TextField
               label="Email"
@@ -96,6 +96,7 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
+                      
                       aria-label={showPassword ? 'Hide password' : 'Show password'}
                       onClick={() => setShowPassword((show) => !show)}
                       edge="end"
@@ -111,7 +112,6 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
             )}
             <Button
               type="submit"
-              size="large"
               fullWidth
               sx={{ mt: 2 }}
               endIcon={<Icon icon="signin" />}
@@ -119,6 +119,7 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
               Sign In
             </Button>
           </form>
+          </Box>
         </CardContent>
       </Card>
     </Box>

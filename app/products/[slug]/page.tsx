@@ -6,7 +6,7 @@ import { Container, Box, Typography, AppBar, Toolbar, IconButton, Button } from 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { ProductDetail } from '../../NX/Products';
 import { useDispatch } from '../../NX/Uberedux';
-import { navigateTo } from '../../NX/DesignSystem';
+import { navigateTo, Icon } from '../../NX/DesignSystem';
 import { useRouter } from 'next/navigation';
 
 export default function ProductSlugPage() {
@@ -31,18 +31,22 @@ export default function ProductSlugPage() {
     if (loading) return <Box p={4}><Typography>Loading...</Typography></Box>;
     if (!product) return <Box p={4}><Typography>Product not found.</Typography></Box>;
 
+    const handleBack = () => {
+     dispatch(navigateTo(router, '/products'));
+    }
 
     return (
         <Container id="main" maxWidth="md">
           <AppBar position="static" color="default" elevation={1} sx={{ mb: 3 }}>
             <Toolbar>
-              <IconButton edge="start" color="inherit" aria-label="back" onClick={() => router.push('/products')}>
-                <ArrowBackIcon />
-              </IconButton>
-              <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                Product Details
-              </Typography>
-              {/* Add more action buttons here if needed */}
+              
+              <Button 
+                variant="contained"
+                color="primary" 
+                startIcon={<Icon icon="products" />}
+                onClick={handleBack}>
+                    All Products
+              </Button>
             </Toolbar>
           </AppBar>
           <ProductDetail product={product} />

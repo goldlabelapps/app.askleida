@@ -17,11 +17,17 @@ export async function GET(
     const res = makeRes({ tenant, message: 'Missing slug parameter', severity: 'error' });
     return NextResponse.json(res, { status: 400 });
   }
-  const { data, error } = await supabase.from('products').select('*').eq('slug', slug).single();
+  const { data, error } = await supabase.from('products').select('*').eq('slug', slug);
   if (error) {
     const res = makeRes({ tenant, message: error.message, severity: 'error' });
     return NextResponse.json(res, { status: 404 });
   }
-  const res = makeRes({ tenant, message: 'Fetched product', severity: 'success', data });
+  if (!data || data.length === 0) {
+    const res = makeRes({ tenant, message: 'No product found with this slug', severity: 'error' });
+    return NextResponse.json(res, { status: 404 });
+  }
+  // If only one product, return the object, else return the array
+  const result = data.length === 1 ? data[0] : data;
+  const res = makeRes({ tenant, message: 'Fetched product(s)', severity: 'success', data: result });
   return NextResponse.json(res);
 }

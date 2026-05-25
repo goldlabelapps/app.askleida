@@ -12,13 +12,17 @@ export async function GET(req: Request) {
   const url = req?.url ? new URL(req.url) : null;
   const id = url?.searchParams.get('id');
   if (id) {
-    // Get single product by id
-    const { data, error } = await supabase.from('products').select('*').eq('product_id', id).single();
+    // Get product(s) by id (may return multiple, handle as array)
+    const { data, error } = await supabase.from('products').select('*').eq('product_id', id);
     if (error) {
       const res = makeRes({ tenant, message: error.message, severity: 'error' });
       return NextResponse.json(res, { status: 404 });
     }
-    const res = makeRes({ tenant, message: 'Fetched product', severity: 'success', data });
+    if (!data || data.length === 0) {
+      const res = makeRes({ tenant, message: 'No product found with this id', severity: 'error' });
+      return NextResponse.json(res, { status: 404 });
+    }
+    const res = makeRes({ tenant, message: 'Fetched product(s)', severity: 'success', data });
     return NextResponse.json(res);
   }
   // List all products

@@ -115,8 +115,11 @@ export default async function Page(props: any) {
         image: (typeof data.image === 'string' && data.image.trim()) ? data.image : themedImage,
     });
 
-    // If the route is /products, render the Products component instead of markdown
+
+    // If the route is /products, render the Products component
     const isProductsRoute = slugArr.length === 1 && slugArr[0] === 'products';
+    // If the route is /products/:slug, render Products with slug
+    const isProductDetailRoute = slugArr[0] === 'products' && slugArr.length > 1;
     // Optionally, handle /products/ as well
     const isProductsRouteAlt = slugArr.length === 0 && data.slug === '/products';
     // If the route is the main dashboard ("/"), render Dashboard
@@ -150,6 +153,28 @@ export default async function Page(props: any) {
                 <Container id="main" maxWidth="md" sx={{ mt: '100px', pb: '90px' }}>
                     <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
                         <Products />
+                    </Box>
+                </Container>
+                <footer>
+                    <Footer
+                        frontmatter={data}
+                        navItems={navItems as I_NestedNav["navItems"]}
+                    >
+                    </Footer>
+                </footer>
+            </NX>
+        );
+    }
+
+    if (isProductDetailRoute) {
+        const { Products } = await import('../NX/Products');
+        const productSlug = slugArr[1];
+        return (
+            <NX config={config} frontmatter={data}>
+                <Header config={config} frontmatter={data} />
+                <Container id="main" maxWidth="md" sx={{ mt: '100px', pb: '90px' }}>
+                    <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
+                        <Products slug={productSlug} />
                     </Box>
                 </Container>
                 <footer>

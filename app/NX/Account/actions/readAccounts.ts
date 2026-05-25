@@ -33,16 +33,8 @@ export const readAccounts = (user_id?: string): any =>
             }
             if (user_id) {
                 dispatch(setKey('account', data.data as I_Account));
-                dispatch(setFeedback({
-                    title: 'Account loaded successfully',
-                    severity: 'success',
-                }));
             } else {
                 dispatch(setKey('accounts', data.data as I_Account[]));
-                dispatch(setFeedback({
-                    title: 'Accounts loaded successfully',
-                    severity: 'success',
-                }));
             }
             dispatch(setKey('loading', false));
         } catch (e: unknown) {

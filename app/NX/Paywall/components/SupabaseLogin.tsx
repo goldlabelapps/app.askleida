@@ -44,7 +44,7 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
 
   // Use designSystem for siteName and avatar (logo)
   // You can get theme mode from MUI if needed, or default to 'light'
-  const themeMode = 'light'; // Replace with MUI theme if available
+  const themeMode = 'dark'; // Replace with MUI theme if available
 
   const siteName = designSystem?.config?.siteName || "Sign In";
   const avatarUrl = designSystem?.config?.avatars?.[themeMode] || designSystem?.avatar || '';
@@ -69,12 +69,13 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
         }}>
         
         <CardContent>
-          <Box display="flex" justifyContent="center" alignItems="center" sx={{ py: 2 }}>
-            <Avatar src={avatarUrl} alt={siteName} sx={{ width: 50, height: 50 }} />
+          <Box display="flex" justifyContent="center" alignItems="center" sx={{ pt: 2 }}>
+            <Avatar src={avatarUrl} alt={siteName}  />
           </Box>
           <form onSubmit={handleSubmit}>
             <TextField
               label="Email"
+              variant="standard"
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
@@ -84,6 +85,7 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
             />
             <TextField
               label="Password"
+              variant="standard"
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={e => setPassword(e.target.value)}
@@ -111,7 +113,6 @@ export default function SupabaseLogin({ publicUrl, onSupabaseLogin, error: exter
               type="submit"
               size="large"
               fullWidth
-              variant="contained"
               sx={{ mt: 2 }}
               endIcon={<Icon icon="signin" />}
             >

@@ -9,12 +9,14 @@ import { Button, TextField, Box, Typography } from '@mui/material';
 
 const initialState: Partial<I_Product> = {
   title: '',
-  description: '',
-  brand: '',
-  price: undefined,
 };
 
-export default function Create() {
+
+interface CreateProps {
+  onCreated?: (slug: string) => void;
+}
+
+export default function Create({ onCreated }: CreateProps) {
   const dispatch = useDispatch();
   const [form, setForm] = useState<Partial<I_Product>>(initialState);
   const [error, setError] = useState<string | null>(null);
@@ -36,19 +38,25 @@ export default function Create() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-    // Auto-generate slug from title
-    const slug = form.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    // Auto-generate slug from title, max 40 chars
+    let slug = form.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || '';
+    const MAX_SLUG_LENGTH = 40;
+    if (slug.length > MAX_SLUG_LENGTH) {
+      slug = slug.slice(0, MAX_SLUG_LENGTH).replace(/-+$/g, '');
+    }
     dispatch(createProduct({ ...form, slug } as I_Product));
     setSuccess(true);
     setForm(initialState);
+    if (onCreated) onCreated(slug);
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400, mx: 'auto', mt: 4 }}>
-      <Typography variant="h5" mb={2}>Create Product</Typography>
+    <Box component="form" onSubmit={handleSubmit} sx={{  }}>
       <TextField
+        autoFocus
         label="Title"
         name="title"
+        variant="standard"
         value={form.title}
         onChange={handleChange}
         fullWidth
@@ -56,42 +64,16 @@ export default function Create() {
         margin="normal"
         inputProps={{ minLength: 5 }}
       />
-      <TextField
-        label="Description"
-        name="description"
-        value={form.description}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Brand"
-        name="brand"
-        value={form.brand}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Price"
-        name="price"
-        type="number"
-        value={form.price ?? ''}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-      />
       {error && <Typography color="error" mt={1}>{error}</Typography>}
       {success && <Typography color="primary" mt={1}>Product created!</Typography>}
       <Button 
         fullWidth
-        type="submit" 
-        variant="contained" 
+        type="submit"
         color="primary" 
         sx={{ mt: 2 }}
         startIcon={<Icon icon="tick" />}
       >
-        Add 
+        Create Product 
       </Button>
     </Box>
   );

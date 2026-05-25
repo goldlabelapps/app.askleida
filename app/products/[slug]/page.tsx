@@ -1,4 +1,3 @@
-
 "use client";
 import * as React from "react";
 import { useParams } from "next/navigation";
@@ -6,7 +5,8 @@ import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 
 
-  export default function ProductSlugPage() {
+export default function ProductSlugPage() {
+
     const params = useParams();
     const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
     const [product, setProduct] = useState(null);
@@ -28,7 +28,7 @@ import { Box, Typography } from "@mui/material";
     return (
       <Box p={4}>
         <Typography variant="h5" mb={2}>Product: {slug}</Typography>
-        <pre style={{ background: '#f5f5f5', padding: 16, borderRadius: 8 }}>
+        <pre>
           {JSON.stringify(product, null, 2)}
         </pre>
       </Box>

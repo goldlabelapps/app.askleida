@@ -1,6 +1,7 @@
 
 import Products from './Products';
-import Product from './components/Product';
+import ProductCard from './components/ProductCard';
+import ProductDetail from './components/ProductDetail';
 import Create from './components/Create';
 import Thumbnail from './components/Thumbnail';
 import { init } from './actions/init';
@@ -12,7 +13,8 @@ import {useState} from './hooks/useState';
 
 export {
     Products,
-    Product,
+    ProductCard,
+    ProductDetail,
     Create,
     Thumbnail,
     init,

@@ -19,13 +19,13 @@ const ProductDetail: FC<{ product: I_Product }> = ({ product }) => {
       <CardContent>
         <Grid container spacing={3}>
           {product.image_url && (
-            <Grid item size={{ xs: 12, md: 5 }}>
+            <Grid size={{ xs: 12, md: 5 }}>
               <Box sx={{ display: 'flex', justifyContent: { xs: 'center', sm: 'flex-start' } }}>
                 <Thumbnail src={product.image_url as string} alt={decodedTitle} size={300} />
               </Box>
             </Grid>
           )}
-          <Grid item size={{ xs: 12, md: product.image_url ? 7 : 12 }}>
+          <Grid size={{ xs: 12 }}>
             <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 2 }}>
               {product.description}
             </Typography>

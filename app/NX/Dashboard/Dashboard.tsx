@@ -54,12 +54,12 @@ export default function Dashboard() {
                 <ListItemText primary="Products" />
               </ListItemButton>
 
-            <ListItemButton
+            {/* <ListItemButton
               onClick={() => dispatch(navigateTo(router, '/videos/pwa'))}
             >
               <ListItemIcon><Icon icon="film" color="primary" /></ListItemIcon>
               <ListItemText primary="Video" />
-            </ListItemButton>
+            </ListItemButton> */}
 
               {/* <ListItem>
                 <ListItemText primary="Onboarding" />

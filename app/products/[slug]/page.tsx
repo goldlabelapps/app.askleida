@@ -2,8 +2,7 @@
 import * as React from "react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Container, Box, Typography, AppBar, Toolbar, IconButton, Button } from "@mui/material";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Container, Box, Typography, AppBar, Toolbar, Button } from "@mui/material";
 import { ProductDetail } from '../../NX/Products';
 import { useDispatch } from '../../NX/Uberedux';
 import { navigateTo, Icon } from '../../NX/DesignSystem';
@@ -39,13 +38,12 @@ export default function ProductSlugPage() {
         <Container id="main" maxWidth="md">
           <AppBar position="static" color="default" elevation={1} sx={{ mb: 3 }}>
             <Toolbar>
-              
               <Button 
                 variant="contained"
                 color="primary" 
                 startIcon={<Icon icon="products" />}
                 onClick={handleBack}>
-                    All Products
+                    Back
               </Button>
             </Toolbar>
           </AppBar>

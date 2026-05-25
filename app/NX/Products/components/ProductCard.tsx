@@ -20,11 +20,11 @@ const ProductCard: FC<{ product?: I_Product }> = ({ product }) => {
   };
 
   return (
-    <Card sx={{ height: '100%' }}>
-      <CardActionArea onClick={handleClick} sx={{ height: '100%' }}>
+    <Card sx={{ width: '100%' }}>
+      <CardActionArea onClick={handleClick} sx={{  }}>
         <CardHeader
           title={
-            <Typography variant="h6" noWrap>
+            <Typography variant="body1" noWrap>
               {product.title || product.name || 'Untitled'}
             </Typography>
           }

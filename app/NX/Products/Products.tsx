@@ -6,6 +6,7 @@ import {
   Container,
   Typography,
   Box,
+  Grid,
 } from '@mui/material';
 import { init, useState, ProductCard } from '../../NX/Products';
 import { useDispatch } from '../../NX/Uberedux';
@@ -59,11 +60,21 @@ export default function Products({ slug }: { slug?: string }) {
         Create
       </Button> */}
       {results && results.length > 0 ? (
-        results.map((product: any, idx: number) => (
-          <Box key={`product_${idx}`}>
+        <Grid container spacing={2} sx={{  }}>
+        {results.map((product: any, idx: number) => (
+          <Grid 
+            key={`product_${idx}`}
+            size={{
+              xs: 12,
+              sm: 6,
+              md: 4,
+              lg: 3,
+            }}
+          >
             <ProductCard product={product} />
-          </Box>
-        ))
+          </Grid>
+        ))}
+        </Grid>
       ) : (
         <Typography variant="body1" align="center" sx={{ mt: 4 }}>
           No products found.

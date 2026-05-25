@@ -45,7 +45,7 @@ export default function Dashboard() {
         <Grid container spacing={2}>
 
           <Grid size={{ xs: 12, sm: 6 }}>
-            <List>
+            <List sx={{mt:1}}>
 
               <ListItemButton
                 onClick={() => dispatch(navigateTo(router, '/products'))}
@@ -54,7 +54,14 @@ export default function Dashboard() {
                 <ListItemText primary="Products" />
               </ListItemButton>
 
-              <ListItem>
+            <ListItemButton
+              onClick={() => dispatch(navigateTo(router, '/videos/pwa'))}
+            >
+              <ListItemIcon><Icon icon="film" color="primary" /></ListItemIcon>
+              <ListItemText primary="Video" />
+            </ListItemButton>
+
+              {/* <ListItem>
                 <ListItemText primary="Onboarding" />
               </ListItem>
 
@@ -66,7 +73,7 @@ export default function Dashboard() {
               </ListItem>
               <ListItem>
                 <ListItemText primary="Tips" />
-              </ListItem>
+              </ListItem> */}
 
             </List>
           </Grid>

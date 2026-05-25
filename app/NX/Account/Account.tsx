@@ -55,12 +55,7 @@ function AccountCard({ account }: { account: any }) {
       <CardHeader
         avatar={<Avatar src={avatar} alt={name} sx={{ width: 75, height: 75 }} />}
         title={<Typography variant="h6">{name}</Typography>}
-        subheader={<>
-
-          {[...Array(5)].map((_, i) => (
-            <Icon key={i} icon={i < (typeof level === 'number' ? level : 0) ? 'staron' : 'staroff'} color={i < (typeof level === 'number' ? level : 0) ? 'prinary' : 'disabled'} />
-          ))}
-        </>}
+        subheader={<Typography variant="body2" color="text.secondary">{email}</Typography>}
         action={<SignOutBtn />}
       />
       <CardContent>
@@ -68,10 +63,14 @@ function AccountCard({ account }: { account: any }) {
           
           <Box>
             
-            <Typography variant="body2" color="text.secondary">{email}</Typography>
-            <Typography variant="caption" color="text.secondary">
-              Joined: {created_at ? new Date(created_at).toLocaleDateString() : ''}
-            </Typography>
+            
+
+            <>
+
+              {[...Array(5)].map((_, i) => (
+                <Icon key={i} icon={i < (typeof level === 'number' ? level : 0) ? 'staron' : 'staroff'} color={i < (typeof level === 'number' ? level : 0) ? 'prinary' : 'disabled'} />
+              ))}
+            </>
           </Box>
         </Stack>
         

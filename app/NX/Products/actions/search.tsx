@@ -29,8 +29,9 @@ export const search = () => async (
         const data = await res.json();
         if (data?.data) {
             dispatch(setKey('results', data.data));
-            dispatch(setKey('pagination', data.pagination));
-            dispatch(setKey('search', data.search));
+            // Read pagination and search from meta
+            dispatch(setKey('pagination', data.meta?.pagination ?? null));
+            dispatch(setKey('search', data.meta?.search ?? null));
         } else {
             dispatch(setKey('results', []));
             dispatch(setKey('pagination', null));

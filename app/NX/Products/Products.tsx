@@ -5,8 +5,9 @@ import {
   Box,
   Grid,
   Pagination,
+  Button,
 } from '@mui/material';
-import { init, useState, ProductCard } from '../../NX/Products';
+import { init, useState, ProductCard, setKey, search } from '../../NX/Products';
 import { useDispatch } from '../../NX/Uberedux';
 
 export default function Products({ slug }: { slug?: string }) {
@@ -15,6 +16,10 @@ export default function Products({ slug }: { slug?: string }) {
   const {
     initted,
     results,
+    pagination,
+    searchParams = {},
+    search: searchMeta,
+    loading,
   } = state || {};
 
   React.useEffect(() => {
@@ -25,9 +30,54 @@ export default function Products({ slug }: { slug?: string }) {
 
   if (!initted) return null;
 
+  // Results summary
+  let summary = null;
+  if (pagination && typeof pagination.total === 'number') {
+    if (searchParams.s) {
+      summary = `${pagination.total} product${pagination.total === 1 ? '' : 's'} containing "${searchParams.s}"`;
+    } else {
+      summary = `${pagination.total} product${pagination.total === 1 ? '' : 's'}`;
+    }
+  }
+
+  // Handle page change
+  const handlePageChange = (_: any, value: number) => {
+    dispatch(setKey('searchParams', { ...searchParams, page: value }));
+    dispatch(search());
+  };
+
+  // Clear search
+  const handleClearSearch = () => {
+    dispatch(setKey('searchParams', { ...searchParams, s: '', page: 1 }));
+    dispatch(search());
+  };
+
   return (
     <Box>
-      this is where...
+
+      {pagination && pagination.total_pages > 1 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+          <Pagination
+            count={pagination.total_pages}
+            page={searchParams.page || 1}
+            onChange={handlePageChange}
+            color="primary"
+            disabled={loading}
+          />
+        </Box>
+      )}
+
+      
+      {summary && (
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 2 }}>
+          <Typography variant="subtitle1">{summary}</Typography>
+          {searchParams.s && (
+            <Button size="small" onClick={handleClearSearch} disabled={loading}>
+              Clear
+            </Button>
+          )}
+        </Box>
+      )}
       {results && results.length > 0 ? (
         <Grid container spacing={1} sx={{  }}>
           {results.map((product: any, idx: number) => (
@@ -47,6 +97,7 @@ export default function Products({ slug }: { slug?: string }) {
           No products found.
         </Typography>
       )}
+      
     </Box>
   );
 }

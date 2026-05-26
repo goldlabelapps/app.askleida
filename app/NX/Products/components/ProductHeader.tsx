@@ -73,7 +73,7 @@ const ProductHeader: FC<{ product?: I_Product }> = ({ product }) => {
         }}>
         <Container maxWidth="md">
           <CardHeader
-            avatar={<>
+            avatar={<Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
               <IconButton color="primary" onClick={handleDashboardClick}>
                 <Avatar src={avatar} />
               </IconButton>
@@ -86,7 +86,7 @@ const ProductHeader: FC<{ product?: I_Product }> = ({ product }) => {
                 onEnter={handleSearchEnter}
                 placeholder="Search products..."
               />
-            </>}
+            </Box>}
             action={<>
               <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                 <MightyButton

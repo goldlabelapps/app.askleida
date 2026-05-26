@@ -36,10 +36,10 @@ const ProductDetail: FC<{ product: I_Product }> = ({ product }) => {
             <Box>
               <MightyButton
                 variant="outlined"
-                icon="edit"
-                label="Edit"
+                icon="delete"
+                label="Delete"
                 onClick={() => {
-                  router.push(`/products/${product.slug}/edit`);
+                  
                 }}
               />
             </Box>
@@ -80,8 +80,8 @@ const ProductDetail: FC<{ product: I_Product }> = ({ product }) => {
             <>
               
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
-                Concerns {product.concern_tags.map((tag: string, idx: number) => (
-                  <Chip key={idx} label={typeof tag === 'string' ? tag.charAt(0).toUpperCase() + tag.slice(1) : tag} variant="outlined" clickable={false} />
+                {product.concern_tags.map((tag: string, idx: number) => (
+                  <Chip key={idx} color="primary" label={typeof tag === 'string' ? tag.charAt(0).toUpperCase() + tag.slice(1) : tag} variant="outlined" clickable={false} />
                 ))}
               </Box>
             </>
@@ -90,7 +90,7 @@ const ProductDetail: FC<{ product: I_Product }> = ({ product }) => {
           {product.skin_type_tags && Array.isArray(product.skin_type_tags) && product.skin_type_tags.length > 0 && (
             <>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
-                Skin {product.skin_type_tags.map((tag: string, idx: number) => (
+                {product.skin_type_tags.map((tag: string, idx: number) => (
                   <Chip key={idx} label={tag} variant="outlined" clickable={false} />
                 ))}
               </Box>

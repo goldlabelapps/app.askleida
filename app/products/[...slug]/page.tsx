@@ -10,18 +10,19 @@ import {
   CircularProgress, 
   Backdrop,
 } from "@mui/material";
-import { ProductDetail, ProductCreate, ProductHeader,
-  ProductUpdate,
- } from '../../NX/Products';
+import { 
+    ProductDetail, 
+    ProductCreate, 
+    ProductHeader,
+} from '../../NX/Products';
 import type { I_Product } from '../../NX/Products/types.d.ts';
 import { useDispatch } from '../../NX/Uberedux';
-import { navigateTo, Icon } from '../../NX/DesignSystem';
 import { useRouter } from 'next/navigation';
 
 type ProductPageWrapperProps = {
   children: React.ReactNode;
   onBack: () => void;
-  product: any;
+  product?: I_Product;
 };
 
 function ProductPageWrapper({ children, onBack, product }: ProductPageWrapperProps) {
@@ -41,7 +42,7 @@ function ProductPageWrapper({ children, onBack, product }: ProductPageWrapperPro
 
   return (
     <>
-      <ProductHeader product={product} />
+      <ProductHeader product={product ?? undefined} />
       <Container id="main" maxWidth="md" sx={{mt: '100px'}}>
         {children}
       </Container>
@@ -53,17 +54,10 @@ function ProductPageWrapper({ children, onBack, product }: ProductPageWrapperPro
 export default function ProductSlugPage() {
   const theme = useTheme();
   const params = useParams();
-  // Support both /products/:slug and /products/:slug/edit
+  // Only support /products/:slug and /products/new
   let slug = params.slug;
-  let isEdit = false;
   if (Array.isArray(slug)) {
-    // e.g. ['my-product', 'edit']
-    if (slug.length > 1 && slug[1] === 'edit') {
-      isEdit = true;
-      slug = slug[0];
-    } else {
-      slug = slug.join('/');
-    }
+    slug = slug[0];
   }
 
 
@@ -119,7 +113,7 @@ export default function ProductSlugPage() {
         <Head>
           <title>Products</title>
         </Head>
-        <ProductPageWrapper onBack={handleBack} product={null}>
+        <ProductPageWrapper onBack={handleBack} product={undefined}>
           <ProductCreate />
         </ProductPageWrapper>
       </>
@@ -130,25 +124,12 @@ export default function ProductSlugPage() {
   if (!product) notFound();
 
 
-  if (isEdit) {
-    return (
-      <>
-        <Head>
-          <title>{product?.title ? product.title : "Products"}</title>
-        </Head>
-        <ProductPageWrapper onBack={handleBack} product={product}>
-          <ProductUpdate product={product} />
-        </ProductPageWrapper>
-      </>
-    );
-  }
-
   return (
     <>
       <Head>
         <title>{product?.title ? product.title : "Products"}</title>
       </Head>
-      <ProductPageWrapper onBack={handleBack} product={product}>
+      <ProductPageWrapper onBack={handleBack} product={product ?? undefined}>
         <ProductDetail product={product} />
       </ProductPageWrapper>
     </>

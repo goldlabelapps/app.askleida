@@ -1,6 +1,7 @@
 // This file was moved from /products/[slug]/page.tsx to /products/[...slug]/page.tsx to support both /products/:slug and /products/:slug/edit routes.
 "use client";
 import * as React from "react";
+import Head from "next/head";
 import { useParams, notFound } from "next/navigation";
 import { useEffect, useState } from "react";
 import { 
@@ -12,6 +13,7 @@ import {
 import { ProductDetail, ProductCreate, ProductHeader,
   ProductUpdate,
  } from '../../NX/Products';
+import type { I_Product } from '../../NX/Products/types.d.ts';
 import { useDispatch } from '../../NX/Uberedux';
 import { navigateTo, Icon } from '../../NX/DesignSystem';
 import { useRouter } from 'next/navigation';
@@ -65,7 +67,7 @@ export default function ProductSlugPage() {
   }
 
 
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState<I_Product | null>(null);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -92,39 +94,63 @@ export default function ProductSlugPage() {
       });
   }, [slug]);
 
+
   if (loading) return (
-    <Backdrop
-      open={true}
-      sx={{
-        color: theme.palette?.common?.white,
-        zIndex: theme.zIndex.drawer + 1,
-      }}
-    >
-      <CircularProgress color="inherit" />
-    </Backdrop>
+    <>
+      <Head>
+        <title>Products</title>
+      </Head>
+      <Backdrop
+        open={true}
+        sx={{
+          color: theme.palette?.common?.white,
+          zIndex: theme.zIndex.drawer + 1,
+        }}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    </>
   );
+
 
   if (slug === 'new') {
     return (
-      <ProductPageWrapper onBack={handleBack} product={null}>
-        <ProductCreate />
-      </ProductPageWrapper>
+      <>
+        <Head>
+          <title>Products</title>
+        </Head>
+        <ProductPageWrapper onBack={handleBack} product={null}>
+          <ProductCreate />
+        </ProductPageWrapper>
+      </>
     );
   }
 
+
   if (!product) notFound();
+
 
   if (isEdit) {
     return (
-      <ProductPageWrapper onBack={handleBack} product={product}>
-        <ProductUpdate product={product} />
-      </ProductPageWrapper>
+      <>
+        <Head>
+          <title>{product?.title ? product.title : "Products"}</title>
+        </Head>
+        <ProductPageWrapper onBack={handleBack} product={product}>
+          <ProductUpdate product={product} />
+        </ProductPageWrapper>
+      </>
     );
   }
 
   return (
-    <ProductPageWrapper onBack={handleBack} product={product}>
-      <ProductDetail product={product} />
-    </ProductPageWrapper>
+    <>
+      <Head>
+        <title>{product?.title ? product.title : "Products"}</title>
+      </Head>
+      <ProductPageWrapper onBack={handleBack} product={product}>
+        <ProductDetail product={product} />
+      </ProductPageWrapper>
+    </>
   );
 }

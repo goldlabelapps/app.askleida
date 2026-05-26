@@ -15,6 +15,7 @@ interface MightyButtonProps extends React.ComponentProps<typeof Button> {
 	label: string;
 	mobileOnly?: boolean;
 	mode?: MightyButtonMode;
+	variant?: 'text' | 'outlined' | 'contained'; // Add variant as optional prop
 }
 
 /**
@@ -23,7 +24,7 @@ interface MightyButtonProps extends React.ComponentProps<typeof Button> {
  * - On mobile: IconButton with Tooltip (label as tooltip)
  */
 
-const MightyButton: React.FC<MightyButtonProps> = ({ icon, label, mobileOnly, mode = 'auto', ...props }) => {
+const MightyButton: React.FC<MightyButtonProps> = ({ icon, label, mobileOnly, mode = 'auto', variant = 'contained', ...props }) => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -52,7 +53,7 @@ const MightyButton: React.FC<MightyButtonProps> = ({ icon, label, mobileOnly, mo
 	// Default to button
 	return (
 		<Button
-			variant="contained"
+			variant={variant}
 			color="primary"
 			startIcon={<Icon icon={icon as any} />}
 			{...props}

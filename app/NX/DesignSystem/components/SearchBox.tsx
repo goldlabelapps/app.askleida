@@ -37,8 +37,10 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   return (
     <TextField
       fullWidth
-      variant="outlined"
-      value={value}
+      sx={{m:1}}
+      variant="standard"
+      color="primary"
+      // value={value}
       onChange={handleInputChange}
       onKeyDown={handleKeyDown}
       placeholder={placeholder}
@@ -46,13 +48,13 @@ const SearchBox: React.FC<SearchBoxProps> = ({
       InputProps={{
         startAdornment: startIcon && (
           <InputAdornment position="start">
-            <Icon icon={startIcon as any} />
+            <Icon icon={startIcon as any} color="primary" />
           </InputAdornment>
         ),
         endAdornment: endIcon && (
           <InputAdornment position="end">
             <IconButton size="small" disabled={disabled}>
-              <Icon icon={endIcon as any} />
+              <Icon icon={endIcon as any} color="primary" />
             </IconButton>
           </InputAdornment>
         ),

@@ -8,13 +8,15 @@ import {
   CircularProgress, 
   Backdrop,
 } from "@mui/material";
-import { ProductDetail, ProductCreate, ProductHeader,
+import { 
+  ProductDetail, 
+  ProductCreate, 
+  ProductHeader,
   ProductUpdate,
  } from '../../NX/Products';
 import { useDispatch } from '../../NX/Uberedux';
-import { navigateTo, Icon } from '../../NX/DesignSystem';
 import { useRouter } from 'next/navigation';
-// This file has been moved to /products/[...slug]/page.tsx. Delete this file to avoid route conflicts.
+// This file is obsolete. Logic is now in /products/[...slug]/page.tsx
 type ProductPageWrapperProps = {
   children: React.ReactNode;
   onBack: () => void;

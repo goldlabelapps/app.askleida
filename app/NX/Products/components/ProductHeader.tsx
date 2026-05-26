@@ -8,14 +8,12 @@ import {
   Container,
   IconButton,
   Avatar,
-  Typography, 
   useTheme,
 } from '@mui/material';
 import type { I_Product } from '../types';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from '../../Uberedux';
 import { 
-  navigateTo, 
   Icon,
   SearchBox,
   MightyButton,
@@ -78,24 +76,26 @@ const ProductHeader: FC<{ product?: I_Product }> = ({ product }) => {
                 >
                   <Icon icon="products" />
                 </IconButton>
+
+              <SearchBox
+                value=""
+                onChange={() => { }}
+                onEnter={() => { }}
+                placeholder="Search products..."
+              />
               </>}
               
               action={<>
                 <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
 
-                <MightyButton
-                  mode="iconbutton"
-                  icon="new"
-                  label="Create"
-                  onClick={handleCreateClick}
-                />
+                  <MightyButton
+                    variant="outlined"
+                    icon="new"
+                    label="Create"
+                    onClick={handleCreateClick}
+                  />
 
-                <SearchBox
-                  value=""
-                  onChange={() => {}}
-                  onEnter={() => {}}
-                  placeholder="Search products..."
-                />
+                
                 </Box>
               </>}
             />

@@ -10,7 +10,6 @@ import {
 } from '@mui/material';
 import { init, useState, ProductCard } from '../../NX/Products';
 import { useDispatch } from '../../NX/Uberedux';
-import { Icon } from '../../NX/DesignSystem';
 
 export default function Products({ slug }: { slug?: string }) {
   const dispatch = useDispatch();

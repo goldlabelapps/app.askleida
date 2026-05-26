@@ -1,8 +1,8 @@
 ---
-title: Dashboard
+title: Ask Leida
 order: 1
 slug: /
-icon: dashboard
+icon: home
 ---
 [PageLink icon="film" url="/videos/latest" title="Video" description="The latest" ]  
 

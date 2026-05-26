@@ -12,8 +12,7 @@ const ProductDetail: FC<{ product: I_Product }> = ({ product }) => {
   return (
     <Card variant="outlined" sx={{ width: '100%' }}>
       <CardHeader
-        title={<Typography variant="h4">{decodedTitle}</Typography>}
-        subheader={product.brand}
+        title={product.brand}
       />
       <Divider />
       <CardContent>
@@ -30,10 +29,9 @@ const ProductDetail: FC<{ product: I_Product }> = ({ product }) => {
               {product.description}
             </Typography>
             <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
-              {product.slug && <li><b>Slug:</b> {product.slug}</li>}
               {product.routine_step && <li><b>Routine Step:</b> {product.routine_step}</li>}
               {product.treat_sublabel && <li><b>Treat Sublabel:</b> {product.treat_sublabel}</li>}
-              {product.distribution_type && <li><b>Distribution Type:</b> {product.distribution_type}</li>}
+              {/* {product.distribution_type && <li><b>Distribution Type:</b> {product.distribution_type}</li>} */}
               {product.website_url && <li><b>Website:</b> <a href={product.website_url} target="_blank" rel="noopener noreferrer">{product.website_url}</a></li>}
               {product.claude_description && <li><b>Claude Description:</b> {product.claude_description}</li>}
               {product.how_to_apply && <li><b>How to Apply:</b> {product.how_to_apply}</li>}

@@ -1,6 +1,7 @@
 
 import Products from './Products';
 import ProductCard from './components/ProductCard';
+import ProductHeader from './components/ProductHeader';
 import ProductDetail from './components/ProductDetail';
 import ProductCreate from './components/ProductCreate';
 import Thumbnail from './components/Thumbnail';
@@ -14,6 +15,7 @@ import {useState} from './hooks/useState';
 export {
     Products,
     ProductCard,
+    ProductHeader,
     ProductDetail,
     ProductCreate,
     Thumbnail,

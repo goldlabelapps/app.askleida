@@ -3,14 +3,12 @@ import * as React from "react";
 import { useParams, notFound } from "next/navigation";
 import { useEffect, useState } from "react";
 import { 
-  Container, 
-  AppBar, 
-  Toolbar, 
-  Button, 
+  useTheme,
+  Container,
   CircularProgress, 
   Backdrop,
 } from "@mui/material";
-import { ProductDetail, ProductCreate } from '../../NX/Products';
+import { ProductDetail, ProductCreate, ProductHeader } from '../../NX/Products';
 import { useDispatch } from '../../NX/Uberedux';
 import { navigateTo, Icon } from '../../NX/DesignSystem';
 import { useRouter } from 'next/navigation';
@@ -18,10 +16,12 @@ import { useRouter } from 'next/navigation';
 type ProductPageWrapperProps = {
   children: React.ReactNode;
   onBack: () => void;
+  product: any;
 };
 
-function ProductPageWrapper({ children, onBack }: ProductPageWrapperProps) {
+function ProductPageWrapper({ children, onBack, product }: ProductPageWrapperProps) {
 
+  const theme = useTheme();
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -32,30 +32,16 @@ function ProductPageWrapper({ children, onBack }: ProductPageWrapperProps) {
   const handleNew = () => {
     dispatch(navigateTo(router, '/products/new'));
   }
+
+  console.log('product', product);
+
   return (
-    <Container id="main" maxWidth="md">
-      <AppBar position="static" color="default" elevation={1} sx={{ mb: 3, mt: '100px' }}>
-        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<Icon icon="products" />}
-            onClick={onBack}
-          >
-            All
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<Icon icon="new" />}
-            onClick={handleNew}
-          >
-            New
-          </Button>
-        </Toolbar>
-      </AppBar>
-      {children}
-    </Container>
+    <>
+      <ProductHeader product={product} />
+      <Container id="main" maxWidth="md" sx={{mt: '100px'}}>
+        {children}
+      </Container>
+    </>
   );
 }
 
@@ -67,6 +53,7 @@ export default function ProductSlugPage() {
     const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
     const router = useRouter();
+    console.debug('ProductSlugPage: slug', slug);
 
     const handleBack = () => {
       dispatch(navigateTo(router, '/products'));
@@ -74,23 +61,20 @@ export default function ProductSlugPage() {
 
     useEffect(() => {
       if (!slug || slug === 'new') return;
+      console.debug('Fetching product for slug:', slug);
       fetch(`/api/products/${slug}`)
         .then((res) => res.json())
         .then((data) => {
+          console.debug('API response for product:', data);
           setProduct(data.data); // Only set the product data
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error('Error fetching product:', err);
           setLoading(false);
         });
     }, [slug]);
 
-
-
-    if (slug === 'new') {
-      return (
-        <ProductPageWrapper onBack={handleBack}>
-          <ProductCreate />
-        </ProductPageWrapper>
-      );
-    }
 
     if (loading) return (
       <Backdrop
@@ -106,8 +90,15 @@ export default function ProductSlugPage() {
 
     if (!product) notFound();
 
+    if (slug === 'new') {
+      return (
+        <ProductPageWrapper onBack={handleBack} product={product}>
+          <ProductCreate />
+        </ProductPageWrapper>
+      );
+    }
     return (
-      <ProductPageWrapper onBack={handleBack}>
+      <ProductPageWrapper onBack={handleBack} product={product}>
         <ProductDetail product={product} />
       </ProductPageWrapper>
     );

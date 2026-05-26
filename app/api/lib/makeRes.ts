@@ -1,4 +1,4 @@
-
+import type { I_MakeRes } from '../../NX/types';
 import { getBaseurl } from './getBaseurl';
 import { makeTime } from './makeTime';
 
@@ -11,7 +11,7 @@ export function makeRes({ severity, message, data, tenant, meta }: I_MakeRes) {
         severity,
         message,
     };
-    // Merge in any additional meta fields (pagination, search, etc)
+    
     const mergedMeta = meta ? { ...baseMeta, ...meta } : baseMeta;
     return data !== undefined
         ? { meta: mergedMeta, data }

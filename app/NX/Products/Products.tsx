@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { init, useState, ProductCard, setKey, search } from '../../NX/Products';
 import { useDispatch } from '../../NX/Uberedux';
+import { MightyButton } from '../../NX/DesignSystem';
 
 export default function Products({ slug }: { slug?: string }) {
   const dispatch = useDispatch();
@@ -55,29 +56,7 @@ export default function Products({ slug }: { slug?: string }) {
   return (
     <Box>
 
-      {pagination && pagination.total_pages > 1 && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-          <Pagination
-            count={pagination.total_pages}
-            page={searchParams.page || 1}
-            onChange={handlePageChange}
-            color="primary"
-            disabled={loading}
-          />
-        </Box>
-      )}
-
-      
-      {summary && (
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 2 }}>
-          <Typography variant="subtitle1">{summary}</Typography>
-          {searchParams.s && (
-            <Button size="small" onClick={handleClearSearch} disabled={loading}>
-              Clear
-            </Button>
-          )}
-        </Box>
-      )}
+ 
       {results && results.length > 0 ? (
         <Grid container spacing={1} sx={{  }}>
           {results.map((product: any, idx: number) => (
@@ -96,6 +75,31 @@ export default function Products({ slug }: { slug?: string }) {
         <Typography variant="body1" align="center" sx={{ mt: 4 }}>
           No products found.
         </Typography>
+      )}
+
+      {summary && (
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', my: 2, gap: 2 }}>
+          <Typography variant="subtitle1">{summary}</Typography>
+          {searchParams.s && (
+            <MightyButton
+              variant="outlined"
+              icon="close"
+              label="Clear"
+              onClick={handleClearSearch}
+            />
+          )}
+        </Box>
+      )}
+      {pagination && pagination.total_pages > 1 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+          <Pagination
+            count={pagination.total_pages}
+            page={searchParams.page || 1}
+            onChange={handlePageChange}
+            color="primary"
+            disabled={loading}
+          />
+        </Box>
       )}
       
     </Box>

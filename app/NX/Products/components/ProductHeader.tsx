@@ -2,6 +2,7 @@
 import * as React from 'react';
 import type { FC } from 'react';
 import { 
+  Box,
   AppBar,
   CardHeader, 
   Container,
@@ -38,9 +39,7 @@ const ProductHeader: FC<{ product?: I_Product }> = ({ product }) => {
   const title = product?.title || 'Products';
 
   const handleProductsClick = () => {
-    if (product && product.slug) {
-      router.push(`/products/${product.slug}`);
-    }
+    router.push('/products');
   };
 
   const handleCreateClick = () => {
@@ -86,15 +85,26 @@ const ProductHeader: FC<{ product?: I_Product }> = ({ product }) => {
                 variant="h5"
                 component="h1"
                 sx={{ mt: 0.25 }}>
-                {title}
+                Products
               </Typography>}
               
               action={<>
+                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+
                 <MightyButton
+                  mode="iconbutton"
                   icon="new"
                   label="Create"
                   onClick={handleCreateClick}
                 />
+
+                <SearchBox
+                  value=""
+                  onChange={() => {}}
+                  onEnter={() => {}}
+                  placeholder="Search products..."
+                />
+                </Box>
               </>}
             />
           </Container>

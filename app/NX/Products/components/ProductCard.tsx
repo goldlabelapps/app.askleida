@@ -21,7 +21,7 @@ const ProductCard: FC<{ product?: I_Product }> = ({ product }) => {
   };
 
   return (
-    <Card sx={{ width: '100%' }}>
+    <Card sx={{ width: '100%' }} variant="outlined">
       <CardActionArea onClick={handleClick} sx={{  }}>
         <CardHeader
           title={

@@ -1,9 +1,6 @@
 'use client';
 import * as React from 'react';
 import {
-  Alert,
-  Button,
-  Container,
   Typography,
   Box,
   Grid,
@@ -15,7 +12,6 @@ export default function Products({ slug }: { slug?: string }) {
   const dispatch = useDispatch();
   const state = useState();
   const {
-    error,
     initted,
     results,
   } = state || {};
@@ -28,38 +24,10 @@ export default function Products({ slug }: { slug?: string }) {
 
   if (!initted) return null;
 
-  if (error) {
-    return (
-      <Container maxWidth="lg" sx={{ my: 4 }}>
-        <Alert severity="info" sx={{ my: 2 }}
-          action={
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => window.location.reload()}
-            >
-              Retry
-            </Button>
-          }
-        >
-          {error}
-        </Alert>
-      </Container>
-    );
-  }
-
   return (
     <Box>
-      {/* <Button
-        startIcon={<Icon icon="add" />}
-        variant="contained"
-        color="primary"
-        onClick={() => window.location.assign('/products/new')}
-      >
-        Create
-      </Button> */}
       {results && results.length > 0 ? (
-        <Grid container spacing={2} sx={{  }}>
+        <Grid container spacing={1} sx={{  }}>
         {results.map((product: any, idx: number) => (
           <Grid 
             key={`product_${idx}`}

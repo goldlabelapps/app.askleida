@@ -11,10 +11,6 @@ const ProductDetail: FC<{ product: I_Product }> = ({ product }) => {
 
   return (
     <Card variant="outlined" sx={{ width: '100%' }}>
-      <CardHeader
-        title={product.brand}
-      />
-      <Divider />
       <CardContent>
         <Grid container spacing={3}>
           {product.image_url && (
@@ -25,6 +21,12 @@ const ProductDetail: FC<{ product: I_Product }> = ({ product }) => {
             </Grid>
           )}
           <Grid size={{ xs: 12 }}>
+            <Typography variant="h4" color="text.secondary" sx={{ mb: 2 }}>
+              {product.title}
+            </Typography>
+            <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
+              {product.brand}
+            </Typography>
             <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 2 }}>
               {product.description}
             </Typography>
@@ -32,7 +34,7 @@ const ProductDetail: FC<{ product: I_Product }> = ({ product }) => {
               {product.routine_step && <li><b>Routine Step:</b> {product.routine_step}</li>}
               {product.treat_sublabel && <li><b>Treat Sublabel:</b> {product.treat_sublabel}</li>}
               {/* {product.distribution_type && <li><b>Distribution Type:</b> {product.distribution_type}</li>} */}
-              {product.website_url && <li><b>Website:</b> <a href={product.website_url} target="_blank" rel="noopener noreferrer">{product.website_url}</a></li>}
+              {/* {product.website_url && <li><b>Website:</b> <a href={product.website_url} target="_blank" rel="noopener noreferrer">{product.website_url}</a></li>} */}
               {product.claude_description && <li><b>Claude Description:</b> {product.claude_description}</li>}
               {product.how_to_apply && <li><b>How to Apply:</b> {product.how_to_apply}</li>}
               {product.active_ingredients && <li><b>Active Ingredients:</b> {product.active_ingredients}</li>}
@@ -45,8 +47,6 @@ const ProductDetail: FC<{ product: I_Product }> = ({ product }) => {
               {Array.isArray(product.concern_tags) && product.concern_tags.length > 0 && (
                 <li><b>Concerns:</b> {product.concern_tags.join(', ')}</li>
               )}
-              {typeof product.is_verified === 'boolean' && <li><b>Verified:</b> {product.is_verified ? 'Yes' : 'No'}</li>}
-              {typeof product.is_seeded === 'boolean' && <li><b>Seeded:</b> {product.is_seeded ? 'Yes' : 'No'}</li>}
             </Box>
             <Box sx={{ mt: 3 }}>
               <Typography variant="h5" color="primary">

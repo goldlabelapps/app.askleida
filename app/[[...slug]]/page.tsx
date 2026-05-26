@@ -151,7 +151,7 @@ export default async function Page(props: any) {
         return (
             <NX config={config} frontmatter={data}>
                 <ProductHeader />
-                <Container id="main" maxWidth="md" sx={{  pb: '90px' }}>
+                <Container id="main" maxWidth="md" sx={{  py: '100px' }}>
                     <Products />
                 </Container>
                 <Footer

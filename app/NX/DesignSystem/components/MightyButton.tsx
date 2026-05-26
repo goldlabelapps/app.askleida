@@ -7,10 +7,14 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import { Icon } from '../../DesignSystem';
 
+
+type MightyButtonMode = 'auto' | 'button' | 'iconbutton';
+
 interface MightyButtonProps extends React.ComponentProps<typeof Button> {
 	icon: string;
 	label: string;
 	mobileOnly?: boolean;
+	mode?: MightyButtonMode;
 }
 
 /**
@@ -18,18 +22,26 @@ interface MightyButtonProps extends React.ComponentProps<typeof Button> {
  * - On desktop: MUI Button with startIcon and label
  * - On mobile: IconButton with Tooltip (label as tooltip)
  */
-const MightyButton: React.FC<MightyButtonProps> = ({ icon, label, mobileOnly, ...props }) => {
+
+const MightyButton: React.FC<MightyButtonProps> = ({ icon, label, mobileOnly, mode = 'auto', ...props }) => {
 	const theme = useTheme();
-	// You can adjust the breakpoint as needed
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-	if (isMobile || mobileOnly) {
+	// Determine which mode to use
+	let renderMode: MightyButtonMode = 'auto';
+	if (mode && mode !== 'auto') {
+		renderMode = mode;
+	} else if (isMobile || mobileOnly) {
+		renderMode = 'iconbutton';
+	} else {
+		renderMode = 'button';
+	}
+
+	if (renderMode === 'iconbutton') {
 		return (
 			<Tooltip title={label}>
 				<span>
-					<IconButton 
-                        color="primary"
-                        aria-label={label} {...props}>
+					<IconButton color="primary" aria-label={label} {...props}>
 						<Icon icon={icon as any} />
 					</IconButton>
 				</span>
@@ -37,12 +49,14 @@ const MightyButton: React.FC<MightyButtonProps> = ({ icon, label, mobileOnly, ..
 		);
 	}
 
+	// Default to button
 	return (
-		<Button 
-            variant="contained" 
-            color="primary"
-            startIcon={<Icon icon={icon as any} />} 
-            {...props}>
+		<Button
+			variant="contained"
+			color="primary"
+			startIcon={<Icon icon={icon as any} />}
+			{...props}
+		>
 			{label}
 		</Button>
 	);

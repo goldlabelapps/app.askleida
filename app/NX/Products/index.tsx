@@ -4,7 +4,6 @@ import ProductCard from './components/ProductCard';
 import ProductHeader from './components/ProductHeader';
 import ProductDetail from './components/ProductDetail';
 import ProductCreate from './components/ProductCreate';
-import ProductUpdate from './components/ProductUpdate';
 import Thumbnail from './components/Thumbnail';
 import { init } from './actions/init';
 import { setKey } from './actions/setKey';
@@ -19,7 +18,6 @@ export {
     ProductHeader,
     ProductDetail,
     ProductCreate,
-    ProductUpdate,
     Thumbnail,
     init,
     setKey,

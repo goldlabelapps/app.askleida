@@ -2,7 +2,7 @@
 "use client";
 import * as React from "react";
 import Head from "next/head";
-import { useParams, notFound } from "next/navigation";
+import { useParams, notFound, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { 
   useTheme,
@@ -51,20 +51,28 @@ function ProductPageWrapper({ children, onBack, product }: ProductPageWrapperPro
 }
 
 
-export default function ProductSlugPage() {
+
   const theme = useTheme();
   const params = useParams();
+  const searchParams = useSearchParams();
   // Only support /products/:slug and /products/new
   let slug = params.slug;
   if (Array.isArray(slug)) {
     slug = slug[0];
   }
 
-
   const [product, setProduct] = useState<I_Product | null>(null);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const router = useRouter();
+
+  // Restore search param if present
+  React.useEffect(() => {
+    const s = searchParams.get('s');
+    if (s) {
+      dispatch({ type: 'products/setKey', key: 'searchParams', value: { s } });
+    }
+  }, [searchParams, dispatch]);
 
   const handleBack = () => {
     router.push('/products');

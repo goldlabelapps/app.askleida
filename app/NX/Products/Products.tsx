@@ -82,7 +82,7 @@ export default function Products({ slug }: { slug?: string }) {
           <Typography variant="subtitle1">{summary}</Typography>
           {searchParams.s && (
             <MightyButton
-              variant="outlined"
+              mode="iconbutton"
               icon="close"
               label="Clear"
               onClick={handleClearSearch}

@@ -1,12 +1,11 @@
 'use client';
 import * as React from 'react';
 import type { FC } from 'react';
-import { Card, CardHeader, CardContent, Typography, CardActionArea } from '@mui/material';
+import { Card, CardHeader, Typography, CardActionArea } from '@mui/material';
 import type { I_Product } from '../types';
 import Thumbnail from './Thumbnail';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from '../../Uberedux';
-import { navigateTo } from '../../DesignSystem';
 
 const ProductCard: FC<{ product?: I_Product }> = ({ product }) => {
   const dispatch = useDispatch();
@@ -14,9 +13,13 @@ const ProductCard: FC<{ product?: I_Product }> = ({ product }) => {
 
   if (!product) return null;
 
+  // Get current search param from Redux (if any)
+  const state = typeof window !== 'undefined' ? (window.__NEXT_DATA__?.props?.pageProps?.reduxState?.products || {}) : {};
+  const searchParams = state.searchParams || {};
   const handleClick = () => {
     if (product.slug) {
-      router.push(`/products/${product.slug}`);
+      const s = searchParams.s ? `?s=${encodeURIComponent(searchParams.s)}` : '';
+      router.push(`/products/${product.slug}${s}`);
     }
   };
 

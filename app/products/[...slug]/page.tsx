@@ -1,3 +1,4 @@
+// This file was moved from /products/[slug]/page.tsx to /products/[...slug]/page.tsx to support both /products/:slug and /products/:slug/edit routes.
 "use client";
 import * as React from "react";
 import { useParams, notFound } from "next/navigation";
@@ -14,7 +15,7 @@ import { ProductDetail, ProductCreate, ProductHeader,
 import { useDispatch } from '../../NX/Uberedux';
 import { navigateTo, Icon } from '../../NX/DesignSystem';
 import { useRouter } from 'next/navigation';
-// This file has been moved to /products/[...slug]/page.tsx. Delete this file to avoid route conflicts.
+
 type ProductPageWrapperProps = {
   children: React.ReactNode;
   onBack: () => void;

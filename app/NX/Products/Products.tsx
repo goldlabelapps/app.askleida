@@ -28,17 +28,17 @@ export default function Products({ slug }: { slug?: string }) {
     <Box>
       {results && results.length > 0 ? (
         <Grid container spacing={1} sx={{  }}>
-        {results.map((product: any, idx: number) => (
-          <Grid 
-            key={`product_${idx}`}
-            size={{
-              sm: 12,
-              md: 6,
-            }}
-          >
-            <ProductCard product={product} />
-          </Grid>
-        ))}
+          {results.map((product: any, idx: number) => (
+            <Grid 
+              key={`product_${idx}`}
+              size={{
+                sm: 12,
+                md: 6,
+              }}
+            >
+              <ProductCard product={product} />
+            </Grid>
+          ))}
         </Grid>
       ) : (
         <Typography variant="body1" align="center" sx={{ mt: 4 }}>

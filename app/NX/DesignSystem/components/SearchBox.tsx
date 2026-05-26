@@ -46,13 +46,13 @@ const SearchBox: React.FC<SearchBoxProps> = ({
       InputProps={{
         startAdornment: startIcon && (
           <InputAdornment position="start">
-            <Icon icon={startIcon} />
+            <Icon icon={startIcon as any} />
           </InputAdornment>
         ),
         endAdornment: endIcon && (
           <InputAdornment position="end">
             <IconButton size="small" disabled={disabled}>
-              <Icon icon={endIcon} />
+              <Icon icon={endIcon as any} />
             </IconButton>
           </InputAdornment>
         ),

@@ -79,14 +79,6 @@ const ProductHeader: FC<{ product?: I_Product }> = ({ product }) => {
                   <Icon icon="products" />
                 </IconButton>
               </>}
-
-              title={<Typography
-                color='secondary'
-                variant="h5"
-                component="h1"
-                sx={{ mt: 0.25 }}>
-                Products
-              </Typography>}
               
               action={<>
                 <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>

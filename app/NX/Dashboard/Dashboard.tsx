@@ -15,7 +15,6 @@ import {
 } from '../../NX/Dashboard';
 import { useDispatch } from '../../NX/Uberedux';
 import { navigateTo, Icon } from '../../NX/DesignSystem';
-import { Account } from '../../NX/Account';
 
 export default function Dashboard() {
 
@@ -38,18 +37,16 @@ export default function Dashboard() {
       <Box sx={{mx:2}}>
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, sm: 6 }}>
-            <List sx={{mt:1}}>
-              <ListItemButton
-                onClick={() => router.push('/products')}
-              >
-                <ListItemIcon><Icon icon="products" color="primary" /></ListItemIcon>
-                <ListItemText primary="Products" />
-              </ListItemButton>
-
-            </List>
+            Clients Widget
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
-            <Account />
+            Practitioner Widget
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6 }}>
+            Recommendations Widget
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6 }}>
+            Products Widget
           </Grid>
         </Grid>
       </Box>

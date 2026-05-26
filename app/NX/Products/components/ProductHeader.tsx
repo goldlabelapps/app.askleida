@@ -7,14 +7,18 @@ import {
   Container,
   IconButton,
   Avatar,
-  Button,
   Typography, 
   useTheme,
 } from '@mui/material';
 import type { I_Product } from '../types';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from '../../Uberedux';
-import { navigateTo, Icon } from '../../DesignSystem';
+import { 
+  navigateTo, 
+  Icon,
+  SearchBox,
+  MightyButton,
+} from '../../DesignSystem';
 
 const ProductHeader: FC<{ product?: I_Product }> = ({ product }) => {
   
@@ -35,22 +39,21 @@ const ProductHeader: FC<{ product?: I_Product }> = ({ product }) => {
 
   const handleProductsClick = () => {
     if (product && product.slug) {
-      dispatch(navigateTo(router, `/products/${product.slug}`));
+      router.push(`/products/${product.slug}`);
     }
   };
 
   const handleCreateClick = () => {
-      dispatch(navigateTo(router, `/products/new`));
+      router.push('/products/new');
   };
 
   const handleDashboardClick = () => {
-    dispatch(navigateTo(router, `/`));
+    router.push(`/`);
   };
   
 
   return (
     <>
-      <header>
         <AppBar
           position="fixed"
           color="default"
@@ -87,24 +90,16 @@ const ProductHeader: FC<{ product?: I_Product }> = ({ product }) => {
               </Typography>}
               
               action={<>
-
-                <Button 
-                  variant="contained" 
-                  color="primary" 
-                  onClick={handleCreateClick} 
-                >
-
-                  Create
-                </Button>
-                
-                <IconButton color="primary">
-                  <Icon icon="new" />
-                </IconButton>
+                <MightyButton
+                  icon="new"
+                  label="Create"
+                  onClick={handleCreateClick}
+                />
               </>}
             />
           </Container>
         </AppBar>
-      </header>
+    
       {/* <pre>product {JSON.stringify(product ?? {}, null, 2)}</pre> */}
     </>
   );

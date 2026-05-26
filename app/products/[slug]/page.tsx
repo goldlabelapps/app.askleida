@@ -26,14 +26,13 @@ function ProductPageWrapper({ children, onBack, product }: ProductPageWrapperPro
   const router = useRouter();
 
   const handleBack = () => {
-    dispatch(navigateTo(router, '/products'));
+    router.push('/products');
   }
 
   const handleNew = () => {
-    dispatch(navigateTo(router, '/products/new'));
+    router.push('/products/new');
   }
 
-  console.log('product', product);
 
   return (
     <>
@@ -53,28 +52,33 @@ export default function ProductSlugPage() {
     const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
     const router = useRouter();
-    console.debug('ProductSlugPage: slug', slug);
+    // console.debug('ProductSlugPage: slug', slug);
 
     const handleBack = () => {
-      dispatch(navigateTo(router, '/products'));
+      router.push('/products');
     }
 
+
     useEffect(() => {
-      if (!slug || slug === 'new') return;
+      if (!slug || slug === 'new') {
+        setLoading(false);
+        setProduct(null);
+        return;
+      }
       console.debug('Fetching product for slug:', slug);
       fetch(`/api/products/${slug}`)
         .then((res) => res.json())
         .then((data) => {
-          console.debug('API response for product:', data);
+          // console.debug('API response for product:', data);
           setProduct(data.data); // Only set the product data
           setLoading(false);
         })
         .catch((err) => {
-          console.error('Error fetching product:', err);
+          // console.error('Error fetching product:', err);
           setLoading(false);
         });
-    }, [slug]);
 
+    }, [slug]);
 
     if (loading) return (
       <Backdrop
@@ -88,15 +92,18 @@ export default function ProductSlugPage() {
       </Backdrop>
     );
 
-    if (!product) notFound();
-
     if (slug === 'new') {
       return (
-        <ProductPageWrapper onBack={handleBack} product={product}>
+        <ProductPageWrapper onBack={handleBack} product={null}>
           <ProductCreate />
         </ProductPageWrapper>
       );
     }
+
+    if (!product) notFound();
+
+    
+
     return (
       <ProductPageWrapper onBack={handleBack} product={product}>
         <ProductDetail product={product} />

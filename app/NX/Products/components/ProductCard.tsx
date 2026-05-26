@@ -16,7 +16,7 @@ const ProductCard: FC<{ product?: I_Product }> = ({ product }) => {
 
   const handleClick = () => {
     if (product.slug) {
-      dispatch(navigateTo(router, `/products/${product.slug}`));
+      router.push(`/products/${product.slug}`);
     }
   };
 
@@ -26,10 +26,15 @@ const ProductCard: FC<{ product?: I_Product }> = ({ product }) => {
         <CardHeader
           title={
             <Typography variant="body1" noWrap>
+              {product.brand}
+            </Typography>
+          }
+          subheader={
+            <Typography variant="body2" noWrap>
               {product.title}
             </Typography>
           }
-          action={
+          avatar={
             product.image_url ? (
               <Thumbnail src={product.image_url} alt={product.title || ''} size={48} />
             ) : null

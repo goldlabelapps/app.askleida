@@ -52,7 +52,7 @@ export default function Viruses() {
             variant='outlined'
             startIcon={<Icon icon="new" />}
             onClick={() => {
-              dispatch(navigateTo(router, '/viruses/new'));
+              router.push('/viruses/new');
             }}
           >
             New

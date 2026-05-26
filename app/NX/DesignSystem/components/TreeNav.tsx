@@ -106,7 +106,7 @@ export default function TreeNav({ navItems = [] }: { navItems?: any[] }) {
                     }
                     const clickedItem = findItem(treeViewItems, itemId);
                     if (clickedItem && clickedItem.route && clickedItem.route !== pathname) {
-                        dispatch(navigateTo(router, clickedItem.route));
+                        router.push(clickedItem.route);
                     }
                 }}
             />

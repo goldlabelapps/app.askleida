@@ -38,7 +38,7 @@ export default function Header({
 
 	const handleAvatarClick = () => {
 		if (pathname === '/') return;
-		dispatch(navigateTo(router, '/'));
+		router.push('/');
 	}
 
 	return (

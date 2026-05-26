@@ -27,8 +27,7 @@ export default function PageLink({
 
   const handleClick = () => {
     if (url) {
-      const isExternal = url.startsWith('http');
-      dispatch(navigateTo(router, url, isExternal ? '_blank' : '_self'));
+      router.push(url);
     }
   };
 

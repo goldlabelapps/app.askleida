@@ -56,7 +56,7 @@ const Nav: React.FC<I_Nav> = ({
 
     function handleNavClick(slug?: string) {
         if (typeof slug === 'string' && slug.trim().length > 0) {
-            dispatch(navigateTo(router, slug));
+            router.push(slug);
             setDrawerOpen(false);
         } else {
             console.log('No valid slug for nav item:', slug);

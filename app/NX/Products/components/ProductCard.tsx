@@ -3,6 +3,7 @@ import * as React from 'react';
 import type { FC } from 'react';
 import { Card, CardHeader, CardContent, Typography, CardActionArea } from '@mui/material';
 import type { I_Product } from '../types';
+import Thumbnail from './Thumbnail';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from '../../Uberedux';
 import { navigateTo } from '../../DesignSystem';
@@ -25,16 +26,15 @@ const ProductCard: FC<{ product?: I_Product }> = ({ product }) => {
         <CardHeader
           title={
             <Typography variant="body1" noWrap>
-              {product.title || product.name || 'Untitled'}
+              {product.title}
             </Typography>
           }
-          subheader={product.brand || ''}
+          action={
+            product.image_url ? (
+              <Thumbnail src={product.image_url} alt={product.title || ''} size={48} />
+            ) : null
+          }
         />
-        <CardContent>
-          <Typography variant="body2" color="text.secondary" noWrap>
-            {product.description || ''}
-          </Typography>
-        </CardContent>
       </CardActionArea>
     </Card>
   );

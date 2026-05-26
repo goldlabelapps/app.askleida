@@ -39,5 +39,4 @@ This directory implements a secure, RESTful API for managing your Supabase datab
 - `route.ts` — Root API health check
 - `lib/` — Shared utilities (e.g., `makeRes` for re
 
-
 Copyright © 2026 askleida.com - All Rights Reserved

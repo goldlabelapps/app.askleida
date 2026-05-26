@@ -2,7 +2,7 @@
 import Products from './Products';
 import ProductCard from './components/ProductCard';
 import ProductDetail from './components/ProductDetail';
-import Create from './components/Create';
+import ProductCreate from './components/ProductCreate';
 import Thumbnail from './components/Thumbnail';
 import { init } from './actions/init';
 import { setKey } from './actions/setKey';
@@ -15,7 +15,7 @@ export {
     Products,
     ProductCard,
     ProductDetail,
-    Create,
+    ProductCreate,
     Thumbnail,
     init,
     setKey,

@@ -16,7 +16,7 @@ interface CreateProps {
   onCreated?: (slug: string) => void;
 }
 
-export default function Create({ onCreated }: CreateProps) {
+export default function ProductCreate({ onCreated }: CreateProps) {
   const dispatch = useDispatch();
   const [form, setForm] = useState<Partial<I_Product>>(initialState);
   const [error, setError] = useState<string | null>(null);

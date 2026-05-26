@@ -65,10 +65,8 @@ export default function Products({ slug }: { slug?: string }) {
           <Grid 
             key={`product_${idx}`}
             size={{
-              xs: 12,
-              sm: 6,
-              md: 4,
-              lg: 3,
+              sm: 12,
+              md: 6,
             }}
           >
             <ProductCard product={product} />

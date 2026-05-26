@@ -25,27 +25,101 @@ type ProductPageWrapperProps = {
   product?: I_Product;
 };
 
-function ProductPageWrapper({ children, onBack, product }: ProductPageWrapperProps) {
 
-  const theme = useTheme();
-  const dispatch = useDispatch();
-  const router = useRouter();
-
-  const handleBack = () => {
-    router.push('/products');
-  }
-
-  const handleNew = () => {
-    router.push('/products/new');
-  }
-
-
+function ProductPageWrapper({ children, product }: ProductPageWrapperProps) {
   return (
     <>
       <ProductHeader product={product ?? undefined} />
-      <Container id="main" maxWidth="md" sx={{mt: '100px'}}>
+      <Container id="main" maxWidth="md" sx={{ mt: '100px' }}>
         {children}
       </Container>
+    </>
+  );
+}
+
+export default function ProductPage() {
+  const theme = useTheme();
+  const params = useParams();
+  const searchParams = useSearchParams();
+  let slug = params.slug;
+  if (Array.isArray(slug)) {
+    slug = slug[0];
+  }
+
+  const [product, setProduct] = useState<I_Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  // Restore search param if present
+  React.useEffect(() => {
+    const s = searchParams.get('s');
+    if (s) {
+      dispatch({ type: 'products/setKey', key: 'searchParams', value: { s } });
+    }
+  }, [searchParams, dispatch]);
+
+  const handleBack = () => {
+    router.push('/products');
+  };
+
+  useEffect(() => {
+    if (!slug || slug === 'new') {
+      setLoading(false);
+      setProduct(null);
+      return;
+    }
+    fetch(`/api/products/${slug}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setProduct(data.data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  }, [slug]);
+
+  if (loading) return (
+    <>
+      <Head>
+        <title>Products</title>
+      </Head>
+      <Backdrop
+        open={true}
+        sx={{
+          color: theme.palette?.common?.white,
+          zIndex: theme.zIndex.drawer + 1,
+        }}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    </>
+  );
+
+  if (slug === 'new') {
+    return (
+      <>
+        <Head>
+          <title>Products</title>
+        </Head>
+        <ProductPageWrapper onBack={handleBack} product={undefined}>
+          <ProductCreate />
+        </ProductPageWrapper>
+      </>
+    );
+  }
+
+  if (!product) notFound();
+
+  return (
+    <>
+      <Head>
+        <title>{product?.title ? product.title : "Products"}</title>
+      </Head>
+      <ProductPageWrapper onBack={handleBack} product={product ?? undefined}>
+        <ProductDetail product={product} />
+      </ProductPageWrapper>
     </>
   );
 }

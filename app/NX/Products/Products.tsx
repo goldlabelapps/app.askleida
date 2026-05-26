@@ -4,6 +4,7 @@ import {
   Typography,
   Box,
   Grid,
+  Pagination,
 } from '@mui/material';
 import { init, useState, ProductCard } from '../../NX/Products';
 import { useDispatch } from '../../NX/Uberedux';
@@ -26,6 +27,7 @@ export default function Products({ slug }: { slug?: string }) {
 
   return (
     <Box>
+      this is where...
       {results && results.length > 0 ? (
         <Grid container spacing={1} sx={{  }}>
           {results.map((product: any, idx: number) => (

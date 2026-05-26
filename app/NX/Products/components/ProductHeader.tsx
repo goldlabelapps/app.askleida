@@ -19,89 +19,89 @@ import {
   MightyButton,
 } from '../../DesignSystem';
 
+
+import { useState as useProductsState } from '../hooks/useState';
+import { setKey, search } from '../index';
+import { debounce } from 'lodash';
+
 const ProductHeader: FC<{ product?: I_Product }> = ({ product }) => {
-  
   const dispatch = useDispatch();
   const router = useRouter();
   const theme = useTheme();
   const themeMode = theme?.palette?.mode || 'light';
-  
+  const state = useProductsState();
+  const searchValue = state?.searchParams?.s || '';
 
   const avatars = {
     "light": "/askleida/svg/avatarLight.svg",
     "dark": "/askleida/svg/avatarDark.svg"
   };
-
   const avatar = avatars[themeMode] || '';
-
   const title = product?.title || 'Products';
 
   const handleProductsClick = () => {
     router.push('/products');
   };
-
   const handleCreateClick = () => {
-      router.push('/products/new');
+    router.push('/products/new');
   };
-
   const handleDashboardClick = () => {
     router.push(`/`);
   };
-  
+
+  // Debounced search
+  const debouncedSearch = React.useMemo(() => debounce((val: string) => {
+    dispatch(setKey('searchParams', { ...state.searchParams, s: val, page: 1 }));
+    dispatch(search());
+  }, 400), [dispatch, state.searchParams]);
+
+  const handleSearchChange = (val: string) => {
+    debouncedSearch(val);
+  };
+
+  const handleSearchEnter = (val: string) => {
+    dispatch(setKey('searchParams', { ...state.searchParams, s: val, page: 1 }));
+    dispatch(search());
+  };
 
   return (
     <>
-        <AppBar
-          position="fixed"
-          color="default"
-          sx={{
-            boxShadow: 0,
-            background: theme.palette?.background?.default || 'inherit',
-          }}>
-          <Container maxWidth="md">
-            <CardHeader
-
-              avatar={<>
-
-                <IconButton
-                  color="primary"
-                  onClick={handleDashboardClick}
-                >
-                  <Avatar src={avatar} />
-                </IconButton>
-
-                <IconButton 
-                  color="primary"
-                  onClick={handleProductsClick}
-                >
-                  <Icon icon="products" />
-                </IconButton>
-
+      <AppBar
+        position="fixed"
+        color="default"
+        sx={{
+          boxShadow: 0,
+          background: theme.palette?.background?.default || 'inherit',
+        }}>
+        <Container maxWidth="md">
+          <CardHeader
+            avatar={<>
+              <IconButton color="primary" onClick={handleDashboardClick}>
+                <Avatar src={avatar} />
+              </IconButton>
+              <IconButton color="primary" onClick={handleProductsClick}>
+                <Icon icon="products" />
+              </IconButton>
               <SearchBox
-                value=""
-                onChange={() => { }}
-                onEnter={() => { }}
+                value={searchValue}
+                onChange={handleSearchChange}
+                onEnter={handleSearchEnter}
                 placeholder="Search products..."
               />
-              </>}
-              
-              action={<>
-                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-
-                  <MightyButton
-                    variant="outlined"
-                    icon="new"
-                    label="Create"
-                    onClick={handleCreateClick}
-                  />
-
-                
-                </Box>
-              </>}
-            />
-          </Container>
-        </AppBar>
-    
+            </>}
+            action={<>
+              <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                <MightyButton
+                  variant="outlined"
+                  icon="new"
+                  label="Create"
+                  onClick={handleCreateClick}
+                />
+              </Box>
+            </>}
+          />
+        </Container>
+      </AppBar>
       {/* <pre>product {JSON.stringify(product ?? {}, null, 2)}</pre> */}
     </>
   );

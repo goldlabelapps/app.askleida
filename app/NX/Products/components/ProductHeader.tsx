@@ -18,8 +18,6 @@ import {
   SearchBox,
   MightyButton,
 } from '../../DesignSystem';
-
-
 import { useState as useProductsState } from '../hooks/useState';
 import { setKey, search } from '../index';
 import { debounce } from 'lodash';
@@ -29,8 +27,9 @@ const ProductHeader: FC<{ product?: I_Product }> = ({ product }) => {
   const router = useRouter();
   const theme = useTheme();
   const themeMode = theme?.palette?.mode || 'light';
-  const state = useProductsState();
-  const searchValue = state?.searchParams?.s || '';
+  const state = useProductsState() || {};
+  const searchParams = state.searchParams || {};
+  const searchValue = searchParams.s || '';
 
   const avatars = {
     "light": "/askleida/svg/avatarLight.svg",
@@ -49,18 +48,17 @@ const ProductHeader: FC<{ product?: I_Product }> = ({ product }) => {
     router.push(`/`);
   };
 
-  // Debounced search
   const debouncedSearch = React.useMemo(() => debounce((val: string) => {
-    dispatch(setKey('searchParams', { ...state.searchParams, s: val, page: 1 }));
+    dispatch(setKey('searchParams', { ...searchParams, s: val, page: 1 }));
     dispatch(search());
-  }, 400), [dispatch, state.searchParams]);
+  }, 400), [dispatch, searchParams]);
 
   const handleSearchChange = (val: string) => {
     debouncedSearch(val);
   };
 
   const handleSearchEnter = (val: string) => {
-    dispatch(setKey('searchParams', { ...state.searchParams, s: val, page: 1 }));
+    dispatch(setKey('searchParams', { ...searchParams, s: val, page: 1 }));
     dispatch(search());
   };
 
@@ -102,7 +100,6 @@ const ProductHeader: FC<{ product?: I_Product }> = ({ product }) => {
           />
         </Container>
       </AppBar>
-      {/* <pre>product {JSON.stringify(product ?? {}, null, 2)}</pre> */}
     </>
   );
 };

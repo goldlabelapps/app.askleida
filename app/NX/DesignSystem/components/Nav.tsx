@@ -122,7 +122,7 @@ const Nav: React.FC<I_Nav> = ({
                 )}
 
                 <Drawer
-                    anchor="right"
+                    anchor="bottom"
                     open={drawerOpen}
                     onClose={() => setDrawerOpen(false)}
                     sx={{
@@ -162,9 +162,6 @@ const Nav: React.FC<I_Nav> = ({
                                 </Box>
                             </>}
                             
-                            <Box sx={{ pb: 1.5, mr: 2, }}>
-                                <SignOutBtn />
-                            </Box>
                         </Box>
                         
                     </Box>

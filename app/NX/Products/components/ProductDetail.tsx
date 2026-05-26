@@ -133,7 +133,7 @@ const ProductDetail: FC<{ product: I_Product }> = ({ product }) => {
         }}>
           <CardContent>
             
-            <FormControlLabel
+            {/* <FormControlLabel
               control={
                 <Checkbox
                   checked={!!product.is_pregnancy_safe}
@@ -154,7 +154,7 @@ const ProductDetail: FC<{ product: I_Product }> = ({ product }) => {
               }
               label="Breastfeeding Safe"
               sx={{ mb: 2 }}
-            />
+            /> */}
             {product.concern_tags && Array.isArray(product.concern_tags) && product.concern_tags.length > 0 && (
               <>
 

@@ -92,7 +92,7 @@ const ProductHeader: FC<{ product?: I_Product }> = ({ product }) => {
                 <MightyButton
                   variant="outlined"
                   icon="new"
-                  label="Create"
+                  label="New Product"
                   onClick={handleCreateClick}
                 />
               </Box>

@@ -13,7 +13,7 @@ const config = JSON.parse(configRaw);
 const { title, description, favicon } = config;
 
 export const metadata: Metadata = {
-  title: `${title}, ${description}`,
+  title: `Leida`,
   description,
   icons: {
     icon: favicon,

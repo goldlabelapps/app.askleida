@@ -14,7 +14,8 @@ export default function Footer({ frontmatter, navItems }: I_Footer) {
 			style={{
 				position: 'fixed',
 				bottom: 8,
-				right: 8,
+				left: '50%',
+				transform: 'translateX(-50%)',
 				zIndex: 9999,
 			}}
 		>

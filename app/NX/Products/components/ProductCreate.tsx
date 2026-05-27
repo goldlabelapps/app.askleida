@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useDispatch } from '../../../NX/Uberedux';
 import type { I_Product } from '../types.d.ts';
 import { createProduct } from '../../Products';
@@ -16,8 +17,11 @@ interface CreateProps {
   onCreated?: (slug: string) => void;
 }
 
-export default function Create({ onCreated }: CreateProps) {
+
+export default function ProductCreate(props: CreateProps) {
+  const { onCreated } = props;
   const dispatch = useDispatch();
+  const router = useRouter();
   const [form, setForm] = useState<Partial<I_Product>>(initialState);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -47,7 +51,11 @@ export default function Create({ onCreated }: CreateProps) {
     dispatch(createProduct({ ...form, slug } as I_Product));
     setSuccess(true);
     setForm(initialState);
-    if (onCreated) onCreated(slug);
+    if (typeof onCreated === 'function') onCreated(slug);
+    // Redirect to edit page for the new product
+    if (slug) {
+      router.push(`/products/${slug}/edit`);
+    }
   };
 
   return (

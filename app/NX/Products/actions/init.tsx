@@ -10,7 +10,7 @@ export const init = () =>
             dispatch(setKey('searchParams', {
                 s: '',
                 page: 1,
-                limit: 25,
+                limit: 10,
             }));
             // Fetch products
             await dispatch(search());

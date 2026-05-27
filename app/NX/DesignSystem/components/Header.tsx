@@ -30,13 +30,15 @@ export default function Header({
 	const dispatch = useDispatch();
 	const router: ReturnType<typeof useRouter> = useRouter();
     const themeMode = theme?.palette?.mode || 'light';
+
+
 	const avatar = config?.avatars?.[themeMode] || '';
     const {title} = frontmatter || {};
 	const pathname = usePathname();
 
 	const handleAvatarClick = () => {
 		if (pathname === '/') return;
-		dispatch(navigateTo(router, '/'));
+		router.push('/');
 	}
 
 	return (

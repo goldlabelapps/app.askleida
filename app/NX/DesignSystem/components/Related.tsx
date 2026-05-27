@@ -22,7 +22,6 @@ const Related: React.FC<I_Related> = ({ related }) => {
 			severity: 'success',
 			title: 'Tags coming soon'
 		}));
-		// dispatch(navigateTo(router, `/tags`));
 	};
 	return null
 	return (

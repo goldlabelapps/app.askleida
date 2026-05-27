@@ -32,7 +32,7 @@ export default function ContentCard({
     }, [slug, dispatch]);
 
     const handleClick = () => {        
-        dispatch(navigateTo(router, slug));
+        router.push(slug);
     };
 
     if (!markdown) return null;

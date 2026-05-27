@@ -6,7 +6,6 @@
 - [Supabase](https://supabase.com/dashboard/project/fnogxpcfvphmdpxeflqa)
 - Powered by [NX°](https://goldlabel.pro/nx)
 
-
 ## Askleida API (Next.js + Supabase)
 
 This directory implements a secure, RESTful API for managing your Supabase database using Next.js API routes. All endpoints are designed for server-side use and require Supabase authentication. Security is a priority—never expose your Supabase service role key to the client.
@@ -23,35 +22,6 @@ This directory implements a secure, RESTful API for managing your Supabase datab
 ### `/api/`
 - **GET**: Health check endpoint. Returns a simple success message.
 
-### `/api/supabase/`
-- **GET**: List all tables in the database (via the `list_tables` Postgres function).
-
-### `/api/supabase/tables/`
-- **GET**: List all tables in the database.
-- **POST**: Create a new table. Requires a SQL statement in the request body:
-  ```json
-  { "sql": "CREATE TABLE ..." }
-  ```
-
-### `/api/supabase/tables/[table]`
-- **GET**: List all rows in the specified table.
-- **POST**: Insert a new row. Request body should be a JSON object representing the row.
-- **PATCH**: Update rows. Request body should include:
-  ```json
-  { "filter": { ... }, "values": { ... } }
-  ```
-- **DELETE**: Delete rows. Request body should include:
-  ```json
-  { "filter": { ... } }
-  ```
-
-### `/api/supabase/tables/[table]/schema`
-- **GET**: Get the schema (columns) for the specified table.
-- **PATCH**: Alter the table structure. Requires a SQL statement in the request body:
-  ```json
-  { "sql": "ALTER TABLE ..." }
-  ```
-
 ## Requirements
 - The following Postgres functions must exist in your Supabase database:
   - `list_tables()`
@@ -67,13 +37,6 @@ This directory implements a secure, RESTful API for managing your Supabase datab
 
 ## File Structure
 - `route.ts` — Root API health check
-- `lib/` — Shared utilities (e.g., `makeRes` for response formatting)
-- `supabase/` — All Supabase-related API routes
-  - `route.ts` — List tables
-  - `tables/` — Table CRUD and schema management
-    - `[table]/route.ts` — CRUD for individual tables
-    - `[table]/schema/route.ts` — Schema management for individual tables
-
-
+- `lib/` — Shared utilities (e.g., `makeRes` for re
 
 Copyright © 2026 askleida.com - All Rights Reserved

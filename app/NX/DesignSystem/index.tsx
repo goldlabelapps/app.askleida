@@ -12,6 +12,8 @@ import Feedback from './components/Feedback';
 import { Mapbox, MapPin } from './components/Mapbox';
 import Footer from './components/Footer';
 import Header from './components/Header';
+import SearchBox from './components/SearchBox';
+import MightyButton from './components/MightyButton'
 import Hero from './components/Hero';
 import Icon from './components/Icon';
 import Loader from "./components/Loader";
@@ -55,6 +57,8 @@ export {
     ConfirmAction,
     Fullscreen,
     FullscreenToggle,
+    MightyButton,
+    SearchBox,
     
     // Hooks
     useConfig,

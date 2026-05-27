@@ -27,6 +27,7 @@ import {
     Dashboard,
 } from '../NX/Dashboard';
 import { RenderMarkdown } from '../NX/Shortcodes';
+import { ProductHeader } from '../NX/Products';
 
 export async function generateMetadata({ params }: { params: any }): Promise<Metadata> {
 
@@ -149,19 +150,14 @@ export default async function Page(props: any) {
         const { Products } = await import('../NX/Products');
         return (
             <NX config={config} frontmatter={data}>
-                <Header config={config} frontmatter={data} />
-                <Container id="main" maxWidth="md" sx={{ mt: '100px', pb: '90px' }}>
-                    <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
-                        <Products />
-                    </Box>
+                <ProductHeader />
+                <Container id="main" maxWidth="md" sx={{  py: '100px' }}>
+                    <Products />
                 </Container>
-                <footer>
-                    <Footer
-                        frontmatter={data}
-                        navItems={navItems as I_NestedNav["navItems"]}
-                    >
-                    </Footer>
-                </footer>
+                <Footer
+                    frontmatter={data}
+                    navItems={navItems as I_NestedNav["navItems"]}
+                />
             </NX>
         );
     }

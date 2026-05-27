@@ -22,7 +22,7 @@ export default function GithubLink({
 
   const handleClick = () => {
     if (url) {
-      dispatch(navigateTo(router, url, '_blank'));
+      router.push(url);
     }
   };
 

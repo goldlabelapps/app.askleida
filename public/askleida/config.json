@@ -1,7 +1,7 @@
 {
     "tenant": "askleida",
-    "siteName": "Ask Leida",
-    "description": "",
+    "siteName": "Leida",
+    "description": "Homecare assistant for solo skin therapists",
     "url": "https://askleida.vercel.app/",
     "owner": {
         "name": "Millie",
@@ -24,7 +24,7 @@
         "designSystem": {
             "themeSwitching": true,
             "sharing": false,
-            "defaultTheme": "dark",
+            "defaultTheme": "light",
             "themes": {
                 "dark": {
                     "mode": "dark",

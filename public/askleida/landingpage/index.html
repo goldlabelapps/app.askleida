@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Leida — Homecare assistant for solo skin therapists</title>
+<meta name="description" content="Leida turns your post-appointment WhatsApp into a beautiful, personalised homecare PDF — in your voice, in under two minutes. Built for solo skin therapists." />
+
+<!-- Fonts: distinctive editorial serif + clean sans -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+
+<div class="site-bg" aria-hidden="true"></div>
+
+<!-- ========== NAV ========== -->
+<nav class="site-nav">
+  <div class="nav-inner">
+    <img src="assets/logo-dark.svg" alt="Leida" class="logo" />
+    <a href="#founding" class="nav-cta">Become a founding member</a>
+  </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">For solo skin therapists</span>
+    <h1>Clinic hours are over but you're sat on your sofa writing homecare.<br><strong class="sound-familiar">Sound familiar?<span class="scribble-underline" aria-hidden="true"></span></strong></h1>
+    <p class="lede">
+      Leida is the assistant designed for solo skin therapists. She turns your post-appointment WhatsApp into a beautiful, personalised PDF, in your voice&hellip; in under two minutes.
+    </p>
+    <div class="cta-stack">
+      <a href="https://buy.stripe.com/cNicN56eh4DHdhs0A6ew801" class="btn btn-primary">
+        Become a founding member
+        <span class="arrow">→</span>
+      </a>
+      <p class="micro">50 founding spots. £29/month, yours forever.</p>
+      <p class="micro">Or <a href="#waitlist">join the waitlist</a> →</p>
+    </div>
+  </div>
+</header>
+
+<!-- ========== SECTION 2 — PRODUCT PROOF ========== -->
+<section id="proof">
+  <div class="wrap">
+    <div class="proof-grid">
+      <div class="pdf-carousel reveal" data-current="1" data-total="4">
+        <div class="pdf-stack">
+          <div class="pdf-paper-back pdf-paper-back-2" aria-hidden="true"></div>
+          <div class="pdf-paper-back pdf-paper-back-1" aria-hidden="true"></div>
+          <div class="pdf-viewer">
+            <img src="assets/pdf-page-1.png" alt="Page 1 of sample homecare recommendation" class="pdf-page-img is-active" data-page="1" />
+            <img src="assets/pdf-page-2.png" alt="Page 2 of sample homecare recommendation" class="pdf-page-img" data-page="2" />
+            <img src="assets/pdf-page-3.png" alt="Page 3 of sample homecare recommendation" class="pdf-page-img" data-page="3" />
+            <img src="assets/pdf-page-4.png" alt="Page 4 of sample homecare recommendation" class="pdf-page-img" data-page="4" />
+          </div>
+        </div>
+
+        <div class="pdf-controls">
+          <button class="pdf-arrow" id="pdf-prev" aria-label="Previous page">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="pdf-dots" role="tablist" aria-label="PDF page navigation">
+            <button class="pdf-dot is-active" data-page="1" aria-label="Go to page 1"></button>
+            <button class="pdf-dot" data-page="2" aria-label="Go to page 2"></button>
+            <button class="pdf-dot" data-page="3" aria-label="Go to page 3"></button>
+            <button class="pdf-dot" data-page="4" aria-label="Go to page 4"></button>
+          </div>
+          <button class="pdf-arrow" id="pdf-next" aria-label="Next page">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <p class="pdf-hint">Click or swipe through to see each page of the sample recommendation.</p>
+      </div>
+
+      <div class="proof-copy reveal">
+        <h2 class="section-title">Here's what your client receives.</h2>
+        <p>This isn't a templated PDF. <strong>Every paragraph is written from scratch for your client.</strong> Her skin, her concerns, the context you give Leida.</p>
+        <p>Whatever's going on in her life, whether that's a wedding, a flare-up, a holiday, or a new baby, Leida weaves it through.</p>
+        <p><strong>It feels like you spent an hour on it. It took two minutes.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== RECOGNITION ========== -->
+<section class="recognition">
+  <div class="wrap">
+    <p class="recognition-lede reveal">
+      Whether you're firing off WhatsApps and hoping your clients actually read them, or spending an hour on Canva making something you're actually proud of, you already know this part of the job takes too long.
+    </p>
+    <h2 class="recognition-headline reveal">
+      Leida does it in <em>two&nbsp;minutes.<span class="scribble-underline" aria-hidden="true"></span></em>
+    </h2>
+    <p class="recognition-stamps reveal">
+      <span>Beautiful enough to be proud of.</span>
+      <span>Fast enough to do between clients.</span>
+    </p>
+  </div>
+</section>
+
+<!-- ========== DEMO ========== -->
+<section class="tight">
+  <div class="wrap">
+    <div class="glass demo-row reveal">
+      <div class="demo-text">
+        <h3>Watch her work.</h3>
+        <p>She can turn your expertise into a finished PDF in less than the time it takes to make your coffee.</p>
+      </div>
+      <div class="phone-mock">
+        <div class="phone-screen-wrap" id="demo-wrap">
+          <video
+            id="demo-video"
+            src="assets/demo.mp4"
+            poster="assets/demo-poster.jpg"
+            preload="none"
+            playsinline
+            class="phone-screen"
+          ></video>
+          <button class="demo-play" id="demo-play" aria-label="Play demo">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M8 5.5v13a.5.5 0 0 0 .77.42l10.5-6.5a.5.5 0 0 0 0-.84L8.77 5.08A.5.5 0 0 0 8 5.5z" fill="currentColor"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SECTION 3 — FOUNDER ========== -->
+<section id="founder">
+  <div class="wrap">
+    <div class="founder-grid">
+      <div class="founder-photo reveal">
+        <img src="assets/millie.png" alt="Millie, founder of Leida" />
+      </div>
+      <div class="founder-copy reveal">
+        <h2 class="section-title">Built for skin therapists, <em style="font-style:italic;font-weight:300;">by a skin therapist.</em></h2>
+        <p>Hi, I'm Millie. I trained as a skin therapist to do work I loved and create a career where I could spend time with my young family. I loved the work. What I didn't love was how much time I spent on my phone doing the admin that running a small business requires.</p>
+        <p>One of the biggest drains was homecare. Being a perfectionist, and knowing how vital aftercare was to my results, I'd sometimes spend 30 minutes putting recommendations together for one client. And even after all that time, it was still just random links and a WhatsApp message.</p>
+        <p>So I set to work while the toddler slept, armed with an iPad and a mission.</p>
+        <p class="sig">Leida was born.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SECTION 4 — FOUNDING MEMBER ========== -->
+<section id="founding">
+  <div class="wrap">
+    <div class="founding-intro reveal">
+      <h2 class="section-title center">A tool built from the inside.</h2>
+      <p>Most tools built for practitioners weren't built by one. They were built by people who looked at the industry from the outside and guessed at what was needed.</p>
+      <p><strong>Leida is different.</strong> I've sat where you sit. I know the paperwork, the anxiety, the late nights, the unpaid labour that nobody talks about. I built Leida to change that. We're starting with homecare, but it doesn't end there.</p>
+      <p>Founding members don't just get early access, they get a real say in what comes next. I would love for you to come on this journey with me to build a tool that finally gives us the work-life balance we chose this career for.</p>
+    </div>
+
+    <div class="glass-strong founding-card reveal">
+      <span class="eyebrow" style="margin-bottom: 0;">Founding Member</span>
+      <div class="price">£29<span class="small">/month</span></div>
+      <p class="price-sub">FOUNDING MEMBER RATE, FOREVER.</p>
+
+      <h2 class="section-title center" style="font-size: clamp(26px, 3.2vw, 36px); margin-bottom: 32px;">
+        For the first 50 practitioners to join. <em style="font-style:italic;font-weight:300;">You get:</em>
+      </h2>
+
+      <div class="perks">
+        <div class="perk"><span class="perk-dot"></span><span>£29/month, yours forever</span></div>
+        <div class="perk"><span class="perk-dot"></span><span>Cancel any time — no contracts, no catch</span></div>
+        <div class="perk"><span class="perk-dot"></span><span>First access to new features before anyone else</span></div>
+        <div class="perk"><span class="perk-dot"></span><span>A direct line to me as I build Leida</span></div>
+        <div class="perk perk-span"><span class="perk-dot"></span><span>Founding member status, recognised forever</span></div>
+      </div>
+
+      <a href="https://buy.stripe.com/cNicN56eh4DHdhs0A6ew801" class="btn btn-primary">
+        Claim your founding spot
+        <span class="arrow">→</span>
+      </a>
+      <p class="post-price" style="margin-top: 20px;">Once 50 spots are taken, standard pricing starts at £39/month.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SECTION 5 — FINAL CTA + WAITLIST ========== -->
+<section class="final-cta">
+  <div class="wrap">
+    <h2 class="reveal">Ready to <em>wow</em> your clients?</h2>
+    <div class="cta-stack reveal">
+      <a href="https://buy.stripe.com/cNicN56eh4DHdhs0A6ew801" class="btn btn-primary">
+        Become a founding member
+        <span class="arrow">→</span>
+      </a>
+      <p class="micro">£29/month forever. Cancel any time. 50 spots only.</p>
+    </div>
+
+    <div id="waitlist" class="glass waitlist reveal">
+      <div class="form-state">
+        <h4>Not ready? Join the waitlist.</h4>
+        <p>Be the first to know when Leida launches. No spam. Ever.</p>
+        <form id="waitlist-form" action="https://assets.mailerlite.com/jsonp/2381051/forms/188535256482055233/subscribe" method="post">
+          <div class="field">
+            <input type="email" name="fields[email]" placeholder="your@email.com" required aria-label="Email" autocomplete="email" />
+            <button type="submit" id="waitlist-submit">Join the waitlist</button>
+          </div>
+          <p class="waitlist-error" id="waitlist-error" role="alert" aria-live="polite"></p>
+          <input type="hidden" name="ml-submit" value="1" />
+          <input type="hidden" name="anticsrf" value="true" />
+        </form>
+      </div>
+      <div class="success" id="waitlist-success">
+        <h4>You're on the list.</h4>
+        <p>I'll be in touch as soon as Leida is ready for you. In the meantime, keep an eye on @ask.leida on Instagram for updates. Millie x</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="wrap">
+    <img src="assets/logo-dark.svg" alt="Leida" class="logo-wm" />
+    <p>© 2026 Leida. Made with care for solo skin therapists.</p>
+  </div>
+</footer>
+<script src="scripts.js"></script>
+</body>
+</html>

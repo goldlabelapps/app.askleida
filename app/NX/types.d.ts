@@ -8,6 +8,11 @@ export interface I_MakeRes {
     message: string;
     data?: any;
     tenant?: string;
+    meta?: {
+        pagination?: any;
+        search?: string;
+        [key: string]: any;
+    };
 }
 
 export type T_Email = {

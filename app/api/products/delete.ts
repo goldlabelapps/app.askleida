@@ -23,13 +23,15 @@ export async function DELETE(req: Request) {
     return NextResponse.json(res, { status: 400 });
   }
 
-  const { product_id } = body;
-  if (!product_id || typeof product_id !== 'number') {
-    const res = makeRes({ tenant, message: 'Missing or invalid product_id', severity: 'error' });
+  const { id } = body;
+  // Validate id as a non-empty string (UUID)
+  if (!id || typeof id !== 'string' || !/^[0-9a-fA-F-]{36}$/.test(id)) {
+    const res = makeRes({ tenant, message: 'Missing or invalid product id (must be UUID)', severity: 'error' });
     return NextResponse.json(res, { status: 400 });
   }
 
-  const { data, error } = await supabase.from('products').delete().eq('product_id', product_id).select();
+  // Use 'id' (UUID) for deletion
+  const { data, error } = await supabase.from('products').delete().eq('id', id).select();
   if (error) {
     const res = makeRes({ tenant, message: error.message, severity: 'error' });
     return NextResponse.json(res, { status: 500 });

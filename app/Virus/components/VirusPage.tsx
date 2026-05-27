@@ -55,7 +55,7 @@ export default function VirusPage() {
               variant="outlined"
               startIcon={<Icon icon="virus" />}
               onClick={() => {
-                dispatch(navigateTo(router, '/viruses'));
+                router.push('/viruses');
               }}
             >
               Viruses°
@@ -64,7 +64,7 @@ export default function VirusPage() {
               variant="outlined"
               startIcon={<Icon icon="new" />}
               onClick={() => {
-                dispatch(navigateTo(router, '/viruses/new'));
+                router.push('/viruses/new');
               }}
             >
               New

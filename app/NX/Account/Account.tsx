@@ -17,7 +17,7 @@ import {
 } from '../../NX/Account';
 import { useDispatch } from '../../NX/Uberedux';
 import { useSupabaseAuth, SignOutBtn } from '../../NX/Paywall';
-import { Icon } from '../../NX/DesignSystem';
+import { Icon, ConfirmAction } from '../../NX/DesignSystem';
 
 export default function Account() {
   const router = useRouter();
@@ -53,7 +53,7 @@ function AccountCard({ account }: { account: any }) {
   return (
     <Card>
       <CardHeader
-        avatar={<Avatar src={avatar} alt={name} sx={{ width: 75, height: 75 }} />}
+        // avatar={<Avatar src={avatar} alt={name} />}
         title={<Typography variant="h6">{name}</Typography>}
         subheader={<Typography variant="body1" color="text.secondary">{email}</Typography>}
         action={<SignOutBtn />}

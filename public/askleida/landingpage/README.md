@@ -1,10 +1,3 @@
-![askleida.com](public/askleida/png/banner/trans.png) 
-
-## askleida.com
-
-- [askleida.com on Vercel](https://askleida.com)
-- [Supabase](https://supabase.com/dashboard/project/fnogxpcfvphmdpxeflqa)
-- Powered by [NX°](https://goldlabel.pro/nx)
 Optimized tool selection
 
 # Leida — Homecare assistant for solo skin therapists
@@ -22,7 +15,7 @@ Leida is the assistant designed for solo skin therapists. She turns your post-ap
 
 Or join the waitlist →
 
-
+---
 
 ## Here's what your client receives.
 
@@ -34,7 +27,7 @@ Whatever's going on in her life, whether that's a wedding, a flare-up, a holiday
 
 *Click or swipe through to see each page of the sample recommendation.*
 
-
+---
 
 Whether you're firing off WhatsApps and hoping your clients actually read them, or spending an hour on Canva making something you're actually proud of, you already know this part of the job takes too long.
 
@@ -43,13 +36,13 @@ Whether you're firing off WhatsApps and hoping your clients actually read them, 
 - Beautiful enough to be proud of.
 - Fast enough to do between clients.
 
-
+---
 
 ## Watch her work.
 
 She can turn your expertise into a finished PDF in less than the time it takes to make your coffee.
 
-
+---
 
 # Built for skin therapists, *by a skin therapist.*
 
@@ -61,7 +54,7 @@ So I set to work while the toddler slept, armed with an iPad and a mission.
 
 *Leida was born.*
 
-
+---
 
 # A tool built from the inside.
 
@@ -71,7 +64,7 @@ Most tools built for practitioners weren't built by one. They were built by peop
 
 Founding members don't just get early access, they get a real say in what comes next. I would love for you to come on this journey with me to build a tool that finally gives us the work-life balance we chose this career for.
 
-
+---
 
 ## Founding Member
 
@@ -90,7 +83,7 @@ Founding members don't just get early access, they get a real say in what comes 
 
 *Once 50 spots are taken, standard pricing starts at £39/month.*
 
-
+---
 
 # Ready to *wow* your clients?
 
@@ -98,7 +91,7 @@ Founding members don't just get early access, they get a real say in what comes 
 
 *£29/month forever. Cancel any time. 50 spots only.*
 
-
+---
 
 ## Not ready? Join the waitlist.
 
@@ -108,6 +101,6 @@ Be the first to know when Leida launches. No spam. Ever.
 
 I'll be in touch as soon as Leida is ready for you. In the meantime, keep an eye on @ask.leida on Instagram for updates. Millie x
 
-
+---
 
 © 2026 Leida. Made with care for solo skin therapists.

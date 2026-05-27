@@ -7,7 +7,9 @@
 - Powered by [NX°](https://goldlabel.pro/nx)
 Optimized tool selection
 
-# Leida — Homecare assistant for solo skin therapists
+# Leida — 
+
+> Homecare assistant for solo skin therapists
 
 **For solo skin therapists**
 

@@ -1,5 +1,6 @@
 ---
-title: Ask Leida
+title: Leida
+description: Homecare assistant for solo skin therapists
 order: 1
 slug: /
 icon: home

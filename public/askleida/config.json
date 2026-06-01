@@ -26,6 +26,15 @@
             "sharing": false,
             "defaultTheme": "light",
             "themes": {
+                "light": {
+                    "mode": "light",
+                    "primary": "#2c2c2a",
+                    "secondary": "#364450",
+                    "background": "#f7f7f4",
+                    "paper": "#FFF",
+                    "border": "#d4d4d4",
+                    "text": "#2c2c2a"
+                },
                 "dark": {
                     "mode": "dark",
                     "primary": "#F7F5F2",
@@ -34,15 +43,6 @@
                     "paper": "#c93379",
                     "text": "#fff",
                     "border": "#F7F5F2"
-                },
-                "light": {
-                    "mode": "light",
-                    "primary": "#c93379",
-                    "secondary": "#364450",
-                    "background": "#F7F5F2",
-                    "paper": "#FFF",
-                    "border": "#5F8F87",
-                    "text": "#000"
                 }
             },
             "typography": {

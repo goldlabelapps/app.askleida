@@ -1,5 +1,5 @@
 "use client";
-import './fonts.css';
+// import './fonts.css';
 import React from 'react';
 import { I_NX, T_Theme } from './types';
 import { Box } from '@mui/material';
@@ -30,10 +30,6 @@ const NX: React.FC<I_NX> = ({
         const mode: 'light' | 'dark' = themeMode === 'dark' ? 'dark' : 'light';
         theme = { ...theme, mode };
     }
-
-    // React.useEffect(() => {
-    //     console.log("paywall", paywall);
-    // }, [dispatch, paywall]);
 
     if (!theme) {
         return (

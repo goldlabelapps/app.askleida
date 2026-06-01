@@ -1,13 +1,15 @@
 "use client";
-// import './fonts.css';
 import React from 'react';
-import { I_NX, T_Theme } from './types';
-import { Box } from '@mui/material';
-import { DesignSystem, Feedback } from './DesignSystem';
-import { useDispatch } from './Uberedux';
-import { setDesignSystem, useDesignSystem } from './DesignSystem';
+import type { T_Theme } from '../NX/types';
+import { useDispatch } from '../NX/Uberedux';
+import { 
+    DesignSystem, 
+    Feedback, 
+    setDesignSystem, 
+    useDesignSystem,
+} from '../NX/DesignSystem';
 
-const NX: React.FC<I_NX> = ({
+const Leida: React.FC<any> = ({
     children,
     config,
 }) => {
@@ -31,20 +33,6 @@ const NX: React.FC<I_NX> = ({
         theme = { ...theme, mode };
     }
 
-    if (!theme) {
-        return (
-            <Box sx={{ border: '2px solid red', m: 1, p: 2, borderRadius: '12px', background: '#fff0f0' }}>
-                <p style={{ color: 'red', fontWeight: 'bold' }}>
-                    Error: Invalid or missing config.json
-                </p>
-                <pre style={{ padding: '1em', borderRadius: '8px' }}>
-                    {JSON.stringify(config, null, 2)}
-                </pre>
-                {children}
-            </Box>
-        );
-    }
-
     return (
         <DesignSystem theme={theme as T_Theme} config={config}>
             <Feedback />
@@ -53,4 +41,4 @@ const NX: React.FC<I_NX> = ({
     );
 };
 
-export default NX;
+export default Leida;

@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import {
     IconButton,
 } from '@mui/material';
@@ -14,6 +15,7 @@ import {
     Icon,
     ConfirmAction,
 } from '../NX/DesignSystem';
+import BottomNav from './components/BottomNav';
 import { setPaywall } from '../NX/Paywall';
 import { supabase } from '../NX/lib/supabase';
 
@@ -24,6 +26,7 @@ const Leida: React.FC<any> = ({
 }) => {
     
     const dispatch = useDispatch();
+    const pathname = usePathname();
     const designSystem = useDesignSystem();
     const defaultTheme = config?.cartridges?.designSystem?.defaultTheme;
     const themeSwitching = config?.cartridges?.designSystem?.themeSwitching;
@@ -51,12 +54,25 @@ const Leida: React.FC<any> = ({
 
     const handleOpenSignoutConfirm = () => setIsConfirmOpen(true);
     const handleCloseSignoutConfirm = () => setIsConfirmOpen(false);
+    const bottomNavValue = pathname === '/' ? 'home' : pathname;
+    const bottomNavItems = [
+        {
+            label: 'Home',
+            value: 'home',
+            icon: 'home' as const,
+            href: '/',
+        },
+        {
+            label: 'Sign out',
+            value: 'signout',
+            icon: 'signout' as const,
+            onClick: handleOpenSignoutConfirm,
+        },
+    ];
 
     return (
         <DesignSystem theme={theme as T_Theme} config={config}>
             <Feedback />
-            {children}
-
             <nav className="site-nav">
                 <div className="nav-inner">
                     <a href="/" className="logo-link">
@@ -74,6 +90,10 @@ const Leida: React.FC<any> = ({
                 </div>
             </nav>
 
+            <main style={{ paddingBottom: 88 }}>
+                {children}
+            </main>
+
             <ConfirmAction
                 open={isConfirmOpen}
                 icon="signout"
@@ -81,6 +101,11 @@ const Leida: React.FC<any> = ({
                 body="Are you sure you want to sign out?"
                 handleConfirm={handleSignout}
                 handleClose={handleCloseSignoutConfirm}
+            />
+
+            <BottomNav
+                value={bottomNavValue}
+                items={bottomNavItems}
             />
             
         </DesignSystem>

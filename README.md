@@ -1,115 +1,99 @@
-![askleida.com](public/askleida/png/banner/trans.png) 
+# askleida.com
 
-## askleida.com
+Next.js 16 application for the Leida platform.
 
-- [askleida.com on Vercel](https://askleida.com)
-- [Supabase](https://supabase.com/dashboard/project/fnogxpcfvphmdpxeflqa)
-- Powered by [NX°](https://goldlabel.pro/nx)
-Optimized tool selection
+## Live
 
-# Leida — 
+- Production: https://askleida.com
 
-> Homecare assistant for solo skin therapists
+## Tech Stack
 
-**For solo skin therapists**
+- Next.js 16 (App Router) + React 19 + TypeScript
+- ESLint 9 with `eslint-config-next`
+- Supabase (data + auth)
+- Stripe (checkout + webhook)
+- Anthropic API route (server-side)
+- PWA support via `@ducanh2912/next-pwa`
 
-## Clinic hours are over but you're sat on your sofa writing homecare.  
-**Sound familiar?**
+## Prerequisites
 
-Leida is the assistant designed for solo skin therapists. She turns your post-appointment WhatsApp into a beautiful, personalised PDF, in your voice… in under two minutes.
+- Node.js 20+
+- Yarn 1.x (repo includes `yarn.lock`)
 
-[Become a founding member](https://buy.stripe.com/cNicN56eh4DHdhs0A6ew801)
+## Local Development
 
-*50 founding spots. £29/month, yours forever.*
+1. Install dependencies:
 
-Or join the waitlist →
+	```bash
+	yarn install
+	```
 
+2. Create local env file:
 
+	```bash
+	cp .env.example .env.local
+	```
 
-## Here's what your client receives.
+3. Start the app:
 
-This isn't a templated PDF. **Every paragraph is written from scratch for your client.** Her skin, her concerns, the context you give Leida.
+	```bash
+	yarn dev
+	```
 
-Whatever's going on in her life, whether that's a wedding, a flare-up, a holiday, or a new baby, Leida weaves it through.
+4. Open `http://localhost:1888`.
 
-**It feels like you spent an hour on it. It took two minutes.**
+## Available Scripts
 
-*Click or swipe through to see each page of the sample recommendation.*
+- `yarn dev` - kills existing process, installs deps, clears `.next`, then runs Next.js dev server on port `1888`.
+- `yarn build` - production build.
+- `yarn start` - run production server.
+- `yarn lint` - run ESLint.
+- `yarn clean` - project cleanup helper script.
+- `yarn kill` - stop process bound to local dev port(s).
+- `yarn open` - convenience script from `app/NX/lib/bash/open.sh`.
 
+## Environment Variables
 
+Copy `.env.example` to `.env.local` and fill in values.
 
-Whether you're firing off WhatsApps and hoping your clients actually read them, or spending an hour on Canva making something you're actually proud of, you already know this part of the job takes too long.
+Core:
 
-# Leida does it in *two minutes.*
+- `NEXT_PUBLIC_TENANT`
+- `NEXT_PUBLIC_SITE_URL`
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
 
-- Beautiful enough to be proud of.
-- Fast enough to do between clients.
+Billing:
 
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
 
+AI:
 
-## Watch her work.
+- `ANTHROPIC_API_KEY`
 
-She can turn your expertise into a finished PDF in less than the time it takes to make your coffee.
+Optional features:
 
+- `NEXT_PUBLIC_PYTHON_URL`
+- `NEXT_PUBLIC_MAPBOX_TOKEN`
+- `NEXT_PUBLIC_IPGEOLOCATION_API_KEY`
+- `NEXT_PUBLIC_FIREBASE_API_KEY`
+- `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`
+- `NEXT_PUBLIC_FIREBASE_PROJECT_ID`
+- `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`
+- `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`
+- `NEXT_PUBLIC_FIREBASE_APP_ID`
 
+## Project Structure
 
-# Built for skin therapists, *by a skin therapist.*
+- `app/` - Next.js app routes and feature modules.
+- `app/api/` - API routes (products, practitioners, stripe, anthropic).
+- `app/NX/` - shared UI/system modules and utilities.
+- `public/` - static assets, PWA files, tenant content.
 
-Hi, I'm Millie. I trained as a skin therapist to do work I loved and create a career where I could spend time with my young family. I loved the work. What I didn't love was how much time I spent on my phone doing the admin that running a small business requires.
+## Notes
 
-One of the biggest drains was homecare. Being a perfectionist, and knowing how vital aftercare was to my results, I'd sometimes spend 30 minutes putting recommendations together for one client. And even after all that time, it was still just random links and a WhatsApp message.
-
-So I set to work while the toddler slept, armed with an iPad and a mission.
-
-*Leida was born.*
-
-
-
-# A tool built from the inside.
-
-Most tools built for practitioners weren't built by one. They were built by people who looked at the industry from the outside and guessed at what was needed.
-
-**Leida is different.** I've sat where you sit. I know the paperwork, the anxiety, the late nights, the unpaid labour that nobody talks about. I built Leida to change that. We're starting with homecare, but it doesn't end there.
-
-Founding members don't just get early access, they get a real say in what comes next. I would love for you to come on this journey with me to build a tool that finally gives us the work-life balance we chose this career for.
-
-
-
-## Founding Member
-
-**£29/month**  
-*FOUNDING MEMBER RATE, FOREVER.*
-
-### For the first 50 practitioners to join. *You get:*
-
-- £29/month, yours forever
-- Cancel any time — no contracts, no catch
-- First access to new features before anyone else
-- A direct line to me as I build Leida
-- Founding member status, recognised forever
-
-[Claim your founding spot](https://buy.stripe.com/cNicN56eh4DHdhs0A6ew801)
-
-*Once 50 spots are taken, standard pricing starts at £39/month.*
-
-
-
-# Ready to *wow* your clients?
-
-[Become a founding member](https://buy.stripe.com/cNicN56eh4DHdhs0A6ew801)
-
-*£29/month forever. Cancel any time. 50 spots only.*
-
-
-
-## Not ready? Join the waitlist.
-
-Be the first to know when Leida launches. No spam. Ever.
-
-*You're on the list.*
-
-I'll be in touch as soon as Leida is ready for you. In the meantime, keep an eye on @ask.leida on Instagram for updates. Millie x
-
-
-
-© 2026 Leida. Made with care for solo skin therapists.
+- Stripe integration requires valid runtime secrets for both checkout and webhook routes.
+- If `NEXT_PUBLIC_TENANT` is missing or invalid, the app falls back to `askleida` defaults.
+- Keep secrets in `.env.local` only. Do not commit credentials.

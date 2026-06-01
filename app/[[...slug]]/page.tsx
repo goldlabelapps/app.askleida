@@ -1,6 +1,6 @@
 "use client"; 
 import Image from 'next/image';
-
+import {Leida} from '../Leida';
 const assets = '/askleida/landingpage/assets';
 
 export default function Page() {
@@ -8,22 +8,8 @@ export default function Page() {
         <>
             {/* Persistent background */}
             <div className="site-bg" aria-hidden="true" />
-
-            {/* NAV */}
-            <nav className="site-nav">
-                <div className="nav-inner">
-                    <a href="/" className="logo-link">
-                        <Image 
-                            src={`${assets}/logo-dark.svg`} 
-                            alt="Leida" 
-                            width={110} 
-                            height={22} 
-                            className="logo" />
-                    </a>
-                    
-                    icon
-                </div>
-            </nav>
+            <Leida />
+            
         </>
     );
 }

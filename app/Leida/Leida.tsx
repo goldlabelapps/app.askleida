@@ -42,3 +42,20 @@ const Leida: React.FC<any> = ({
 };
 
 export default Leida;
+
+/*
+<nav className="site-nav">
+    <div className="nav-inner">
+        <a href="/" className="logo-link">
+            <Image
+                src={`${assets}/logo-dark.svg`}
+                alt="Leida"
+                width={110}
+                height={22}
+                className="logo" />
+        </a>
+
+        icon
+    </div>
+</nav>
+*/

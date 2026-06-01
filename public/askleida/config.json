@@ -9,8 +9,8 @@
     },
     "favicon": "/askleida/svg/favicon.svg",
     "avatars": {
-        "light": "/askleida/svg/avatarLight.svg",
-        "dark": "/askleida/svg/avatarDark.svg"
+        "light": "/askleida/svg/favicon.svg",
+        "dark": "/askleida/svg/favicon.svg"
     },
     "images": {
         "light": "/askleida/png/banner/light.png",

@@ -21,7 +21,7 @@ export default function Page() {
                             className="logo" />
                     </a>
                     
-                    {/* <a href="#founding" className="nav-cta">Become a founding member</a> */}
+                    icon
                 </div>
             </nav>
         </>

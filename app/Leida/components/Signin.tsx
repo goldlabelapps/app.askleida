@@ -1,0 +1,128 @@
+"use client";
+import React, { useState } from "react";
+import {
+  Typography,
+  Box,
+  TextField,
+  Button,
+  InputAdornment,
+  IconButton,
+  Card,
+  Avatar,
+  CardContent
+} from "@mui/material";
+import { 
+  Icon,
+  useDesignSystem
+} from '../../NX/DesignSystem';
+
+export interface I_Signin {
+  publicUrl: string;
+  onSignin?: (email: string, password: string) => void;
+  error?: string | null;
+}
+
+export default function Signin({ publicUrl, onSignin, error: externalError }: I_Signin) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const designSystem = useDesignSystem();
+
+  function isValidEmail(email: string) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isValidEmail(email) || password.length < 6) {
+      setError("Invalid email or password.");
+      return;
+    }
+    setError("");
+    if (onSignin) onSignin(email, password);
+  };
+
+  // Use designSystem for siteName and avatar (logo)
+  // You can get theme mode from MUI if needed, or default to 'light'
+  const themeMode = 'dark'; // Replace with MUI theme if available
+
+  const siteName = designSystem?.config?.siteName || "Sign In";
+  const avatarUrl = designSystem?.config?.avatars?.[themeMode] || designSystem?.avatar || '';
+  
+
+  return (
+    <Box 
+      display="flex" 
+      alignItems="center" 
+      justifyContent="center" 
+      minHeight="100vh" 
+      sx={{ 
+        bgcolor: 'none' 
+      }}
+    >
+
+      <Card 
+        sx={{ 
+          width: 360, 
+          maxWidth: '90vw',
+        }}>
+        
+        <CardContent>
+          <Box display="flex" justifyContent="center" alignItems="center" sx={{ pt: 2 }}>
+            <Avatar src={avatarUrl} alt={siteName}  />
+          </Box>
+          <Box sx={{mx:2}}>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              label="Email"
+              variant="standard"
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              fullWidth
+              required
+              margin="normal"
+            />
+            <TextField
+              label="Password"
+              variant="standard"
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              fullWidth
+              required
+              margin="normal"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      onClick={() => setShowPassword((show) => !show)}
+                      edge="end"
+                    >
+                      <Icon icon={showPassword ? 'hide' : 'show'} color="primary" />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            {(error || externalError) && (
+              <Typography color="text.secondary" sx={{ mt: 1 }}>{externalError || error}</Typography>
+            )}
+            <Button
+              type="submit"
+              fullWidth
+              sx={{ mt: 2 }}
+              endIcon={<Icon icon="signin" />}
+            >
+              Sign In
+            </Button>
+          </form>
+          </Box>
+        </CardContent>
+      </Card>
+    </Box>
+  );
+}

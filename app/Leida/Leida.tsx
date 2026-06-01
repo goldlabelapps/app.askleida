@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import Image from 'next/image';
 import type { T_Theme } from '../NX/types';
 import { useDispatch } from '../NX/Uberedux';
 import { 
@@ -7,7 +8,14 @@ import {
     Feedback, 
     setDesignSystem, 
     useDesignSystem,
+    Icon,
+    ConfirmAction,
 } from '../NX/DesignSystem';
+import { setPaywall } from '../NX/Paywall';
+import { supabase } from '../NX/lib/supabase';
+import {
+    IconButton,
+} from '@mui/material';
 
 const Leida: React.FC<any> = ({
     children,
@@ -19,6 +27,7 @@ const Leida: React.FC<any> = ({
     const defaultTheme = config?.cartridges?.designSystem?.defaultTheme;
     const themeSwitching = config?.cartridges?.designSystem?.themeSwitching;
     const themeMode = designSystem?.themeMode || defaultTheme;
+    const [isConfirmOpen, setIsConfirmOpen] = React.useState(false);
 
     React.useEffect(() => {
         if (!designSystem?.themeMode && defaultTheme) {
@@ -33,10 +42,46 @@ const Leida: React.FC<any> = ({
         theme = { ...theme, mode };
     }
 
+    const handleSignout = async () => {
+        await supabase.auth.signOut();
+        dispatch(setPaywall('supabaseAuth', null));
+        setIsConfirmOpen(false);
+    };
+
+    const handleOpenSignoutConfirm = () => setIsConfirmOpen(true);
+    const handleCloseSignoutConfirm = () => setIsConfirmOpen(false);
+
     return (
         <DesignSystem theme={theme as T_Theme} config={config}>
             <Feedback />
             {children}
+
+            <nav className="site-nav">
+                <div className="nav-inner">
+                    <a href="/" className="logo-link">
+                        <Image
+                            src={`/askleida/svg/logo-dark.svg`}
+                            alt="Leida"
+                            width={110}
+                            height={22}
+                            className="logo" />
+                    </a>
+
+                    <IconButton onClick={handleOpenSignoutConfirm}>
+                        <Icon icon="signout" color="primary" />
+                    </IconButton>
+                </div>
+            </nav>
+
+            <ConfirmAction
+                open={isConfirmOpen}
+                icon="signout"
+                title="Sign out?"
+                body="Are you sure you want to sign out?"
+                handleConfirm={handleSignout}
+                handleClose={handleCloseSignoutConfirm}
+            />
+            
         </DesignSystem>
     );
 };
@@ -44,18 +89,5 @@ const Leida: React.FC<any> = ({
 export default Leida;
 
 /*
-<nav className="site-nav">
-    <div className="nav-inner">
-        <a href="/" className="logo-link">
-            <Image
-                src={`${assets}/logo-dark.svg`}
-                alt="Leida"
-                width={110}
-                height={22}
-                className="logo" />
-        </a>
 
-        icon
-    </div>
-</nav>
 */

@@ -1,5 +1,5 @@
 "use client"; 
-import Image from 'next/image';
+
 import {Leida} from '../Leida';
 const assets = '/askleida/landingpage/assets';
 

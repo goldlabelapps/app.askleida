@@ -45,6 +45,7 @@
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
     "resend": "^6.9.3",
+    "stripe": "^22.2.0",
     "ua-parser-js": "^2.0.9"
   },
   "devDependencies": {

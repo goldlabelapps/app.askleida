@@ -6,6 +6,8 @@ import SupabaseLogin from './SupabaseLogin';
 import { Backdrop, CircularProgress, Box, Typography } from '@mui/material';
 import { supabase } from '../../lib/supabase';
 import { NX } from '../../../NX';
+import { Signin } from '../../../Leida'; // Adjust the path as needed
+
 import { getTenant } from '../../../NX/lib/getTenant';
 
 export default function RequireSupabaseAuth({ children, publicUrl }: { children: React.ReactNode; publicUrl: string }) {
@@ -27,17 +29,17 @@ export default function RequireSupabaseAuth({ children, publicUrl }: { children:
   return (
     <NX config={config}>
       {loading || pending ? (
-        <Backdrop open sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, color: '#fff' }}>
+        <Backdrop open 
+          sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, color: '#fff' }}>
           <Box display="flex" flexDirection="column" alignItems="center">
-            
-            <Typography variant="body1" sx={{ mb: 2 }}>
-              Checking Supabase ...
+            <Typography variant="body2" sx={{ mb: 2 }}>
+              Supabasing ...
             </Typography>
             <CircularProgress color="inherit" />
           </Box>
         </Backdrop>
       ) : !user ? (
-        <SupabaseLogin publicUrl={publicUrl} onSupabaseLogin={handleSupabaseLogin} error={error} />
+        <Signin publicUrl={publicUrl} onSignin={handleSupabaseLogin} error={error} />
       ) : (
         <>{children}</>
       )}

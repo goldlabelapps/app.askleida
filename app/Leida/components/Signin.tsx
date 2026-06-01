@@ -1,16 +1,9 @@
 "use client";
 import React, { useState } from "react";
+import Image from 'next/image';
 import {
-  Typography,
-  Box,
-  TextField,
-  Button,
-  InputAdornment,
   IconButton,
-  Card,
-  Avatar,
-  CardContent
-} from "@mui/material";
+} from '@mui/material';
 import { 
   Icon,
   useDesignSystem
@@ -23,6 +16,7 @@ export interface I_Signin {
 }
 
 export default function Signin({ publicUrl, onSignin, error: externalError }: I_Signin) {
+  void publicUrl;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -52,77 +46,66 @@ export default function Signin({ publicUrl, onSignin, error: externalError }: I_
   
 
   return (
-    <Box 
-      display="flex" 
-      alignItems="center" 
-      justifyContent="center" 
-      minHeight="100vh" 
-      sx={{ 
-        bgcolor: 'none' 
-      }}
-    >
+    <section className="hero" aria-label="Sign in">
+      <div className="wrap">
+        <div className="waitlist glass-strong signin-card">
+          <div className="signin-avatar-wrap">
+              <a href="https://askleida.com" className="logo-link">
+                <Image
+                    src={`/askleida/svg/logo-dark.svg`}
+                    alt="Leida"
+                    width={110}
+                    height={22}
+                    className="logo" />
+            </a>
+          </div>
 
-      <Card 
-        sx={{ 
-          width: 360, 
-          maxWidth: '90vw',
-        }}>
-        
-        <CardContent>
-          <Box display="flex" justifyContent="center" alignItems="center" sx={{ pt: 2 }}>
-            <Avatar src={avatarUrl} alt={siteName}  />
-          </Box>
-          <Box sx={{mx:2}}>
           <form onSubmit={handleSubmit}>
-            <TextField
-              label="Email"
-              variant="standard"
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              fullWidth
-              required
-              margin="normal"
-            />
-            <TextField
-              label="Password"
-              variant="standard"
-              type={showPassword ? 'text' : 'password'}
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              fullWidth
-              required
-              margin="normal"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      
-                      aria-label={showPassword ? 'Hide password' : 'Show password'}
-                      onClick={() => setShowPassword((show) => !show)}
-                      edge="end"
-                    >
-                      <Icon icon={showPassword ? 'hide' : 'show'} color="primary" />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            {(error || externalError) && (
-              <Typography color="text.secondary" sx={{ mt: 1 }}>{externalError || error}</Typography>
-            )}
-            <Button
-              type="submit"
-              fullWidth
-              sx={{ mt: 2 }}
-              endIcon={<Icon icon="signin" />}
-            >
+            <div className="field signin-field">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                autoComplete="email"
+                required
+              />
+            </div>
+
+            <div className="field">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                autoComplete="current-password"
+                required
+              />
+              <IconButton
+                onClick={() => setShowPassword((show) => !show)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                className="signin-password-toggle"
+                size="small"
+                disableRipple
+              >
+
+                <Icon icon={showPassword ? 'hide' : 'show'} />
+              </IconButton>
+            </div>
+
+            <button type="submit" className="btn btn-primary signin-submit">
               Sign In
-            </Button>
+              <span className="arrow">
+                <Icon icon="signin" />
+              </span>
+            </button>
           </form>
-          </Box>
-        </CardContent>
-      </Card>
-    </Box>
+
+          <div className={`waitlist-error ${error || externalError ? 'show' : ''}`}>
+            {externalError || error}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

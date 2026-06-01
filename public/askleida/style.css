@@ -1014,6 +1014,47 @@ section.tight {
   padding: 32px;
 }
 
+.signin-card {
+  max-width: 420px;
+}
+
+.signin-avatar-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.signin-avatar {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.signin-field {
+  margin-bottom: 10px;
+}
+
+.signin-submit {
+  margin-top: 14px;
+  width: 100%;
+}
+
+.waitlist .signin-password-toggle {
+  background: transparent;
+  color: var(--ink-50);
+  border: 1px solid var(--ink-08);
+  box-shadow: none;
+  min-width: 40px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+}
+
+.waitlist .signin-password-toggle:hover {
+  background: rgba(44, 44, 42, 0.06);
+  color: var(--ink-70);
+  transform: none;
+}
+
 .waitlist h4 {
   font-family: var(--serif);
   font-weight: 400;
@@ -1034,7 +1075,9 @@ section.tight {
   flex-wrap: wrap;
 }
 
-.waitlist input[type="email"] {
+.waitlist input[type="email"],
+.waitlist input[type="password"],
+.waitlist input[type="text"] {
   flex: 1 1 200px;
   padding: 14px 16px;
   border: 1px solid var(--ink-15);
@@ -1047,7 +1090,9 @@ section.tight {
   transition: border-color .2s ease;
 }
 
-.waitlist input[type="email"]:focus {
+.waitlist input[type="email"]:focus,
+.waitlist input[type="password"]:focus,
+.waitlist input[type="text"]:focus {
   border-color: var(--ink);
 }
 

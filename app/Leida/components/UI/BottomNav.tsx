@@ -6,8 +6,8 @@ import {
 	BottomNavigationAction,
 	Paper,
 } from '@mui/material';
-import { Icon } from '../../NX/DesignSystem';
-import type { I_Icon } from '../../NX/types';
+import { Icon } from '../../../NX/DesignSystem';
+import type { I_Icon } from '../../../NX/types';
 
 export interface I_BottomNavItem {
 	label: string;

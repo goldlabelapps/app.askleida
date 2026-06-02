@@ -1,5 +1,7 @@
 // @ts-ignore
 import "./globals.css";
+// @ts-ignore
+import "./Leida/style.css";
 import type { Metadata } from "next";
 import fs from 'fs';
 import path from 'path';
@@ -84,8 +86,6 @@ const description = config.description || 'Homecare assistant for solo skin ther
 const favicon = config.favicon || '/askleida/svg/favicon.svg';
 const manifestPath = path.join(process.cwd(), 'public', tenant, 'manifest.json');
 const manifestHref = fs.existsSync(manifestPath) ? `/${tenant}/manifest.json` : undefined;
-const cssPath = path.join(process.cwd(), 'public', tenant, 'style.css');
-const cssHref = fs.existsSync(cssPath) ? `/${tenant}/style.css` : undefined;
 
 export const metadata: Metadata = {
   title,
@@ -113,7 +113,6 @@ export default async function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content={title} />
         <meta name="mobile-web-app-capable" content="yes" />
-        {cssHref ? <link rel="stylesheet" href={cssHref} /> : null}
       </head>
       <body>
         <div className="wrapper">

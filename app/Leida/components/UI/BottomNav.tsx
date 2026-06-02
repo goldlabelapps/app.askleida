@@ -67,7 +67,7 @@ export default function BottomNav({
 			<BottomNavigation
 				value={value}
 				onChange={handleChange}
-				showLabels
+				showLabels={false}
 			>
 				{items.map((item) => {
 					return (

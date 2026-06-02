@@ -14,6 +14,7 @@ import {
     ListItemAvatar,
     ListItemButton,
     ListItemText,
+    Typography,
 } from '@mui/material';
 import { useDispatch } from '../../../NX/Uberedux';
 import { Icon, navigateTo } from '../../../NX/DesignSystem';
@@ -49,17 +50,21 @@ export default function Clients() {
         }
     }, [dispatch, clients?.initted, clients?.loading, user?.id]);
 
+    const handleNew = () => {
+        dispatch(navigateTo(router, '/clients/new'));
+    };
+
     return (
         <Card variant="outlined">
             <CardHeader 
                 avatar={<>
                     <Icon icon="clients" color="primary" />
                 </>}
-                title={clients?.loading ? 'Loading clients...' : `You have ${list.length} clients`}
-                subheader={`uuid ${user?.id ?? 'not available'}`}
+                title={<Typography variant="body1">{clients?.loading ? 'Loading clients...' : `You have ${list.length} clients`}</Typography>}
                 action={<>
                     <IconButton
-                        
+                        color="primary"
+                        onClick={handleNew}
                     >
                         <Icon icon="add" />
                     </IconButton>
@@ -79,6 +84,7 @@ export default function Clients() {
                             const initials = `${firstName?.[0] || ''}${lastName?.[0] || ''}`.toUpperCase() || '?';
                             const clientId = client?.client_id;
                             const avatarKey = String(clientId || fullName);
+                            const avatarColor = getAvatarColor(avatarKey);
 
                             return (
                                 <ListItem key={avatarKey} disablePadding>
@@ -86,21 +92,25 @@ export default function Clients() {
                                         disabled={!clientId}
                                         onClick={() => {
                                             if (clientId) {
-                                                dispatch(navigateTo(router, `/clients/${clientId}`));
+                                                const qs = new URLSearchParams({ avatarColor }).toString();
+                                                dispatch(navigateTo(router, `/clients/${clientId}?${qs}`));
                                             }
                                         }}
                                     >
                                         <ListItemAvatar>
                                             <Avatar
                                                 sx={{
-                                                    bgcolor: getAvatarColor(avatarKey),
+                                                    bgcolor: avatarColor,
                                                     color: '#334155',
                                                 }}
                                             >
                                                 {initials}
                                             </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary={fullName} />
+                                        <ListItemText primary={<Typography variant="subtitle1">
+                                            {fullName}
+
+                                        </Typography>} />
                                     </ListItemButton>
                                 </ListItem>
                             );

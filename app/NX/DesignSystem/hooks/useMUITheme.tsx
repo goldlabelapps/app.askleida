@@ -17,7 +17,7 @@ export function useMUITheme(t: T_Theme) {
   const headingFont = t?.typography?.heading?.join(', ') || 'Cormorant Garamond, Fraunces, serif';
   const bodyFont = t?.typography?.body?.join(', ') || 'Cormorant Garamond, Fraunces, serif';
   // Increase all font sizes by 15%
-  const scale = 1;
+  const scale = 1.15;
   function scaleSize(size: string | number): string | number {
     if (typeof size === 'string' && size.endsWith('rem')) {
       const num = parseFloat(size);
@@ -43,23 +43,23 @@ export function useMUITheme(t: T_Theme) {
       },
       // border is not a standard palette property; use only in component overrides
     },
-    typography: {
-      // fontSize: scaleSize(20) as number,
-      // fontFamily: bodyFont,
-      // h1: { fontSize: scaleSize('5rem'), fontWeight: 600, fontFamily: headingFont },
-      // h2: {fontSize: scaleSize('4rem'), fontWeight: 600, fontFamily: headingFont },
-      // h3: { fontSize: scaleSize('3rem'), fontWeight: 600, fontFamily: headingFont },
-      // h4: { fontSize: scaleSize('2.5rem'), fontWeight: 600, fontFamily: headingFont },
-      // h5: { fontSize: scaleSize('2rem'), fontWeight: 600, fontFamily: headingFont },
-      // h6: { fontSize: scaleSize('1.5rem'), fontWeight: 600, fontFamily: headingFont },
-      // body1: { fontSize: scaleSize('1.15rem'), fontFamily: bodyFont, fontWeight: 500 },
-      // body2: { fontSize: scaleSize('1rem'), fontFamily: bodyFont, fontWeight: 500 },
-      // subtitle1: { fontSize: scaleSize('1.1rem'), color: getColor(t.primary), fontFamily: headingFont, fontWeight: 500 },
-      // subtitle2: { fontSize: scaleSize('1rem'), color: getColor(t.primary), fontFamily: headingFont, fontWeight: 500 },
-      // button: { fontSize: scaleSize('1rem'), fontFamily: bodyFont, fontWeight: 600 },
-      // caption: { fontSize: scaleSize('0.95rem'), fontFamily: bodyFont, fontWeight: 500 },
-      // overline: { fontSize: scaleSize('0.95rem'), fontFamily: bodyFont, fontWeight: 500 }, 
-    },
+    // typography: {
+    //   fontSize: scaleSize(20) as number,
+    //   fontFamily: bodyFont,
+    //   h1: { fontSize: scaleSize('5rem'), fontWeight: 600, fontFamily: headingFont },
+    //   h2: {fontSize: scaleSize('4rem'), fontWeight: 600, fontFamily: headingFont },
+    //   h3: { fontSize: scaleSize('3rem'), fontWeight: 600, fontFamily: headingFont },
+    //   h4: { fontSize: scaleSize('2.5rem'), fontWeight: 600, fontFamily: headingFont },
+    //   h5: { fontSize: scaleSize('2rem'), fontWeight: 600, fontFamily: headingFont },
+    //   h6: { fontSize: scaleSize('1.5rem'), fontWeight: 600, fontFamily: headingFont },
+    //   body1: { fontSize: scaleSize('1.15rem'), fontFamily: bodyFont, fontWeight: 500 },
+    //   body2: { fontSize: scaleSize('1rem'), fontFamily: bodyFont, fontWeight: 500 },
+    //   subtitle1: { fontSize: scaleSize('1.1rem'), color: getColor(t.primary), fontFamily: headingFont, fontWeight: 500 },
+    //   subtitle2: { fontSize: scaleSize('1rem'), color: getColor(t.primary), fontFamily: headingFont, fontWeight: 500 },
+    //   button: { fontSize: scaleSize('1rem'), fontFamily: bodyFont, fontWeight: 600 },
+    //   caption: { fontSize: scaleSize('0.95rem'), fontFamily: bodyFont, fontWeight: 500 },
+    //   overline: { fontSize: scaleSize('0.95rem'), fontFamily: bodyFont, fontWeight: 500 }, 
+    // },
     components: {
       MuiButton: {
         styleOverrides: {

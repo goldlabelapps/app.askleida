@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 import withPWA from "@ducanh2912/next-pwa";
 
+const isDevelopment = process.env.NODE_ENV === "development";
+const enablePwaInDev = process.env.ENABLE_PWA_DEV === "true";
 
 const nextConfig: NextConfig = {
   devIndicators: false,
@@ -28,7 +30,7 @@ export default withPWA({
   cacheOnFrontEndNav: true,
   aggressiveFrontEndNavCaching: true,
   reloadOnOnline: true,
-  disable: process.env.NODE_ENV === "development",
+  disable: isDevelopment && !enablePwaInDev,
   // Exclude large folders from precaching
   publicExcludes: [
     "/shared/svg/flags/**",

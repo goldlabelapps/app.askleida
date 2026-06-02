@@ -1,10 +1,11 @@
 "use client";
 import React from 'react';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
     Box,
     Button,
+    ButtonBase,
     Container,
     IconButton,
     Stack,
@@ -25,6 +26,10 @@ import {
     BottomNav,
     Clients,
     ClientDetail,
+    ClientNew,
+    Products,
+    Recommendations,
+    Tips,
 } from '../Leida';
 import { initClients, useClients } from './components/Clients';
 import { setPaywall, useSupabaseAuth } from '../NX/Paywall';
@@ -51,6 +56,7 @@ const Leida: React.FC<any> = ({
     
     const dispatch = useDispatch();
     const router = useRouter();
+    const searchParams = useSearchParams();
     const { user } = useSupabaseAuth();
     const pathname = usePathname();
     const clientsState = useClients();
@@ -79,19 +85,28 @@ const Leida: React.FC<any> = ({
         setIsConfirmOpen(false);
     };
 
+    const handleHome = () => {
+        dispatch(navigateTo(router, '/'));
+    };
+
     const handleStart = () => {
-        dispatch(navigateTo(router, '/recommendation'));
-    }
+        dispatch(navigateTo(router, '/recommendations'));
+    };
 
     const handleOpenSignoutConfirm = () => setIsConfirmOpen(true);
     const handleCloseSignoutConfirm = () => setIsConfirmOpen(false);
     const routeParts = (pathname || '/').split('/').filter(Boolean);
     const isClientsRoute = routeParts[0] === 'clients';
+    const isProductsRoute = routeParts[0] === 'products';
+    const isRecommendationsRoute = routeParts[0] === 'recommendations';
+    const isTipsRoute = routeParts[0] === 'tips';
+    const isClientNewRoute = isClientsRoute && routeParts[1] === 'new';
     const clientId = isClientsRoute && routeParts[1] ? routeParts[1] : null;
     const clientList = Array.isArray(clientsState?.list) ? clientsState.list : [];
     const selectedClient = clientId
         ? clientList.find((client: any) => client?.client_id === clientId) || null
         : null;
+    const avatarColor = searchParams.get('avatarColor') || undefined;
 
     React.useEffect(() => {
         if (isClientsRoute && user?.id && !clientsState?.initted && !clientsState?.loading) {
@@ -99,14 +114,16 @@ const Leida: React.FC<any> = ({
         }
     }, [dispatch, isClientsRoute, user?.id, clientsState?.initted, clientsState?.loading]);
 
-    const bottomNavValue = isClientsRoute ? 'clients' : 'home';
+    const bottomNavValue = isClientsRoute
+        ? 'clients'
+        : isProductsRoute
+            ? 'products'
+            : isRecommendationsRoute
+                ? 'recommendations'
+                : isTipsRoute
+                    ? 'tips'
+                    : 'products';
     const bottomNavItems = [
-        {
-            label: 'Home',
-            value: 'home',
-            icon: 'home' as const,
-            href: '/',
-        },
         {
             label: 'Clients',
             value: 'clients',
@@ -114,18 +131,23 @@ const Leida: React.FC<any> = ({
             href: '/clients',
         },
         {
+            label: 'Products',
+            value: 'products',
+            icon: 'products' as const,
+            href: '/products',
+        },
+        {
             label: 'Tips',
             value: 'tips',
             icon: 'tips' as const,
             href: '/tips',
         },
-        // {
-        //     label: 'Recommendations',
-        //     value: 'recommendations',
-        //     icon: 'recommendation' as const,
-        //     href: '/recommendations',
-        // },
-        
+        {
+            label: 'Recommendations',
+            value: 'recommendations',
+            icon: 'recommendation' as const,
+            href: '/recommendations',
+        },  
     ];
 
     return (
@@ -133,14 +155,17 @@ const Leida: React.FC<any> = ({
             <Feedback />
             <nav className="site-nav">
                 <div className="nav-inner">
-                    <a href="/" className="logo-link">
+                    <ButtonBase onClick={handleHome} sx={{ borderRadius: 1, px: 0.5 }}>
+
                         <Image
                             src={`/askleida/svg/logo-dark.svg`}
                             alt="Leida"
                             width={110}
                             height={22}
                             className="logo" />
-                    </a>
+                        
+                    </ButtonBase>
+                        
 
                     <IconButton onClick={handleOpenSignoutConfirm}>
                         <Icon icon="signout" color="primary" />
@@ -150,10 +175,18 @@ const Leida: React.FC<any> = ({
             
             <main style={{ paddingBottom: 88 }}>
                 <Container sx={{mt:3 }}>
-                    {isClientsRoute && clientId ? (
-                        <ClientDetail config={config} client={selectedClient} />
+                    {isClientNewRoute ? (
+                        <ClientNew config={config} />
+                    ) : isClientsRoute && clientId ? (
+                        <ClientDetail config={config} client={selectedClient} avatarColor={avatarColor} />
                     ) : isClientsRoute ? (
                         <Clients />
+                    ) : isProductsRoute ? (
+                        <Products />
+                    ) : isTipsRoute ? (
+                        <Tips />
+                    ) : isRecommendationsRoute ? (
+                        <Recommendations />
                     ) : (
                         <Box sx={{ minHeight: 'calc(100vh - 220px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <Container maxWidth="xs">
@@ -163,7 +196,7 @@ const Leida: React.FC<any> = ({
                                     </Typography>
 
                                     <Button
-                                        variant="outlined"
+                                        variant="contained"
                                         startIcon={<Icon icon="recommendation" />}
                                         onClick={handleStart}
                                     >

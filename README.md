@@ -75,6 +75,7 @@ AI:
 
 Optional features:
 
+- `ENABLE_PWA_DEV` (set to `true` only when testing PWA behavior in local dev)
 - `NEXT_PUBLIC_PYTHON_URL`
 - `NEXT_PUBLIC_MAPBOX_TOKEN`
 - `NEXT_PUBLIC_IPGEOLOCATION_API_KEY`
@@ -95,6 +96,7 @@ Optional features:
 
 ## Notes
 
+- PWA/service worker is disabled by default in development (`yarn dev`). Set `ENABLE_PWA_DEV=true` in `.env.local` to test it locally.
 - Stripe integration requires valid runtime secrets for both checkout and webhook routes.
 - If `NEXT_PUBLIC_TENANT` is missing or invalid, the app falls back to `askleida` defaults.
 - Keep secrets in `.env.local` only. Do not commit credentials.

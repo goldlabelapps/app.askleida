@@ -27,11 +27,14 @@ import {
     Clients,
     ClientDetail,
     ClientNew,
+    TipDetail,
+    TipNew,
     Products,
     Recommendations,
     Tips,
 } from '../Leida';
 import { initClients, useClients } from './components/Clients';
+import { initTips, useTips } from './components/Tips';
 import { setPaywall, useSupabaseAuth } from '../NX/Paywall';
 import { supabase } from '../NX/lib/supabase';
 
@@ -60,6 +63,7 @@ const Leida: React.FC<any> = ({
     const { user } = useSupabaseAuth();
     const pathname = usePathname();
     const clientsState = useClients();
+    const tipsState = useTips();
     const designSystem = useDesignSystem();
     const defaultTheme = config?.cartridges?.designSystem?.defaultTheme;
     const themeSwitching = config?.cartridges?.designSystem?.themeSwitching;
@@ -101,10 +105,16 @@ const Leida: React.FC<any> = ({
     const isRecommendationsRoute = routeParts[0] === 'recommendations';
     const isTipsRoute = routeParts[0] === 'tips';
     const isClientNewRoute = isClientsRoute && routeParts[1] === 'new';
+    const isTipNewRoute = isTipsRoute && routeParts[1] === 'new';
     const clientId = isClientsRoute && routeParts[1] ? routeParts[1] : null;
+    const tipId = isTipsRoute && routeParts[1] ? routeParts[1] : null;
     const clientList = Array.isArray(clientsState?.list) ? clientsState.list : [];
+    const tipList = Array.isArray(tipsState?.list) ? tipsState.list : [];
     const selectedClient = clientId
         ? clientList.find((client: any) => client?.client_id === clientId) || null
+        : null;
+    const selectedTip = tipId
+        ? tipList.find((tip: any) => tip?.tip_id === tipId) || null
         : null;
     const avatarColor = searchParams.get('avatarColor') || undefined;
 
@@ -113,6 +123,12 @@ const Leida: React.FC<any> = ({
             dispatch(initClients(user.id));
         }
     }, [dispatch, isClientsRoute, user?.id, clientsState?.initted, clientsState?.loading]);
+
+    React.useEffect(() => {
+        if (isTipsRoute && user?.id && !tipsState?.initted && !tipsState?.loading) {
+            dispatch(initTips(user.id));
+        }
+    }, [dispatch, isTipsRoute, user?.id, tipsState?.initted, tipsState?.loading]);
 
     const bottomNavValue = isClientsRoute
         ? 'clients'
@@ -185,6 +201,10 @@ const Leida: React.FC<any> = ({
                         <ClientDetail config={config} client={selectedClient} avatarColor={avatarColor} />
                     ) : isClientsRoute ? (
                         <Clients />
+                    ) : isTipNewRoute ? (
+                        <TipNew config={config} />
+                    ) : isTipsRoute && tipId ? (
+                        <TipDetail config={config} tip={selectedTip} avatarColor={avatarColor} />
                     ) : isProductsRoute ? (
                         <Products />
                     ) : isTipsRoute ? (

@@ -1,13 +1,9 @@
 "use client";
 import React from 'react';
-import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
     Box,
-    Button,
-    ButtonBase,
     Container,
-    IconButton,
     Stack,
     Typography,
 } from '@mui/material';
@@ -18,7 +14,6 @@ import {
     Feedback, 
     setDesignSystem, 
     useDesignSystem,
-    Icon,
     ConfirmAction,
     navigateTo,
 } from '../NX/DesignSystem';
@@ -30,8 +25,10 @@ import {
     TipDetail,
     TipNew,
     Products,
+    Practitioner,
     Recommendations,
     Tips,
+    Header,
 } from '../Leida';
 import { initClients, useClients } from './components/Clients';
 import { initTips, useTips } from './components/Tips';
@@ -102,6 +99,7 @@ const Leida: React.FC<any> = ({
     const routeParts = (pathname || '/').split('/').filter(Boolean);
     const isClientsRoute = routeParts[0] === 'clients';
     const isProductsRoute = routeParts[0] === 'products';
+    const isPractitionerRoute = routeParts[0] === 'practitioner';
     const isRecommendationsRoute = routeParts[0] === 'recommendations';
     const isTipsRoute = routeParts[0] === 'tips';
     const isClientNewRoute = isClientsRoute && routeParts[1] === 'new';
@@ -169,25 +167,7 @@ const Leida: React.FC<any> = ({
     return (
         <DesignSystem theme={theme as T_Theme} config={config}>
             <Feedback />
-            <nav className="site-nav">
-                <div className="nav-inner">
-                    <ButtonBase onClick={handleHome} sx={{ borderRadius: 1, px: 0.5 }}>
-
-                        <Image
-                            src={`/askleida/svg/logo-dark.svg`}
-                            alt="Leida"
-                            width={110}
-                            height={22}
-                            className="logo" />
-                        
-                    </ButtonBase>
-                        
-
-                    <IconButton onClick={handleOpenSignoutConfirm}>
-                        <Icon icon="signout" color="primary" />
-                    </IconButton>
-                </div>
-            </nav>
+            <Header onHome={handleHome} />
             
             <main style={{ paddingBottom: 88 }}>
                 <Container sx={{mt:3 }}>
@@ -207,6 +187,8 @@ const Leida: React.FC<any> = ({
                         <TipDetail config={config} tip={selectedTip} avatarColor={avatarColor} />
                     ) : isProductsRoute ? (
                         <Products />
+                    ) : isPractitionerRoute ? (
+                        <Practitioner />
                     ) : isTipsRoute ? (
                         <Tips />
                     ) : isRecommendationsRoute ? (
@@ -218,14 +200,7 @@ const Leida: React.FC<any> = ({
                                     <Typography variant="h4" sx={{ my: 1 }}>
                                         {getTimeGreeting()},
                                     </Typography>
-
-                                    <Button
-                                        variant="contained"
-                                        startIcon={<Icon icon="recommendation" />}
-                                        onClick={handleStart}
-                                    >
-                                        Start a Recommendation
-                                    </Button>
+                                    
                                 </Stack>
                             </Container>
                         </Box>
@@ -255,5 +230,11 @@ const Leida: React.FC<any> = ({
 export default Leida;
 
 /*
-
+<Button
+    variant="contained"
+    startIcon={<Icon icon="recommendation" />}
+    onClick={handleStart}
+>
+    Start a Recommendation
+</Button>
 */

@@ -496,11 +496,10 @@ export type I_Icon = {
     | 'orders'
     | 'staroff'
     | 'staron'
-
+    | 'tips'
     | 'play'
     | 'pause'
-
-
+    | 'recommendation'
     | 'bouncer';
     color?: any;
 };

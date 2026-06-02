@@ -1,23 +1,26 @@
 'use client';
 import * as React from 'react';
-import { useSearchParams } from 'next/navigation';
 import {
+    Box,
     Card,
-    CardContent,
     CardHeader,
     Typography,
 } from '@mui/material';
+import { Icon } from '../../../NX/DesignSystem';
 
 
 export default function Tips() {
     
-
     return (
-        <Card variant="outlined">
+        <Box>
             <CardHeader 
-                title={<Typography variant="h6">Tips coming soon...</Typography>}
+                title={<Typography variant="h6">
+                    Tips
+                </Typography>}
+                avatar={<>
+                    <Icon icon="tips" color="primary" />
+                </>}
             />
-        </Card>
-        
+        </Box>
     );
 }

@@ -2,12 +2,11 @@
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { 
+    Box,
     Alert,
     Avatar,
-    IconButton,
-    Card,
+    Button,
     CardHeader,
-    CardContent,
     LinearProgress,
     List,
     ListItem,
@@ -55,19 +54,23 @@ export default function Clients() {
     };
 
     return (
-        <Card variant="outlined">
+        <Box>
+
             <CardHeader 
                 avatar={<>
                     <Icon icon="clients" color="primary" />
                 </>}
-                title={<Typography variant="body1">{clients?.loading ? 'Loading clients...' : `You have ${list.length} clients`}</Typography>}
+                title={<Typography variant="h6">
+                    Clients
+                </Typography>}
                 action={<>
-                    <IconButton
+                    <Button
+                        endIcon={<Icon icon="add" />}
                         color="primary"
                         onClick={handleNew}
                     >
-                        <Icon icon="add" />
-                    </IconButton>
+                        New client
+                    </Button>
                 </>}
             />
             
@@ -76,47 +79,51 @@ export default function Clients() {
                 ) : clients?.error ? (
                     <Alert severity="error">{String(clients.error)}</Alert>
                 ) : (
-                    <List dense>
-                        {list.map((client: any) => {
-                            const firstName = client?.data?.first_name || client?.first_name || '';
-                            const lastName = client?.data?.last_name || client?.last_name || '';
-                            const fullName = `${firstName} ${lastName}`.trim() || 'Unnamed client';
-                            const initials = `${firstName?.[0] || ''}${lastName?.[0] || ''}`.toUpperCase() || '?';
-                            const clientId = client?.client_id;
-                            const avatarKey = String(clientId || fullName);
-                            const avatarColor = getAvatarColor(avatarKey);
+                    <>
+                        <List dense>
+                            {list.map((client: any) => {
+                                const firstName = client?.data?.first_name || client?.first_name || '';
+                                const lastName = client?.data?.last_name || client?.last_name || '';
+                                const fullName = `${firstName} ${lastName}`.trim() || 'Unnamed client';
+                                const initials = `${firstName?.[0] || ''}${lastName?.[0] || ''}`.toUpperCase() || '?';
+                                const clientId = client?.client_id;
+                                const avatarKey = String(clientId || fullName);
+                                const avatarColor = getAvatarColor(avatarKey);
 
-                            return (
-                                <ListItem key={avatarKey} disablePadding>
-                                    <ListItemButton
-                                        disabled={!clientId}
-                                        onClick={() => {
-                                            if (clientId) {
-                                                const qs = new URLSearchParams({ avatarColor }).toString();
-                                                dispatch(navigateTo(router, `/clients/${clientId}?${qs}`));
-                                            }
-                                        }}
-                                    >
-                                        <ListItemAvatar>
-                                            <Avatar
-                                                sx={{
-                                                    bgcolor: avatarColor,
-                                                    color: '#334155',
-                                                }}
-                                            >
-                                                {initials}
-                                            </Avatar>
-                                        </ListItemAvatar>
-                                        <ListItemText primary={<Typography variant="subtitle1">
-                                            {fullName}
+                                return (
+                                    <ListItem key={avatarKey} disablePadding>
+                                        <ListItemButton
+                                            disabled={!clientId}
+                                            onClick={() => {
+                                                if (clientId) {
+                                                    const qs = new URLSearchParams({ avatarColor }).toString();
+                                                    dispatch(navigateTo(router, `/clients/${clientId}?${qs}`));
+                                                }
+                                            }}
+                                        >
+                                            <ListItemAvatar>
+                                                <Avatar
+                                                    sx={{
+                                                        bgcolor: avatarColor,
+                                                        color: '#000',
+                                                    }}
+                                                >
+                                                    <Typography>
+                                                        {initials}
+                                                    </Typography>
+                                                </Avatar>
+                                            </ListItemAvatar>
+                                            <ListItemText primary={<Typography variant="subtitle1">
+                                                {fullName}
 
-                                        </Typography>} />
-                                    </ListItemButton>
-                                </ListItem>
-                            );
-                        })}
-                    </List>
+                                            </Typography>} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                );
+                            })}
+                        </List>
+                    </>
                 )}
-        </Card>
+        </Box>
     );
 }

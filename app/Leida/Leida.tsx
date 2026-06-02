@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
     IconButton,
+    Container,
 } from '@mui/material';
 import type { T_Theme } from '../NX/types';
 import { useDispatch } from '../NX/Uberedux';
@@ -15,18 +16,24 @@ import {
     Icon,
     ConfirmAction,
 } from '../NX/DesignSystem';
-import {BottomNav} from '../Leida';
-import { setPaywall } from '../NX/Paywall';
+import {
+    BottomNav,
+    Clients,
+    ClientDetail,
+} from '../Leida';
+import { initClients, useClients } from './components/Clients';
+import { setPaywall, useSupabaseAuth } from '../NX/Paywall';
 import { supabase } from '../NX/lib/supabase';
 
 
 const Leida: React.FC<any> = ({
-    children,
     config,
 }) => {
     
     const dispatch = useDispatch();
+    const { user } = useSupabaseAuth();
     const pathname = usePathname();
+    const clientsState = useClients();
     const designSystem = useDesignSystem();
     const defaultTheme = config?.cartridges?.designSystem?.defaultTheme;
     const themeSwitching = config?.cartridges?.designSystem?.themeSwitching;
@@ -54,7 +61,22 @@ const Leida: React.FC<any> = ({
 
     const handleOpenSignoutConfirm = () => setIsConfirmOpen(true);
     const handleCloseSignoutConfirm = () => setIsConfirmOpen(false);
-    const bottomNavValue = pathname === '/' ? 'home' : pathname;
+    const routeParts = (pathname || '/').split('/').filter(Boolean);
+    const isHomeRoute = routeParts.length === 0;
+    const isClientsRoute = routeParts[0] === 'clients';
+    const clientId = isClientsRoute && routeParts[1] ? routeParts[1] : null;
+    const clientList = Array.isArray(clientsState?.list) ? clientsState.list : [];
+    const selectedClient = clientId
+        ? clientList.find((client: any) => client?.client_id === clientId) || null
+        : null;
+
+    React.useEffect(() => {
+        if (isClientsRoute && user?.id && !clientsState?.initted && !clientsState?.loading) {
+            dispatch(initClients(user.id));
+        }
+    }, [dispatch, isClientsRoute, user?.id, clientsState?.initted, clientsState?.loading]);
+
+    const bottomNavValue = isHomeRoute ? 'home' : (isClientsRoute ? 'clients' : pathname);
     const bottomNavItems = [
         {
             label: 'Home',
@@ -67,6 +89,12 @@ const Leida: React.FC<any> = ({
             value: 'clients',
             icon: 'clients' as const,
             href: '/clients',
+        },
+        {
+            label: 'Debug',
+            value: 'debug',
+            icon: 'bug' as const,
+            href: '/debug',
         },
     ];
 
@@ -91,7 +119,21 @@ const Leida: React.FC<any> = ({
             </nav>
 
             <main style={{ paddingBottom: 88 }}>
-                {children}
+                <Container sx={{mt:3 }}>
+                    {isHomeRoute ? (
+                        <>
+                            home
+                        </>
+                    ) : isClientsRoute && clientId ? (
+                        <ClientDetail config={config} client={selectedClient} />
+                    ) : isClientsRoute ? (
+                        <Clients />
+                    ) : (
+                        <>
+                            home
+                        </>
+                    )}
+                </Container>
             </main>
 
             <ConfirmAction

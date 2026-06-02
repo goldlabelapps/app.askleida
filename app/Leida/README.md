@@ -1,3 +1,6 @@
+## Clients
+
+
 ## Supabase Auth
 
 ```json

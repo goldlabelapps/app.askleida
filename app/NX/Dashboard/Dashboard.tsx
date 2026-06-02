@@ -40,7 +40,7 @@ export default function Dashboard() {
             Clients Widget
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
-            Practitioner Widget
+            Client Widget
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
             Recommendations Widget

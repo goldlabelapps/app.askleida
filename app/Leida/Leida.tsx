@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
     IconButton,
+    Container,
 } from '@mui/material';
 import type { T_Theme } from '../NX/types';
 import { useDispatch } from '../NX/Uberedux';
@@ -15,13 +16,15 @@ import {
     Icon,
     ConfirmAction,
 } from '../NX/DesignSystem';
-import {BottomNav} from '../Leida';
+import {
+    BottomNav,
+    Clients,
+} from '../Leida';
 import { setPaywall } from '../NX/Paywall';
 import { supabase } from '../NX/lib/supabase';
 
 
 const Leida: React.FC<any> = ({
-    children,
     config,
 }) => {
     
@@ -97,7 +100,9 @@ const Leida: React.FC<any> = ({
             </nav>
 
             <main style={{ paddingBottom: 88 }}>
-                {children}
+                <Container sx={{mt:3 }}>
+                    <Clients />
+                </Container>
             </main>
 
             <ConfirmAction

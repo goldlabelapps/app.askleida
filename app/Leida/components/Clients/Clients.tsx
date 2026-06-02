@@ -1,6 +1,12 @@
 'use client';
 import * as React from 'react';
+import { 
+    IconButton,
+    Card,
+    CardHeader,
+} from '@mui/material';
 import { useDispatch } from '../../../NX/Uberedux';
+import { Icon } from '../../../NX/DesignSystem';
 import { initClients, useClients } from '../Clients';
 
 export default function Clients() {
@@ -15,8 +21,21 @@ export default function Clients() {
     }, [dispatch, clients?.initted]);
 
     return (
-        <>
-            Clients
-        </>
+        <Card variant="outlined">
+            <CardHeader 
+                avatar={<>
+                    <Icon icon="clients" color="primary" />
+                </>}
+                title="You have X clients"
+                subheader="Manage your clients effectively" 
+                action={<>
+                    <IconButton
+                        
+                    >
+                        <Icon icon="add" />
+                    </IconButton>
+                </>}
+            />
+        </Card>
     );
 }

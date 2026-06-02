@@ -3,3 +3,7 @@ export { default as Signin } from './components/UI/Signin';
 export { default as BottomNav } from './components/UI/BottomNav';
 export { default as Clients } from './components/Clients/Clients';
 export { default as ClientDetail } from './components/Clients/components/ClientDetail';
+export { default as ClientNew } from './components/Clients/components/ClientNew';
+export { default as Recommendations } from './components/Recommendations/Recommendations';
+export { default as Products } from './components/Products/Products';
+export { default as Tips } from './components/Tips/Tips';

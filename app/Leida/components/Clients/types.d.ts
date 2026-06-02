@@ -1,5 +1,5 @@
 export type T_Client = {
-	id?: string;
+	client_id?: string;
 	practitioner_id?: string | null;
 	first_name?: string | null;
 	last_name?: string | null;

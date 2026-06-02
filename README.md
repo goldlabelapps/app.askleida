@@ -89,6 +89,7 @@ Optional features:
 
 - `app/` - Next.js app routes and feature modules.
 - `app/api/` - API routes (products, practitioners, stripe, anthropic).
+- `app/Leida/` - Leida feature module (components, hooks, prompts, and actions).
 - `app/NX/` - shared UI/system modules and utilities.
 - `public/` - static assets, PWA files, tenant content.
 

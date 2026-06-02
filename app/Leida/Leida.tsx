@@ -4,8 +4,6 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
     Box,
     Container,
-    Stack,
-    Typography,
 } from '@mui/material';
 import type { T_Theme } from '../NX/types';
 import { useDispatch } from '../NX/Uberedux';
@@ -29,26 +27,12 @@ import {
     Recommendations,
     Tips,
     Header,
+    Greeting,
 } from '../Leida';
 import { initClients, useClients } from './components/Clients';
 import { initTips, useTips } from './components/Tips';
 import { setPaywall, useSupabaseAuth } from '../NX/Paywall';
 import { supabase } from '../NX/lib/supabase';
-
-const getTimeGreeting = (date = new Date()) => {
-    const hour = date.getHours();
-
-    if (hour < 12) {
-        return 'Good Morning';
-    }
-
-    if (hour < 18) {
-        return 'Good Afternoon';
-    }
-
-    return 'Good Evening';
-};
-
 
 const Leida: React.FC<any> = ({
     config,
@@ -156,12 +140,12 @@ const Leida: React.FC<any> = ({
             icon: 'tips' as const,
             href: '/tips',
         },
-        {
-            label: 'Recommendations',
-            value: 'recommendations',
-            icon: 'recommendation' as const,
-            href: '/recommendations',
-        },  
+        // {
+        //     label: 'Recommendations',
+        //     value: 'recommendations',
+        //     icon: 'recommendation' as const,
+        //     href: '/recommendations',
+        // },  
     ];
 
     return (
@@ -171,10 +155,7 @@ const Leida: React.FC<any> = ({
             
             <main style={{ paddingBottom: 88 }}>
                 <Container sx={{mt:3 }}>
-                    <Box sx={{ 
-                        mx: 3,
-                        // border: '1px solid red',
-                     }}>
+                    <Box sx={{ mx: 3 }}>
                     {isClientNewRoute ? (
                         <ClientNew config={config} />
                     ) : isClientsRoute && clientId ? (
@@ -194,16 +175,7 @@ const Leida: React.FC<any> = ({
                     ) : isRecommendationsRoute ? (
                         <Recommendations />
                     ) : (
-                        <Box sx={{ minHeight: 'calc(100vh - 220px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <Container maxWidth="xs">
-                                <Stack alignItems="center" textAlign="center" spacing={2.5}>
-                                    <Typography variant="h4" sx={{ my: 1 }}>
-                                        {getTimeGreeting()},
-                                    </Typography>
-                                    
-                                </Stack>
-                            </Container>
-                        </Box>
+                        <Greeting />
                     )}
                     </Box>
                 </Container>

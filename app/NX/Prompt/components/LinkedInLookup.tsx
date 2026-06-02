@@ -14,11 +14,11 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Backdrop,
-  CircularProgress
+  Backdrop
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Icon } from '../../DesignSystem';
+import OverlaySpinner from '../../DesignSystem/components/OverlaySpinner';
 import { useDispatch } from '../../Uberedux';
 import { stepsLinkedin, promptLinkedin } from '../prompts/linkedin';
 import { fetchPrompt, useSlice } from '../../Prompt';
@@ -75,9 +75,9 @@ export default function LinkedInLookup() {
 
   return (
     <>
-      {/* Modal blocking overlay with CircularProgress */}
+      {/* Modal blocking overlay with subtle custom spinner */}
       <Backdrop open={!!fetching} sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, color: '#fff' }}>
-        <CircularProgress color="inherit" />
+        <OverlaySpinner />
       </Backdrop>
 
       <Accordion variant="outlined" sx={{ mb: 2 }}>

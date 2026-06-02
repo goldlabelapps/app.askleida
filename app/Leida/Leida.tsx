@@ -1,10 +1,14 @@
 "use client";
 import React from 'react';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
-    IconButton,
+    Box,
+    Button,
     Container,
+    IconButton,
+    Stack,
+    Typography,
 } from '@mui/material';
 import type { T_Theme } from '../NX/types';
 import { useDispatch } from '../NX/Uberedux';
@@ -15,6 +19,7 @@ import {
     useDesignSystem,
     Icon,
     ConfirmAction,
+    navigateTo,
 } from '../NX/DesignSystem';
 import {
     BottomNav,
@@ -25,12 +30,27 @@ import { initClients, useClients } from './components/Clients';
 import { setPaywall, useSupabaseAuth } from '../NX/Paywall';
 import { supabase } from '../NX/lib/supabase';
 
+const getTimeGreeting = (date = new Date()) => {
+    const hour = date.getHours();
+
+    if (hour < 12) {
+        return 'Good Morning';
+    }
+
+    if (hour < 18) {
+        return 'Good Afternoon';
+    }
+
+    return 'Good Evening';
+};
+
 
 const Leida: React.FC<any> = ({
     config,
 }) => {
     
     const dispatch = useDispatch();
+    const router = useRouter();
     const { user } = useSupabaseAuth();
     const pathname = usePathname();
     const clientsState = useClients();
@@ -59,10 +79,13 @@ const Leida: React.FC<any> = ({
         setIsConfirmOpen(false);
     };
 
+    const handleStart = () => {
+        dispatch(navigateTo(router, '/recommendation'));
+    }
+
     const handleOpenSignoutConfirm = () => setIsConfirmOpen(true);
     const handleCloseSignoutConfirm = () => setIsConfirmOpen(false);
     const routeParts = (pathname || '/').split('/').filter(Boolean);
-    const isHomeRoute = routeParts.length === 0;
     const isClientsRoute = routeParts[0] === 'clients';
     const clientId = isClientsRoute && routeParts[1] ? routeParts[1] : null;
     const clientList = Array.isArray(clientsState?.list) ? clientsState.list : [];
@@ -76,7 +99,7 @@ const Leida: React.FC<any> = ({
         }
     }, [dispatch, isClientsRoute, user?.id, clientsState?.initted, clientsState?.loading]);
 
-    const bottomNavValue = isHomeRoute ? 'home' : (isClientsRoute ? 'clients' : pathname);
+    const bottomNavValue = isClientsRoute ? 'clients' : 'home';
     const bottomNavItems = [
         {
             label: 'Home',
@@ -91,11 +114,18 @@ const Leida: React.FC<any> = ({
             href: '/clients',
         },
         {
-            label: 'Debug',
-            value: 'debug',
-            icon: 'bug' as const,
-            href: '/debug',
+            label: 'Tips',
+            value: 'tips',
+            icon: 'tips' as const,
+            href: '/tips',
         },
+        // {
+        //     label: 'Recommendations',
+        //     value: 'recommendations',
+        //     icon: 'recommendation' as const,
+        //     href: '/recommendations',
+        // },
+        
     ];
 
     return (
@@ -117,21 +147,31 @@ const Leida: React.FC<any> = ({
                     </IconButton>
                 </div>
             </nav>
-
+            
             <main style={{ paddingBottom: 88 }}>
                 <Container sx={{mt:3 }}>
-                    {isHomeRoute ? (
-                        <>
-                            home
-                        </>
-                    ) : isClientsRoute && clientId ? (
+                    {isClientsRoute && clientId ? (
                         <ClientDetail config={config} client={selectedClient} />
                     ) : isClientsRoute ? (
                         <Clients />
                     ) : (
-                        <>
-                            home
-                        </>
+                        <Box sx={{ minHeight: 'calc(100vh - 220px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Container maxWidth="xs">
+                                <Stack alignItems="center" textAlign="center" spacing={2.5}>
+                                    <Typography variant="h4" sx={{ my: 1 }}>
+                                        {getTimeGreeting()},
+                                    </Typography>
+
+                                    <Button
+                                        variant="outlined"
+                                        startIcon={<Icon icon="recommendation" />}
+                                        onClick={handleStart}
+                                    >
+                                        Start a Recommendation
+                                    </Button>
+                                </Stack>
+                            </Container>
+                        </Box>
                     )}
                 </Container>
             </main>

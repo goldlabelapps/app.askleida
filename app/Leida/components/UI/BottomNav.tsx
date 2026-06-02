@@ -1,13 +1,17 @@
 'use client';
 
 import * as React from 'react';
+import { useRouter } from 'next/navigation';
 import {
 	BottomNavigation,
 	BottomNavigationAction,
 	Paper,
 } from '@mui/material';
-import { Icon } from '../../../NX/DesignSystem';
+import { useDispatch } from '../../../NX/Uberedux';
+import { Icon, navigateTo } from '../../../NX/DesignSystem';
 import type { I_Icon } from '../../../NX/types';
+
+
 
 export interface I_BottomNavItem {
 	label: string;
@@ -29,6 +33,22 @@ export default function BottomNav({
 	value,
 	onChange,
 }: I_BottomNav) {
+
+	const dispatch = useDispatch();
+	const router = useRouter();
+
+	const handleChange = React.useCallback(
+		(_event: React.SyntheticEvent, nextValue: string) => {
+			onChange?.(nextValue);
+			const nextItem = items.find((item) => item.value === nextValue);
+			if (nextItem?.href) {
+				dispatch(navigateTo(router, nextItem.href));
+			}
+		},
+		[dispatch, items, onChange, router],
+	);
+
+	
 	return (
 		<Paper
 			elevation={8}
@@ -46,17 +66,10 @@ export default function BottomNav({
 		>
 			<BottomNavigation
 				value={value}
-				onChange={(_event, nextValue) => onChange?.(nextValue)}
+				onChange={handleChange}
 				showLabels
 			>
 				{items.map((item) => {
-					const linkProps = item.href
-						? {
-							component: 'a' as const,
-							href: item.href,
-						}
-						: {};
-
 					return (
 						<BottomNavigationAction
 							key={item.value}
@@ -65,7 +78,6 @@ export default function BottomNav({
 							icon={<Icon icon={item.icon} />}
 							onClick={item.onClick}
 							disabled={item.disabled}
-							{...linkProps}
 						/>
 					);
 				})}

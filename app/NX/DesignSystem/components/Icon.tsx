@@ -194,12 +194,19 @@ import AgileIcon from '@mui/icons-material/Badge';
 import LeidaIcon from '@mui/icons-material/SupportAgent';
 import PlayIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
-
+import TipsIcon from '@mui/icons-material/TipsAndUpdates';
+import RecommendationIcon from '@mui/icons-material/Assistant';
 
 export default function Icon({ icon, color }: I_Icon) {
   if (!color) color = 'inherit';
   let iconFragment = <React.Fragment />;
   switch (icon) {
+    case 'tips':
+      iconFragment = <TipsIcon color={color} />;
+      break;
+    case 'recommendation':
+      iconFragment = <RecommendationIcon color={color} />;
+      break;
     case 'agile':
       iconFragment = <AgileIcon color={color} />;
       break;

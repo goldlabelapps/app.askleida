@@ -25,7 +25,11 @@ export async function GET(req: Request) {
 
   if (practitionerId) {
     // List clients for a specific practitioner
-    const { data, error } = await supabase.from('clients').select('*').eq('practitioner_id', practitionerId);
+    const { data, error } = await supabase
+      .from('clients')
+      .select('*')
+      .eq('practitioner_id', practitionerId)
+      .order('updated', { ascending: false, nullsFirst: false });
     if (error) {
       const res = makeRes({ tenant, message: error.message, severity: 'error' });
       return NextResponse.json(res, { status: 500 });
@@ -35,7 +39,10 @@ export async function GET(req: Request) {
   }
 
   // List all clients
-  const { data, error } = await supabase.from('clients').select('*');
+  const { data, error } = await supabase
+    .from('clients')
+    .select('*')
+    .order('updated', { ascending: false, nullsFirst: false });
   if (error) {
     const res = makeRes({ tenant, message: error.message, severity: 'error' });
     return NextResponse.json(res, { status: 500 });

@@ -219,13 +219,7 @@ const Leida: React.FC<any> = ({
                                         {getTimeGreeting()},
                                     </Typography>
 
-                                    <Button
-                                        variant="contained"
-                                        startIcon={<Icon icon="recommendation" />}
-                                        onClick={handleStart}
-                                    >
-                                        Start a Recommendation
-                                    </Button>
+                                    
                                 </Stack>
                             </Container>
                         </Box>
@@ -255,5 +249,11 @@ const Leida: React.FC<any> = ({
 export default Leida;
 
 /*
-
+<Button
+    variant="contained"
+    startIcon={<Icon icon="recommendation" />}
+    onClick={handleStart}
+>
+    Start a Recommendation
+</Button>
 */

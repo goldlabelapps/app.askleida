@@ -17,20 +17,22 @@ import {
 } from '@mui/material';
 import { useDispatch } from '../../../NX/Uberedux';
 import { Icon, navigateTo } from '../../../NX/DesignSystem';
+import { useSupabaseAuth } from '../../../NX/Paywall';
 import { initClients, useClients } from '../Clients';
 
 export default function Clients() {
 
     const router = useRouter();
+    const { user } = useSupabaseAuth();
     const dispatch = useDispatch();
     const clients = useClients();
     const list = Array.isArray(clients?.list) ? clients.list : [];
 
     React.useEffect(() => {
-        if (!clients?.initted) {
-            dispatch(initClients());
+        if (!clients?.initted && !clients?.loading && user?.id) {
+            dispatch(initClients(user.id));
         }
-    }, [dispatch, clients?.initted]);
+    }, [dispatch, clients?.initted, clients?.loading, user?.id]);
 
     return (
         <Card variant="outlined">
@@ -38,8 +40,8 @@ export default function Clients() {
                 avatar={<>
                     <Icon icon="clients" color="primary" />
                 </>}
-                title="You have X clients"
-                subheader="Your practitioner_id is 1234" 
+                title={`You have ${list.length} clients`}
+                subheader={`Your practitioner_id is ${user?.id ?? 'not available'}`}
                 action={<>
                     <IconButton
                         

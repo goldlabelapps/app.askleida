@@ -22,7 +22,7 @@ import {
     ClientDetail,
 } from '../Leida';
 import { initClients, useClients } from './components/Clients';
-import { setPaywall } from '../NX/Paywall';
+import { setPaywall, useSupabaseAuth } from '../NX/Paywall';
 import { supabase } from '../NX/lib/supabase';
 
 
@@ -31,6 +31,7 @@ const Leida: React.FC<any> = ({
 }) => {
     
     const dispatch = useDispatch();
+    const { user } = useSupabaseAuth();
     const pathname = usePathname();
     const clientsState = useClients();
     const designSystem = useDesignSystem();
@@ -70,10 +71,10 @@ const Leida: React.FC<any> = ({
         : null;
 
     React.useEffect(() => {
-        if (isClientsRoute && !clientsState?.initted) {
-            dispatch(initClients());
+        if (isClientsRoute && user?.id && !clientsState?.initted && !clientsState?.loading) {
+            dispatch(initClients(user.id));
         }
-    }, [dispatch, isClientsRoute, clientsState?.initted]);
+    }, [dispatch, isClientsRoute, user?.id, clientsState?.initted, clientsState?.loading]);
 
     const bottomNavValue = isHomeRoute ? 'home' : (isClientsRoute ? 'clients' : pathname);
     const bottomNavItems = [

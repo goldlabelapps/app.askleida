@@ -1,12 +1,15 @@
 import { setClients } from '../../Clients';
 
-export const initClients = (): any =>
+export const initClients = (practitionerId?: string): any =>
     async (dispatch: any) => {
         try {
             dispatch(setClients('loading', true));
             dispatch(setClients('error', null));
 
-            const response = await fetch('/api/clients', {
+            const query = practitionerId
+                ? `?practitioner_id=${encodeURIComponent(practitionerId)}`
+                : '';
+            const response = await fetch(`/api/clients${query}`, {
                 method: 'GET',
                 headers: {
                     Accept: 'application/json',

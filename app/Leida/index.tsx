@@ -7,3 +7,5 @@ export { default as ClientNew } from './components/Clients/components/ClientNew'
 export { default as Recommendations } from './components/Recommendations/Recommendations';
 export { default as Products } from './components/Products/Products';
 export { default as Tips } from './components/Tips/Tips';
+export { default as TipDetail } from './components/Tips/components/TipDetail';
+export { default as TipNew } from './components/Tips/components/TipNew';

@@ -15,7 +15,7 @@ import {
     Icon,
     ConfirmAction,
 } from '../NX/DesignSystem';
-import BottomNav from './components/BottomNav';
+import {BottomNav} from '../Leida';
 import { setPaywall } from '../NX/Paywall';
 import { supabase } from '../NX/lib/supabase';
 

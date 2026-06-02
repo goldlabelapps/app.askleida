@@ -170,17 +170,9 @@ const TipDetail: React.FC<T_TipDetailProps> = ({
                         >
                             <Icon icon="left" />
                         </IconButton>
-
-                        <Avatar
-                            sx={{
-                                bgcolor: avatarColor || '#e2e8f0',
-                                color: '#000',
-                            }}
-                        >
-                            <Typography>
-                                {initials}
-                            </Typography>
-                        </Avatar>
+                        <Box sx={{m:1, mt: 1.5}}>
+                            <Icon icon="tips" />
+                        </Box>
                     </>
                 }
                 title={<Typography variant="subtitle1">{fullName}</Typography>}
@@ -211,40 +203,8 @@ const TipDetail: React.FC<T_TipDetailProps> = ({
                 />
                 
                 <CardContent>
-                    
-                    {concernTags.length ? (
-                        <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
-                            {concernTags.map((tag) => (
-                                <Chip key={tag} label={tag} />
-                            ))}
-                        </Stack>
-                    ) : (
-                        <Typography variant="body2" color="text.secondary">
-                            No concern tags recorded.
-                        </Typography>
-                    )}
-                <List disablePadding>
-                    <DetailRow label="Skin overview" value={skinOverview} />
-                    
-                    
-                    <DetailRow label="Personal notes" value={personalNotes} />
-
-                        <DetailRow label="Email" value={email} />
-                        <DetailRow label="Date of birth" value={formatDate(dateOfBirth)} />
-                        <DetailRow label="Skin type" value={skinType} />
-                        <DetailRow label="Pregnant" value={getBooleanLabel(tipData.is_pregnant ?? tip?.is_pregnant)} />
-                        <DetailRow label="Breastfeeding" value={getBooleanLabel(tipData.is_breastfeeding ?? tip?.is_breastfeeding)} />
-                        <DetailRow label="Current medication" value={medication} />
-                    </List>
-                    
-                    
-                    <Typography variant="h6">Record metadata</Typography>
-                    <List disablePadding>
-                        <DetailRow label="Created" value={formatDateTime(tip?.created ?? tip?.created_at)} />
-                        <DetailRow label="Updated" value={formatDateTime(tip?.updated)} />
-                        <DetailRow label="Imported from source" value={formatDateTime(tipData.source_created_at)} />
-                        <DetailRow label="Source practitioner ID" value={getStringValue(tipData.source_practitioner_id) || 'Not provided'} />
-                    </List>
+                    <pre>{JSON.stringify(tip, null, 2)}</pre>
+                   
                 </CardContent>
                 <CardActions>
                     <Box sx={{ flexGrow: 1 }} />

@@ -80,48 +80,40 @@ export default function Tips() {
                     <Alert severity="error">{String(tips.error)}</Alert>
                 ) : (
                     <>
-                        <List dense>
-                            {list.map((tip: any) => {
-                                const firstName = tip?.data?.first_name || tip?.first_name || '';
-                                const lastName = tip?.data?.last_name || tip?.last_name || '';
-                                const fullName = `${firstName} ${lastName}`.trim() || 'Unnamed tip';
-                                const initials = `${firstName?.[0] || ''}${lastName?.[0] || ''}`.toUpperCase() || '?';
-                                const tipId = tip?.tip_id;
-                                const avatarKey = String(tipId || fullName);
-                                const avatarColor = getAvatarColor(avatarKey);
+                        {list.length === 0 ? (
+                            <Alert severity="info">No results found.</Alert>
+                        ) : (
+                            <List dense>
+                                {list.map((tip: any) => {
+                                    const firstName = tip?.data?.first_name || tip?.first_name || '';
+                                    const lastName = tip?.data?.last_name || tip?.last_name || '';
+                                    const fullName = tip?.title || '';
+                                    const initials = `${firstName?.[0] || ''}${lastName?.[0] || ''}`.toUpperCase() || '?';
+                                    const tipId = tip?.tip_id;
+                                    const avatarKey = String(tipId || fullName);
+                                    const avatarColor = getAvatarColor(avatarKey);
 
-                                return (
-                                    <ListItem key={avatarKey} disablePadding>
-                                        <ListItemButton
-                                            disabled={!tipId}
-                                            onClick={() => {
-                                                if (tipId) {
-                                                    const qs = new URLSearchParams({ avatarColor }).toString();
-                                                    dispatch(navigateTo(router, `/tips/${tipId}?${qs}`));
-                                                }
-                                            }}
-                                        >
-                                            <ListItemAvatar>
-                                                <Avatar
-                                                    sx={{
-                                                        bgcolor: avatarColor,
-                                                        color: '#000',
-                                                    }}
-                                                >
-                                                    <Typography>
-                                                        {initials}
-                                                    </Typography>
-                                                </Avatar>
-                                            </ListItemAvatar>
-                                            <ListItemText primary={<Typography variant="subtitle1">
-                                                {fullName}
-
-                                            </Typography>} />
-                                        </ListItemButton>
-                                    </ListItem>
-                                );
-                            })}
-                        </List>
+                                    return (
+                                        <ListItem key={avatarKey} disablePadding>
+                                            <ListItemButton
+                                                disabled={!tipId}
+                                                onClick={() => {
+                                                    if (tipId) {
+                                                        const qs = new URLSearchParams({ avatarColor }).toString();
+                                                        dispatch(navigateTo(router, `/tips/${tipId}?${qs}`));
+                                                    }
+                                                }}
+                                            >
+                                                
+                                                <ListItemText primary={<Typography variant="subtitle1">
+                                                    {fullName}
+                                                </Typography>} />
+                                            </ListItemButton>
+                                        </ListItem>
+                                    );
+                                })}
+                            </List>
+                        )}
                     </>
                 )}
         </Box>

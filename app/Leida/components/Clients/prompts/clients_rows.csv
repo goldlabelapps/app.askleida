@@ -1,4 +1,4 @@
-id,client_id,first_name,last_name,date_of_birth,email,skin_type,concern_tags,is_pregnant,is_breastfeeding,current_medication,skin_overview,personal_notes,created_at
+id,practitioner_id,first_name,last_name,date_of_birth,email,skin_type,concern_tags,is_pregnant,is_breastfeeding,current_medication,skin_overview,personal_notes,created_at
 0dd54e41-9bed-4052-8bdb-2dafac465081,190e3a95-a8e6-4dab-99c5-52d9ff7fdc49,Thomas,(me),,,,[],false,false,,,,2026-03-29 20:22:26.151004+00
 0f2aead0-ba0b-47cf-bc4a-c228672dca3c,f824b82b-0bcc-4d09-b558-9214d663f527,Angie,Havers,,,Combination,"[""ageing"",""dehydration""]",false,false,,,,2026-04-14 20:42:59.732887+00
 138a0358-7ab8-49a3-ad20-b7de597f18b5,f824b82b-0bcc-4d09-b558-9214d663f527,Emma,Colgate,,,Oily,"[""ageing"",""pigmentation""]",false,false,,,,2026-03-26 22:21:21.558668+00

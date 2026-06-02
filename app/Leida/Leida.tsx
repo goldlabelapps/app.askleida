@@ -19,7 +19,9 @@ import {
 import {
     BottomNav,
     Clients,
+    ClientDetail,
 } from '../Leida';
+import { initClients, useClients } from './components/Clients';
 import { setPaywall } from '../NX/Paywall';
 import { supabase } from '../NX/lib/supabase';
 
@@ -30,6 +32,7 @@ const Leida: React.FC<any> = ({
     
     const dispatch = useDispatch();
     const pathname = usePathname();
+    const clientsState = useClients();
     const designSystem = useDesignSystem();
     const defaultTheme = config?.cartridges?.designSystem?.defaultTheme;
     const themeSwitching = config?.cartridges?.designSystem?.themeSwitching;
@@ -57,7 +60,22 @@ const Leida: React.FC<any> = ({
 
     const handleOpenSignoutConfirm = () => setIsConfirmOpen(true);
     const handleCloseSignoutConfirm = () => setIsConfirmOpen(false);
-    const bottomNavValue = pathname === '/' ? 'home' : pathname;
+    const routeParts = (pathname || '/').split('/').filter(Boolean);
+    const isHomeRoute = routeParts.length === 0;
+    const isClientsRoute = routeParts[0] === 'clients';
+    const clientId = isClientsRoute && routeParts[1] ? routeParts[1] : null;
+    const clientList = Array.isArray(clientsState?.list) ? clientsState.list : [];
+    const selectedClient = clientId
+        ? clientList.find((client: any) => client?.client_id === clientId) || null
+        : null;
+
+    React.useEffect(() => {
+        if (isClientsRoute && !clientsState?.initted) {
+            dispatch(initClients());
+        }
+    }, [dispatch, isClientsRoute, clientsState?.initted]);
+
+    const bottomNavValue = isHomeRoute ? 'home' : (isClientsRoute ? 'clients' : pathname);
     const bottomNavItems = [
         {
             label: 'Home',
@@ -101,7 +119,19 @@ const Leida: React.FC<any> = ({
 
             <main style={{ paddingBottom: 88 }}>
                 <Container sx={{mt:3 }}>
-                    <Clients />
+                    {isHomeRoute ? (
+                        <>
+                            home
+                        </>
+                    ) : isClientsRoute && clientId ? (
+                        <ClientDetail config={config} client={selectedClient} />
+                    ) : isClientsRoute ? (
+                        <Clients />
+                    ) : (
+                        <>
+                            home
+                        </>
+                    )}
                 </Container>
             </main>
 

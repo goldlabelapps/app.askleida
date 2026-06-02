@@ -7,7 +7,7 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const tenant = process.env.NEXT_PUBLIC_TENANT;
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-// GET /api/practitioners/:id - Get practitioner by practitioner_id
+// GET /api/clients/:id - Get client by client_id
 
 export async function GET(
   req: Request,
@@ -18,11 +18,11 @@ export async function GET(
     const res = makeRes({ tenant, message: 'Missing id parameter', severity: 'error' });
     return NextResponse.json(res, { status: 400 });
   }
-  const { data, error } = await supabase.from('practitioners').select('*').eq('practitioner_id', id).single();
+  const { data, error } = await supabase.from('clients').select('*').eq('client_id', id).single();
   if (error) {
     const res = makeRes({ tenant, message: error.message, severity: 'error' });
     return NextResponse.json(res, { status: 404 });
   }
-  const res = makeRes({ tenant, message: 'Fetched practitioner', severity: 'success', data });
+  const res = makeRes({ tenant, message: 'Fetched client', severity: 'success', data });
   return NextResponse.json(res);
 }

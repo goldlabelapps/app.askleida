@@ -20,7 +20,6 @@ import {
     TreeNav,
 } from '../../DesignSystem';
 import { useDispatch } from '../../Uberedux';
-import { Share } from '../../../Virus';
 import { SignOutBtn } from '../../Paywall';
 
 function sortNavItems(items: any[]) {
@@ -70,7 +69,8 @@ const Nav: React.FC<I_Nav> = ({
 
         return items
             .map((item, i) => {
-                const key = `${parentKey}item_${i}`;
+
+                const key = `${parentKey}_item_${i}`;
                 const hasChildren = Array.isArray(item.children) && item.children.length > 0;
                 const navTarget = (typeof item.slug === 'string' && item.slug.trim().length > 0)
                     ? item.slug
@@ -128,10 +128,6 @@ const Nav: React.FC<I_Nav> = ({
                     sx={{
                         zIndex: (theme) => (theme.zIndex?.modal ?? 1300) + 200,
                     }}>
-
-                    {sharing && <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-                        <Share size="small" />
-                    </Box>}
                     
                     <Box
                         role="presentation"

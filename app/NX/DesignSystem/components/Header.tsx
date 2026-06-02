@@ -13,9 +13,6 @@ import {
 } from '@mui/material';
 import { navigateTo } from '../../DesignSystem';
 import { useDispatch } from '../../Uberedux';
-import {
-	Virus,
-} from '../../../Virus';
 
 export interface I_Header {
 	config: T_Config;
@@ -62,7 +59,7 @@ export default function Header({
 						avatar={<IconButton onClick={handleAvatarClick}>
 									<Avatar src={avatar} />
 								</IconButton>}
-						action={<Virus />}
+						action={null}
 					/>
 				</Container>
 			</AppBar>			

@@ -68,6 +68,12 @@ const Leida: React.FC<any> = ({
             icon: 'clients' as const,
             href: '/clients',
         },
+        {
+            label: 'Debug',
+            value: 'debug',
+            icon: 'bug' as const,
+            href: '/debug',
+        },
     ];
 
     return (

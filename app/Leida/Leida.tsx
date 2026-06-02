@@ -63,10 +63,10 @@ const Leida: React.FC<any> = ({
             href: '/',
         },
         {
-            label: 'Sign out',
-            value: 'signout',
-            icon: 'signout' as const,
-            onClick: handleOpenSignoutConfirm,
+            label: 'Clients',
+            value: 'clients',
+            icon: 'clients' as const,
+            href: '/clients',
         },
     ];
 

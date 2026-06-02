@@ -3,25 +3,15 @@ import * as React from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
     Alert,
-    Button,
-    Card,
-    CardActions,
+    Box,
     CardContent,
     CardHeader,
-    Chip,
-    Divider,
-    FormControl,
-    InputLabel,
-    LinearProgress,
-    MenuItem,
-    Select,
-    Stack,
-    TextField,
     Typography,
 } from '@mui/material';
 import { useDispatch } from '../../../NX/Uberedux';
 import { useSupabaseAuth } from '../../../NX/Paywall';
 import { initClients, useClients } from '../Clients';
+import { Icon } from '../../../NX/DesignSystem';
 
 const getClientFullName = (client: any) => {
     const firstName = client?.data?.first_name || client?.first_name || '';
@@ -132,33 +122,22 @@ export default function Recommendations() {
     };
 
     return (
-        <Stack spacing={2}>
-            <Alert severity="info">
-                Generate content to preview your personalised recommendation before exporting.
-            </Alert>
-            <Card variant="outlined">
+            <Box>
                 <CardHeader
                     title={<Typography variant="h6">Recommendations</Typography>}
-                    subheader={<Typography variant="body1">
-                            Create personalised client PDFs in under two minutes
-                        </Typography>}
+                    avatar={<>
+                        <Icon icon="tips" color="primary" />
+                    </>}
                     
                 />
                 <CardContent>
-                        <Typography variant="body1" sx={{ mb: 3 }}>
-                            This is the Leida's core feature. Choose a client, add your clinical context, generate AI personalised homecare copy, then export to PDF to send to your client.
-                        </Typography>
-                        <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
-                            <Chip label="Solo skin therapists" />
-                            <Chip label="Personalised from scratch" />
-                            <Chip label="Under 2 minutes" />
-                        </Stack>
+                    <Alert severity="success">
+                        To do
+                    </Alert>
+                    <Typography variant="body1" sx={{ my: 3 }}>
+                        This is the Leida's core feature. Choose a client, add your clinical context, generate AI personalised homecare copy, then export to PDF to send to your client.
+                    </Typography>
                 </CardContent>
-            </Card>
-
-           
-
-           
-        </Stack>
+            </Box>
     );
 }

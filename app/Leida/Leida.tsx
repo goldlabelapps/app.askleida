@@ -130,12 +130,12 @@ const Leida: React.FC<any> = ({
             icon: 'clients' as const,
             href: '/clients',
         },
-        {
-            label: 'Products',
-            value: 'products',
-            icon: 'products' as const,
-            href: '/products',
-        },
+        // {
+        //     label: 'Products',
+        //     value: 'products',
+        //     icon: 'products' as const,
+        //     href: '/products',
+        // },
         {
             label: 'Tips',
             value: 'tips',
@@ -175,6 +175,10 @@ const Leida: React.FC<any> = ({
             
             <main style={{ paddingBottom: 88 }}>
                 <Container sx={{mt:3 }}>
+                    <Box sx={{ 
+                        mx: 3,
+                        // border: '1px solid red',
+                     }}>
                     {isClientNewRoute ? (
                         <ClientNew config={config} />
                     ) : isClientsRoute && clientId ? (
@@ -206,6 +210,7 @@ const Leida: React.FC<any> = ({
                             </Container>
                         </Box>
                     )}
+                    </Box>
                 </Container>
             </main>
 

@@ -2,16 +2,17 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import {
+    Box,
     Alert,
     Button,
-    Card,
+    Typography,
     CardActions,
     CardContent,
     CardHeader,
     Stack,
     TextField,
 } from '@mui/material';
-import { navigateTo } from '../../../../NX/DesignSystem';
+import { Icon, navigateTo } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
 import { useSupabaseAuth } from '../../../../NX/Paywall';
 import { initClients } from '../../Clients';
@@ -103,24 +104,33 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
     };
 
     return (
-        <Card variant="outlined">
-            <CardHeader title="New client" subheader="Create a client profile" />
+        <Box>
+            <CardHeader 
+                avatar={<>
+                    <Icon icon="clients" color="primary" />
+                </>}
+                title={<Typography variant="h6">
+                    New Client
+                </Typography>}  />
             <CardContent>
                 <Stack spacing={2}>
                     {error ? <Alert severity="error">{error}</Alert> : null}
                     <TextField
+                        variant="filled"
                         label="First name"
                         value={form.first_name}
                         onChange={handleChange('first_name')}
                         fullWidth
                     />
                     <TextField
+                        variant="filled"
                         label="Last name"
                         value={form.last_name}
                         onChange={handleChange('last_name')}
                         fullWidth
                     />
                     <TextField
+                        variant="filled"
                         label="Email"
                         type="email"
                         value={form.email}
@@ -130,14 +140,20 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                 </Stack>
             </CardContent>
             <CardActions>
-                <Button variant="text" onClick={handleBack} disabled={submitting}>
-                    Back to clients
+                <Box sx={{ flexGrow: 1 }} />
+                <Button
+                    startIcon={<Icon icon="cancel" />}
+                    onClick={handleBack} disabled={submitting}>
+                    Cancel
                 </Button>
-                <Button variant="contained" onClick={handleSubmit} disabled={submitting}>
+                <Button 
+                    startIcon={<Icon icon="save" />}
+                    variant="contained" 
+                    onClick={handleSubmit} disabled={submitting}>
                     {submitting ? 'Creating...' : 'Create client'}
                 </Button>
             </CardActions>
-        </Card>
+        </Box>
     );
 };
 

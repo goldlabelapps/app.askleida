@@ -4,10 +4,10 @@ import React from 'react';
 import type { T_Client } from '../types';
 import { useRouter } from 'next/navigation';
 import {
+    Box,
     Alert,
     Avatar,
     Button,
-    Card,
     CardActions,
     CardContent,
     CardHeader,
@@ -161,32 +161,28 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
     };
 
     return (
-        
-
-            <Card variant="outlined">
-
-            <CardActions>
-                <Button
-                    fullWidth
-                    variant="outlined"
-                    startIcon={<Icon icon="recommendation" />}
-                    onClick={handleCreateRecommendation}
-                >
-                    Create Recommendation
-                </Button>
-            </CardActions>
-                
+            <Box>
                 <CardHeader
-                    avatar={
+                    avatar={<>
+                        <IconButton
+                            color="primary"
+                            onClick={handleClientsNavigate}
+                        >
+                            <Icon icon="left" />
+                        </IconButton>
+
                         <Avatar
                             sx={{
                                 bgcolor: avatarColor || '#e2e8f0',
-                                color: '#334155',
+                                color: '#000',
                             }}
                         >
-                            {initials}
+                            <Typography>
+                                {initials}
+                            </Typography>
                         </Avatar>
-                    }
+                    </>
+                }
                 title={<Typography variant="subtitle1">{fullName}</Typography>}
                     subheader={email}
                     action={<>
@@ -196,35 +192,26 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
                         >
                             <Icon icon="delete" />
                         </IconButton>
-                        <IconButton
-                            color="primary"
-                            onClick={handleClientsNavigate}
-                        >
-                            <Icon icon="clients" />
-                        </IconButton>
+                        
                         <IconButton
                             color="primary"
                             onClick={handleNew}
                         >
                             <Icon icon="new" />
                         </IconButton>
+
+                        {/* <IconButton
+                            color="primary"
+                            onClick={handleCreateRecommendation}
+                        >
+                            <Icon icon="recommendation" />
+                        </IconButton> */}
+
                     </>}
                 />
                 
                 <CardContent>
-
-                <List disablePadding>
-                    <DetailRow label="Skin overview" value={skinOverview} />
-                    <DetailRow label="Personal notes" value={personalNotes} />
-
-                        <DetailRow label="Email" value={email} />
-                        <DetailRow label="Date of birth" value={formatDate(dateOfBirth)} />
-                        <DetailRow label="Skin type" value={skinType} />
-                        <DetailRow label="Pregnant" value={getBooleanLabel(clientData.is_pregnant ?? client?.is_pregnant)} />
-                        <DetailRow label="Breastfeeding" value={getBooleanLabel(clientData.is_breastfeeding ?? client?.is_breastfeeding)} />
-                        <DetailRow label="Current medication" value={medication} />
-                    </List>
-                    <Typography variant="h6">Concerns</Typography>
+                    
                     {concernTags.length ? (
                         <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
                             {concernTags.map((tag) => (
@@ -236,6 +223,20 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
                             No concern tags recorded.
                         </Typography>
                     )}
+                <List disablePadding>
+                    <DetailRow label="Skin overview" value={skinOverview} />
+                    
+                    
+                    <DetailRow label="Personal notes" value={personalNotes} />
+
+                        <DetailRow label="Email" value={email} />
+                        <DetailRow label="Date of birth" value={formatDate(dateOfBirth)} />
+                        <DetailRow label="Skin type" value={skinType} />
+                        <DetailRow label="Pregnant" value={getBooleanLabel(clientData.is_pregnant ?? client?.is_pregnant)} />
+                        <DetailRow label="Breastfeeding" value={getBooleanLabel(clientData.is_breastfeeding ?? client?.is_breastfeeding)} />
+                        <DetailRow label="Current medication" value={medication} />
+                    </List>
+                    
                     
                     <Typography variant="h6">Record metadata</Typography>
                     <List disablePadding>
@@ -245,13 +246,13 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
                         <DetailRow label="Source practitioner ID" value={getStringValue(clientData.source_practitioner_id) || 'Not provided'} />
                     </List>
                 </CardContent>
-                <Divider />
                 <CardActions>
-                <Button variant="text" onClick={handleClientsNavigate}>
+                    <Box sx={{ flexGrow: 1 }} />
+                    <Button variant="text" onClick={handleClientsNavigate}>
                         Back to clients
                     </Button>
                 </CardActions>
-            </Card>
+            </Box>
     );
 };
 

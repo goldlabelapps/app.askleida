@@ -1,28 +1,31 @@
 'use client';
 import * as React from 'react';
-import { useSearchParams } from 'next/navigation';
 import {
     Card,
     CardContent,
     CardHeader,
     Typography,
+    Alert,
 } from '@mui/material';
-
+import { Icon } from '../../../NX/DesignSystem';
 
 export default function Products() {
     
-
     return (
         <Card variant="outlined">
-            <CardHeader 
-                title={<Typography variant="h6">Product recommendations coming soon...</Typography>}
+            <CardHeader
+                title={<Typography variant="h6">
+                    Products
+                </Typography>}
+                avatar={<>
+                    <Icon icon="products" color="primary" />
+                </>}
             />
             <CardContent>
-                <Typography variant="body2" color="textSecondary">
-                    This feature is under development. In the meantime, you can generate personalized product recommendations for your clients using the "Recommendations" tab.
-                </Typography>
+                <Alert severity="success">
+                    To do
+                </Alert>
             </CardContent>
         </Card>
-        
     );
 }

@@ -19,6 +19,23 @@ import { useSupabaseAuth } from '../../../NX/Paywall';
 import { initTips, useTips } from '../Tips';
 import TipCategories from './components/TipCategories';
 
+const getSortTimestamp = (value: unknown): number => {
+    if (typeof value !== 'string') {
+        return 0;
+    }
+
+    const time = Date.parse(value);
+    return Number.isNaN(time) ? 0 : time;
+};
+
+const sortTipsByLastUpdated = (items: any[]): any[] => {
+    return [...items].sort((a, b) => {
+        const aUpdated = getSortTimestamp(a?.updated) || getSortTimestamp(a?.created);
+        const bUpdated = getSortTimestamp(b?.updated) || getSortTimestamp(b?.created);
+        return bUpdated - aUpdated;
+    });
+};
+
 export default function Tips() {
 
     const router = useRouter();
@@ -26,6 +43,7 @@ export default function Tips() {
     const dispatch = useDispatch();
     const tips = useTips();
     const list = Array.isArray(tips?.list) ? tips.list : [];
+    const titleText = list.length > 0 ? `Tips (${list.length})` : 'Tips';
     const selectedCategory = typeof tips?.category === 'string' ? tips.category.trim() : '';
     const filteredList = selectedCategory
         ? list.filter((tip: any) => {
@@ -35,6 +53,10 @@ export default function Tips() {
             return category === selectedCategory;
         })
         : list;
+    const sortedFilteredList = React.useMemo(
+        () => sortTipsByLastUpdated(filteredList),
+        [filteredList],
+    );
 
     React.useEffect(() => {
         if (!tips?.initted && !tips?.loading && user?.id) {
@@ -56,9 +78,7 @@ export default function Tips() {
                         <Icon icon="tips" color="primary" />
                     </Box>}
                 </>}
-                title={<Typography variant="h6">
-                    Tips
-                </Typography>}
+                title={<Typography variant="h6">{titleText}</Typography>}
                 action={<>
                     <Button
                         endIcon={<Icon icon="add" />}
@@ -76,9 +96,9 @@ export default function Tips() {
                 
                 {tips?.error ? null : (
                     <>
-                        {filteredList.length === 0 ? null : (
+                        {sortedFilteredList.length === 0 ? null : (
                             <List dense>
-                                {filteredList.map((tip: any, index: number) => {
+                                {sortedFilteredList.map((tip: any, index: number) => {
                                     const title = typeof tip?.title === 'string' && tip.title.trim()
                                         ? tip.title.trim()
                                         : 'Untitled tip';

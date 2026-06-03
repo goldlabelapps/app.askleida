@@ -7,8 +7,10 @@ export type EditableTextProps = {
 	label?: string;
 	placeholder?: string;
 	disabled?: boolean;
+	autoFocus?: boolean;
 	multiline?: boolean;
 	minRows?: number;
+    variant?: 'standard' | 'outlined' | 'filled';
 };
 
 export default function EditableText({
@@ -17,17 +19,20 @@ export default function EditableText({
 	label,
 	placeholder,
 	disabled = false,
+	autoFocus = false,
 	multiline = false,
 	minRows,
+    variant = 'outlined',
 }: EditableTextProps) {
 	return (
 		<TextField
 			fullWidth
-			variant="filled"
+			variant={variant}
 			label={label}
 			placeholder={placeholder}
 			value={value}
 			disabled={disabled}
+			autoFocus={autoFocus}
 			multiline={multiline}
 			minRows={minRows}
 			onChange={(event) => onChange?.(event.target.value)}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { 
     Box, 
+    Collapse,
     Container, 
     
     Stack,
@@ -8,9 +9,20 @@ import {
 import { getTimeGreeting } from '../../../Leida';
 import { CleverText } from '../../../NX/DesignSystem';
 import { usePractitioner } from '../Practitioner';
+import TipsCTA from './TipsCTA';
 
 const Greeting: React.FC = () => {
     const practitioner = usePractitioner();
+    const [showTipsCTA, setShowTipsCTA] = React.useState(false);
+    const tipsCtaDelayTimeoutRef = React.useRef<number | null>(null);
+
+    React.useEffect(() => {
+        return () => {
+            if (tipsCtaDelayTimeoutRef.current !== null) {
+                window.clearTimeout(tipsCtaDelayTimeoutRef.current);
+            }
+        };
+    }, []);
 
     if (practitioner?.loading) return null;
 
@@ -23,17 +35,26 @@ const Greeting: React.FC = () => {
     return (
         <Box sx={{ minHeight: 'calc(100vh - 220px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Container maxWidth="xs">
-                <Stack alignItems="center" textAlign="center">
+                <Stack alignItems="center" textAlign="center" spacing={2}>
                     <CleverText 
                         options={{
                             id: 'greeting_welcome_message',
                             markdown: `# ${greetingText}`,
-                            animateOncePerSession: true,
+                            // animateOncePerSession: true,
                             onFinish: () => {
-                                console.log('Greeting message finished typing');
+                                if (tipsCtaDelayTimeoutRef.current !== null) {
+                                    window.clearTimeout(tipsCtaDelayTimeoutRef.current);
+                                }
+                                tipsCtaDelayTimeoutRef.current = window.setTimeout(() => {
+                                    setShowTipsCTA(true);
+                                }, 1000);
+                                // console.log('Greeting message finished typing');
                             }
                         }}
                     />
+                    <Collapse in={showTipsCTA} timeout={380} sx={{ width: '100%' }}>
+                        <TipsCTA />
+                    </Collapse>
                 </Stack>
             </Container>
         </Box>

@@ -108,11 +108,8 @@ const TipDetail: React.FC<T_TipDetailProps> = ({
                             color="primary"
                             onClick={handleTipsNavigate}
                         >
-                            <Icon icon="left" />
-                        </IconButton>
-                        <Box sx={{m:1, mt: 1.5}}>
                             <Icon icon="tips" />
-                        </Box>
+                        </IconButton>
                     </>
                 }
                     action={<>

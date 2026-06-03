@@ -1,8 +1,9 @@
 'use client';
 import * as React from 'react';
-import { Backdrop, CircularProgress } from '@mui/material';
+import { Backdrop } from '@mui/material';
 import { useDesignSystem, setDesignSystem } from '../../DesignSystem';
 import { useDispatch } from '../../Uberedux';
+import OverlaySpinner from './OverlaySpinner';
 
 export default function Loader() {
     const designSystem = useDesignSystem();
@@ -33,8 +34,11 @@ export default function Loader() {
             open={!!loading} 
             sx={{ 
                 zIndex: (theme) => theme.zIndex.drawer + 2000,
+                color: '#eef3ff',
+                backgroundColor: 'rgba(8, 13, 24, 0.34)',
+                backdropFilter: 'blur(2px)',
             }}>
-            <CircularProgress color="info" />
+            <OverlaySpinner />
         </Backdrop>
     );
 }

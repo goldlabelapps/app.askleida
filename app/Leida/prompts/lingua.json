@@ -1,0 +1,23 @@
+{
+  "GREET_MORNING": {
+    "en-GB": "Good Morning",
+    "de": "Guten Morgen",
+    "fr": "Bonjour",
+    "es": "Buenos dias",
+    "zh-CN": "早上好"
+  },
+  "GREET_AFTERNOON": {
+    "en-GB": "Good Afternoon",
+    "de": "Guten Tag",
+    "fr": "Bon apres-midi",
+    "es": "Buenas tardes",
+    "zh-CN": "下午好"
+  },
+  "GREET_EVENING": {
+    "en-GB": "Good Evening",
+    "de": "Guten Abend",
+    "fr": "Bonsoir",
+    "es": "Buenas noches",
+    "zh-CN": "晚上好"
+  }
+}

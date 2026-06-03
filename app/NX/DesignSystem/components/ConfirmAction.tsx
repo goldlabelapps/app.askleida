@@ -3,6 +3,7 @@ import * as React from 'react';
 import {
     Box,
     Button,
+    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
@@ -17,7 +18,7 @@ export interface I_ConfirmAction {
     icon?: I_Icon['icon'];
     title: React.ReactNode;
     body: React.ReactNode;
-    handleConfirm: () => void;
+    handleConfirm: () => void | Promise<void>;
     handleClose: () => void;
 }
 
@@ -29,8 +30,36 @@ export default function ConfirmAction({
     handleConfirm,
     handleClose,
 }: I_ConfirmAction) {
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+    React.useEffect(() => {
+        if (!open) {
+            setIsSubmitting(false);
+        }
+    }, [open]);
+
+    const onConfirm = async () => {
+        if (isSubmitting) {
+            return;
+        }
+
+        try {
+            setIsSubmitting(true);
+            await Promise.resolve(handleConfirm());
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const onClose = () => {
+        if (isSubmitting) {
+            return;
+        }
+        handleClose();
+    };
+
     return (
-        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
+        <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
             <DialogTitle>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     
@@ -51,10 +80,19 @@ export default function ConfirmAction({
             </DialogContent>
 
             <DialogActions>
-                <Button onClick={handleClose} color="inherit">
+                <Button 
+                    startIcon={<Icon icon="cancel" />}
+                    onClick={onClose} 
+                    color="inherit" 
+                    disabled={isSubmitting}>
                     No
                 </Button>
-                <Button onClick={handleConfirm} variant="contained" color="primary">
+                <Button 
+                    endIcon={<Icon icon="tick" />}
+                    onClick={onConfirm} 
+                    variant="contained" 
+                    color="primary" disabled={isSubmitting}>
+                    {isSubmitting ? <CircularProgress size={14} color="inherit" sx={{ mr: 1 }} /> : null}
                     Yes
                 </Button>
             </DialogActions>

@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import Image from 'next/image';
-import { ButtonBase } from '@mui/material';
+import { Box, ButtonBase } from '@mui/material';
 // import { Icon } from '../../../NX/DesignSystem';
 import {
     Practitioner,
@@ -26,7 +26,9 @@ const Header: React.FC<T_HeaderProps> = ({
                         className="logo"
                     />
                 </ButtonBase>
-                <Practitioner />
+                <Box sx={{height: 46 }}>
+                    <Practitioner />
+                </Box>
             </div>
         </nav>
     );

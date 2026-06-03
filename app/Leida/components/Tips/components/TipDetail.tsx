@@ -6,35 +6,22 @@ import { useRouter } from 'next/navigation';
 import {
     Box,
     Alert,
-    Avatar,
     Button,
     CardActions,
     CardContent,
     CardHeader,
-    Chip,
-    Divider,
+    IconButton,
     List,
     ListItem,
     ListItemText,
-    Stack,
-    IconButton,
     Typography,
 } from '@mui/material';
-import { Icon, navigateTo } from '../../../../NX/DesignSystem';
+import { Icon, navigateTo, ConfirmAction } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
-
-type T_TipRecord = T_Tip & {
-    tip_id?: string | null;
-    title?: string | null;
-    created?: string | null;
-    updated?: string | null;
-    data?: T_Tip | null;
-};
+import { deleteTip } from '../../Tips';
 
 type T_TipDetailProps = {
-    config?: unknown;
-    tip?: T_TipRecord | null;
-    avatarColor?: string;
+    tip?: T_Tip | null;
 };
 
 const getStringValue = (value: unknown): string | null => {
@@ -44,53 +31,6 @@ const getStringValue = (value: unknown): string | null => {
 
     const trimmed = value.trim();
     return trimmed ? trimmed : null;
-};
-
-const getBooleanLabel = (value: unknown): string => {
-    if (value === true || value === 'true') {
-        return 'Yes';
-    }
-
-    if (value === false || value === 'false') {
-        return 'No';
-    }
-
-    return 'Not provided';
-};
-
-const formatDateTime = (value: unknown): string => {
-    const stringValue = getStringValue(value);
-
-    if (!stringValue) {
-        return 'Not provided';
-    }
-
-    const date = new Date(stringValue);
-    if (Number.isNaN(date.getTime())) {
-        return stringValue;
-    }
-
-    return new Intl.DateTimeFormat('en-GB', {
-        dateStyle: 'medium',
-        timeStyle: 'short',
-    }).format(date);
-};
-
-const formatDate = (value: unknown): string => {
-    const stringValue = getStringValue(value);
-
-    if (!stringValue) {
-        return 'Not provided';
-    }
-
-    const date = new Date(stringValue);
-    if (Number.isNaN(date.getTime())) {
-        return stringValue;
-    }
-
-    return new Intl.DateTimeFormat('en-GB', {
-        dateStyle: 'long',
-    }).format(date);
 };
 
 const getArrayValues = (value: unknown): string[] => {
@@ -104,48 +44,53 @@ const getArrayValues = (value: unknown): string[] => {
     return stringValue ? [stringValue] : [];
 };
 
-const DetailRow = ({
-    label,
-    value,
-}: {
-    label: string;
-    value: string;
-}) => (
-    <ListItem divider>
-        <ListItemText primary={label} secondary={value} />
-    </ListItem>
-);
+const getDataObject = (value: unknown): Record<string, unknown> => {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) {
+        return {};
+    }
+
+    return value as Record<string, unknown>;
+};
 
 const TipDetail: React.FC<T_TipDetailProps> = ({
-    config,
     tip,
-    avatarColor,
 }) => {
-    void config;
 
     const router = useRouter();
     const dispatch = useDispatch();
-    const tipData = tip?.data ?? {};
-    const firstName = getStringValue(tipData.first_name) || getStringValue(tip?.first_name) || '';
-    const lastName = getStringValue(tipData.last_name) || getStringValue(tip?.last_name) || '';
-    const fullName = `${firstName} ${lastName}`.trim() || getStringValue(tip?.title) || 'Unnamed tip';
-    const email = getStringValue(tipData.email) || getStringValue(tip?.email) || '';
-    const skinType = getStringValue(tipData.skin_type) || getStringValue(tip?.skin_type) || 'Not provided';
-    const medication = getStringValue(tipData.current_medication) || getStringValue(tip?.current_medication) || 'Not provided';
-    const personalNotes = getStringValue(tipData.personal_notes) || getStringValue(tip?.personal_notes) || 'Not provided';
-    const skinOverview = getStringValue(tipData.skin_overview) || getStringValue(tip?.skin_overview) || 'Not provided';
-    const dateOfBirth = tipData.date_of_birth ?? tip?.date_of_birth;
-    const concernTags = getArrayValues(tipData.concern_tags ?? tip?.concern_tags);
-    const initials = `${firstName?.[0] || ''}${lastName?.[0] || ''}`.toUpperCase() || '?';
-    const tipId = getStringValue(tip?.tip_id) || getStringValue(tip?.id);
+    const [confirmOpen, setConfirmOpen] = React.useState(false);
+    const [isDeleting, setIsDeleting] = React.useState(false);
+    const tipData = getDataObject(tip?.data);
+    const title = getStringValue(tip?.title) || 'Untitled tip';
+    const tipId = getStringValue(tip?.tip_id) || getStringValue(tip?.id || '');
+    const category = getStringValue(tipData.category) || 'Not provided';
+    const bullets = getArrayValues(tipData.bullets);
 
     if (!tip) {
+        if (isDeleting) {
+            return null;
+        }
         return <Alert severity="warning">Tip details are not available.</Alert>;
     }
 
-    const handleDelete = () => {
-        window.alert(`Delete tip placeholder for ${fullName}`);
-    }
+    const handleOpenDeleteConfirm = () => {
+        setConfirmOpen(true);
+    };
+
+    const handleCloseDeleteConfirm = () => {
+        setConfirmOpen(false);
+    };
+
+    const handleDelete = async () => {
+        if (!tipId) {
+            setConfirmOpen(false);
+            return;
+        }
+        setIsDeleting(true);
+        setConfirmOpen(false);
+        await dispatch(deleteTip(tipId));
+        handleTipsNavigate();
+    };
 
     const handleTipsNavigate = () => {
         dispatch(navigateTo(router, '/tips'));
@@ -153,11 +98,6 @@ const TipDetail: React.FC<T_TipDetailProps> = ({
 
     const handleNew = () => {
         dispatch(navigateTo(router, '/tips/new'));
-    };
-
-    const handleCreateRecommendation = () => {
-        const query = tipId ? `?tipId=${encodeURIComponent(tipId)}` : '';
-        dispatch(navigateTo(router, `/recommendations${query}`));
     };
 
     return (
@@ -175,43 +115,58 @@ const TipDetail: React.FC<T_TipDetailProps> = ({
                         </Box>
                     </>
                 }
-                title={<Typography variant="subtitle1">{fullName}</Typography>}
-                    subheader={email}
                     action={<>
-                        <IconButton
-                            color="primary"
-                            onClick={handleDelete}
-                        >
-                            <Icon icon="delete" />
-                        </IconButton>
-                        
-                        <IconButton
+                        <Button
+                            endIcon={<Icon icon="add" />}
                             color="primary"
                             onClick={handleNew}
                         >
-                            <Icon icon="new" />
-                        </IconButton>
-
-                        {/* <IconButton
+                            New
+                        </Button>
+                        <IconButton
                             color="primary"
-                            onClick={handleCreateRecommendation}
+                            onClick={handleOpenDeleteConfirm}
                         >
-                            <Icon icon="recommendation" />
-                        </IconButton> */}
-
+                            <Icon icon="delete" />
+                        </IconButton>
                     </>}
                 />
                 
                 <CardContent>
-                    <pre>{JSON.stringify(tip, null, 2)}</pre>
-                   
+                        <Box>
+                            <Typography variant="h6">
+                                {title}
+                            </Typography>
+                            <Typography variant="body1" sx={{ mb: 1 }}>
+                                {category}
+                            </Typography>
+                            {bullets.length ? (
+                                <List dense>
+                                    {bullets.map((bullet, index) => (
+                                        <ListItem key={`${index}-${bullet.slice(0, 16)}`}>
+                                            <ListItemText primary={<Typography>{`${index + 1}. ${bullet}`}</Typography>} />
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            ) : null}
+                        </Box>
                 </CardContent>
                 <CardActions>
-                    <Box sx={{ flexGrow: 1 }} />
-                    <Button variant="text" onClick={handleTipsNavigate}>
-                        Back to tips
+                    <Button 
+                        startIcon={<Icon icon="left" />}
+                        variant="text" onClick={handleTipsNavigate}>
+                        Back
                     </Button>
                 </CardActions>
+
+                <ConfirmAction
+                    open={confirmOpen}
+                    icon="delete"
+                    title="Delete Tip?"
+                    body="Are you sure you want to delete this tip? This action cannot be undone."
+                    handleConfirm={handleDelete}
+                    handleClose={handleCloseDeleteConfirm}
+                />
             </Box>
     );
 };

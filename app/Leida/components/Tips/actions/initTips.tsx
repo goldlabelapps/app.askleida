@@ -16,7 +16,7 @@ export const initTips = (practitionerId?: string): any =>
                         Accept: 'application/json',
                     },
                 }),
-                fetch('http://localhost:1888/api/tips/categories/f3dde5b6-b389-4493-a480-a414689a6023', {
+                fetch('/api/tips/categories/f3dde5b6-b389-4493-a480-a414689a6023', {
                     method: 'GET',
                     headers: {
                         Accept: 'application/json',

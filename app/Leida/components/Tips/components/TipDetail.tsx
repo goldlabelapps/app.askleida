@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import { Icon, navigateTo, ConfirmAction } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
-import { deleteTip } from '../../Tips';
+import { deleteTip, patchTip } from '../../Tips';
 
 type T_TipDetailProps = {
     tip?: T_Tip | null;
@@ -70,7 +70,7 @@ const TipDetail: React.FC<T_TipDetailProps> = ({
         if (isDeleting) {
             return null;
         }
-        return <Alert severity="warning">Tip details are not available.</Alert>;
+        return null;
     }
 
     const handleOpenDeleteConfirm = () => {
@@ -95,6 +95,16 @@ const TipDetail: React.FC<T_TipDetailProps> = ({
     const handleTipsNavigate = () => {
         dispatch(navigateTo(router, '/tips'));
     }
+
+    const handlePatch = () => {
+        dispatch(patchTip(tipId, {
+            title: 'Updated Title',
+            data: {
+                category: 'Updated Category',
+                bullets: ['Updated bullet 1', 'Updated bullet 2'],
+            },
+        }));
+    };
 
     const handleNew = () => {
         dispatch(navigateTo(router, '/tips/new'));
@@ -147,6 +157,14 @@ const TipDetail: React.FC<T_TipDetailProps> = ({
                                 </List>
                             ) : null}
                         </Box>
+                        <Button 
+                            fullWidth
+                            startIcon={<Icon icon="save" />}
+                            variant="outlined" 
+                            onClick={handlePatch} 
+                            sx={{ mt: 2 }}>
+                            Save
+                        </Button>
                 </CardContent>
                 <CardActions>
                     <Button 

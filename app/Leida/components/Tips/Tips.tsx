@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { 
     Box,
-    Alert,
+    Divider,
     Button,
     CardHeader,
     CircularProgress,
@@ -51,7 +51,10 @@ export default function Tips() {
 
             <CardHeader 
                 avatar={<>
-                    {tips?.loading ? <CircularProgress size={20} /> : <Icon icon="tips" color="primary" />}
+                    {tips?.loading ? <CircularProgress size={20} /> : 
+                    <Box sx={{mt:1, ml:1}}>
+                        <Icon icon="tips" color="primary" />
+                    </Box>}
                 </>}
                 title={<Typography variant="h6">
                     Tips
@@ -67,17 +70,15 @@ export default function Tips() {
                 </>}
             />
                 <Box sx={{ display: 'flex', px: 2, mb: 1 }}>
-                    <Box sx={{ flexGrow: 1 }} />
+                    {/* <Box sx={{ flexGrow: 1 }} /> */}
                     <TipCategories />
                 </Box>
                 
-                {tips?.error ? (
-                    <Alert severity="error">{String(tips.error)}</Alert>
-                ) : (
+                {tips?.error ? null : (
                     <>
                         {filteredList.length === 0 ? null : (
                             <List dense>
-                                {filteredList.map((tip: any) => {
+                                {filteredList.map((tip: any, index: number) => {
                                     const title = typeof tip?.title === 'string' && tip.title.trim()
                                         ? tip.title.trim()
                                         : 'Untitled tip';
@@ -88,14 +89,16 @@ export default function Tips() {
                                         ? tip.data.bullets.filter((item: unknown) => typeof item === 'string' && item.trim())
                                         : [];
                                     const tipId = typeof tip?.tip_id === 'string' ? tip.tip_id : '';
-                                    const itemKey = String(tipId || title);
+                                    const itemKey = tipId
+                                        ? `tip-${tipId}`
+                                        : `tip-${title}-${index}`;
                                     const summary = [
                                         category ? `${category}` : null,
                                         bullets.length ? `${bullets.length} bullet${bullets.length === 1 ? '' : 's'}` : null,
                                     ].filter(Boolean).join(' • ');
 
-                                    return (
-                                        <ListItem key={itemKey} disablePadding>
+                                    return (<React.Fragment key={itemKey}>
+                                        <ListItem disablePadding>
                                             <ListItemButton
                                                 disabled={!tipId}
                                                 onClick={() => {
@@ -111,6 +114,8 @@ export default function Tips() {
                                                 />
                                             </ListItemButton>
                                         </ListItem>
+                                        <Divider />
+                                    </React.Fragment>
                                     );
                                 })}
                             </List>

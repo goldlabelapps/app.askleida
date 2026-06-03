@@ -5,7 +5,6 @@ import type { T_Tip } from '../types';
 import { useRouter } from 'next/navigation';
 import {
     Box,
-    Alert,
     Button,
     CardActions,
     CardContent,
@@ -13,15 +12,11 @@ import {
     Collapse,
     CircularProgress,
     IconButton,
-    List,
-    ListItem,
-    ListItemText,
-    Typography,
 } from '@mui/material';
 import { Icon, navigateTo, ConfirmAction } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
 import { deleteTip, patchTip } from '../../Tips';
-import { EditableText } from '../../../../Leida';
+import { BulletEditor, EditableText } from '../../../../Leida';
 
 type T_TipDetailProps = {
     tip?: T_Tip | null;
@@ -34,17 +29,6 @@ const getStringValue = (value: unknown): string | null => {
 
     const trimmed = value.trim();
     return trimmed ? trimmed : null;
-};
-
-const getArrayValues = (value: unknown): string[] => {
-    if (Array.isArray(value)) {
-        return value
-            .map((item) => getStringValue(item))
-            .filter((item): item is string => Boolean(item));
-    }
-
-    const stringValue = getStringValue(value);
-    return stringValue ? [stringValue] : [];
 };
 
 const getDataObject = (value: unknown): Record<string, unknown> => {
@@ -136,13 +120,8 @@ const TipDetail: React.FC<T_TipDetailProps> = ({
 
     const isDirty = !areTipsEqual(originalTip, draftTip);
     const activeTip = draftTip ?? tip ?? null;
-    const tipData = getDataObject(activeTip?.data);
     const editableTitle = typeof activeTip?.title === 'string' ? activeTip.title : '';
-    const title = getStringValue(activeTip?.title) || 'Untitled tip';
     const tipId = getStringValue(activeTip?.tip_id) || getStringValue(activeTip?.id || '');
-    const category = getStringValue(tipData.category) || 'Not provided';
-    const bullets = getArrayValues(tipData.bullets);
-
     if (!activeTip) {
         if (isDeleting) {
             return null;
@@ -210,6 +189,24 @@ const TipDetail: React.FC<T_TipDetailProps> = ({
         });
     };
 
+    const handleBulletsChange = (nextBullets: string[]) => {
+        setDraftTip((currentTip) => {
+            if (!currentTip) {
+                return currentTip;
+            }
+
+            const currentData = getDataObject(currentTip.data);
+
+            return {
+                ...currentTip,
+                data: {
+                    ...currentData,
+                    bullets: nextBullets,
+                },
+            };
+        });
+    };
+
     return (
             <Box>
                 <CardHeader
@@ -248,19 +245,11 @@ const TipDetail: React.FC<T_TipDetailProps> = ({
                                 onChange={handleTitleChange}
                             />
 
-                            {/* <Typography variant="body1" sx={{ mb: 1 }}>
-                                {category}
-                            </Typography> */}
-
-                            {bullets.length ? (
-                                <List dense>
-                                    {bullets.map((bullet, index) => (
-                                        <ListItem key={`${index}-${bullet.slice(0, 16)}`}>
-                                            <ListItemText primary={<Typography>{`${index + 1}. ${bullet}`}</Typography>} />
-                                        </ListItem>
-                                    ))}
-                                </List>
-                            ) : null}
+                            <BulletEditor
+                                value={Array.isArray(draftTip?.data?.bullets) ? draftTip.data.bullets.filter((item): item is string => typeof item === 'string') : []}
+                                onChange={handleBulletsChange}
+                                disabled={isPatching}
+                            />
                         </Box>
                         <Collapse in={isDirty} unmountOnExit>
                             <Button 

@@ -10,6 +10,19 @@ const toObject = (value: unknown): Record<string, unknown> => {
     return value as Record<string, unknown>;
 };
 
+const normalizeBullets = (value: unknown): string[] | undefined => {
+    if (!Array.isArray(value)) {
+        return undefined;
+    }
+
+    const bullets = value
+        .filter((item): item is string => typeof item === 'string')
+        .map((item) => item.trim())
+        .filter((item) => item.length > 0);
+
+    return bullets;
+};
+
 const extractTip = (payload: unknown): Partial<T_Tip> | null => {
     if (!payload) {
         return null;
@@ -105,6 +118,13 @@ export const patchTip = (
                 ...existingData,
                 ...incomingData,
             };
+
+            const normalizedBullets = normalizeBullets(mergedData.bullets);
+            if (normalizedBullets) {
+                mergedData.bullets = normalizedBullets;
+            } else {
+                delete mergedData.bullets;
+            }
 
             const payload: Partial<T_Tip> & { tip_id: string } = {
                 tip_id: tipId,

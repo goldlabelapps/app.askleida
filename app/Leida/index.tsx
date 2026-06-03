@@ -3,6 +3,7 @@ export { getTimeGreeting } from './prompts/getTimeGreeting';
 export { default as Signin } from './components/UI/Signin';
 export { default as BottomNav } from './components/UI/BottomNav';
 export { default as EditableText } from './components/UI/EditableText';
+export { default as BulletEditor } from './components/UI/BulletEditor';
 
 export { default as Header } from './components/UI/Header';
 export { default as Greeting } from './components/UI/Greeting';

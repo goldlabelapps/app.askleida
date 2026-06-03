@@ -122,24 +122,27 @@ const Leida: React.FC<any> = ({
                     ? 'tips'
                     : 'products';
     const bottomNavItems = [
-        {
-            label: 'Clients',
-            value: 'clients',
-            icon: 'clients' as const,
-            href: '/clients',
-        },
+        // {
+        //     label: 'Clients',
+        //     value: 'clients',
+        //     icon: 'clients' as const,
+        //     href: '/clients',
+        // },
+
         // {
         //     label: 'Products',
         //     value: 'products',
         //     icon: 'products' as const,
         //     href: '/products',
         // },
+        
         {
             label: 'Tips',
             value: 'tips',
             icon: 'tips' as const,
             href: '/tips',
         },
+        
         // {
         //     label: 'Recommendations',
         //     value: 'recommendations',
@@ -165,7 +168,7 @@ const Leida: React.FC<any> = ({
                     ) : isTipNewRoute ? (
                         <TipNew config={config} />
                     ) : isTipsRoute && tipId ? (
-                        <TipDetail config={config} tip={selectedTip} avatarColor={avatarColor} />
+                        <TipDetail tip={selectedTip} />
                     ) : isProductsRoute ? (
                         <Products />
                     ) : isPractitionerRoute ? (

@@ -4,6 +4,7 @@ import TipNew from './components/TipNew';
 import { initTips } from './actions/initTips';
 import { useTips } from './hooks/useTips';
 import { setTips } from './actions/setTips';
+import { deleteTip } from './actions/deleteTip';
 export {
     Tips,
     TipDetail,
@@ -11,4 +12,5 @@ export {
     initTips,
     useTips,
     setTips,
+    deleteTip,
 };

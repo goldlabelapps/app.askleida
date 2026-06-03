@@ -11,6 +11,7 @@ export interface I_CleverText {
         id: string | undefined;
         markdown?: string;
         onFinish?: () => void;
+        animateOncePerSession?: boolean;
     }
 }
 
@@ -42,10 +43,35 @@ export default function CleverText({ options }: I_CleverText) {
 
     const markdownText = options.markdown ?? '';
     const onFinish = options.onFinish;
+    const storageKey = options.id ? `clevertext:${options.id}:done` : null;
+
+    const [hasAnimatedThisSession, setHasAnimatedThisSession] = useState<boolean>(() => {
+        if (!options.animateOncePerSession || !storageKey || typeof window === 'undefined') {
+            return false;
+        }
+
+        return window.sessionStorage.getItem(storageKey) === '1';
+    });
+
+    const disableAnimation = Boolean(options.animateOncePerSession && hasAnimatedThisSession);
 
     // Typewriter effect for real-time text generation
-    const [displayed, setDisplayed] = useState('');
+    const [displayed, setDisplayed] = useState(disableAnimation ? markdownText : '');
+
     useEffect(() => {
+        if (!options.animateOncePerSession || !storageKey || typeof window === 'undefined') {
+            return;
+        }
+
+        setHasAnimatedThisSession(window.sessionStorage.getItem(storageKey) === '1');
+    }, [options.animateOncePerSession, storageKey]);
+
+    useEffect(() => {
+        if (disableAnimation) {
+            setDisplayed(markdownText);
+            return;
+        }
+
         let i = 0;
         let timeout: NodeJS.Timeout;
 
@@ -64,6 +90,10 @@ export default function CleverText({ options }: I_CleverText) {
                 timeout = setTimeout(typeNext, delay);
             } else {
                 // Animation finished, call onFinish if provided
+                if (options.animateOncePerSession && storageKey && typeof window !== 'undefined') {
+                    window.sessionStorage.setItem(storageKey, '1');
+                    setHasAnimatedThisSession(true);
+                }
                 if (typeof onFinish === 'function') {
                     onFinish();
                 }
@@ -72,7 +102,7 @@ export default function CleverText({ options }: I_CleverText) {
 
         timeout = setTimeout(typeNext, 0);
         return () => clearTimeout(timeout);
-    }, [markdownText, onFinish]);
+    }, [disableAnimation, markdownText, onFinish, options.animateOncePerSession, storageKey]);
 
     return (
         <Box

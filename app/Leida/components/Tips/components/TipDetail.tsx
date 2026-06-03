@@ -10,6 +10,8 @@ import {
     CardActions,
     CardContent,
     CardHeader,
+    Collapse,
+    CircularProgress,
     IconButton,
     List,
     ListItem,
@@ -18,7 +20,8 @@ import {
 } from '@mui/material';
 import { Icon, navigateTo, ConfirmAction } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
-import { deleteTip } from '../../Tips';
+import { deleteTip, patchTip } from '../../Tips';
+import { EditableText } from '../../../../Leida';
 
 type T_TipDetailProps = {
     tip?: T_Tip | null;
@@ -52,6 +55,67 @@ const getDataObject = (value: unknown): Record<string, unknown> => {
     return value as Record<string, unknown>;
 };
 
+const cloneTip = (value: T_Tip | null | undefined): T_Tip | null => {
+    if (!value) {
+        return null;
+    }
+
+    return JSON.parse(JSON.stringify(value)) as T_Tip;
+};
+
+const areTipsEqual = (left: T_Tip | null, right: T_Tip | null): boolean => {
+    if (!left && !right) {
+        return true;
+    }
+
+    if (!left || !right) {
+        return false;
+    }
+
+    return JSON.stringify(left) === JSON.stringify(right);
+};
+
+const buildTipPatch = (
+    originalTip: T_Tip | null,
+    draftTip: T_Tip | null,
+): Partial<T_Tip> => {
+    if (!draftTip) {
+        return {};
+    }
+
+    if (!originalTip) {
+        return { ...draftTip };
+    }
+
+    const patch: Partial<T_Tip> = {};
+    const originalData = getDataObject(originalTip.data);
+    const draftData = getDataObject(draftTip.data);
+    const dataPatch: Record<string, unknown> = {};
+
+    Object.keys(draftTip).forEach((key) => {
+        if (key === 'data') {
+            return;
+        }
+
+        if (JSON.stringify(originalTip[key]) !== JSON.stringify(draftTip[key])) {
+            patch[key] = draftTip[key];
+        }
+    });
+
+    const dataKeys = new Set([...Object.keys(originalData), ...Object.keys(draftData)]);
+    dataKeys.forEach((key) => {
+        if (JSON.stringify(originalData[key]) !== JSON.stringify(draftData[key])) {
+            dataPatch[key] = draftData[key];
+        }
+    });
+
+    if (Object.keys(dataPatch).length > 0) {
+        patch.data = dataPatch;
+    }
+
+    return patch;
+};
+
 const TipDetail: React.FC<T_TipDetailProps> = ({
     tip,
 }) => {
@@ -60,17 +124,30 @@ const TipDetail: React.FC<T_TipDetailProps> = ({
     const dispatch = useDispatch();
     const [confirmOpen, setConfirmOpen] = React.useState(false);
     const [isDeleting, setIsDeleting] = React.useState(false);
-    const tipData = getDataObject(tip?.data);
-    const title = getStringValue(tip?.title) || 'Untitled tip';
-    const tipId = getStringValue(tip?.tip_id) || getStringValue(tip?.id || '');
+    const [isPatching, setIsPatching] = React.useState(false);
+    const [originalTip, setOriginalTip] = React.useState<T_Tip | null>(cloneTip(tip));
+    const [draftTip, setDraftTip] = React.useState<T_Tip | null>(cloneTip(tip));
+
+    React.useEffect(() => {
+        const nextTip = cloneTip(tip);
+        setOriginalTip(nextTip);
+        setDraftTip(nextTip);
+    }, [tip]);
+
+    const isDirty = !areTipsEqual(originalTip, draftTip);
+    const activeTip = draftTip ?? tip ?? null;
+    const tipData = getDataObject(activeTip?.data);
+    const editableTitle = typeof activeTip?.title === 'string' ? activeTip.title : '';
+    const title = getStringValue(activeTip?.title) || 'Untitled tip';
+    const tipId = getStringValue(activeTip?.tip_id) || getStringValue(activeTip?.id || '');
     const category = getStringValue(tipData.category) || 'Not provided';
     const bullets = getArrayValues(tipData.bullets);
 
-    if (!tip) {
+    if (!activeTip) {
         if (isDeleting) {
             return null;
         }
-        return <Alert severity="warning">Tip details are not available.</Alert>;
+        return null;
     }
 
     const handleOpenDeleteConfirm = () => {
@@ -96,8 +173,41 @@ const TipDetail: React.FC<T_TipDetailProps> = ({
         dispatch(navigateTo(router, '/tips'));
     }
 
+    const handlePatch = async () => {
+        if (!draftTip || !tipId || !isDirty || isPatching) {
+            return;
+        }
+
+        const patch = buildTipPatch(originalTip, draftTip);
+
+        if (Object.keys(patch).length === 0) {
+            return;
+        }
+
+        setIsPatching(true);
+        const success = await dispatch(patchTip(tipId, patch));
+        setIsPatching(false);
+
+        if (success) {
+            handleTipsNavigate();
+        }
+    };
+
     const handleNew = () => {
         dispatch(navigateTo(router, '/tips/new'));
+    };
+
+    const handleTitleChange = (nextTitle: string) => {
+        setDraftTip((currentTip) => {
+            if (!currentTip) {
+                return currentTip;
+            }
+
+            return {
+                ...currentTip,
+                title: nextTitle,
+            };
+        });
     };
 
     return (
@@ -131,12 +241,17 @@ const TipDetail: React.FC<T_TipDetailProps> = ({
                 
                 <CardContent>
                         <Box>
-                            <Typography variant="h6">
-                                {title}
-                            </Typography>
-                            <Typography variant="body1" sx={{ mb: 1 }}>
+                            <EditableText 
+                                label="Title"
+                                value={editableTitle}
+                                placeholder="Add title"
+                                onChange={handleTitleChange}
+                            />
+
+                            {/* <Typography variant="body1" sx={{ mb: 1 }}>
                                 {category}
-                            </Typography>
+                            </Typography> */}
+
                             {bullets.length ? (
                                 <List dense>
                                     {bullets.map((bullet, index) => (
@@ -147,9 +262,21 @@ const TipDetail: React.FC<T_TipDetailProps> = ({
                                 </List>
                             ) : null}
                         </Box>
+                        <Collapse in={isDirty} unmountOnExit>
+                            <Button 
+                                fullWidth
+                                startIcon={isPatching ? <CircularProgress size={16} color="inherit" /> : <Icon icon="save" />}
+                                variant="contained" 
+                                disabled={isPatching}
+                                onClick={handlePatch} 
+                                sx={{ mt: 2 }}>
+                                Save
+                            </Button>
+                        </Collapse>
                 </CardContent>
                 <CardActions>
                     <Button 
+                        fullWidth
                         startIcon={<Icon icon="left" />}
                         variant="text" onClick={handleTipsNavigate}>
                         Back

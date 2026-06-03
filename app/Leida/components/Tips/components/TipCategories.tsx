@@ -33,7 +33,7 @@ export default function TipCategories() {
     };
 
     return (
-        <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0, minWidth: 200 }}>
+        <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0, width: "100%" }}>
             <FormControl fullWidth>
                 <Select
                     id="tip-categories"

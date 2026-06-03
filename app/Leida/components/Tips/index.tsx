@@ -5,6 +5,7 @@ import { initTips } from './actions/initTips';
 import { useTips } from './hooks/useTips';
 import { setTips } from './actions/setTips';
 import { deleteTip } from './actions/deleteTip';
+import { patchTip } from './actions/patchTip';
 export {
     Tips,
     TipDetail,
@@ -13,4 +14,5 @@ export {
     useTips,
     setTips,
     deleteTip,
+    patchTip,
 };

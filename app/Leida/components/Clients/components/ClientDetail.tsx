@@ -140,7 +140,7 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
     const clientId = getStringValue(client?.client_id) || getStringValue(client?.id);
 
     if (!client) {
-        return <Alert severity="warning">Client details are not available.</Alert>;
+        return null;
     }
 
     const handleDelete = () => {

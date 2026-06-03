@@ -134,7 +134,7 @@ const TipNew: React.FC<T_TipNewProps> = ({ config }) => {
                     </IconButton>
                 </>}
                 title={<Typography variant="h6">
-                    New Tip
+                    New
                 </Typography>}  />
             <CardContent>
                 <Stack spacing={2}>

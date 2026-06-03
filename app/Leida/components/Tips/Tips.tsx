@@ -17,6 +17,7 @@ import { useDispatch } from '../../../NX/Uberedux';
 import { Icon, navigateTo } from '../../../NX/DesignSystem';
 import { useSupabaseAuth } from '../../../NX/Paywall';
 import { initTips, useTips } from '../Tips';
+import TipCategories from './components/TipCategories';
 
 export default function Tips() {
 
@@ -25,6 +26,15 @@ export default function Tips() {
     const dispatch = useDispatch();
     const tips = useTips();
     const list = Array.isArray(tips?.list) ? tips.list : [];
+    const selectedCategory = typeof tips?.category === 'string' ? tips.category.trim() : '';
+    const filteredList = selectedCategory
+        ? list.filter((tip: any) => {
+            const category = typeof tip?.data?.category === 'string'
+                ? tip.data.category.trim()
+                : '';
+            return category === selectedCategory;
+        })
+        : list;
 
     React.useEffect(() => {
         if (!tips?.initted && !tips?.loading && user?.id) {
@@ -56,14 +66,18 @@ export default function Tips() {
                     </Button>
                 </>}
             />
-            
+                <Box sx={{ display: 'flex', px: 2, mb: 1 }}>
+                    <Box sx={{ flexGrow: 1 }} />
+                    <TipCategories />
+                </Box>
+                
                 {tips?.error ? (
                     <Alert severity="error">{String(tips.error)}</Alert>
                 ) : (
                     <>
-                        {list.length === 0 ? null : (
+                        {filteredList.length === 0 ? null : (
                             <List dense>
-                                {list.map((tip: any) => {
+                                {filteredList.map((tip: any) => {
                                     const title = typeof tip?.title === 'string' && tip.title.trim()
                                         ? tip.title.trim()
                                         : 'Untitled tip';

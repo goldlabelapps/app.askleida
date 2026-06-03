@@ -13,6 +13,7 @@ import {
     Stack,
     Switch,
     TextField,
+    IconButton,
 } from '@mui/material';
 import { Icon, navigateTo } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
@@ -48,6 +49,10 @@ const TipNew: React.FC<T_TipNewProps> = ({ config }) => {
     const [form, setForm] = React.useState<T_FormState>(initialForm);
     const [error, setError] = React.useState<string | null>(null);
     const [submitting, setSubmitting] = React.useState(false);
+
+    const handleTipsNavigate = () => {
+        dispatch(navigateTo(router, '/tips'));
+    }
 
     const handleChange =
         (key: keyof T_FormState) =>
@@ -121,7 +126,12 @@ const TipNew: React.FC<T_TipNewProps> = ({ config }) => {
         <Box>
             <CardHeader 
                 avatar={<>
-                    <Icon icon="tips" color="primary" />
+                    <IconButton
+                        color="primary"
+                        onClick={handleTipsNavigate}
+                    >
+                        <Icon icon="tips" />
+                    </IconButton>
                 </>}
                 title={<Typography variant="h6">
                     New Tip

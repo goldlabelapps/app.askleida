@@ -158,7 +158,7 @@ const Leida: React.FC<any> = ({
             
             <main style={{ paddingBottom: 88 }}>
                 <Container sx={{mt:3 }}>
-                    <Box sx={{ mx: 3 }}>
+                    <Box sx={{ mx: 1 }}>
                     {isClientNewRoute ? (
                         <ClientNew config={config} />
                     ) : isClientsRoute && clientId ? (

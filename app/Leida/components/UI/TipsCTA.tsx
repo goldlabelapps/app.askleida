@@ -19,6 +19,15 @@ const TipsCTA: React.FC = () => {
             <CardActionArea onClick={handleClick} aria-label="Manage tips">
                 <CardContent>
                     <Typography variant="overline" color="text.secondary">
+                        Tips Management
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                        Create, review, and update your client tips in one place.
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
+        </Card>
+    );
 };
 
 export default TipsCTA;

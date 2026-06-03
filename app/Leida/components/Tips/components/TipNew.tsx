@@ -2,42 +2,24 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import {
-    Box,
     Alert,
+    Box,
     Button,
     Typography,
     CardActions,
     CardContent,
     CardHeader,
-    FormControlLabel,
-    Stack,
-    Switch,
-    TextField,
+    CircularProgress,
     IconButton,
 } from '@mui/material';
 import { Icon, navigateTo } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
+import { BulletEditor, EditableText } from '../../../../Leida';
+import { createTip } from '../../Tips';
 import { useSupabaseAuth } from '../../../../NX/Paywall';
-import { initTips } from '../../Tips';
 
 type T_TipNewProps = {
     config?: unknown;
-};
-
-type T_FormState = {
-    title: string;
-    category: string;
-    bullets: string;
-    isActive: boolean;
-    displayOrder: string;
-};
-
-const initialForm: T_FormState = {
-    title: '',
-    category: '',
-    bullets: '',
-    isActive: true,
-    displayOrder: '',
 };
 
 const TipNew: React.FC<T_TipNewProps> = ({ config }) => {
@@ -46,77 +28,57 @@ const TipNew: React.FC<T_TipNewProps> = ({ config }) => {
     const router = useRouter();
     const dispatch = useDispatch();
     const { user } = useSupabaseAuth();
-    const [form, setForm] = React.useState<T_FormState>(initialForm);
-    const [error, setError] = React.useState<string | null>(null);
     const [submitting, setSubmitting] = React.useState(false);
+    const [title, setTitle] = React.useState('');
+    const [bullets, setBullets] = React.useState<string[]>(['']);
+    const [error, setError] = React.useState<string | null>(null);
+
+    const normalizedTitle = title.trim();
+    const normalizedBullets = React.useMemo(
+        () => bullets.map((bullet) => bullet.trim()).filter((bullet) => bullet.length > 0),
+        [bullets],
+    );
+    const canSave = normalizedTitle.length > 0 && normalizedBullets.length > 0 && !submitting;
 
     const handleTipsNavigate = () => {
         dispatch(navigateTo(router, '/tips'));
-    }
-
-    const handleChange =
-        (key: keyof T_FormState) =>
-            (event: React.ChangeEvent<HTMLInputElement>) => {
-                setForm((current) => ({ ...current, [key]: event.target.value }));
-            };
-
-    const handleToggleActive = (_event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-        setForm((current) => ({ ...current, isActive: checked }));
     };
 
     const handleBack = () => {
         dispatch(navigateTo(router, '/tips'));
     };
 
-    const handleSubmit = async () => {
-        const title = form.title.trim();
-        const category = form.category.trim();
-        const displayOrder = form.displayOrder.trim();
-        const bullets = form.bullets
-            .split('\n')
-            .map((line) => line.trim())
-            .filter(Boolean);
-
-        if (!title) {
-            setError('Add a title before creating a tip.');
+    const handleSave = async () => {
+        if (!canSave) {
+            setError('Please add a title and at least one bullet before saving.');
             return;
         }
 
+        if (!user?.id) {
+            setError('You must be signed in to create a tip.');
+            return;
+        }
+
+        setSubmitting(true);
+        setError(null);
+
         try {
-            setSubmitting(true);
-            setError(null);
-
-            const response = await fetch('/api/tips', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
+            const success = await dispatch(createTip({
+                practitioner_id: user.id,
+                title: normalizedTitle,
+                data: {
+                    bullets: normalizedBullets,
                 },
-                body: JSON.stringify({
-                    practitioner_id: user?.id ?? null,
-                    title,
-                    data: {
-                        bullets,
-                        category: category || null,
-                        is_active: String(form.isActive),
-                        is_custom: 'true',
-                        display_order: displayOrder || null,
-                        practitioner_id: user?.id ?? null,
-                    },
-                }),
-            });
+            }));
 
-            const payload = await response.json().catch(() => null);
-            if (!response.ok) {
-                throw new Error(payload?.message || `Failed to create tip (${response.status})`);
+            if (success) {
+                handleTipsNavigate();
+            } else {
+                throw new Error('Failed to create tip');
             }
-
-            if (user?.id) {
-                await dispatch(initTips(user.id));
-            }
-            dispatch(navigateTo(router, '/tips'));
         } catch (e: unknown) {
-            setError(e instanceof Error ? e.message : String(e));
+            const message = e instanceof Error ? e.message : String(e);
+            setError(message || 'Failed to create tip');
         } finally {
             setSubmitting(false);
         }
@@ -137,44 +99,20 @@ const TipNew: React.FC<T_TipNewProps> = ({ config }) => {
                     New
                 </Typography>}  />
             <CardContent>
-                <Stack spacing={2}>
+                <Box sx={{ display: 'grid', gap: 2 }}>
                     {error ? <Alert severity="error">{error}</Alert> : null}
-                    <TextField
-                        variant="filled"
+                    <EditableText
                         label="Title"
-                        value={form.title}
-                        onChange={handleChange('title')}
-                        fullWidth
-                        required
+                        value={title}
+                        placeholder="Add title"
+                        onChange={setTitle}
                     />
-                    <TextField
-                        variant="filled"
-                        label="Category"
-                        value={form.category}
-                        onChange={handleChange('category')}
-                        fullWidth
+                    <BulletEditor
+                        value={bullets}
+                        onChange={setBullets}
+                        disabled={submitting}
                     />
-                    <TextField
-                        variant="filled"
-                        label="Bullets (one per line)"
-                        value={form.bullets}
-                        onChange={handleChange('bullets')}
-                        multiline
-                        minRows={4}
-                        fullWidth
-                    />
-                    <TextField
-                        variant="filled"
-                        label="Display order"
-                        value={form.displayOrder}
-                        onChange={handleChange('displayOrder')}
-                        fullWidth
-                    />
-                    <FormControlLabel
-                        control={<Switch checked={form.isActive} onChange={handleToggleActive} />}
-                        label="Active"
-                    />
-                </Stack>
+                </Box>
             </CardContent>
             <CardActions>
                 <Box sx={{ flexGrow: 1 }} />
@@ -184,10 +122,11 @@ const TipNew: React.FC<T_TipNewProps> = ({ config }) => {
                     Cancel
                 </Button>
                 <Button 
-                    startIcon={<Icon icon="save" />}
+                    startIcon={submitting ? <CircularProgress size={16} color="inherit" /> : <Icon icon="save" />}
                     variant="contained" 
-                    onClick={handleSubmit} disabled={submitting}>
-                    {submitting ? 'Creating...' : 'Create tip'}
+                    onClick={handleSave}
+                    disabled={!canSave}>
+                    {submitting ? 'Creating...' : 'Save'}
                 </Button>
             </CardActions>
         </Box>

@@ -26,6 +26,7 @@ export default function EditableText({
 }: EditableTextProps) {
 	return (
 		<TextField
+            sx={{ background: 'rgba(255, 255, 255, 0.8)' }}
 			fullWidth
 			variant={variant}
 			label={label}

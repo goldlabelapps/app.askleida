@@ -89,10 +89,9 @@ export default function Tips() {
                     </Button>
                 </>}
             />
-                <Box sx={{ display: 'flex', px: 2, mb: 1 }}>
-                    {/* <Box sx={{ flexGrow: 1 }} /> */}
+                {/* <Box sx={{ display: 'flex', px: 2, mb: 1 }}>
                     <TipCategories />
-                </Box>
+                </Box> */}
                 
                 {tips?.error ? null : (
                     <>

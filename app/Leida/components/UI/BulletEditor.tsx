@@ -61,8 +61,7 @@ export default function BulletEditor({
 		<Box sx={{ mt: 2 }}>
 			<Box sx={{ display: 'flex', alignItems: 'center', 
                 justifyContent: 'space-between', mb: 1 }}>
-                <Box sx={{ flexGrow: 1 }} />
-				<Button variant="text" startIcon={<Icon icon="add" />} onClick={handleAddBullet} disabled={disabled}>
+    			<Button variant="text" startIcon={<Icon icon="add" />} onClick={handleAddBullet} disabled={disabled}>
 					Add bullet
 				</Button>
 			</Box>

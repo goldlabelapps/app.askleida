@@ -81,12 +81,12 @@ export async function POST(req: Request) {
   };
 
   const payload: T_Tip = {
-    tip_id: body.tip_id,
+    tip_id: body.tip_id?.trim() || crypto.randomUUID(),
     practitioner_id: body.practitioner_id,
     title: body.title,
     data: normalizedData,
-    created: body.created,
-    updated: body.updated,
+    created: body.created || new Date().toISOString(),
+    updated: body.updated || new Date().toISOString(),
   };
 
   const { data, error } = await supabase.from('tips').insert([payload]).select();
@@ -94,6 +94,7 @@ export async function POST(req: Request) {
     const res = makeRes({ tenant, message: error.message, severity: 'error' });
     return NextResponse.json(res, { status: 500 });
   }
+
   const res = makeRes({ tenant, message: 'Tip created', severity: 'success', data });
   return NextResponse.json(res);
 }

@@ -43,7 +43,10 @@ export default function Clients() {
         <Box>
             <CardHeader 
                 avatar={<>
-                    {clients?.loading ? <CircularProgress size={20} /> : <Icon icon="clients" color="primary" />}
+                    {clients?.loading ? <CircularProgress size={20} /> : 
+                    <Box sx={{mt:1, ml:1}}>
+                        <Icon icon="clients" color="primary" />
+                    </Box>}
                 </>}
                 title={<Typography variant="h6">{titleText}</Typography>}
                 action={<>
@@ -52,7 +55,7 @@ export default function Clients() {
                         color="primary"
                         onClick={handleNew}
                     >
-                        New client
+                        New
                     </Button>
                 </>}
             />

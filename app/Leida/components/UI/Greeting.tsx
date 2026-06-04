@@ -9,14 +9,12 @@ import {
 } from '@mui/material';
 import { getTimeGreeting } from '../../../Leida';
 import { CleverText } from '../../../NX/DesignSystem';
-import { AnimateFlashLogo, LightningBolt, MovieClip } from '../../../NX/Flash';
 import { usePractitioner } from '../Practitioner';
 import GameMenu from './GameMenu';
 
 const Greeting: React.FC = () => {
     const practitioner = usePractitioner();
     const [showGameMenu, setShowGameMenu] = React.useState(false);
-    const [showLightning, setShowLightning] = React.useState(false);
     const gameMenuDelayTimeoutRef = React.useRef<number | null>(null);
     const gameMenuAnimationFrameRef = React.useRef<number | null>(null);
 
@@ -30,7 +28,6 @@ const Greeting: React.FC = () => {
                 window.cancelAnimationFrame(gameMenuAnimationFrameRef.current);
             }
 
-            gsap.killTweensOf('#game_menu_lightning');
             gsap.killTweensOf('#game_menu_box');
         };
     }, []);
@@ -40,36 +37,29 @@ const Greeting: React.FC = () => {
             return;
         }
 
-        setShowLightning(true);
-
         gameMenuAnimationFrameRef.current = window.requestAnimationFrame(() => {
-            const flashAnim = new AnimateFlashLogo('game_menu_box', () => {
-                gsap.to('#game_menu_lightning', {
-                    opacity: 0,
-                    duration: 0.25,
-                    ease: 'power1.out',
-                    onComplete: () => setShowLightning(false),
-                });
-            });
-
-            flashAnim.init();
-
             gsap.fromTo(
-                '#game_menu_lightning',
+                '#game_menu_box',
                 {
                     opacity: 0,
-                    scale: 0.5,
-                    rotate: -20,
-                    filter: 'brightness(2)',
+                    scaleX: 0.72,
+                    scaleY: 0.86,
+                    transformOrigin: 'center center',
                 },
                 {
-                    opacity: 0.9,
-                    scale: 1.15,
-                    rotate: 15,
-                    duration: 0.16,
-                    yoyo: true,
-                    repeat: 3,
-                    ease: 'power2.inOut',
+                    opacity: 1,
+                    scaleX: 1.06,
+                    scaleY: 1.02,
+                    duration: 0.22,
+                    ease: 'power2.out',
+                    onComplete: () => {
+                        gsap.to('#game_menu_box', {
+                            scaleX: 1,
+                            scaleY: 1,
+                            duration: 0.12,
+                            ease: 'power1.out',
+                        });
+                    },
                 },
             );
         });
@@ -78,7 +68,7 @@ const Greeting: React.FC = () => {
             if (gameMenuAnimationFrameRef.current !== null) {
                 window.cancelAnimationFrame(gameMenuAnimationFrameRef.current);
             }
-            gsap.killTweensOf('#game_menu_lightning');
+            gsap.killTweensOf('#game_menu_box');
         };
     }, [showGameMenu]);
 
@@ -111,18 +101,6 @@ const Greeting: React.FC = () => {
                         }}
                     />
                     <Box sx={{ width: '100%', position: 'relative' }}>
-                        {showLightning ? (
-                            <MovieClip
-                                id="game_menu_lightning"
-                                width={180}
-                                height={240}
-                                pos="top-middle"
-                                zIndex={3}
-                                style={{ pointerEvents: 'none', opacity: 0 }}
-                            >
-                                <LightningBolt />
-                            </MovieClip>
-                        ) : null}
                         <Collapse in={showGameMenu} timeout={380} sx={{ width: '100%', position: 'relative', zIndex: 2 }}>
                             <Box id="game_menu_box">
                                 <GameMenu />

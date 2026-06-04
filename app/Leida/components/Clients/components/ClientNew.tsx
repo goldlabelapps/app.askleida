@@ -3,6 +3,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import {
     Box,
+    Grid,
     Alert,
     Button,
     Collapse,
@@ -17,7 +18,7 @@ import { Icon, navigateTo } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
 import { useSupabaseAuth } from '../../../../NX/Paywall';
 import { Editable } from '../../../../Leida';
-import { initClients } from '../../Clients';
+import { createClient } from '../../Clients';
 
 type T_ClientNewProps = {
     config?: unknown;
@@ -90,41 +91,12 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
             setSubmitting(true);
             setError(null);
 
-            const response = await fetch('/api/clients', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                },
-                body: JSON.stringify({
-                    practitioner_id: user?.id ?? null,
-                    title: [firstName, lastName].filter(Boolean).join(' ') || email || 'New client',
-                    first_name: firstName || null,
-                    last_name: lastName || null,
-                    email: email || null,
-                    data: {
-                        first_name: firstName || null,
-                        last_name: lastName || null,
-                        email: email || null,
-                    },
-                }),
-            });
-
-            const payload = await response.json().catch(() => null);
-            if (!response.ok) {
-                throw new Error(payload?.message || `Failed to create client (${response.status})`);
-            }
-
-            if (user?.id) {
-                await dispatch(initClients(user.id));
-            }
-
-            const newClientId =
-                payload?.data?.client_id ||
-                payload?.data?.id ||
-                payload?.client_id ||
-                payload?.id ||
-                null;
+            const newClientId = await dispatch(createClient({
+                practitioner_id: user?.id ?? null,
+                first_name: firstName || null,
+                last_name: lastName || null,
+                email: email || null,
+            }));
 
             dispatch(navigateTo(router, newClientId ? `/clients/${newClientId}` : '/clients'));
         } catch (e: unknown) {
@@ -146,28 +118,42 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
             <CardContent>
                 <Stack spacing={2}>
                     {error ? <Alert severity="error">{error}</Alert> : null}
-                    <Editable
-                        variant="filled"
-                        label="First name"
-                        value={form.first_name}
-                        onChange={handleChange('first_name')}
-                        required
-                        autoFocus
-                    />
-                    <Editable
-                        variant="filled"
-                        label="Last name"
-                        value={form.last_name}
-                        onChange={handleChange('last_name')}
-                        required
-                    />
-                    <Editable
-                        variant="filled"
-                        label="Email"
-                        value={form.email}
-                        onChange={handleChange('email')}
-                        required
-                    />
+                    
+                    <Grid container spacing={2}>
+                        <Grid size={{xs: 12, sm: 6}}>
+                            <Editable
+                                variant="outlined"
+                                label="First name"
+                                value={form.first_name}
+                                onChange={handleChange('first_name')}
+                                required
+                                autoFocus
+                            />
+                        </Grid>
+                        <Grid size={{ xs: 12, sm: 6 }}>
+                            <Editable
+                                variant="outlined"
+                                label="Last name"
+                                value={form.last_name}
+                                onChange={handleChange('last_name')}
+                                required
+                            />
+                        </Grid>
+                        <Grid size={{ xs: 12 }}>
+                            <Editable
+                                variant="outlined"
+                                label="Email"
+                                value={form.email}
+                                onChange={handleChange('email')}
+                                required
+                            />
+                        </Grid>
+                        
+                    </Grid>
+                    
+                    
+                    
+                    
                 </Stack>
             </CardContent>
             <Collapse in={isFormComplete || submitting} unmountOnExit>

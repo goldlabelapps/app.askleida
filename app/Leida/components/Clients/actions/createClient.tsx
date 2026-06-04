@@ -114,7 +114,12 @@ export const createClient = (client: Partial<T_Client>): any =>
                 }),
             );
 
-            return true;
+            const newClientId =
+                (createdClient as Record<string, unknown>).client_id ||
+                (createdClient as Record<string, unknown>).id ||
+                null;
+
+            return typeof newClientId === 'string' ? newClientId : null;
         } catch (e: unknown) {
             const msg = e instanceof Error ? e.message : String(e);
             dispatch(setFeedback({
@@ -123,6 +128,6 @@ export const createClient = (client: Partial<T_Client>): any =>
                 severity: 'error',
             }));
             dispatch(setUbereduxKey({ key: 'error', value: msg }));
-            return false;
+            return null;
         }
     };

@@ -213,8 +213,8 @@ export const patchClient = (
 
                 return {
                     ...listClient,
-                    updated: updatedNow,
                     ...updatedClient,
+                    updated: updatedNow,
                 };
             });
 

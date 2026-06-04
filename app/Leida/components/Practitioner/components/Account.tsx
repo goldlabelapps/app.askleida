@@ -8,14 +8,13 @@ import {
 	DialogActions,
 	DialogContent,
 	DialogTitle,
-	Divider,
 	IconButton,
 	Stack,
 	Typography,
 	useMediaQuery,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { Icon } from '../../../../NX/DesignSystem';
+import { ConfirmAction, Icon } from '../../../../NX/DesignSystem';
 import { setPaywall, useSupabaseAuth } from '../../../../NX/Paywall';
 import { useDispatch } from '../../../../NX/Uberedux';
 import { setPractitioner } from '..';
@@ -41,12 +40,14 @@ export default function Account() {
 	const dispatch = useDispatch();
 	const practitioner = usePractitioner();
 	const { user } = useSupabaseAuth();
+    const title = practitioner?.title || 'Practitioner';
 	const profile = getPractitionerProfile(practitioner?.data ?? null);
 	const open = Boolean(practitioner?.accountOpen);
 	const name = String(
 		profile?.display_name || profile?.title || user?.user_metadata?.full_name || 'Your account',
 	);
 	const email = String(profile?.email || user?.email || 'No email available');
+	const [confirmSignoutOpen, setConfirmSignoutOpen] = React.useState(false);
 	const avatarSource =
 		typeof profile?.avatar === 'string' && profile.avatar.trim()
 			? profile.avatar.trim()
@@ -56,7 +57,16 @@ export default function Account() {
 		dispatch(setPractitioner('accountOpen', false));
 	};
 
-	const handleSignout = async () => {
+	const handleRequestSignout = () => {
+		setConfirmSignoutOpen(true);
+	};
+
+	const handleCancelSignout = () => {
+		setConfirmSignoutOpen(false);
+	};
+
+	const handleConfirmSignout = async () => {
+		setConfirmSignoutOpen(false);
 		handleClose();
 		await supabase.auth.signOut();
 		dispatch(setPaywall('supabaseAuth', null));
@@ -79,79 +89,75 @@ export default function Account() {
 				}),
 			}}
 		>
-			<DialogTitle sx={{ pr: 7 }}>
+			<DialogTitle sx={{ pr: 14 }}>
 				<Stack direction="row" spacing={2} alignItems="center">
 					<Avatar src={avatarSource} sx={{ width: 56, height: 56 }}>
 						{!avatarSource ? <Icon icon="clients" color="primary" /> : null}
 					</Avatar>
 					<Box>
-						<Typography variant="h5">{name}</Typography>
+						<Typography variant="h5">
+                            {name}
+                        </Typography>
 						<Typography variant="body2" color="text.secondary">
-							Practitioner account
+                            {email}
 						</Typography>
 					</Box>
 				</Stack>
-
+			<Box
+				sx={{
+					position: 'absolute',
+					right: 16,
+					top: 16,
+					display: 'flex',
+					alignItems: 'center',
+					gap: 1,
+				}}
+			>
+                <IconButton 
+                    color="primary"
+                    onClick={handleRequestSignout} 
+                    aria-label="sign out">
+                    <Icon icon="signout" />
+                </IconButton>
 				<IconButton
+                    color="primary"
 					onClick={handleClose}
 					aria-label="close account dialog"
-					sx={{ position: 'absolute', right: 16, top: 16 }}
 				>
-					<Icon icon="cancel" />
+					<Icon icon="close" />
 				</IconButton>
+				
+			</Box>
+                
 			</DialogTitle>
 
-			<DialogContent dividers>
-				<Stack spacing={3}>
-					<Box>
-						<Typography variant="overline" color="text.secondary">
-							Personal details
-						</Typography>
-						<Typography variant="body1">{name}</Typography>
-						<Typography variant="body2" color="text.secondary">
-							{email}
-						</Typography>
-					</Box>
-
-					<Divider />
-
-					<Box>
-						<Typography variant="overline" color="text.secondary">
-							Settings
-						</Typography>
-						<Typography variant="body2" color="text.secondary">
-							This dialog is ready for account controls such as profile updates, preferences,
-							and practitioner-specific settings.
-						</Typography>
-					</Box>
-
-					<Divider />
-
-					<Box>
-						<Typography variant="overline" color="text.secondary">
-							Status
-						</Typography>
-						<Typography variant="body2" color="text.secondary">
-							{practitioner?.loading
-								? 'Loading practitioner details.'
-								: practitioner?.error
-									? String(practitioner.error)
-									: 'Practitioner details loaded.'}
-						</Typography>
-					</Box>
-				</Stack>
+			<DialogContent>
+                <Box>
+                    <pre>
+                        {JSON.stringify(practitioner?.data?.data, null, 2)}
+                    </pre>
+                </Box>
 			</DialogContent>
 
-			<DialogActions sx={{ px: 3, py: 2 }}>
+			<DialogActions sx={{ px: 2, py: 2 }}>
 				<Button
-					onClick={handleSignout}
+                    fullWidth
 					color="primary"
-					variant="contained"
-					startIcon={<Icon icon="signout" />}
+					variant="outlined"
+					startIcon={<Icon icon="close" />}
 				>
-					Sign out
+					Close
 				</Button>
 			</DialogActions>
+
+			<ConfirmAction
+				open={confirmSignoutOpen}
+				icon="signout"
+				title="Sign out?"
+				body={`You are signed in as ${email}. Do you want to sign out now?`}
+				handleConfirm={handleConfirmSignout}
+				handleClose={handleCancelSignout}
+			/>
 		</Dialog>
 	);
 }

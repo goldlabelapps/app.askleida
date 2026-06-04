@@ -81,7 +81,7 @@ export default function ConfirmAction({
 
             <DialogActions>
                 <Button 
-                    startIcon={<Icon icon="cancel" />}
+                    startIcon={<Icon icon="close" />}
                     onClick={onClose} 
                     color="inherit" 
                     disabled={isSubmitting}>

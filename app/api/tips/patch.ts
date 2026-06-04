@@ -9,17 +9,36 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 // PATCH /api/tips - Update a tip (expects { tip_id, ...fields })
 export async function PATCH(req: Request) {
-  const body = await req.json();
+  let body: Record<string, unknown>;
+  try {
+    const parsed = await req.json();
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      const res = makeRes({ tenant, message: 'Request body must be a JSON object', severity: 'error' });
+      return NextResponse.json(res, { status: 400 });
+    }
+
+    body = parsed as Record<string, unknown>;
+  } catch {
+    const res = makeRes({ tenant, message: 'Invalid JSON body', severity: 'error' });
+    return NextResponse.json(res, { status: 400 });
+  }
+
   const { tip_id, ...fields } = body;
-  if (!tip_id) {
+  const tipId = typeof tip_id === 'string' ? tip_id.trim() : '';
+  if (!tipId) {
     const res = makeRes({ tenant, message: 'Missing tip_id', severity: 'error' });
+    return NextResponse.json(res, { status: 400 });
+  }
+
+  if (fields.data !== undefined && fields.data !== null && typeof fields.data !== 'object') {
+    const res = makeRes({ tenant, message: 'data must be a JSON object', severity: 'error' });
     return NextResponse.json(res, { status: 400 });
   }
 
   const { data: existingRow, error: existingError } = await supabase
     .from('tips')
     .select('data')
-    .eq('tip_id', tip_id)
+    .eq('tip_id', tipId)
     .single();
 
   if (existingError) {
@@ -72,7 +91,7 @@ export async function PATCH(req: Request) {
   const { data, error } = await supabase
     .from('tips')
     .update(updatePayload)
-    .eq('tip_id', tip_id)
+    .eq('tip_id', tipId)
     .select();
   if (error) {
     const res = makeRes({ tenant, message: error.message, severity: 'error' });

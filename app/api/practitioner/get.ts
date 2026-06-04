@@ -13,22 +13,33 @@ export async function GET(req: Request) {
   const id = url?.searchParams.get('id');
   const practitionerId = url?.searchParams.get('practitioner_id');
 
-  if (id || practitionerId) {
-    const lookupId = id ?? practitionerId;
+  if (id) {
+    // Get single practitioner by id
     const { data, error } = await supabase
       .from('practitioners')
       .select('*')
-      .eq('practitioner_id', lookupId)
-      .maybeSingle();
+      .eq('practitioner_id', id)
+      .single();
+    if (error) {
+      const res = makeRes({ tenant, message: error.message, severity: 'error' });
+      return NextResponse.json(res, { status: 404 });
+    }
+    const res = makeRes({ tenant, message: 'Fetched practitioner', severity: 'success', data });
+    return NextResponse.json(res);
+  }
+
+  if (practitionerId) {
+    // List practitioners for a specific practitioner id
+    const { data, error } = await supabase
+      .from('practitioners')
+      .select('*')
+      .eq('practitioner_id', practitionerId)
+      .order('updated', { ascending: false, nullsFirst: false });
     if (error) {
       const res = makeRes({ tenant, message: error.message, severity: 'error' });
       return NextResponse.json(res, { status: 500 });
     }
-    if (!data) {
-      const res = makeRes({ tenant, message: 'Practitioner not found', severity: 'error' });
-      return NextResponse.json(res, { status: 404 });
-    }
-    const res = makeRes({ tenant, message: 'Fetched practitioner', severity: 'success', data });
+    const res = makeRes({ tenant, message: 'Fetched practitioners by practitioner_id', severity: 'success', data });
     return NextResponse.json(res);
   }
 

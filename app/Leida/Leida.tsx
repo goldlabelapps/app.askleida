@@ -20,9 +20,11 @@ import {
     Clients,
     ClientDetail,
     ClientNew,
+    Products,
+    ProductDetail,
+    ProductNew,
     TipDetail,
     TipNew,
-    // Products,
     Practitioner,
     Recommendations,
     Tips,
@@ -30,6 +32,7 @@ import {
     Greeting,
 } from '../Leida';
 import { initClients, useClients } from './components/Clients';
+import { initProducts, useProducts } from './components/Products';
 import { initTips, useTips } from './components/Tips';
 import { setPaywall, useSupabaseAuth } from '../NX/Paywall';
 import { supabase } from '../NX/lib/supabase';
@@ -43,6 +46,7 @@ const Leida: React.FC<any> = ({
     const { user } = useSupabaseAuth();
     const pathname = usePathname();
     const clientsState = useClients();
+    const productsState = useProducts();
     const tipsState = useTips();
     const designSystem = useDesignSystem();
     const defaultTheme = config?.cartridges?.designSystem?.defaultTheme;
@@ -86,16 +90,22 @@ const Leida: React.FC<any> = ({
     const isRecommendationsRoute = routeParts[0] === 'recommendations';
     const isTipsRoute = routeParts[0] === 'tips';
     const isClientNewRoute = isClientsRoute && routeParts[1] === 'new';
+    const isProductNewRoute = isProductsRoute && routeParts[1] === 'new';
     const isTipNewRoute = isTipsRoute && routeParts[1] === 'new';
     const clientId = isClientsRoute && routeParts[1] ? routeParts[1] : null;
+    const productId = isProductsRoute && routeParts[1] ? routeParts[1] : null;
     const tipId = isTipsRoute && routeParts[1] ? routeParts[1] : null;
     const clientList = Array.isArray(clientsState?.list) ? clientsState.list : [];
+    const productList = Array.isArray(productsState?.list) ? productsState.list : [];
     const tipList = Array.isArray(tipsState?.list) ? tipsState.list : [];
     const selectedClient = clientId
         ? clientList.find((client: any) => client?.client_id === clientId) || null
         : null;
     const selectedTip = tipId
         ? tipList.find((tip: any) => tip?.tip_id === tipId) || null
+        : null;
+    const selectedProduct = productId
+        ? productList.find((product: any) => product?.product_id === productId) || null
         : null;
 
     React.useEffect(() => {
@@ -109,6 +119,12 @@ const Leida: React.FC<any> = ({
             dispatch(initTips(user.id));
         }
     }, [dispatch, isTipsRoute, user?.id, tipsState?.initted, tipsState?.loading]);
+
+    React.useEffect(() => {
+        if (isProductsRoute && user?.id && !productsState?.initted && !productsState?.loading) {
+            dispatch(initProducts(user.id));
+        }
+    }, [dispatch, isProductsRoute, user?.id, productsState?.initted, productsState?.loading]);
 
     const bottomNavValue = isClientsRoute
         ? 'clients'
@@ -127,12 +143,12 @@ const Leida: React.FC<any> = ({
             href: '/clients',
         },
 
-        // {
-        //     label: 'Products',
-        //     value: 'products',
-        //     icon: 'products' as const,
-        //     href: '/products',
-        // },
+        {
+            label: 'Products',
+            value: 'products',
+            icon: 'products' as const,
+            href: '/products',
+        },
         
         {
             label: 'Tips',
@@ -163,12 +179,16 @@ const Leida: React.FC<any> = ({
                         <ClientDetail config={config} client={selectedClient} />
                     ) : isClientsRoute ? (
                         <Clients />
+                    ) : isProductNewRoute ? (
+                        <ProductNew config={config} />
+                    ) : isProductsRoute && productId ? (
+                        <ProductDetail config={config} product={selectedProduct} />
+                    ) : isProductsRoute ? (
+                        <Products />
                     ) : isTipNewRoute ? (
                         <TipNew config={config} />
                     ) : isTipsRoute && tipId ? (
                         <TipDetail tip={selectedTip} />
-                    // ) : isProductsRoute ? (
-                    //     <Products />
                     ) : isPractitionerRoute ? (
                         <Practitioner />
                     ) : isTipsRoute ? (

@@ -12,7 +12,6 @@ export { default as Clients } from './components/Clients/Clients';
 export { default as ClientDetail } from './components/Clients/components/ClientDetail';
 export { default as ClientNew } from './components/Clients/components/ClientNew';
 export { default as Recommendations } from './components/Recommendations/Recommendations';
-export { default as Products } from './components/Products/Products';
 export { default as Practitioner } from './components/Practitioner/Practitioner';
 export { default as Tips } from './components/Tips/Tips';
 export { default as TipDetail } from './components/Tips/components/TipDetail';

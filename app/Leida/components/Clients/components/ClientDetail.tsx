@@ -5,10 +5,11 @@ import { useRouter } from 'next/navigation';
 import {
     Box,
     Button,
+    Fab,
     CardActions,
     CardContent,
     CardHeader,
-    CircularProgress,
+    Grid,
     Collapse,
     IconButton,
     ListItem,
@@ -95,6 +96,9 @@ const getArrayValues = (value: unknown): string[] => {
     return stringValue ? [stringValue] : [];
 };
 
+const SKIN_TYPE_OPTIONS = ['Dry', 'Oily', 'Combination', 'Normal'] as const;
+const CONCERN_TAG_OPTIONS = ['acne', 'barrier damage', 'redness', 'pigmentation', 'dehydration', 'aging'] as const;
+
 const cloneClient = (value: T_ClientRecord | null | undefined): T_ClientRecord | null => {
     if (!value) {
         return null;
@@ -163,7 +167,6 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
     const isPregnant = getBooleanValue(clientData.is_pregnant ?? activeClient?.is_pregnant);
     const isBreastfeeding = getBooleanValue(clientData.is_breastfeeding ?? activeClient?.is_breastfeeding);
     const concernTags = getArrayValues(clientData.concern_tags ?? activeClient?.concern_tags);
-    const concernTagsText = concernTags.join(', ');
     const clientId = getStringValue(activeClient?.client_id) || getStringValue(activeClient?.id);
 
     if (!activeClient) {
@@ -278,23 +281,19 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
         });
     };
 
-    const handleConcernTagsChange = (nextValue: string) => {
+    const handleConcernTagsChange = (nextValue: string[]) => {
         setDraftClient((currentClient) => {
             if (!currentClient) {
                 return currentClient;
             }
 
             const currentData = getDataObject(currentClient.data);
-            const nextTags = nextValue
-                .split(',')
-                .map((tag) => tag.trim())
-                .filter((tag) => tag.length > 0);
 
             return {
                 ...currentClient,
                 data: {
                     ...currentData,
-                    concern_tags: nextTags,
+                    concern_tags: nextValue,
                 },
             };
         });
@@ -319,76 +318,111 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
     };
 
     return (
-        <Box>
-            <CardHeader
-                avatar={<>
-                    <IconButton color="primary" onClick={handleClientsNavigate}>
-                        <Icon icon="clients" />
-                    </IconButton>
-                </>}
-                action={<>
-                    <Button
-                        endIcon={<Icon icon="add" />}
-                        color="primary"
-                        onClick={handleNew}>
-                        New
-                    </Button>
-                    <IconButton color="primary" onClick={handleOpenDeleteConfirm}>
-                        <Icon icon="delete" />
-                    </IconButton>
-                </>}
-            />
+        <>
+            <Box>
+                <Collapse in={isDirty} unmountOnExit>
+                    <Box
+                        sx={{
+                            position: 'fixed',
+                            right: { xs: 16, sm: 24 },
+                            bottom: { xs: 16, sm: 24 },
+                            zIndex: (theme) => theme.zIndex.appBar + 1,
+                        }}
+                    >
 
-            <CardContent>
-                <Stack spacing={2}>
-                    <Editable label="First name" value={firstName} placeholder="Add first name" onChange={(value) => handleDataChange('first_name', value)} />
-                    <Editable label="Last name" value={lastName} placeholder="Add last name" onChange={(value) => handleDataChange('last_name', value)} />
-                    <Editable label="Email" value={email} placeholder="Add email" onChange={(value) => handleDataChange('email', value)} />
-                    <Editable label="Date of birth" value={dateOfBirth} editableType="date" onChange={(value) => handleDataChange('date_of_birth', value)} />
-                    <Editable label="Skin type" value={skinType} placeholder="Add skin type" onChange={(value) => handleDataChange('skin_type', value)} />
-                    <Editable label="Pregnant" value={isPregnant} onChange={(value) => handleBooleanDataChange('is_pregnant', value === true)} />
-                    <Editable label="Breastfeeding" value={isBreastfeeding} onChange={(value) => handleBooleanDataChange('is_breastfeeding', value === true)} />
-                    <Editable label="Concern tags" value={concernTagsText} placeholder="Acne, dryness, sensitivity" onChange={handleConcernTagsChange} />
-                    <Editable label="Current medication" value={medication} placeholder="Add current medication" multiline minRows={2} onChange={(value) => handleDataChange('current_medication', value)} />
-                    <Editable label="Skin overview" value={skinOverview} placeholder="Add skin overview" multiline minRows={3} onChange={(value) => handleDataChange('skin_overview', value)} />
-                    <Editable label="Personal notes" value={personalNotes} placeholder="Add personal notes" multiline minRows={3} onChange={(value) => handleDataChange('personal_notes', value)} />
-
-                    <Collapse in={isDirty} unmountOnExit>
-                        <Button
-                            fullWidth
-                            startIcon={isPatching ? <CircularProgress size={16} color="inherit" /> : <Icon icon="save" />}
-                            variant="contained"
+                        <Fab
+                            color="primary"
                             disabled={isPatching}
                             onClick={handlePatch}
-                            sx={{ mt: 2 }}
+                            
                         >
-                            Save
+                            <Icon icon="save" />
+                        </Fab>
+                    </Box>
+                </Collapse>
+
+                <CardHeader
+                    avatar={<>
+                        <IconButton color="primary" onClick={handleClientsNavigate}>
+                            <Icon icon="clients" />
+                        </IconButton>
+                    </>}
+                    action={<>
+                        <Button
+                            endIcon={<Icon icon="add" />}
+                            color="primary"
+                            onClick={handleNew}>
+                            New
                         </Button>
-                    </Collapse>
+                        <IconButton color="primary" onClick={handleOpenDeleteConfirm}>
+                            <Icon icon="delete" />
+                        </IconButton>
+                    </>}
+                />
 
-                </Stack>
-            </CardContent>
+                <CardContent>
+                    <Grid container spacing={4}>
+                        <Grid size={{xs: 12, sm: 6}}>
+                           
+                            <Editable label="First name" value={firstName} placeholder="Add first name" onChange={(value) => handleDataChange('first_name', value)} />
+                            <Box sx={{ my: 2 }} />
+                            <Editable label="Last name" value={lastName} placeholder="Add last name" onChange={(value) => handleDataChange('last_name', value)} />
+                            <Box sx={{ my: 2 }} />
+                            <Editable label="Email" value={email} placeholder="Add email" onChange={(value) => handleDataChange('email', value)} />
+                            <Box sx={{ my: 2 }} />
+                            <Editable label="Current medication" value={medication} placeholder="Add current medication" multiline minRows={2} onChange={(value) => handleDataChange('current_medication', value)} />
+                            <Box sx={{ my: 2 }} />
+                            <Editable label="Skin overview" value={skinOverview} placeholder="Add skin overview" multiline minRows={3} onChange={(value) => handleDataChange('skin_overview', value)} />
+                           
+                        </Grid>
+                        <Grid size={{ xs: 12, sm: 6 }}>
+                           
+                            <Box sx={{mx: 1}}>
+                                <Editable 
+                                    label="Skin type" 
+                                    value={skinType} 
+                                    editableType="select" 
+                                    variant="standard"
+                                    placeholder="Select skin type" options={SKIN_TYPE_OPTIONS} 
+                                    onChange={(value) => handleDataChange('skin_type', value)} />
+                                <Box sx={{ my: 2 }} />
+                                <Editable label="Date of birth" value={dateOfBirth} editableType="date" onChange={(value) => handleDataChange('date_of_birth', value)} />
+                            </Box>
+                            <Box sx={{ my: 2 }} />
+                            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, px: 1.5 }}>
+                                <Editable label="Pregnant" value={isPregnant} onChange={(value) => handleBooleanDataChange('is_pregnant', value === true)} />
+                                <Editable label="Breastfeeding" value={isBreastfeeding} onChange={(value) => handleBooleanDataChange('is_breastfeeding', value === true)} />
+                            </Box>
+                            <Box sx={{ my: 2 }} />
+                            <Editable value={concernTags} editableType="chips" options={CONCERN_TAG_OPTIONS} onChange={handleConcernTagsChange} />
+                            <Box sx={{ my: 2 }} />
+                            <Editable label="Personal notes" value={personalNotes} placeholder="Add personal notes" multiline minRows={3} onChange={(value) => handleDataChange('personal_notes', value)} />
+                            
+                        </Grid>
+                    </Grid>
+                </CardContent>
 
-            <CardActions>
-                <Button
-                    fullWidth
-                    startIcon={<Icon icon="left" />}
-                    variant="text"
-                    onClick={handleClientsNavigate}
-                >
-                    Back
-                </Button>
-            </CardActions>
+                <CardActions>
+                    <Button
+                        fullWidth
+                        startIcon={<Icon icon="left" />}
+                        variant="text"
+                        onClick={handleClientsNavigate}
+                    >
+                        Back
+                    </Button>
+                </CardActions>
 
-            <ConfirmAction
-                open={confirmOpen}
-                icon="delete"
-                title="Delete Client?"
-                body="Are you sure you want to delete this client? This action cannot be undone."
-                handleConfirm={handleDelete}
-                handleClose={handleCloseDeleteConfirm}
-            />
-        </Box>
+                <ConfirmAction
+                    open={confirmOpen}
+                    icon="delete"
+                    title="Delete Client?"
+                    body="Are you sure you want to delete this client? This action cannot be undone."
+                    handleConfirm={handleDelete}
+                    handleClose={handleCloseDeleteConfirm}
+                />
+            </Box>
+        </>
     );
 };
 

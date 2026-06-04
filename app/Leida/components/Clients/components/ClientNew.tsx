@@ -6,6 +6,7 @@ import {
     Alert,
     Button,
     Collapse,
+    Fab,
     Typography,
     CardActions,
     CardContent,
@@ -117,7 +118,15 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
             if (user?.id) {
                 await dispatch(initClients(user.id));
             }
-            dispatch(navigateTo(router, '/clients'));
+
+            const newClientId =
+                payload?.data?.client_id ||
+                payload?.data?.id ||
+                payload?.client_id ||
+                payload?.id ||
+                null;
+
+            dispatch(navigateTo(router, newClientId ? `/clients/${newClientId}` : '/clients'));
         } catch (e: unknown) {
             setError(e instanceof Error ? e.message : String(e));
         } finally {
@@ -161,19 +170,24 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                     />
                 </Stack>
             </CardContent>
-            <CardActions>
-                <Collapse in={isFormComplete || submitting} unmountOnExit sx={{ width: '100%' }}>
-                    <Button 
-                        fullWidth
-                        startIcon={<Icon icon="save" />}
-                        variant="contained" 
-                        onClick={handleSubmit}
+            <Collapse in={isFormComplete || submitting} unmountOnExit>
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        right: { xs: 16, sm: 24 },
+                        bottom: { xs: 16, sm: 24 },
+                        zIndex: (theme) => theme.zIndex.appBar + 1,
+                    }}
+                >
+                    <Fab
+                        color="primary"
                         disabled={submitting}
+                        onClick={handleSubmit}
                     >
-                        {submitting ? 'Creating...' : 'Create client'}
-                    </Button>
-                </Collapse>
-            </CardActions>
+                        <Icon icon="save" />
+                    </Fab>
+                </Box>
+            </Collapse>
             <CardActions>
                 <Button
                     fullWidth

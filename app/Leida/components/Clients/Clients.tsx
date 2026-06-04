@@ -57,9 +57,7 @@ export default function Clients() {
                 </>}
             />
             
-                {clients?.loading ? (
-                    <LinearProgress />
-                ) : clients?.error ? (
+                {clients?.loading ? null : clients?.error ? (
                     <Alert severity="error">{String(clients.error)}</Alert>
                 ) : (
                     <>
@@ -69,6 +67,10 @@ export default function Clients() {
                                 const lastName = client?.data?.last_name || client?.last_name || '';
                                 const fullName = `${firstName} ${lastName}`.trim() || 'Unnamed client';
                                 const clientId = client?.client_id;
+                                const dateOfBirth = client?.data?.date_of_birth || client?.date_of_birth || '';
+                                const subheader = typeof dateOfBirth === 'string' && dateOfBirth.trim().length > 0
+                                    ? ageFromDoB(dateOfBirth)
+                                    : 'no date of birth';
                                 const itemKey = String(clientId || fullName);
 
 
@@ -86,7 +88,7 @@ export default function Clients() {
                                                 primary={<Typography variant="subtitle1">
                                                             {fullName}
                                                         </Typography>} 
-                                                secondary={ageFromDoB(client?.data?.date_of_birth)}
+                                                secondary={subheader}
                                             />
                                         </ListItemButton>
                                     </ListItem>

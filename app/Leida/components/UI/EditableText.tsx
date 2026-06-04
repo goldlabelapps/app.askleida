@@ -24,9 +24,16 @@ export default function EditableText({
 	minRows,
     variant = 'outlined',
 }: EditableTextProps) {
+	const isEmpty = value.trim().length === 0;
+
 	return (
 		<TextField
-            sx={{ background: 'rgba(255, 255, 255, 0.8)' }}
+			sx={{
+				'& .MuiInputBase-root': {
+					backgroundColor: isEmpty ? 
+						'rgba(255, 255, 255, 0.25)' : 'rgba(255, 255, 255, 0.75)',
+				},
+			}}
 			fullWidth
 			variant={variant}
 			label={label}

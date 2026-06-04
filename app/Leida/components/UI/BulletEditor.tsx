@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box, Button, Divider, IconButton, Stack, Typography } from '@mui/material';
-import EditableText from './EditableText';
+import Editable from './Editable';
 import { Icon } from '../../../NX/DesignSystem';
 
 type T_BulletEditorProps = {
@@ -59,12 +59,14 @@ export default function BulletEditor({
 
 	return (
 		<Box sx={{ mt: 2 }}>
-			<Box sx={{ display: 'flex', alignItems: 'center', 
+			{bullets.length ? (
+				<Box sx={{ display: 'flex', alignItems: 'center', 
                 justifyContent: 'space-between', mb: 1 }}>
-    			<Button variant="text" startIcon={<Icon icon="add" />} onClick={handleAddBullet} disabled={disabled}>
-					Add bullet
-				</Button>
-			</Box>
+	    			<Button variant="text" startIcon={<Icon icon="add" />} onClick={handleAddBullet} disabled={disabled}>
+						Add bullet
+					</Button>
+				</Box>
+			) : null}
 
 			{bullets.length ? (
 				<Stack spacing={1.5}>
@@ -72,22 +74,9 @@ export default function BulletEditor({
 						<Box key={index} 
                         sx={{ display: 'flex', gap: 1, 
                         alignItems: 'flex-start' }}>
-							<Box sx={{ flex: 1 }}>
-								<EditableText
-									label={`Bullet ${index + 1}`}
-									value={bullet}
-									placeholder="Add bullet text"
-									autoFocus={focusNewBullet && index === 0}
-									multiline
-									minRows={3}
-									disabled={disabled}
-									onChange={(nextBullet) => handleBulletChange(index, nextBullet)}
-								/>
-							</Box>
 							<Box sx={{ 
                                 display: 'flex', 
-                                flexDirection: 'column', 
-                                gap: 0.25, 
+                                gap: 0.25,
                                 pt: 1 }}>
                                 <IconButton
                                     color="primary"
@@ -98,25 +87,39 @@ export default function BulletEditor({
                                 >
                                     <Icon icon="delete" />
                                 </IconButton>
-                                <IconButton
-                                    color="primary"
-									size="small"
-									aria-label={`move bullet ${index + 1} up`}
-									onClick={() => handleMoveBullet(index, -1)}
-									disabled={disabled || index === 0}
-								>
-									<Icon icon="up" />
-								</IconButton>
-								<IconButton
-                                    color="primary"
-									size="small"
-									aria-label={`move bullet ${index + 1} down`}
-									onClick={() => handleMoveBullet(index, 1)}
-									disabled={disabled || index === bullets.length - 1}
-								>
-									<Icon icon="down" />
-								</IconButton>
+								<Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.25 }}>
+									<IconButton
+										color="primary"
+										size="small"
+										aria-label={`move bullet ${index + 1} up`}
+										onClick={() => handleMoveBullet(index, -1)}
+										disabled={disabled || index === 0}
+									>
+										<Icon icon="up" />
+									</IconButton>
+									<IconButton
+										color="primary"
+										size="small"
+										aria-label={`move bullet ${index + 1} down`}
+										onClick={() => handleMoveBullet(index, 1)}
+										disabled={disabled || index === bullets.length - 1}
+									>
+										<Icon icon="down" />
+									</IconButton>
+								</Box>
 								
+							</Box>
+							<Box sx={{ flex: 1 }}>
+								<Editable
+									label={`Bullet ${index + 1}`}
+									value={bullet}
+									placeholder="Add bullet text"
+									autoFocus={focusNewBullet && index === 0}
+									multiline
+									minRows={3}
+									disabled={disabled}
+									onChange={(nextBullet) => handleBulletChange(index, nextBullet)}
+								/>
 							</Box>
 						</Box>
 					))}

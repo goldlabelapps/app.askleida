@@ -16,7 +16,6 @@ const getStripeClient = () => {
 export async function POST(req: NextRequest) {
   const stripe = getStripeClient();
   if (!stripe) {
-    console.error('[stripe/checkout] STRIPE_SECRET_KEY is not configured.');
     return NextResponse.json({ error: 'Payment service unavailable' }, { status: 503 });
   }
 
@@ -38,8 +37,7 @@ export async function POST(req: NextRequest) {
       cancel_url: cancelUrl,
     });
     return NextResponse.json({ url: session.url });
-  } catch (error) {
-    console.error('[stripe/checkout] Session creation failed.', error);
+  } catch {
     return NextResponse.json({ error: 'Failed to create checkout session' }, { status: 500 });
   }
 }

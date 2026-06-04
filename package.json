@@ -1,6 +1,6 @@
 {
   "name": "askleida",
-  "version": "1.4.9",
+  "version": "1.6.0",
   "scripts": {
     "dev": "yarn kill && yarn install && rm -rf .next && next dev -p 1888 --webpack",
     "build": "next build --webpack",
@@ -18,11 +18,13 @@
     "@mui/icons-material": "^7.3.7",
     "@mui/material": "^7.3.7",
     "@mui/x-data-grid": "^8.28.0",
+    "@mui/x-date-pickers": "^9.3.0",
     "@mui/x-tree-view": "^8.28.3",
     "@reduxjs/toolkit": "^2.11.2",
     "@supabase/supabase-js": "^2.105.4",
     "axios": "^1.16.1",
     "csv-parser": "^3.2.1",
+    "dayjs": "^1.11.21",
     "firebase": "^12.10.0",
     "firebase-admin": "^13.6.0",
     "gray-matter": "^4.0.3",

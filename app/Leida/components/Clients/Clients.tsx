@@ -4,13 +4,12 @@ import { useRouter } from 'next/navigation';
 import { 
     Box,
     Alert,
-    Avatar,
     Button,
     CardHeader,
+    CircularProgress,
     LinearProgress,
     List,
     ListItem,
-    ListItemAvatar,
     ListItemButton,
     ListItemText,
     Typography,
@@ -19,6 +18,7 @@ import { useDispatch } from '../../../NX/Uberedux';
 import { Icon, navigateTo } from '../../../NX/DesignSystem';
 import { useSupabaseAuth } from '../../../NX/Paywall';
 import { initClients, useClients } from '../Clients';
+import { ageFromDoB } from '../../../Leida';
 
 export default function Clients() {
 
@@ -27,22 +27,8 @@ export default function Clients() {
     const dispatch = useDispatch();
     const clients = useClients();
     const list = Array.isArray(clients?.list) ? clients.list : [];
-    const avatarColorsRef = React.useRef<Record<string, string>>({});
-
-    const getRandomPastelColor = React.useCallback(() => {
-        const hue = Math.floor(Math.random() * 360);
-        const saturation = 55 + Math.floor(Math.random() * 20); // 55-74%
-        const lightness = 82 + Math.floor(Math.random() * 10); // 82-91%
-        return `hsl(${hue} ${saturation}% ${lightness}%)`;
-    }, []);
-
-    const getAvatarColor = React.useCallback((key: string) => {
-        if (!avatarColorsRef.current[key]) {
-            avatarColorsRef.current[key] = getRandomPastelColor();
-        }
-        return avatarColorsRef.current[key];
-    }, [getRandomPastelColor]);
-
+    const titleText = list.length > 0 ? `Clients (${list.length})` : 'Clients';
+    
     React.useEffect(() => {
         if (!clients?.initted && !clients?.loading && user?.id) {
             dispatch(initClients(user.id));
@@ -55,28 +41,26 @@ export default function Clients() {
 
     return (
         <Box>
-
             <CardHeader 
                 avatar={<>
-                    <Icon icon="clients" color="primary" />
+                    {clients?.loading ? <CircularProgress size={20} /> : 
+                    <Box sx={{mt:1, ml:1}}>
+                        <Icon icon="clients" color="primary" />
+                    </Box>}
                 </>}
-                title={<Typography variant="h6">
-                    Clients
-                </Typography>}
+                title={<Typography variant="h6">{titleText}</Typography>}
                 action={<>
                     <Button
                         endIcon={<Icon icon="add" />}
                         color="primary"
                         onClick={handleNew}
                     >
-                        New client
+                        New
                     </Button>
                 </>}
             />
             
-                {clients?.loading ? (
-                    <LinearProgress />
-                ) : clients?.error ? (
+                {clients?.loading ? null : clients?.error ? (
                     <Alert severity="error">{String(clients.error)}</Alert>
                 ) : (
                     <>
@@ -85,38 +69,30 @@ export default function Clients() {
                                 const firstName = client?.data?.first_name || client?.first_name || '';
                                 const lastName = client?.data?.last_name || client?.last_name || '';
                                 const fullName = `${firstName} ${lastName}`.trim() || 'Unnamed client';
-                                const initials = `${firstName?.[0] || ''}${lastName?.[0] || ''}`.toUpperCase() || '?';
                                 const clientId = client?.client_id;
-                                const avatarKey = String(clientId || fullName);
-                                const avatarColor = getAvatarColor(avatarKey);
+                                const dateOfBirth = client?.data?.date_of_birth || client?.date_of_birth || '';
+                                const subheader = typeof dateOfBirth === 'string' && dateOfBirth.trim().length > 0
+                                    ? ageFromDoB(dateOfBirth)
+                                    : 'no date of birth';
+                                const itemKey = String(clientId || fullName);
+
 
                                 return (
-                                    <ListItem key={avatarKey} disablePadding>
+                                    <ListItem key={itemKey} disablePadding>
                                         <ListItemButton
                                             disabled={!clientId}
                                             onClick={() => {
                                                 if (clientId) {
-                                                    const qs = new URLSearchParams({ avatarColor }).toString();
-                                                    dispatch(navigateTo(router, `/clients/${clientId}?${qs}`));
+                                                    dispatch(navigateTo(router, `/clients/${clientId}`));
                                                 }
                                             }}
                                         >
-                                            <ListItemAvatar>
-                                                <Avatar
-                                                    sx={{
-                                                        bgcolor: avatarColor,
-                                                        color: '#000',
-                                                    }}
-                                                >
-                                                    <Typography>
-                                                        {initials}
-                                                    </Typography>
-                                                </Avatar>
-                                            </ListItemAvatar>
-                                            <ListItemText primary={<Typography variant="subtitle1">
-                                                {fullName}
-
-                                            </Typography>} />
+                                            <ListItemText 
+                                                primary={<Typography variant="subtitle1">
+                                                            {fullName}
+                                                        </Typography>} 
+                                                secondary={subheader}
+                                            />
                                         </ListItemButton>
                                     </ListItem>
                                 );

@@ -4,6 +4,7 @@ import React from 'react';
 import type { T_Tip } from '../types';
 import { useRouter } from 'next/navigation';
 import {
+    Fab,
     Box,
     Button,
     CardActions,
@@ -16,7 +17,8 @@ import {
 import { Icon, navigateTo, ConfirmAction } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
 import { deleteTip, patchTip } from '../../Tips';
-import { BulletEditor, EditableText } from '../../../../Leida';
+import { BulletEditor, Editable } from '../../../../Leida';
+
 
 type T_TipDetailProps = {
     tip?: T_Tip | null;
@@ -209,6 +211,24 @@ const TipDetail: React.FC<T_TipDetailProps> = ({
 
     return (
             <Box>
+                <Collapse in={isDirty} unmountOnExit>
+                    <Box
+                        sx={{
+                            position: 'fixed',
+                            right: { xs: 16, sm: 24 },
+                            bottom: { xs: 16, sm: 24 },
+                            zIndex: (theme) => theme.zIndex.appBar + 1,
+                        }}
+                    >
+                        <Fab
+                            color="primary"
+                            disabled={isPatching}
+                            onClick={handlePatch}
+                        >
+                            <Icon icon="save" />
+                        </Fab>
+                    </Box>
+                </Collapse>
                 <CardHeader
                     avatar={<>
                         <IconButton
@@ -238,7 +258,7 @@ const TipDetail: React.FC<T_TipDetailProps> = ({
                 
                 <CardContent>
                         <Box>
-                            <EditableText 
+                            <Editable 
                                 label="Title"
                                 value={editableTitle}
                                 placeholder="Add title"
@@ -251,17 +271,7 @@ const TipDetail: React.FC<T_TipDetailProps> = ({
                                 disabled={isPatching}
                             />
                         </Box>
-                        <Collapse in={isDirty} unmountOnExit>
-                            <Button 
-                                fullWidth
-                                startIcon={isPatching ? <CircularProgress size={16} color="inherit" /> : <Icon icon="save" />}
-                                variant="contained" 
-                                disabled={isPatching}
-                                onClick={handlePatch} 
-                                sx={{ mt: 2 }}>
-                                Save
-                            </Button>
-                        </Collapse>
+                        
                 </CardContent>
                 <CardActions>
                     <Button 

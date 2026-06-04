@@ -546,6 +546,9 @@ export default function Icon({ icon, color }: I_Icon) {
     case 'how':
       iconFragment = <HowIcon color={color} />;
       break;
+    case 'date':
+      iconFragment = <WhenIcon color={color} />;
+      break;
     case 'when':
       iconFragment = <WhenIcon color={color} />;
       break;

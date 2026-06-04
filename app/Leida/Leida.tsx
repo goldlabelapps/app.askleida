@@ -22,7 +22,7 @@ import {
     ClientNew,
     TipDetail,
     TipNew,
-    Products,
+    // Products,
     Practitioner,
     Recommendations,
     Tips,
@@ -167,8 +167,8 @@ const Leida: React.FC<any> = ({
                         <TipNew config={config} />
                     ) : isTipsRoute && tipId ? (
                         <TipDetail tip={selectedTip} />
-                    ) : isProductsRoute ? (
-                        <Products />
+                    // ) : isProductsRoute ? (
+                    //     <Products />
                     ) : isPractitionerRoute ? (
                         <Practitioner />
                     ) : isTipsRoute ? (

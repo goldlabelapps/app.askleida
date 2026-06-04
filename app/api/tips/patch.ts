@@ -46,10 +46,10 @@ export async function PATCH(req: Request) {
     return NextResponse.json(res, { status: 404 });
   }
 
-  const currentData =
+  const currentData: Record<string, unknown> =
     existingRow?.data && typeof existingRow.data === 'object' ? { ...existingRow.data } : {};
 
-  const incomingData =
+  const incomingData: Record<string, unknown> =
     fields?.data && typeof fields.data === 'object' ? { ...fields.data } : {};
 
   const legacyFirstName = typeof fields?.first_name === 'string' ? fields.first_name.trim() || null : undefined;

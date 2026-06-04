@@ -16,7 +16,8 @@ export default function Practitioner() {
     const { user } = useSupabaseAuth();
     const dispatch = useDispatch();
     const practitioner = usePractitioner();
-    const data = (practitioner?.data || null) as T_Practitioner | null;
+    const practitionerRows = Array.isArray(practitioner?.data) ? practitioner.data : [];
+    const data = (practitionerRows[0] || null) as T_Practitioner | null;
     const avatarSource =
         typeof data?.data === 'object' &&
         data?.data !== null &&
@@ -53,21 +54,3 @@ export default function Practitioner() {
     );
 }
 
-/*
-        <Box>
-            <CardHeader
-                avatar={<Icon icon="clients" color="primary" />}
-                title={<Typography variant="h6">Practitioner</Typography>}
-            />
-
-            {practitioner?.loading ? (
-                <LinearProgress />
-            ) : practitioner?.error ? (
-                <Alert severity="error">{String(practitioner.error)}</Alert>
-            ) : data ? (
-                <Typography variant="body1">{String(data?.display_name || data?.title || 'Practitioner loaded')}</Typography>
-            ) : (
-                <Alert severity="info">No practitioner found.</Alert>
-            )}
-        </Box>
-*/

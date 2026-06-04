@@ -1,7 +1,6 @@
 'use client';
 import * as React from 'react';
 import {
-	Avatar,
 	Box,
 	Button,
 	Dialog,
@@ -13,6 +12,7 @@ import {
 	Typography,
 	useMediaQuery,
 } from '@mui/material';
+import AvatarUpload from '../../UI/AvatarUpload';
 import { useTheme } from '@mui/material/styles';
 import { ConfirmAction, Icon } from '../../../../NX/DesignSystem';
 import { setPaywall, useSupabaseAuth } from '../../../../NX/Paywall';
@@ -39,8 +39,9 @@ export default function Account() {
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 	const dispatch = useDispatch();
 	const practitioner = usePractitioner();
+	const practitionerRows = Array.isArray(practitioner?.data) ? practitioner.data : [];
 	const { user } = useSupabaseAuth();
-	const profile = getPractitionerProfile(practitioner?.data[0] ?? null);
+	const profile = getPractitionerProfile(practitionerRows[0] ?? null);
 	const open = Boolean(practitioner?.accountOpen);
 	const name = String(
 		profile?.display_name || profile?.title || user?.user_metadata?.full_name || 'Your account',
@@ -51,6 +52,19 @@ export default function Account() {
 		typeof profile?.avatar === 'string' && profile.avatar.trim()
 			? profile.avatar.trim()
 			: undefined;
+	const practitionerId = String(practitionerRows[0]?.practitioner_id ?? '');
+
+	const handleAvatarSuccess = (avatarUrl: string) => {
+		const current = practitionerRows[0] ?? {};
+		const currentData = (current.data && typeof current.data === 'object')
+			? current.data as Record<string, unknown>
+			: {};
+		const updated = {
+			...current,
+			data: { ...currentData, avatar: avatarUrl },
+		};
+		dispatch(setPractitioner('data', [updated]));
+	};
 
 	const handleClose = () => {
 		dispatch(setPractitioner('accountOpen', false));
@@ -90,9 +104,12 @@ export default function Account() {
 		>
 			<DialogTitle sx={{ pr: 14 }}>
 				<Stack direction="row" spacing={2} alignItems="center">
-					<Avatar src={avatarSource} sx={{ width: 56, height: 56 }}>
-						{!avatarSource ? <Icon icon="clients" color="primary" /> : null}
-					</Avatar>
+					<AvatarUpload
+						practitionerId={practitionerId}
+						currentAvatar={avatarSource}
+						displayName={name}
+						onSuccess={handleAvatarSuccess}
+					/>
 					<Box>
 						<Typography variant="h5">
                             {name}
@@ -133,7 +150,7 @@ export default function Account() {
 			<DialogContent>
                 <Box>
                     <pre>
-                        {JSON.stringify(practitioner?.data[0]?.data, null, 2)}
+	                        {JSON.stringify(practitionerRows[0]?.data, null, 2)}
                     </pre>
                 </Box>
 			</DialogContent>

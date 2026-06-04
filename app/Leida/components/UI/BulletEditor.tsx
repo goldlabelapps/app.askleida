@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box, Button, Divider, IconButton, Stack, Typography } from '@mui/material';
-import EditableText from './EditableText';
+import Editable from './Editable';
 import { Icon } from '../../../NX/DesignSystem';
 
 type T_BulletEditorProps = {
@@ -73,7 +73,7 @@ export default function BulletEditor({
                         sx={{ display: 'flex', gap: 1, 
                         alignItems: 'flex-start' }}>
 							<Box sx={{ flex: 1 }}>
-								<EditableText
+								<Editable
 									label={`Bullet ${index + 1}`}
 									value={bullet}
 									placeholder="Add bullet text"

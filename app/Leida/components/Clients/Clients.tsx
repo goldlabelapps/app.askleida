@@ -18,6 +18,7 @@ import { useDispatch } from '../../../NX/Uberedux';
 import { Icon, navigateTo } from '../../../NX/DesignSystem';
 import { useSupabaseAuth } from '../../../NX/Paywall';
 import { initClients, useClients } from '../Clients';
+import { ageFromDoB } from '../../../Leida';
 
 export default function Clients() {
 
@@ -27,7 +28,7 @@ export default function Clients() {
     const clients = useClients();
     const list = Array.isArray(clients?.list) ? clients.list : [];
     const titleText = list.length > 0 ? `Clients (${list.length})` : 'Clients';
-
+    
     React.useEffect(() => {
         if (!clients?.initted && !clients?.loading && user?.id) {
             dispatch(initClients(user.id));
@@ -70,6 +71,7 @@ export default function Clients() {
                                 const clientId = client?.client_id;
                                 const itemKey = String(clientId || fullName);
 
+
                                 return (
                                     <ListItem key={itemKey} disablePadding>
                                         <ListItemButton
@@ -80,10 +82,12 @@ export default function Clients() {
                                                 }
                                             }}
                                         >
-                                            <ListItemText primary={<Typography variant="subtitle1">
-                                                {fullName}
-
-                                            </Typography>} />
+                                            <ListItemText 
+                                                primary={<Typography variant="subtitle1">
+                                                            {fullName}
+                                                        </Typography>} 
+                                                secondary={ageFromDoB(client?.data?.date_of_birth)}
+                                            />
                                         </ListItemButton>
                                     </ListItem>
                                 );

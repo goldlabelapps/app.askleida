@@ -16,7 +16,7 @@ import {
 import { Icon, navigateTo, ConfirmAction } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
 import { deleteTip, patchTip } from '../../Tips';
-import { BulletEditor, EditableText } from '../../../../Leida';
+import { BulletEditor, Editable } from '../../../../Leida';
 
 
 type T_TipDetailProps = {
@@ -239,7 +239,7 @@ const TipDetail: React.FC<T_TipDetailProps> = ({
                 
                 <CardContent>
                         <Box>
-                            <EditableText 
+                            <Editable 
                                 label="Title"
                                 value={editableTitle}
                                 placeholder="Add title"

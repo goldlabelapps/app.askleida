@@ -18,7 +18,7 @@ import {
 import { Icon, navigateTo, ConfirmAction } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
 import { deleteClient, patchClient } from '../../Clients';
-import { EditableText } from '../../../../Leida';
+import { Editable } from '../../../../Leida';
 
 type T_ClientRecord = T_Client & {
     client_id?: string | null;
@@ -40,6 +40,10 @@ const getStringValue = (value: unknown): string | null => {
 
     const trimmed = value.trim();
     return trimmed ? trimmed : null;
+};
+
+const getBooleanValue = (value: unknown): boolean => {
+    return value === true || value === 'true';
 };
 
 const getBooleanLabel = (value: unknown): string => {
@@ -156,6 +160,8 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
     const personalNotes = getStringValue(clientData.personal_notes) || getStringValue(activeClient?.personal_notes) || '';
     const skinOverview = getStringValue(clientData.skin_overview) || getStringValue(activeClient?.skin_overview) || '';
     const dateOfBirth = getStringValue(clientData.date_of_birth ?? activeClient?.date_of_birth) || '';
+    const isPregnant = getBooleanValue(clientData.is_pregnant ?? activeClient?.is_pregnant);
+    const isBreastfeeding = getBooleanValue(clientData.is_breastfeeding ?? activeClient?.is_breastfeeding);
     const concernTags = getArrayValues(clientData.concern_tags ?? activeClient?.concern_tags);
     const concernTagsText = concernTags.join(', ');
     const clientId = getStringValue(activeClient?.client_id) || getStringValue(activeClient?.id);
@@ -206,6 +212,8 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
         const normalizedEmail = getStringValue(draftData.email) || '';
         const normalizedDateOfBirth = getStringValue(draftData.date_of_birth) || '';
         const normalizedSkinType = getStringValue(draftData.skin_type) || '';
+        const normalizedIsPregnant = getBooleanValue(draftData.is_pregnant);
+        const normalizedIsBreastfeeding = getBooleanValue(draftData.is_breastfeeding);
         const normalizedCurrentMedication = getStringValue(draftData.current_medication) || '';
         const normalizedSkinOverview = getStringValue(draftData.skin_overview) || '';
         const normalizedPersonalNotes = getStringValue(draftData.personal_notes) || '';
@@ -237,6 +245,8 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
                 email: normalizedEmail || null,
                 date_of_birth: normalizedDateOfBirth || null,
                 skin_type: normalizedSkinType || null,
+                is_pregnant: normalizedIsPregnant,
+                is_breastfeeding: normalizedIsBreastfeeding,
                 concern_tags: normalizedConcernTags,
                 current_medication: normalizedCurrentMedication || null,
                 skin_overview: normalizedSkinOverview || null,
@@ -248,19 +258,6 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
         if (success) {
             handleClientsNavigate();
         }
-    };
-
-    const handleTitleChange = (nextTitle: string) => {
-        setDraftClient((currentClient) => {
-            if (!currentClient) {
-                return currentClient;
-            }
-
-            return {
-                ...currentClient,
-                title: nextTitle,
-            };
-        });
     };
 
     const handleDataChange = (key: string, nextValue: string) => {
@@ -303,6 +300,24 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
         });
     };
 
+    const handleBooleanDataChange = (key: 'is_pregnant' | 'is_breastfeeding', nextValue: boolean) => {
+        setDraftClient((currentClient) => {
+            if (!currentClient) {
+                return currentClient;
+            }
+
+            const currentData = getDataObject(currentClient.data);
+
+            return {
+                ...currentClient,
+                data: {
+                    ...currentData,
+                    [key]: nextValue,
+                },
+            };
+        });
+    };
+
     return (
         <Box>
             <CardHeader
@@ -315,8 +330,7 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
                     <Button
                         endIcon={<Icon icon="add" />}
                         color="primary"
-                        onClick={handleNew}
-                    >
+                        onClick={handleNew}>
                         New
                     </Button>
                     <IconButton color="primary" onClick={handleOpenDeleteConfirm}>
@@ -327,21 +341,17 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
 
             <CardContent>
                 <Stack spacing={2}>
-                    <EditableText
-                        label="Title"
-                        value={getStringValue(activeClient.title) || ''}
-                        placeholder="Add title"
-                        onChange={handleTitleChange}
-                    />
-                    <EditableText label="First name" value={firstName} placeholder="Add first name" onChange={(value) => handleDataChange('first_name', value)} />
-                    <EditableText label="Last name" value={lastName} placeholder="Add last name" onChange={(value) => handleDataChange('last_name', value)} />
-                    <EditableText label="Email" value={email} placeholder="Add email" onChange={(value) => handleDataChange('email', value)} />
-                    <EditableText label="Date of birth" value={dateOfBirth} placeholder="YYYY-MM-DD" onChange={(value) => handleDataChange('date_of_birth', value)} />
-                    <EditableText label="Skin type" value={skinType} placeholder="Add skin type" onChange={(value) => handleDataChange('skin_type', value)} />
-                    <EditableText label="Concern tags" value={concernTagsText} placeholder="Acne, dryness, sensitivity" onChange={handleConcernTagsChange} />
-                    <EditableText label="Current medication" value={medication} placeholder="Add current medication" multiline minRows={2} onChange={(value) => handleDataChange('current_medication', value)} />
-                    <EditableText label="Skin overview" value={skinOverview} placeholder="Add skin overview" multiline minRows={3} onChange={(value) => handleDataChange('skin_overview', value)} />
-                    <EditableText label="Personal notes" value={personalNotes} placeholder="Add personal notes" multiline minRows={3} onChange={(value) => handleDataChange('personal_notes', value)} />
+                    <Editable label="First name" value={firstName} placeholder="Add first name" onChange={(value) => handleDataChange('first_name', value)} />
+                    <Editable label="Last name" value={lastName} placeholder="Add last name" onChange={(value) => handleDataChange('last_name', value)} />
+                    <Editable label="Email" value={email} placeholder="Add email" onChange={(value) => handleDataChange('email', value)} />
+                    <Editable label="Date of birth" value={dateOfBirth} editableType="date" onChange={(value) => handleDataChange('date_of_birth', value)} />
+                    <Editable label="Skin type" value={skinType} placeholder="Add skin type" onChange={(value) => handleDataChange('skin_type', value)} />
+                    <Editable label="Pregnant" value={isPregnant} onChange={(value) => handleBooleanDataChange('is_pregnant', value === true)} />
+                    <Editable label="Breastfeeding" value={isBreastfeeding} onChange={(value) => handleBooleanDataChange('is_breastfeeding', value === true)} />
+                    <Editable label="Concern tags" value={concernTagsText} placeholder="Acne, dryness, sensitivity" onChange={handleConcernTagsChange} />
+                    <Editable label="Current medication" value={medication} placeholder="Add current medication" multiline minRows={2} onChange={(value) => handleDataChange('current_medication', value)} />
+                    <Editable label="Skin overview" value={skinOverview} placeholder="Add skin overview" multiline minRows={3} onChange={(value) => handleDataChange('skin_overview', value)} />
+                    <Editable label="Personal notes" value={personalNotes} placeholder="Add personal notes" multiline minRows={3} onChange={(value) => handleDataChange('personal_notes', value)} />
 
                     <Collapse in={isDirty} unmountOnExit>
                         <Button

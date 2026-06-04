@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { Icon, navigateTo } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
-import { BulletEditor, EditableText } from '../../../../Leida';
+import { BulletEditor, Editable } from '../../../../Leida';
 import { createTip } from '../../Tips';
 import { useSupabaseAuth } from '../../../../NX/Paywall';
 
@@ -101,7 +101,7 @@ const TipNew: React.FC<T_TipNewProps> = ({ config }) => {
             <CardContent>
                 <Box sx={{ display: 'grid', gap: 2 }}>
                     {error ? <Alert severity="error">{error}</Alert> : null}
-                    <EditableText
+                    <Editable
                         label="Title"
                         value={title}
                         placeholder="Add title"

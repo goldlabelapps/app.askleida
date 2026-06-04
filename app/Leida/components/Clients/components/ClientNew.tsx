@@ -5,16 +5,17 @@ import {
     Box,
     Alert,
     Button,
+    Collapse,
     Typography,
     CardActions,
     CardContent,
     CardHeader,
     Stack,
-    TextField,
 } from '@mui/material';
 import { Icon, navigateTo } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
 import { useSupabaseAuth } from '../../../../NX/Paywall';
+import { Editable } from '../../../../Leida';
 import { initClients } from '../../Clients';
 
 type T_ClientNewProps = {
@@ -33,6 +34,15 @@ const initialForm: T_FormState = {
     email: '',
 };
 
+const isValidEmail = (value: string): boolean => {
+    const email = value.trim();
+    if (!email) {
+        return false;
+    }
+
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
+
 const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
     void config;
 
@@ -42,11 +52,19 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
     const [form, setForm] = React.useState<T_FormState>(initialForm);
     const [error, setError] = React.useState<string | null>(null);
     const [submitting, setSubmitting] = React.useState(false);
+    const hasRequiredFields =
+        form.first_name.trim().length > 0
+        && form.last_name.trim().length > 0
+        && form.email.trim().length > 0;
+    const isEmailReady = isValidEmail(form.email);
+    const isFormComplete =
+        hasRequiredFields
+        && isEmailReady;
 
     const handleChange =
         (key: keyof T_FormState) =>
-            (event: React.ChangeEvent<HTMLInputElement>) => {
-                setForm((current) => ({ ...current, [key]: event.target.value }));
+            (value: string) => {
+                setForm((current) => ({ ...current, [key]: value }));
             };
 
     const handleBack = () => {
@@ -58,8 +76,13 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
         const lastName = form.last_name.trim();
         const email = form.email.trim().toLowerCase();
 
-        if (!firstName && !lastName && !email) {
-            setError('Add at least a name or email before creating a client.');
+        if (!firstName || !lastName || !email) {
+            setError('First name, last name, and email are required.');
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            setError('Email must be a valid email address.');
             return;
         }
         try {
@@ -114,42 +137,51 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
             <CardContent>
                 <Stack spacing={2}>
                     {error ? <Alert severity="error">{error}</Alert> : null}
-                    <TextField
+                    <Editable
                         variant="filled"
                         label="First name"
                         value={form.first_name}
                         onChange={handleChange('first_name')}
-                        fullWidth
+                        required
+                        autoFocus
                     />
-                    <TextField
+                    <Editable
                         variant="filled"
                         label="Last name"
                         value={form.last_name}
                         onChange={handleChange('last_name')}
-                        fullWidth
+                        required
                     />
-                    <TextField
+                    <Editable
                         variant="filled"
                         label="Email"
-                        type="email"
                         value={form.email}
                         onChange={handleChange('email')}
-                        fullWidth
+                        required
                     />
                 </Stack>
             </CardContent>
             <CardActions>
-                <Box sx={{ flexGrow: 1 }} />
+                <Collapse in={isFormComplete || submitting} unmountOnExit sx={{ width: '100%' }}>
+                    <Button 
+                        fullWidth
+                        startIcon={<Icon icon="save" />}
+                        variant="contained" 
+                        onClick={handleSubmit}
+                        disabled={submitting}
+                    >
+                        {submitting ? 'Creating...' : 'Create client'}
+                    </Button>
+                </Collapse>
+            </CardActions>
+            <CardActions>
                 <Button
-                    startIcon={<Icon icon="cancel" />}
-                    onClick={handleBack} disabled={submitting}>
-                    Cancel
-                </Button>
-                <Button 
-                    startIcon={<Icon icon="save" />}
-                    variant="contained" 
-                    onClick={handleSubmit} disabled={submitting}>
-                    {submitting ? 'Creating...' : 'Create client'}
+                    fullWidth
+                    startIcon={<Icon icon="left" />}
+                    variant="text"
+                    onClick={handleBack}
+                >
+                    Back
                 </Button>
             </CardActions>
         </Box>

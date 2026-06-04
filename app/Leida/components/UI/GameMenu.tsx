@@ -20,6 +20,13 @@ const GameMenu: React.FC = () => {
     return (
         <>
         <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', maxWidth: 300, gap: 1, mx: 'auto' }}>
+                <Button
+                    color="primary"
+                    startIcon={<Icon icon="products" />}
+                    onClick={() => handleClick('/products')}
+                    fullWidth>
+                    Products
+                </Button>
             <Button 
                 color="primary" 
                 startIcon={<Icon icon="clients" />}

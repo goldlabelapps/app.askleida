@@ -1,16 +1,13 @@
 import { setProducts } from '../../Products';
 import { setFeedback } from '../../../../NX/DesignSystem';
 
-export const initProducts = (practitionerId?: string): any =>
+export const initProducts = (): any =>
     async (dispatch: any) => {
         try {
             dispatch(setProducts('loading', true));
             dispatch(setProducts('error', null));
 
-            const query = practitionerId
-                ? `?practitioner_id=${encodeURIComponent(practitionerId)}`
-                : '';
-            const response = await fetch(`/api/products${query}`, {
+            const response = await fetch('/api/products', {
                 method: 'GET',
                 headers: {
                     Accept: 'application/json',

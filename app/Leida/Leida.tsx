@@ -121,8 +121,8 @@ const Leida: React.FC<any> = ({
     }, [dispatch, isTipsRoute, user?.id, tipsState?.initted, tipsState?.loading]);
 
     React.useEffect(() => {
-        if (isProductsRoute && user?.id && !productsState?.initted && !productsState?.loading) {
-            dispatch(initProducts(user.id));
+        if (isProductsRoute && !productsState?.initted && !productsState?.loading) {
+            dispatch(initProducts());
         }
     }, [dispatch, isProductsRoute, user?.id, productsState?.initted, productsState?.loading]);
 

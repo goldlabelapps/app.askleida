@@ -370,6 +370,7 @@ export type I_Icon = {
     | 'examples'
     | 'signup'
     | 'what'
+    | 'date'
     | 'when'
     | 'who'
     | 'how'

@@ -70,7 +70,6 @@ export default function Tips() {
 
     return (
         <Box>
-
             <CardHeader 
                 avatar={<>
                     {tips?.loading ? <CircularProgress size={20} /> : 

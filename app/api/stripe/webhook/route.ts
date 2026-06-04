@@ -17,7 +17,6 @@ const getStripeClient = () => {
 export async function POST(req: NextRequest) {
   const stripe = getStripeClient();
   if (!stripe || !webhookSecret) {
-    console.error('[stripe/webhook] Stripe secrets are not fully configured.');
     return NextResponse.json({ error: 'Webhook service unavailable' }, { status: 503 });
   }
 
@@ -34,8 +33,7 @@ export async function POST(req: NextRequest) {
       sig,
       webhookSecret
     );
-  } catch (error) {
-    console.error('[stripe/webhook] Signature verification failed.', error);
+  } catch {
     return NextResponse.json({ error: 'Invalid webhook signature' }, { status: 400 });
   }
 

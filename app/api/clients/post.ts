@@ -81,12 +81,12 @@ export async function POST(req: Request) {
   };
 
   const payload: T_Client = {
-    client_id: body.client_id,
-    practitioner_id: body.practitioner_id,
+    ...(body.client_id ? { client_id: body.client_id } : {}),
+    ...(body.practitioner_id ? { practitioner_id: body.practitioner_id } : {}),
     title: body.title,
     data: normalizedData,
-    created: body.created,
-    updated: body.updated,
+    ...(body.created ? { created: body.created } : {}),
+    ...(body.updated ? { updated: body.updated } : {}),
   };
 
   const { data, error } = await supabase.from('clients').insert([payload]).select();
@@ -94,6 +94,7 @@ export async function POST(req: Request) {
     const res = makeRes({ tenant, message: error.message, severity: 'error' });
     return NextResponse.json(res, { status: 500 });
   }
+
   const res = makeRes({ tenant, message: 'Client created', severity: 'success', data });
   return NextResponse.json(res);
 }

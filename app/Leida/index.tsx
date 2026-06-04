@@ -1,8 +1,9 @@
 export { default as Leida } from './Leida';
 export { getTimeGreeting } from './prompts/getTimeGreeting';
+export { ageFromDoB } from './prompts/ageFromDoB';
 export { default as Signin } from './components/UI/Signin';
 export { default as BottomNav } from './components/UI/BottomNav';
-export { default as EditableText } from './components/UI/EditableText';
+export { default as Editable } from './components/UI/Editable';
 export { default as BulletEditor } from './components/UI/BulletEditor';
 
 export { default as Header } from './components/UI/Header';

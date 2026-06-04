@@ -1,4 +1,5 @@
 import { setClients } from '../../Clients';
+import { setFeedback } from '../../../../NX/DesignSystem';
 
 export const initClients = (practitionerId?: string): any =>
     async (dispatch: any) => {
@@ -28,6 +29,11 @@ export const initClients = (practitionerId?: string): any =>
             dispatch(setClients('loading', false));
         } catch (e: unknown) {
             const msg = e instanceof Error ? e.message : String(e);
+            dispatch(setFeedback({
+                title: 'Clients Load Failed',
+                description: msg,
+                severity: 'error',
+            }));
             dispatch(setClients('list', []));
             dispatch(setClients('error', msg));
             dispatch(setClients('initted', true));

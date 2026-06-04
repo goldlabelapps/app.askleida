@@ -5,16 +5,17 @@ import {
     Alert,
     Box,
     Button,
+    Collapse,
+    Fab,
     Typography,
     CardActions,
     CardContent,
     CardHeader,
-    CircularProgress,
     IconButton,
 } from '@mui/material';
 import { Icon, navigateTo } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
-import { BulletEditor, EditableText } from '../../../../Leida';
+import { BulletEditor, Editable } from '../../../../Leida';
 import { createTip } from '../../Tips';
 import { useSupabaseAuth } from '../../../../NX/Paywall';
 
@@ -30,7 +31,7 @@ const TipNew: React.FC<T_TipNewProps> = ({ config }) => {
     const { user } = useSupabaseAuth();
     const [submitting, setSubmitting] = React.useState(false);
     const [title, setTitle] = React.useState('');
-    const [bullets, setBullets] = React.useState<string[]>(['']);
+    const [bullets, setBullets] = React.useState<string[]>([]);
     const [error, setError] = React.useState<string | null>(null);
 
     const normalizedTitle = title.trim();
@@ -38,7 +39,9 @@ const TipNew: React.FC<T_TipNewProps> = ({ config }) => {
         () => bullets.map((bullet) => bullet.trim()).filter((bullet) => bullet.length > 0),
         [bullets],
     );
-    const canSave = normalizedTitle.length > 0 && normalizedBullets.length > 0 && !submitting;
+    const hasTitle = normalizedTitle.length > 0;
+    const hasBullets = normalizedBullets.length > 0;
+    const canSave = hasTitle && hasBullets && !submitting;
 
     const handleTipsNavigate = () => {
         dispatch(navigateTo(router, '/tips'));
@@ -49,8 +52,13 @@ const TipNew: React.FC<T_TipNewProps> = ({ config }) => {
     };
 
     const handleSave = async () => {
-        if (!canSave) {
-            setError('Please add a title and at least one bullet before saving.');
+        if (!hasTitle) {
+            setError('Title is required.');
+            return;
+        }
+
+        if (!hasBullets) {
+            setError('Please add at least one bullet before saving.');
             return;
         }
 
@@ -101,10 +109,11 @@ const TipNew: React.FC<T_TipNewProps> = ({ config }) => {
             <CardContent>
                 <Box sx={{ display: 'grid', gap: 2 }}>
                     {error ? <Alert severity="error">{error}</Alert> : null}
-                    <EditableText
+                    <Editable
                         label="Title"
                         value={title}
                         placeholder="Add title"
+                        required
                         onChange={setTitle}
                     />
                     <BulletEditor
@@ -114,19 +123,30 @@ const TipNew: React.FC<T_TipNewProps> = ({ config }) => {
                     />
                 </Box>
             </CardContent>
+            <Collapse in={canSave || submitting} unmountOnExit>
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        right: { xs: 16, sm: 24 },
+                        bottom: { xs: 16, sm: 24 },
+                        zIndex: (theme) => theme.zIndex.appBar + 1,
+                    }}
+                >
+                    <Fab
+                        color="primary"
+                        disabled={submitting || !canSave}
+                        onClick={handleSave}
+                    >
+                        <Icon icon="save" />
+                    </Fab>
+                </Box>
+            </Collapse>
             <CardActions>
-                <Box sx={{ flexGrow: 1 }} />
-                <Button
-                    startIcon={<Icon icon="cancel" />}
-                    onClick={handleBack} disabled={submitting}>
-                    Cancel
-                </Button>
                 <Button 
-                    startIcon={submitting ? <CircularProgress size={16} color="inherit" /> : <Icon icon="save" />}
-                    variant="contained" 
-                    onClick={handleSave}
-                    disabled={!canSave}>
-                    {submitting ? 'Creating...' : 'Save'}
+                    fullWidth
+                    startIcon={<Icon icon="left" />}
+                    variant="text" onClick={handleTipsNavigate}>
+                    Back
                 </Button>
             </CardActions>
         </Box>

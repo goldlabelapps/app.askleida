@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
     Box,
     Container,
@@ -40,7 +40,6 @@ const Leida: React.FC<any> = ({
     
     const dispatch = useDispatch();
     const router = useRouter();
-    const searchParams = useSearchParams();
     const { user } = useSupabaseAuth();
     const pathname = usePathname();
     const clientsState = useClients();
@@ -98,7 +97,6 @@ const Leida: React.FC<any> = ({
     const selectedTip = tipId
         ? tipList.find((tip: any) => tip?.tip_id === tipId) || null
         : null;
-    const avatarColor = searchParams.get('avatarColor') || undefined;
 
     React.useEffect(() => {
         if (isClientsRoute && user?.id && !clientsState?.initted && !clientsState?.loading) {
@@ -122,12 +120,12 @@ const Leida: React.FC<any> = ({
                     ? 'tips'
                     : 'products';
     const bottomNavItems = [
-        // {
-        //     label: 'Clients',
-        //     value: 'clients',
-        //     icon: 'clients' as const,
-        //     href: '/clients',
-        // },
+        {
+            label: 'Clients',
+            value: 'clients',
+            icon: 'clients' as const,
+            href: '/clients',
+        },
 
         // {
         //     label: 'Products',
@@ -158,11 +156,11 @@ const Leida: React.FC<any> = ({
             
             <main style={{ paddingBottom: 88 }}>
                 <Container sx={{mt:3 }}>
-                    <Box sx={{ mx: 1 }}>
+                    <Box sx={{ mx: 1.5 }}>
                     {isClientNewRoute ? (
                         <ClientNew config={config} />
                     ) : isClientsRoute && clientId ? (
-                        <ClientDetail config={config} client={selectedClient} avatarColor={avatarColor} />
+                        <ClientDetail config={config} client={selectedClient} />
                     ) : isClientsRoute ? (
                         <Clients />
                     ) : isTipNewRoute ? (

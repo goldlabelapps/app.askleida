@@ -1,40 +1,37 @@
-// ClientDetail
 "use client";
 import React from 'react';
 import type { T_Client } from '../types';
 import { useRouter } from 'next/navigation';
 import {
     Box,
-    Alert,
-    Avatar,
     Button,
+    Fab,
     CardActions,
     CardContent,
     CardHeader,
-    Chip,
-    Divider,
-    List,
+    Grid,
+    Collapse,
+    IconButton,
     ListItem,
     ListItemText,
     Stack,
-    IconButton,
-    Typography,
 } from '@mui/material';
-import { Icon, navigateTo } from '../../../../NX/DesignSystem';
+import { Icon, navigateTo, ConfirmAction } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
+import { deleteClient, patchClient } from '../../Clients';
+import { Editable } from '../../../../Leida';
 
 type T_ClientRecord = T_Client & {
     client_id?: string | null;
     title?: string | null;
     created?: string | null;
     updated?: string | null;
-    data?: T_Client | null;
+    data?: T_Client['data'] | null;
 };
 
 type T_ClientDetailProps = {
     config?: unknown;
     client?: T_ClientRecord | null;
-    avatarColor?: string;
 };
 
 const getStringValue = (value: unknown): string | null => {
@@ -44,6 +41,10 @@ const getStringValue = (value: unknown): string | null => {
 
     const trimmed = value.trim();
     return trimmed ? trimmed : null;
+};
+
+const getBooleanValue = (value: unknown): boolean => {
+    return value === true || value === 'true';
 };
 
 const getBooleanLabel = (value: unknown): string => {
@@ -76,21 +77,12 @@ const formatDateTime = (value: unknown): string => {
     }).format(date);
 };
 
-const formatDate = (value: unknown): string => {
-    const stringValue = getStringValue(value);
-
-    if (!stringValue) {
-        return 'Not provided';
+const getDataObject = (value: unknown): Record<string, unknown> => {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) {
+        return {};
     }
 
-    const date = new Date(stringValue);
-    if (Number.isNaN(date.getTime())) {
-        return stringValue;
-    }
-
-    return new Intl.DateTimeFormat('en-GB', {
-        dateStyle: 'long',
-    }).format(date);
+    return value as Record<string, unknown>;
 };
 
 const getArrayValues = (value: unknown): string[] => {
@@ -104,6 +96,29 @@ const getArrayValues = (value: unknown): string[] => {
     return stringValue ? [stringValue] : [];
 };
 
+const SKIN_TYPE_OPTIONS = ['Dry', 'Oily', 'Combination', 'Normal'] as const;
+const CONCERN_TAG_OPTIONS = ['acne', 'barrier damage', 'redness', 'pigmentation', 'dehydration', 'aging'] as const;
+
+const cloneClient = (value: T_ClientRecord | null | undefined): T_ClientRecord | null => {
+    if (!value) {
+        return null;
+    }
+
+    return JSON.parse(JSON.stringify(value)) as T_ClientRecord;
+};
+
+const areClientsEqual = (left: T_ClientRecord | null, right: T_ClientRecord | null): boolean => {
+    if (!left && !right) {
+        return true;
+    }
+
+    if (!left || !right) {
+        return false;
+    }
+
+    return JSON.stringify(left) === JSON.stringify(right);
+};
+
 const DetailRow = ({
     label,
     value,
@@ -114,145 +129,300 @@ const DetailRow = ({
     <ListItem divider>
         <ListItemText primary={label} secondary={value} />
     </ListItem>
+    
 );
 
 const ClientDetail: React.FC<T_ClientDetailProps> = ({
     config,
     client,
-    avatarColor,
 }) => {
     void config;
 
     const router = useRouter();
     const dispatch = useDispatch();
-    const clientData = client?.data ?? {};
-    const firstName = getStringValue(clientData.first_name) || getStringValue(client?.first_name) || '';
-    const lastName = getStringValue(clientData.last_name) || getStringValue(client?.last_name) || '';
-    const fullName = `${firstName} ${lastName}`.trim() || getStringValue(client?.title) || 'Unnamed client';
-    const email = getStringValue(clientData.email) || getStringValue(client?.email) || '';
-    const skinType = getStringValue(clientData.skin_type) || getStringValue(client?.skin_type) || 'Not provided';
-    const medication = getStringValue(clientData.current_medication) || getStringValue(client?.current_medication) || 'Not provided';
-    const personalNotes = getStringValue(clientData.personal_notes) || getStringValue(client?.personal_notes) || 'Not provided';
-    const skinOverview = getStringValue(clientData.skin_overview) || getStringValue(client?.skin_overview) || 'Not provided';
-    const dateOfBirth = clientData.date_of_birth ?? client?.date_of_birth;
-    const concernTags = getArrayValues(clientData.concern_tags ?? client?.concern_tags);
-    const initials = `${firstName?.[0] || ''}${lastName?.[0] || ''}`.toUpperCase() || '?';
-    const clientId = getStringValue(client?.client_id) || getStringValue(client?.id);
+    const [confirmOpen, setConfirmOpen] = React.useState(false);
+    const [isDeleting, setIsDeleting] = React.useState(false);
+    const [isPatching, setIsPatching] = React.useState(false);
+    const [originalClient, setOriginalClient] = React.useState<T_ClientRecord | null>(cloneClient(client));
+    const [draftClient, setDraftClient] = React.useState<T_ClientRecord | null>(cloneClient(client));
 
-    if (!client) {
+    React.useEffect(() => {
+        const nextClient = cloneClient(client);
+        setOriginalClient(nextClient);
+        setDraftClient(nextClient);
+    }, [client]);
+
+    const isDirty = !areClientsEqual(originalClient, draftClient);
+    const activeClient = draftClient ?? client ?? null;
+    const clientData = getDataObject(activeClient?.data);
+    const firstName = getStringValue(clientData.first_name) || getStringValue(activeClient?.first_name) || '';
+    const lastName = getStringValue(clientData.last_name) || getStringValue(activeClient?.last_name) || '';
+    const fullName = `${firstName} ${lastName}`.trim() || getStringValue(activeClient?.title) || 'Unnamed client';
+    const email = getStringValue(clientData.email) || getStringValue(activeClient?.email) || '';
+    const skinType = getStringValue(clientData.skin_type) || getStringValue(activeClient?.skin_type) || '';
+    const medication = getStringValue(clientData.current_medication) || getStringValue(activeClient?.current_medication) || '';
+    const personalNotes = getStringValue(clientData.personal_notes) || getStringValue(activeClient?.personal_notes) || '';
+    const skinOverview = getStringValue(clientData.skin_overview) || getStringValue(activeClient?.skin_overview) || '';
+    const dateOfBirth = getStringValue(clientData.date_of_birth ?? activeClient?.date_of_birth) || '';
+    const isPregnant = getBooleanValue(clientData.is_pregnant ?? activeClient?.is_pregnant);
+    const isBreastfeeding = getBooleanValue(clientData.is_breastfeeding ?? activeClient?.is_breastfeeding);
+    const concernTags = getArrayValues(clientData.concern_tags ?? activeClient?.concern_tags);
+    const clientId = getStringValue(activeClient?.client_id) || getStringValue(activeClient?.id);
+
+    if (!activeClient) {
+        if (isDeleting) {
+            return null;
+        }
         return null;
-    }
-
-    const handleDelete = () => {
-        window.alert(`Delete client placeholder for ${fullName}`);
     }
 
     const handleClientsNavigate = () => {
         dispatch(navigateTo(router, '/clients'));
-    }
+    };
 
     const handleNew = () => {
         dispatch(navigateTo(router, '/clients/new'));
     };
 
-    const handleCreateRecommendation = () => {
-        const query = clientId ? `?clientId=${encodeURIComponent(clientId)}` : '';
-        dispatch(navigateTo(router, `/recommendations${query}`));
+    const handleOpenDeleteConfirm = () => {
+        setConfirmOpen(true);
+    };
+
+    const handleCloseDeleteConfirm = () => {
+        setConfirmOpen(false);
+    };
+
+    const handleDelete = async () => {
+        if (!clientId) {
+            setConfirmOpen(false);
+            return;
+        }
+
+        setIsDeleting(true);
+        setConfirmOpen(false);
+        await dispatch(deleteClient(clientId));
+        handleClientsNavigate();
+    };
+
+    const handlePatch = async () => {
+        if (!draftClient || !clientId || !isDirty || isPatching) {
+            return;
+        }
+
+        const draftData = getDataObject(draftClient.data);
+        const normalizedFirstName = getStringValue(draftData.first_name) || '';
+        const normalizedLastName = getStringValue(draftData.last_name) || '';
+        const normalizedEmail = getStringValue(draftData.email) || '';
+        const normalizedDateOfBirth = getStringValue(draftData.date_of_birth) || '';
+        const normalizedSkinType = getStringValue(draftData.skin_type) || '';
+        const normalizedIsPregnant = getBooleanValue(draftData.is_pregnant);
+        const normalizedIsBreastfeeding = getBooleanValue(draftData.is_breastfeeding);
+        const normalizedCurrentMedication = getStringValue(draftData.current_medication) || '';
+        const normalizedSkinOverview = getStringValue(draftData.skin_overview) || '';
+        const normalizedPersonalNotes = getStringValue(draftData.personal_notes) || '';
+        const normalizedConcernTags = Array.isArray(draftData.concern_tags)
+            ? draftData.concern_tags.filter((item): item is string => typeof item === 'string' && item.trim().length > 0)
+            : getStringValue(draftData.concern_tags)
+                ? getStringValue(draftData.concern_tags)!.split(',').map((item) => item.trim()).filter((item) => item.length > 0)
+                : [];
+        const nextTitle = getStringValue(draftClient.title)
+            || [normalizedFirstName, normalizedLastName].filter(Boolean).join(' ')
+            || normalizedEmail
+            || 'Client';
+
+        setIsPatching(true);
+        const success = await dispatch(patchClient(clientId, {
+            title: nextTitle,
+            first_name: normalizedFirstName || null,
+            last_name: normalizedLastName || null,
+            email: normalizedEmail || null,
+            date_of_birth: normalizedDateOfBirth || null,
+            skin_type: normalizedSkinType || null,
+            current_medication: normalizedCurrentMedication || null,
+            skin_overview: normalizedSkinOverview || null,
+            personal_notes: normalizedPersonalNotes || null,
+            data: {
+                ...draftData,
+                first_name: normalizedFirstName || null,
+                last_name: normalizedLastName || null,
+                email: normalizedEmail || null,
+                date_of_birth: normalizedDateOfBirth || null,
+                skin_type: normalizedSkinType || null,
+                is_pregnant: normalizedIsPregnant,
+                is_breastfeeding: normalizedIsBreastfeeding,
+                concern_tags: normalizedConcernTags,
+                current_medication: normalizedCurrentMedication || null,
+                skin_overview: normalizedSkinOverview || null,
+                personal_notes: normalizedPersonalNotes || null,
+            },
+        }));
+        setIsPatching(false);
+
+        if (success) {
+            handleClientsNavigate();
+        }
+    };
+
+    const handleDataChange = (key: string, nextValue: string) => {
+        setDraftClient((currentClient) => {
+            if (!currentClient) {
+                return currentClient;
+            }
+
+            const currentData = getDataObject(currentClient.data);
+
+            return {
+                ...currentClient,
+                data: {
+                    ...currentData,
+                    [key]: nextValue,
+                },
+            };
+        });
+    };
+
+    const handleConcernTagsChange = (nextValue: string[]) => {
+        setDraftClient((currentClient) => {
+            if (!currentClient) {
+                return currentClient;
+            }
+
+            const currentData = getDataObject(currentClient.data);
+
+            return {
+                ...currentClient,
+                data: {
+                    ...currentData,
+                    concern_tags: nextValue,
+                },
+            };
+        });
+    };
+
+    const handleBooleanDataChange = (key: 'is_pregnant' | 'is_breastfeeding', nextValue: boolean) => {
+        setDraftClient((currentClient) => {
+            if (!currentClient) {
+                return currentClient;
+            }
+
+            const currentData = getDataObject(currentClient.data);
+
+            return {
+                ...currentClient,
+                data: {
+                    ...currentData,
+                    [key]: nextValue,
+                },
+            };
+        });
     };
 
     return (
+        <>
             <Box>
+                <Collapse in={isDirty} unmountOnExit>
+                    <Box
+                        sx={{
+                            position: 'fixed',
+                            right: { xs: 16, sm: 24 },
+                            bottom: { xs: 16, sm: 24 },
+                            zIndex: (theme) => theme.zIndex.appBar + 1,
+                        }}
+                    >
+
+                        <Fab
+                            color="primary"
+                            disabled={isPatching}
+                            onClick={handlePatch}
+                            
+                        >
+                            <Icon icon="save" />
+                        </Fab>
+                    </Box>
+                </Collapse>
+
                 <CardHeader
                     avatar={<>
-                        <IconButton
-                            color="primary"
-                            onClick={handleClientsNavigate}
-                        >
-                            <Icon icon="left" />
+                        <IconButton color="primary" onClick={handleClientsNavigate}>
+                            <Icon icon="clients" />
                         </IconButton>
-
-                        <Avatar
-                            sx={{
-                                bgcolor: avatarColor || '#e2e8f0',
-                                color: '#000',
-                            }}
-                        >
-                            <Typography>
-                                {initials}
-                            </Typography>
-                        </Avatar>
-                    </>
-                }
-                title={<Typography variant="subtitle1">{fullName}</Typography>}
-                    subheader={email}
+                    </>}
                     action={<>
-                        <IconButton
+                        <Button
+                            endIcon={<Icon icon="add" />}
                             color="primary"
-                            onClick={handleDelete}
-                        >
+                            onClick={handleNew}>
+                            New
+                        </Button>
+                        <IconButton color="primary" onClick={handleOpenDeleteConfirm}>
                             <Icon icon="delete" />
                         </IconButton>
-                        
-                        <IconButton
-                            color="primary"
-                            onClick={handleNew}
-                        >
-                            <Icon icon="new" />
-                        </IconButton>
-
-                        {/* <IconButton
-                            color="primary"
-                            onClick={handleCreateRecommendation}
-                        >
-                            <Icon icon="recommendation" />
-                        </IconButton> */}
-
                     </>}
                 />
-                
-                <CardContent>
-                    
-                    {concernTags.length ? (
-                        <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
-                            {concernTags.map((tag) => (
-                                <Chip key={tag} label={tag} />
-                            ))}
-                        </Stack>
-                    ) : (
-                        <Typography variant="body2" color="text.secondary">
-                            No concern tags recorded.
-                        </Typography>
-                    )}
-                <List disablePadding>
-                    <DetailRow label="Skin overview" value={skinOverview} />
-                    
-                    
-                    <DetailRow label="Personal notes" value={personalNotes} />
 
-                        <DetailRow label="Email" value={email} />
-                        <DetailRow label="Date of birth" value={formatDate(dateOfBirth)} />
-                        <DetailRow label="Skin type" value={skinType} />
-                        <DetailRow label="Pregnant" value={getBooleanLabel(clientData.is_pregnant ?? client?.is_pregnant)} />
-                        <DetailRow label="Breastfeeding" value={getBooleanLabel(clientData.is_breastfeeding ?? client?.is_breastfeeding)} />
-                        <DetailRow label="Current medication" value={medication} />
-                    </List>
-                    
-                    
-                    <Typography variant="h6">Record metadata</Typography>
-                    <List disablePadding>
-                        <DetailRow label="Created" value={formatDateTime(client?.created ?? client?.created_at)} />
-                        <DetailRow label="Updated" value={formatDateTime(client?.updated)} />
-                        <DetailRow label="Imported from source" value={formatDateTime(clientData.source_created_at)} />
-                        <DetailRow label="Source practitioner ID" value={getStringValue(clientData.source_practitioner_id) || 'Not provided'} />
-                    </List>
+                <CardContent>
+                    <Grid container spacing={4}>
+                        <Grid size={{xs: 12, sm: 6}}>
+                           
+                            <Editable label="First name" value={firstName} placeholder="Add first name" onChange={(value) => handleDataChange('first_name', value)} />
+                            <Box sx={{ my: 2 }} />
+                            <Editable label="Last name" value={lastName} placeholder="Add last name" onChange={(value) => handleDataChange('last_name', value)} />
+                            <Box sx={{ my: 2 }} />
+                            <Editable label="Email" value={email} placeholder="Add email" onChange={(value) => handleDataChange('email', value)} />
+                            <Box sx={{ my: 2 }} />
+                            <Editable label="Current medication" value={medication} placeholder="Add current medication" multiline minRows={2} onChange={(value) => handleDataChange('current_medication', value)} />
+                            <Box sx={{ my: 2 }} />
+                            <Editable label="Skin overview" value={skinOverview} placeholder="Add skin overview" multiline minRows={3} onChange={(value) => handleDataChange('skin_overview', value)} />
+                           
+                        </Grid>
+                        <Grid size={{ xs: 12, sm: 6 }}>
+                           
+                            <Box sx={{mx: 1}}>
+                                <Editable 
+                                    label="Skin type" 
+                                    value={skinType} 
+                                    editableType="select" 
+                                    variant="standard"
+                                    placeholder="Select skin type" options={SKIN_TYPE_OPTIONS} 
+                                    onChange={(value) => handleDataChange('skin_type', value)} />
+                                <Box sx={{ my: 2 }} />
+                                <Editable label="Date of birth" value={dateOfBirth} editableType="date" onChange={(value) => handleDataChange('date_of_birth', value)} />
+                            </Box>
+                            <Box sx={{ my: 2 }} />
+                            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, px: 1.5 }}>
+                                <Editable label="Pregnant" value={isPregnant} onChange={(value) => handleBooleanDataChange('is_pregnant', value === true)} />
+                                <Editable label="Breastfeeding" value={isBreastfeeding} onChange={(value) => handleBooleanDataChange('is_breastfeeding', value === true)} />
+                            </Box>
+                            <Box sx={{ my: 2 }} />
+                            <Editable value={concernTags} editableType="chips" options={CONCERN_TAG_OPTIONS} onChange={handleConcernTagsChange} />
+                            <Box sx={{ my: 2 }} />
+                            <Editable label="Personal notes" value={personalNotes} placeholder="Add personal notes" multiline minRows={3} onChange={(value) => handleDataChange('personal_notes', value)} />
+                            
+                        </Grid>
+                    </Grid>
                 </CardContent>
+
                 <CardActions>
-                    <Box sx={{ flexGrow: 1 }} />
-                    <Button variant="text" onClick={handleClientsNavigate}>
-                        Back to clients
+                    <Button
+                        fullWidth
+                        startIcon={<Icon icon="left" />}
+                        variant="text"
+                        onClick={handleClientsNavigate}
+                    >
+                        Back
                     </Button>
                 </CardActions>
+
+                <ConfirmAction
+                    open={confirmOpen}
+                    icon="delete"
+                    title="Delete Client?"
+                    body="Are you sure you want to delete this client? This action cannot be undone."
+                    handleConfirm={handleDelete}
+                    handleClose={handleCloseDeleteConfirm}
+                />
             </Box>
+        </>
     );
 };
 

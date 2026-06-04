@@ -4,22 +4,17 @@ import type { T_Practitioner } from '../Practitioner/types';
 import {
     Avatar,
     IconButton,
-    Menu,
-    MenuItem,
 } from '@mui/material';
-import { useRouter } from 'next/navigation';
 import { useDispatch } from '../../../NX/Uberedux';
 import { useSupabaseAuth } from '../../../NX/Paywall';
-import { initPractitioner, usePractitioner } from '../Practitioner';
-import { Icon, navigateTo } from '../../../NX/DesignSystem';
-import { setPaywall } from '../../../NX/Paywall';
-import { supabase } from '../../../NX/lib/supabase';
+import { initPractitioner, setPractitioner, usePractitioner } from '../Practitioner';
+import { Icon } from '../../../NX/DesignSystem';
+import Account from './components/Account';
 
 export default function Practitioner() {
 
     const { user } = useSupabaseAuth();
     const dispatch = useDispatch();
-    const router = useRouter();
     const practitioner = usePractitioner();
     const data = (practitioner?.data || null) as T_Practitioner | null;
     const avatarSource =
@@ -29,33 +24,14 @@ export default function Practitioner() {
         String((data.data as Record<string, unknown>).avatar).trim()
             ? String((data.data as Record<string, unknown>).avatar).trim()
             : undefined;
-    const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(null);
-    const menuOpen = Boolean(menuAnchorEl);
-
-
     React.useEffect(() => {
         if (!practitioner?.initted && !practitioner?.loading && user?.id) {
             dispatch(initPractitioner(user.id));
         }
     }, [dispatch, practitioner?.initted, practitioner?.loading, user?.id]);
 
-    const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setMenuAnchorEl(event.currentTarget);
-    };
-
-    const handleCloseMenu = () => {
-        setMenuAnchorEl(null);
-    };
-
-    const handleSettings = () => {
-        handleCloseMenu();
-        dispatch(navigateTo(router, '/practitioner'));
-    };
-
-    const handleSignout = async () => {
-        handleCloseMenu();
-        await supabase.auth.signOut();
-        dispatch(setPaywall('supabaseAuth', null));
+    const handleOpenAccount = () => {
+        dispatch(setPractitioner('accountOpen', true));
     };
 
     if (practitioner?.loading) return null;
@@ -63,11 +39,8 @@ export default function Practitioner() {
     return (
         <>
             <IconButton
-                onClick={handleOpenMenu}
-                aria-label="practitioner menu"
-                aria-controls={menuOpen ? 'practitioner-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={menuOpen ? 'true' : undefined}
+                onClick={handleOpenAccount}
+                aria-label="open practitioner account"
                 sx={{ p: 0.25 }}
             >
                 <Avatar src={avatarSource}>
@@ -75,16 +48,7 @@ export default function Practitioner() {
                 </Avatar>
             </IconButton>
 
-            <Menu
-                id="practitioner-menu"
-                anchorEl={menuAnchorEl}
-                open={menuOpen}
-                onClose={handleCloseMenu}
-                keepMounted
-            >
-                <MenuItem onClick={handleSettings}>Settings</MenuItem>
-                <MenuItem onClick={handleSignout}>Sign out</MenuItem>
-            </Menu>
+            <Account />
         </>
     );
 }

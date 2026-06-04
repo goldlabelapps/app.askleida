@@ -5,18 +5,22 @@ import { useRouter } from 'next/navigation';
 import {
   Box,
   Button,
+  Chip,
   Fab,
   CardActions,
   CardContent,
   CardHeader,
-  Grid,
   Collapse,
+  Divider,
+  Grid,
   IconButton,
+  Link,
+  Stack,
+  Typography,
 } from '@mui/material';
 import { Icon, navigateTo, ConfirmAction } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
 import { deleteProduct, patchProduct } from '../../Products';
-import { Editable } from '../../../../Leida';
 
 type T_ProductRecord = T_Product & {
   product_id?: string | null;
@@ -102,12 +106,27 @@ const ProductDetail: React.FC<T_ProductDetailProps> = ({ config, product }) => {
   const productId = getStringValue(activeProduct?.product_id) || getStringValue(activeProduct?.id);
 
   const name = getStringValue(productData.name) || getStringValue(activeProduct?.name) || getStringValue(activeProduct?.title) || '';
-  const category = getStringValue(productData.category) || getStringValue(activeProduct?.category) || '';
-  const sku = getStringValue(productData.sku) || getStringValue(activeProduct?.sku) || '';
+  const brand = getStringValue(productData.brand) || '';
+  const imageUrl = getStringValue(productData.image_url);
+  const websiteUrl = getStringValue(productData.website_url);
+  const routineStep = getStringValue(productData.routine_step);
+  const distributionType = getStringValue(productData.distribution_type);
+  const howToApply = getStringValue(productData.how_to_apply);
+  const isVerified = productData.is_verified === true;
+  const isSeeded = productData.is_seeded === true;
+  const isPregnancySafe = productData.is_pregnancy_safe === true;
+  const isBreastfeedingSafe = productData.is_breastfeeding_safe === true;
+
+  const concernTags = Array.isArray(productData.concern_tags)
+    ? productData.concern_tags.filter((tag): tag is string => typeof tag === 'string' && tag.trim().length > 0)
+    : [];
+  const skinTypeTags = Array.isArray(productData.skin_type_tags)
+    ? productData.skin_type_tags.filter((tag): tag is string => typeof tag === 'string' && tag.trim().length > 0)
+    : [];
+
   const description = getStringValue(productData.description) || getStringValue(activeProduct?.description) || '';
-  const notes = getStringValue(productData.notes) || getStringValue(activeProduct?.notes) || '';
-  const priceValue = getNumberValue(productData.price ?? activeProduct?.price);
-  const price = priceValue === null ? '' : String(priceValue);
+  const created = getStringValue(activeProduct?.created) || getStringValue(activeProduct?.created_at);
+  const updated = getStringValue(activeProduct?.updated);
 
   if (!activeProduct) {
     if (isDeleting) {
@@ -245,36 +264,117 @@ const ProductDetail: React.FC<T_ProductDetailProps> = ({ config, product }) => {
         />
 
         <CardContent>
-          <Grid container spacing={4}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Editable label="Name" value={name} placeholder="Add product name" onChange={(value) => handleDataChange('name', value)} />
-              <Box sx={{ my: 2 }} />
-              <Editable label="Category" value={category} placeholder="Add category" onChange={(value) => handleDataChange('category', value)} />
-              <Box sx={{ my: 2 }} />
-              <Editable label="SKU" value={sku} placeholder="Add SKU" onChange={(value) => handleDataChange('sku', value)} />
-              <Box sx={{ my: 2 }} />
-              <Editable label="Price" value={price} placeholder="Add price" onChange={(value) => handleDataChange('price', value)} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Editable
-                label="Description"
-                value={description}
-                placeholder="Add product description"
-                multiline
-                minRows={4}
-                onChange={(value) => handleDataChange('description', value)}
+          <Stack spacing={2.5}>
+            {imageUrl ? (
+              <Box
+                component="img"
+                src={imageUrl}
+                alt={name || 'Product image'}
+                sx={{
+                  width: '100%',
+                  maxWidth: 280,
+                  borderRadius: 2,
+                  objectFit: 'cover',
+                  border: (theme) => `1px solid ${theme.palette.divider}`,
+                }}
               />
-              <Box sx={{ my: 2 }} />
-              <Editable
-                label="Notes"
-                value={notes}
-                placeholder="Add internal notes"
-                multiline
-                minRows={4}
-                onChange={(value) => handleDataChange('notes', value)}
+            ) : null}
+
+            <Box>
+              <Typography variant="h5">{name || 'Unnamed product'}</Typography>
+              {brand ? (
+                <Typography variant="subtitle1" color="text.secondary">
+                  {brand}
+                </Typography>
+              ) : null}
+            </Box>
+
+            <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
+              <Chip size="small" color={isVerified ? 'success' : 'default'} label={isVerified ? 'Verified' : 'Unverified'} />
+              <Chip size="small" color={isSeeded ? 'info' : 'default'} label={isSeeded ? 'Seeded' : 'User Added'} />
+              <Chip
+                size="small"
+                color={isPregnancySafe ? 'success' : 'default'}
+                label={isPregnancySafe ? 'Pregnancy Safe' : 'Not Pregnancy Safe'}
               />
+              <Chip
+                size="small"
+                color={isBreastfeedingSafe ? 'success' : 'default'}
+                label={isBreastfeedingSafe ? 'Breastfeeding Safe' : 'Not Breastfeeding Safe'}
+              />
+            </Stack>
+
+            <Grid container spacing={2}>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="caption" color="text.secondary">Routine Step</Typography>
+                <Typography>{routineStep || 'Not set'}</Typography>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="caption" color="text.secondary">Distribution</Typography>
+                <Typography>{distributionType || 'Not set'}</Typography>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="caption" color="text.secondary">Created</Typography>
+                <Typography>{created || 'Unknown'}</Typography>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="caption" color="text.secondary">Updated</Typography>
+                <Typography>{updated || 'Unknown'}</Typography>
+              </Grid>
             </Grid>
-          </Grid>
+
+            {websiteUrl ? (
+              <Box>
+                <Typography variant="caption" color="text.secondary">Website</Typography>
+                <Typography>
+                  <Link href={websiteUrl} target="_blank" rel="noopener noreferrer">
+                    {websiteUrl}
+                  </Link>
+                </Typography>
+              </Box>
+            ) : null}
+
+            {description ? (
+              <Box>
+                <Typography variant="subtitle2">Description</Typography>
+                <Typography color="text.secondary">{description}</Typography>
+              </Box>
+            ) : null}
+
+            {howToApply ? (
+              <Box>
+                <Typography variant="subtitle2">How to apply</Typography>
+                <Typography color="text.secondary">{howToApply}</Typography>
+              </Box>
+            ) : null}
+
+            {concernTags.length > 0 ? (
+              <Box>
+                <Typography variant="subtitle2" sx={{ mb: 1 }}>Concern tags</Typography>
+                <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
+                  {concernTags.map((tag) => (
+                    <Chip key={`concern-${tag}`} size="small" label={tag} />
+                  ))}
+                </Stack>
+              </Box>
+            ) : null}
+
+            {skinTypeTags.length > 0 ? (
+              <Box>
+                <Typography variant="subtitle2" sx={{ mb: 1 }}>Skin type tags</Typography>
+                <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
+                  {skinTypeTags.map((tag) => (
+                    <Chip key={`skin-${tag}`} size="small" label={tag} />
+                  ))}
+                </Stack>
+              </Box>
+            ) : null}
+
+            <Divider />
+            <Typography variant="caption" color="text.secondary">
+              Product ID: {productId || 'Unavailable'}
+            </Typography>
+          </Stack>
         </CardContent>
 
         <CardActions>

@@ -17,6 +17,7 @@ import { useDispatch } from '../../../NX/Uberedux';
 import { Icon, navigateTo } from '../../../NX/DesignSystem';
 import { useSupabaseAuth } from '../../../NX/Paywall';
 import { initProducts, useProducts } from '../Products';
+import type { T_Product } from './types';
 
 export default function Products() {
 
@@ -24,7 +25,7 @@ export default function Products() {
     const { user } = useSupabaseAuth();
     const dispatch = useDispatch();
     const products = useProducts();
-    const list = Array.isArray(products?.list) ? products.list : [];
+    const list: T_Product[] = Array.isArray(products?.list) ? (products.list as T_Product[]) : [];
     const titleText = list.length > 0 ? `Products (${list.length})` : 'Products';
     
     React.useEffect(() => {
@@ -63,20 +64,25 @@ export default function Products() {
                 ) : (
                     <>
                         <List dense>
-                            {list.map((product: any) => {
-                                const name = product?.data?.name || product?.name || product?.title || 'Unnamed product';
-                                const category = product?.data?.category || product?.category || 'No category';
-                                const rawPrice = product?.data?.price ?? product?.price;
-                                const numericPrice = typeof rawPrice === 'number'
-                                    ? rawPrice
-                                    : typeof rawPrice === 'string'
-                                        ? Number(rawPrice)
-                                        : NaN;
-                                const priceText = Number.isFinite(numericPrice)
-                                    ? `£${numericPrice.toFixed(2)}`
-                                    : 'No price';
+                            {list.map((product: T_Product) => {
+                                const name = product?.data?.name || product?.title || product?.name || 'Unnamed product';
+                                const brand = product?.data?.brand || 'Unknown brand';
+                                const routineStep = product?.data?.routine_step || null;
+                                const distributionType = product?.data?.distribution_type || null;
+                                const isVerified = product?.data?.is_verified === true;
+                                const concernTags = Array.isArray(product?.data?.concern_tags)
+                                    ? product.data?.concern_tags
+                                    : [];
                                 const productId = product?.product_id;
-                                const subheader = `${category} • ${priceText}`;
+                                const subheaderParts = [brand, routineStep].filter(Boolean);
+                                const tagsText = concernTags.length > 0
+                                    ? `${concernTags.length} concern tag${concernTags.length === 1 ? '' : 's'}`
+                                    : null;
+                                
+                                const subheader = [
+                                    subheaderParts.length > 0 ? subheaderParts.join(' • ') : null,
+                                    tagsText,
+                                ].filter(Boolean).join(' • ');
                                 const itemKey = String(productId || name);
 
 

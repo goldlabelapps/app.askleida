@@ -7,6 +7,7 @@ import {
     Avatar,
     Button,
     CardHeader,
+    CircularProgress,
     LinearProgress,
     List,
     ListItem,
@@ -27,6 +28,7 @@ export default function Clients() {
     const dispatch = useDispatch();
     const clients = useClients();
     const list = Array.isArray(clients?.list) ? clients.list : [];
+    const titleText = list.length > 0 ? `Clients (${list.length})` : 'Clients';
     const avatarColorsRef = React.useRef<Record<string, string>>({});
 
     const getRandomPastelColor = React.useCallback(() => {
@@ -55,14 +57,11 @@ export default function Clients() {
 
     return (
         <Box>
-
             <CardHeader 
                 avatar={<>
-                    <Icon icon="clients" color="primary" />
+                    {clients?.loading ? <CircularProgress size={20} /> : <Icon icon="clients" color="primary" />}
                 </>}
-                title={<Typography variant="h6">
-                    Clients
-                </Typography>}
+                title={<Typography variant="h6">{titleText}</Typography>}
                 action={<>
                     <Button
                         endIcon={<Icon icon="add" />}

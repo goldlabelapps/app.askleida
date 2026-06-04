@@ -122,12 +122,12 @@ const Leida: React.FC<any> = ({
                     ? 'tips'
                     : 'products';
     const bottomNavItems = [
-        // {
-        //     label: 'Clients',
-        //     value: 'clients',
-        //     icon: 'clients' as const,
-        //     href: '/clients',
-        // },
+        {
+            label: 'Clients',
+            value: 'clients',
+            icon: 'clients' as const,
+            href: '/clients',
+        },
 
         // {
         //     label: 'Products',

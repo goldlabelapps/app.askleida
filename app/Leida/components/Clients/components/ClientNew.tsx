@@ -62,7 +62,6 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
             setError('Add at least a name or email before creating a client.');
             return;
         }
-
         try {
             setSubmitting(true);
             setError(null);

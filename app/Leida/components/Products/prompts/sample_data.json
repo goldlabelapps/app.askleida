@@ -1,0 +1,47 @@
+[
+    {
+        "product_id": "3b95c630-d2f7-4d9b-8d20-2f07020eb1d1",
+        "practitioner_id": "f3dde5b6-b389-4493-a480-a414689a6023",
+        "title": "Barrier Repair Serum",
+        "created": "2026-05-15T10:12:34.000Z",
+        "updated": "2026-05-28T09:22:10.000Z",
+        "data": {
+            "name": "Barrier Repair Serum",
+            "category": "Serum",
+            "sku": "LEI-SER-001",
+            "price": 42,
+            "description": "Lightweight ceramide serum for barrier support and hydration.",
+            "notes": "Best seller in follow-up plans."
+        }
+    },
+    {
+        "product_id": "e89bfcc8-9c76-4675-8f35-55b8a44e73cc",
+        "practitioner_id": "f3dde5b6-b389-4493-a480-a414689a6023",
+        "title": "Daily SPF 50",
+        "created": "2026-05-20T12:05:00.000Z",
+        "updated": "2026-05-20T12:05:00.000Z",
+        "data": {
+            "name": "Daily SPF 50",
+            "category": "Sunscreen",
+            "sku": "LEI-SPF-050",
+            "price": 34.5,
+            "description": "Broad-spectrum SPF 50 with no white cast.",
+            "notes": "Pair with vitamin C in morning routines."
+        }
+    },
+    {
+        "product_id": "8c1a8e4d-298f-40f9-87a3-b7f42df345d8",
+        "practitioner_id": "f3dde5b6-b389-4493-a480-a414689a6023",
+        "title": "Overnight Recovery Cream",
+        "created": "2026-04-22T15:40:30.000Z",
+        "updated": "2026-05-02T08:10:11.000Z",
+        "data": {
+            "name": "Overnight Recovery Cream",
+            "category": "Moisturizer",
+            "sku": "LEI-MOI-014",
+            "price": 48,
+            "description": "Rich night cream for dry and sensitized skin.",
+            "notes": "Recommend only for evening use."
+        }
+    }
+]

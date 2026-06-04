@@ -29,7 +29,7 @@ export default function Products() {
     
     React.useEffect(() => {
         if (!products?.initted && !products?.loading && user?.id) {
-            dispatch(initProducts(user.id));
+            dispatch(initProducts());
         }
     }, [dispatch, products?.initted, products?.loading, user?.id]);
 

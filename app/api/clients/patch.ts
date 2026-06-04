@@ -1,11 +1,18 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { makeRes } from '../';
+import { setFeedback } from '../../NX/DesignSystem';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const tenant = process.env.NEXT_PUBLIC_TENANT;
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+const fb = {
+  title: 'Client Updated',
+  description: 'The client was successfully updated.',
+  severity: 'success' as const,
+}
 
 // PATCH /api/clients - Update a client (expects { client_id, ...fields })
 export async function PATCH(req: Request) {

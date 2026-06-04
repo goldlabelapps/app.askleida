@@ -1,5 +1,6 @@
 import type { T_RootState, T_UbereduxDispatch } from '../../../../NX/Uberedux/store';
 import { setUbereduxKey } from '../../../../NX/Uberedux';
+import { setFeedback } from '../../../../NX/DesignSystem';
 
 export const deleteClient = (clientId: string): any =>
     async (dispatch: T_UbereduxDispatch, getState: () => T_RootState) => {
@@ -49,6 +50,11 @@ export const deleteClient = (clientId: string): any =>
             return true;
         } catch (e: unknown) {
             const msg = e instanceof Error ? e.message : String(e);
+            dispatch(setFeedback({
+                title: 'Client Delete Failed',
+                description: msg,
+                severity: 'error',
+            }));
             dispatch(setUbereduxKey({ key: 'error', value: msg }));
             return false;
         }

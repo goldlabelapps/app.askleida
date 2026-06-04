@@ -1,6 +1,7 @@
 import type { T_RootState, T_UbereduxDispatch } from '../../../../NX/Uberedux/store';
 import type { T_Client } from '../types';
 import { setUbereduxKey } from '../../../../NX/Uberedux';
+import { setFeedback } from '../../../../NX/DesignSystem';
 
 const toObject = (value: unknown): Record<string, unknown> => {
     if (!value || typeof value !== 'object' || Array.isArray(value)) {
@@ -116,6 +117,11 @@ export const createClient = (client: Partial<T_Client>): any =>
             return true;
         } catch (e: unknown) {
             const msg = e instanceof Error ? e.message : String(e);
+            dispatch(setFeedback({
+                title: 'Client Create Failed',
+                description: msg,
+                severity: 'error',
+            }));
             dispatch(setUbereduxKey({ key: 'error', value: msg }));
             return false;
         }

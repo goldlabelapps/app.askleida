@@ -21,7 +21,6 @@ const GameMenu: React.FC = () => {
         <>
         <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', maxWidth: 300, gap: 1, mx: 'auto' }}>
             <Button 
-                variant="outlined" 
                 color="primary" 
                 startIcon={<Icon icon="clients" />}
                 onClick={() => handleClick('/clients')} 
@@ -29,7 +28,6 @@ const GameMenu: React.FC = () => {
                 Clients
             </Button>
             <Button 
-                variant="outlined" 
                 color="primary" 
                 startIcon={<Icon icon="tips" />}
                 onClick={() => handleClick('/tips')} 

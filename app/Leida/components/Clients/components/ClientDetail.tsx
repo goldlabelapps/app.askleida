@@ -4,7 +4,6 @@ import type { T_Client } from '../types';
 import { useRouter } from 'next/navigation';
 import {
     Box,
-    Avatar,
     Button,
     CardActions,
     CardContent,
@@ -34,7 +33,6 @@ type T_ClientRecord = T_Client & {
 type T_ClientDetailProps = {
     config?: unknown;
     client?: T_ClientRecord | null;
-    avatarColor?: string;
 };
 
 const getStringValue = (value: unknown): string | null => {
@@ -125,12 +123,12 @@ const DetailRow = ({
     <ListItem divider>
         <ListItemText primary={label} secondary={value} />
     </ListItem>
+    
 );
 
 const ClientDetail: React.FC<T_ClientDetailProps> = ({
     config,
     client,
-    avatarColor,
 }) => {
     void config;
 
@@ -162,10 +160,12 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
     const dateOfBirth = getStringValue(clientData.date_of_birth ?? activeClient?.date_of_birth) || '';
     const concernTags = getArrayValues(clientData.concern_tags ?? activeClient?.concern_tags);
     const concernTagsText = concernTags.join(', ');
-    const initials = `${firstName?.[0] || ''}${lastName?.[0] || ''}`.toUpperCase() || '?';
     const clientId = getStringValue(activeClient?.client_id) || getStringValue(activeClient?.id);
 
     if (!activeClient) {
+        if (isDeleting) {
+            return null;
+        }
         return null;
     }
 
@@ -194,7 +194,6 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
         setIsDeleting(true);
         setConfirmOpen(false);
         await dispatch(deleteClient(clientId));
-        setIsDeleting(false);
         handleClientsNavigate();
     };
 
@@ -311,25 +310,19 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
             <CardHeader
                 avatar={<>
                     <IconButton color="primary" onClick={handleClientsNavigate}>
-                        <Icon icon="left" />
+                        <Icon icon="clients" />
                     </IconButton>
-                    <Avatar
-                        sx={{
-                            bgcolor: avatarColor || '#e2e8f0',
-                            color: '#000',
-                        }}
-                    >
-                        <Typography>{initials}</Typography>
-                    </Avatar>
                 </>}
-                title={<Typography variant="subtitle1">{fullName}</Typography>}
-                subheader={email || 'No email provided'}
                 action={<>
-                    <IconButton color="primary" onClick={handleOpenDeleteConfirm} disabled={isDeleting}>
+                    <Button
+                        endIcon={<Icon icon="add" />}
+                        color="primary"
+                        onClick={handleNew}
+                    >
+                        New
+                    </Button>
+                    <IconButton color="primary" onClick={handleOpenDeleteConfirm}>
                         <Icon icon="delete" />
-                    </IconButton>
-                    <IconButton color="primary" onClick={handleNew}>
-                        <Icon icon="new" />
                     </IconButton>
                 </>}
             />
@@ -365,33 +358,25 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
                         </Button>
                     </Collapse>
 
-                    <Typography variant="h6">Record metadata</Typography>
-                    <List disablePadding>
-                        <DetailRow label="Created" value={formatDateTime(activeClient?.created ?? activeClient?.created_at)} />
-                        <DetailRow label="Updated" value={formatDateTime(activeClient?.updated)} />
-                        <DetailRow label="Imported from source" value={formatDateTime(clientData.source_created_at)} />
-                        <DetailRow label="Source practitioner ID" value={getStringValue(clientData.source_practitioner_id) || 'Not provided'} />
-                        <DetailRow label="Pregnant" value={getBooleanLabel(clientData.is_pregnant ?? activeClient?.is_pregnant)} />
-                        <DetailRow label="Breastfeeding" value={getBooleanLabel(clientData.is_breastfeeding ?? activeClient?.is_breastfeeding)} />
-                    </List>
                 </Stack>
             </CardContent>
 
             <CardActions>
-                <Button startIcon={<Icon icon="delete" />} color="error" onClick={handleOpenDeleteConfirm} disabled={isDeleting}>
-                    Delete
-                </Button>
-                <Box sx={{ flexGrow: 1 }} />
-                <Button variant="text" onClick={handleClientsNavigate}>
-                    Back to clients
+                <Button
+                    fullWidth
+                    startIcon={<Icon icon="left" />}
+                    variant="text"
+                    onClick={handleClientsNavigate}
+                >
+                    Back
                 </Button>
             </CardActions>
 
             <ConfirmAction
                 open={confirmOpen}
                 icon="delete"
-                title="Delete client?"
-                body={`Are you sure you want to delete ${fullName}? This action cannot be undone.`}
+                title="Delete Client?"
+                body="Are you sure you want to delete this client? This action cannot be undone."
                 handleConfirm={handleDelete}
                 handleClose={handleCloseDeleteConfirm}
             />

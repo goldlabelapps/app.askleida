@@ -18,6 +18,7 @@ import { useDispatch } from '../../../../NX/Uberedux';
 import { deleteTip, patchTip } from '../../Tips';
 import { BulletEditor, EditableText } from '../../../../Leida';
 
+
 type T_TipDetailProps = {
     tip?: T_Tip | null;
 };

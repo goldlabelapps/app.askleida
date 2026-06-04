@@ -40,8 +40,7 @@ export default function Account() {
 	const dispatch = useDispatch();
 	const practitioner = usePractitioner();
 	const { user } = useSupabaseAuth();
-    const title = practitioner?.title || 'Practitioner';
-	const profile = getPractitionerProfile(practitioner?.data ?? null);
+	const profile = getPractitionerProfile(practitioner?.data[0] ?? null);
 	const open = Boolean(practitioner?.accountOpen);
 	const name = String(
 		profile?.display_name || profile?.title || user?.user_metadata?.full_name || 'Your account',
@@ -134,20 +133,20 @@ export default function Account() {
 			<DialogContent>
                 <Box>
                     <pre>
-                        {JSON.stringify(practitioner?.data?.data, null, 2)}
+                        {JSON.stringify(practitioner?.data[0]?.data, null, 2)}
                     </pre>
                 </Box>
 			</DialogContent>
 
 			<DialogActions sx={{ px: 2, py: 2 }}>
-				<Button
+				{/* <Button
                     fullWidth
 					color="primary"
 					variant="outlined"
 					startIcon={<Icon icon="close" />}
 				>
 					Close
-				</Button>
+				</Button> */}
 			</DialogActions>
 
 			<ConfirmAction

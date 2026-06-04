@@ -84,12 +84,12 @@ const { tenant, config } = loadTenantConfig();
 const title = config.siteName || 'Leida';
 const description = config.description || 'Homecare assistant for solo skin therapists';
 const favicon = config.favicon || '/askleida/svg/favicon.svg';
-const manifestPath = path.join(process.cwd(), 'public', tenant, 'manifest.json');
-const manifestHref = fs.existsSync(manifestPath) ? `/${tenant}/manifest.json` : undefined;
+const manifestHref = `/${tenant}/manifest.json`;
 
 export const metadata: Metadata = {
   title,
   description,
+  manifest: manifestHref,
   icons: {
     icon: favicon,
     shortcut: favicon,

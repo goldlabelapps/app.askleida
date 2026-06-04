@@ -66,7 +66,8 @@ export async function POST(req: Request) {
         .from(BUCKET)
         .getPublicUrl(fileName);
 
-    const avatarUrl = urlData.publicUrl;
+    const avatarVersion = Date.now();
+    const avatarUrl = `${urlData.publicUrl}?v=${avatarVersion}`;
 
     // Fetch existing practitioner data so we can merge rather than overwrite
     const { data: existingRow, error: fetchError } = await supabase

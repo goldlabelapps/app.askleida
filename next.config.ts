@@ -43,6 +43,18 @@ export default withPWA({
     disableDevLogs: true,
     runtimeCaching: [
       {
+        urlPattern: /\/storage\/v1\/object\/public\/avatars\/.*/,
+        handler: "NetworkFirst",
+        options: {
+          cacheName: "avatars",
+          networkTimeoutSeconds: 3,
+          expiration: {
+            maxEntries: 32,
+            maxAgeSeconds: 24 * 60 * 60, // 1 day
+          },
+        },
+      },
+      {
         urlPattern: /^https?.*\.(?:png|jpg|jpeg|svg|gif|webp)$/,
         handler: "StaleWhileRevalidate",
         options: {

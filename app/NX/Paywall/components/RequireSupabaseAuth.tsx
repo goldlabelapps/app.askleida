@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { useSupabaseAuth } from '../hooks/useSupabaseAuth';
 import SupabaseLogin from './SupabaseLogin';
 import { Backdrop, Box, Typography } from '@mui/material';
@@ -12,6 +13,7 @@ import OverlaySpinner from '../../DesignSystem/components/OverlaySpinner';
 import { getTenant } from '../../../NX/lib/getTenant';
 
 export default function RequireSupabaseAuth({ children, publicUrl }: { children: React.ReactNode; publicUrl: string }) {
+  const pathname = usePathname();
   const { user, loading } = useSupabaseAuth();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -26,6 +28,10 @@ export default function RequireSupabaseAuth({ children, publicUrl }: { children:
     if (error) setError(error.message);
     setPending(false);
   };
+
+  if (pathname?.startsWith('/invite')) {
+    return <>{children}</>;
+  }
 
   return (
     <NX config={config}>

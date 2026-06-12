@@ -30,6 +30,16 @@ export default function InvitePage() {
     const [saving, setSaving] = React.useState(false);
 
     React.useEffect(() => {
+        if (!success) return;
+
+        const timer = window.setTimeout(() => {
+            router.replace('/');
+        }, 800);
+
+        return () => window.clearTimeout(timer);
+    }, [router, success]);
+
+    React.useEffect(() => {
         let active = true;
 
         const applySession = (session: Session | null) => {
@@ -84,12 +94,16 @@ export default function InvitePage() {
         }
 
         setSaving(true);
-        const { error: updateError } = await supabase.auth.updateUser({ password });
-        setSaving(false);
 
-        if (updateError) {
-            setError(updateError.message);
-            return;
+        try {
+            const { error: updateError } = await supabase.auth.updateUser({ password });
+
+            if (updateError) {
+                setError(updateError.message);
+                return;
+            }
+        } finally {
+            setSaving(false);
         }
 
         setSuccess('Password set. You can continue into the app now.');

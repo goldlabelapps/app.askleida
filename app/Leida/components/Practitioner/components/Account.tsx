@@ -14,7 +14,8 @@ import {
 } from '@mui/material';
 import AvatarUpload from '../../UI/AvatarUpload';
 import { useTheme } from '@mui/material/styles';
-import { ConfirmAction, EditableStr, Icon } from '../../../../NX/DesignSystem';
+import { ConfirmAction, Icon } from '../../../../NX/DesignSystem';
+import { Editable } from '../../../../Leida';
 import { setPaywall, useSupabaseAuth } from '../../../../NX/Paywall';
 import { useDispatch } from '../../../../NX/Uberedux';
 import { setPractitioner } from '..';
@@ -49,6 +50,7 @@ export default function Account() {
 	const email = String(profile?.email || user?.email || 'No email available');
 	const [confirmSignoutOpen, setConfirmSignoutOpen] = React.useState(false);
 	const [displayNameError, setDisplayNameError] = React.useState<string | null>(null);
+	const [displayNameDraft, setDisplayNameDraft] = React.useState(name);
 	const [isSavingDisplayName, setIsSavingDisplayName] = React.useState(false);
 	const [isSigningOut, setIsSigningOut] = React.useState(false);
 	const avatarSource =
@@ -58,6 +60,16 @@ export default function Account() {
 	const practitionerId = String(practitionerRows[0]?.practitioner_id ?? '');
 	const isLoadingPractitioner = Boolean(practitioner?.loading);
 	const isBusy = isLoadingPractitioner || isSavingDisplayName || isSigningOut;
+	const normalizedDraftDisplayName = displayNameDraft.trim();
+	const normalizedCurrentDisplayName = name.trim();
+	const canSaveDisplayName =
+		!isBusy &&
+		normalizedDraftDisplayName.length > 0 &&
+		normalizedDraftDisplayName !== normalizedCurrentDisplayName;
+
+	React.useEffect(() => {
+		setDisplayNameDraft(name);
+	}, [name]);
 
 	const handleAvatarSuccess = (avatarUrl: string) => {
 		const current = practitionerRows[0] ?? {};
@@ -180,47 +192,56 @@ export default function Account() {
 			}}
 		>
 			<DialogTitle sx={{ pr: 14 }}>
-				{isBusy ? <LinearProgress /> : null}
-				<Stack direction="row" spacing={2} alignItems="center">
-					<AvatarUpload
-						practitionerId={practitionerId}
-						currentAvatar={avatarSource}
-						displayName={name}
-						onSuccess={handleAvatarSuccess}
-						disabled={isBusy}
-					/>
-					<Box>
-						<Typography variant="h5">
-                            {name}
-                        </Typography>
-						<Typography variant="body2" color="text.secondary">
-                            {email}
-						</Typography>
-					</Box>
-				</Stack>
-			
-    
+				<Typography variant="body2" color="disabled">
+					{email}
+				</Typography>
+				{isBusy ? <LinearProgress /> : null}    
 			</DialogTitle>
 
 			<DialogContent>
 				<Stack spacing={1.5} sx={{ mb: 2 }}>
+					
+
+					<Box>
+						<AvatarUpload
+							practitionerId={practitionerId}
+							currentAvatar={avatarSource}
+							displayName={name}
+							onSuccess={handleAvatarSuccess}
+							disabled={isBusy}
+						/>
+					</Box>
+
+
+
 					<Typography variant="body2" color="text.secondary">
 						Display name
 					</Typography>
-					<EditableStr
-						id="practitioner-display-name"
-						dialogTitle="Edit display name"
-						value={name}
+					<Editable
+						label="Display name"
+						value={displayNameDraft}
 						disabled={isBusy}
-						onSave={(nextValue) => {
-							void handleDisplayNameSave(nextValue);
+						onChange={(nextValue) => {
+							setDisplayNameError(null);
+							setDisplayNameDraft(nextValue);
 						}}
 					/>
+					<Button
+						color="primary"
+						variant="contained"
+						disabled={!canSaveDisplayName}
+						onClick={() => {
+							void handleDisplayNameSave(displayNameDraft);
+						}}
+					>
+						Save name
+					</Button>
 					{displayNameError ? (
 						<Typography variant="body2" color="error">
 							{displayNameError}
 						</Typography>
 					) : null}
+
 				</Stack>
 
 				{/* <Box>
@@ -230,9 +251,16 @@ export default function Account() {
                 </Box> */}
 
 
+				
+
+
+			</DialogContent>
+
+			<DialogActions sx={{ px: 2, py: 2 }}>
+
 				<Button
 					color="primary"
-					variant="outlined"
+					variant="text"
 					onClick={handleRequestSignout}
 					startIcon={<Icon icon="signout" />}
 					disabled={isBusy}
@@ -240,10 +268,6 @@ export default function Account() {
 					Sign out
 				</Button>
 
-
-			</DialogContent>
-
-			<DialogActions sx={{ px: 2, py: 2 }}>
 				<Button
 					color="primary"
 					variant="outlined"

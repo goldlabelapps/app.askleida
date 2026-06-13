@@ -29,7 +29,11 @@ export default function RequireSupabaseAuth({ children, publicUrl }: { children:
     setPending(false);
   };
 
-  if (pathname?.startsWith('/invite')) {
+  if (
+    pathname?.startsWith('/account/invite') ||
+    pathname?.startsWith('/account/forgot-password') ||
+    pathname?.startsWith('/account/reset-password')
+  ) {
     return <>{children}</>;
   }
 

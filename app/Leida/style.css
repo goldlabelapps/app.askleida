@@ -1038,6 +1038,12 @@ section.tight {
   width: 100%;
 }
 
+.signin-forgot-password {
+  margin-top: 12px;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
 .waitlist .signin-password-toggle {
   background: transparent;
   color: var(--ink-50);

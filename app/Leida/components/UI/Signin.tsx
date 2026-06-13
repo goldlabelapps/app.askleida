@@ -101,6 +101,16 @@ export default function Signin({ publicUrl, onSignin, error: externalError }: I_
             </button>
           </form>
 
+          <div className="signin-forgot-password">
+            <a href="https://buy.stripe.com/cNifZh8mp5HL4KW96Cew803" target="_blank" rel="noopener noreferrer"  >
+              Register
+            </a>
+            &nbsp;|&nbsp;
+            <a href="/account/forgot-password">Forgot password?</a>.
+            
+            
+          </div>
+
           <div className={`waitlist-error ${error || externalError ? 'show' : ''}`}>
             {externalError || error}
           </div>

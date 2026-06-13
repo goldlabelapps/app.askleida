@@ -15,11 +15,11 @@ import {
     Typography,
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { supabase } from '../NX/lib/supabase';
-import { Icon,  } from '../NX/DesignSystem';
-import { NX } from '../NX';
-import { defaultTenantConfig } from '../lib/tenantConfig/base';
-import { loadTenantConfigClient } from '../lib/tenantConfig/client';
+import { supabase } from '../../NX/lib/supabase';
+import { Icon,  } from '../../NX/DesignSystem';
+import { NX } from '../../NX';
+import { defaultTenantConfig } from '../../lib/tenantConfig/base';
+import { loadTenantConfigClient } from '../../lib/tenantConfig/client';
 
 const MIN_PASSWORD_LENGTH = 6;
 

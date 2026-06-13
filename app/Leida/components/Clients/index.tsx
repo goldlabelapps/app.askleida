@@ -1,6 +1,5 @@
 import Clients from './Clients';
-import ClientDetail from './components/ClientDetail';
-import ClientNew from './components/ClientNew';
+import { ClientCard, ClientDetail, ClientNew } from './components';
 import { initClients } from './actions/initClients';
 import { useClients } from './hooks/useClients';
 import { setClients } from './actions/setClients';
@@ -9,6 +8,7 @@ import { patchClient } from './actions/patchClient';
 import { deleteClient } from './actions/deleteClient';
 export {
     Clients,
+    ClientCard,
     ClientDetail,
     ClientNew,
     initClients,

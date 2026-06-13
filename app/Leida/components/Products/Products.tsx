@@ -3,14 +3,9 @@ import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { 
     Box,
-    Alert,
-    Button,
-    CardHeader,
-    CircularProgress,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemText,
+Paper,
+Stack,
+Chip,
     Typography,
 } from '@mui/material';
 import { useDispatch } from '../../../NX/Uberedux';
@@ -40,75 +35,32 @@ export default function Products() {
 
     return (
         <Box>
-            <CardHeader 
-                avatar={<>
-                    {products?.loading ? <CircularProgress size={20} /> : 
-                    <Box sx={{mt:1, ml:1}}>
-                        <Icon icon="products" color="primary" />
-                    </Box>}
-                </>}
-                title={<Typography variant="h6">{titleText}</Typography>}
-                action={<>
-                    <Button
-                        endIcon={<Icon icon="add" />}
-                        color="primary"
-                        onClick={handleNew}
-                    >
-                        New
-                    </Button>
-                </>}
-            />
-            
-                {products?.loading ? null : products?.error ? (
-                    <Alert severity="error">{String(products.error)}</Alert>
-                ) : (
-                    <>
-                        <List dense>
-                            {list.map((product: T_Product) => {
-                                const name = product?.data?.name || product?.title || product?.name || 'Unnamed product';
-                                const brand = product?.data?.brand || 'Unknown brand';
-                                const routineStep = product?.data?.routine_step || null;
-                                const distributionType = product?.data?.distribution_type || null;
-                                const isVerified = product?.data?.is_verified === true;
-                                const concernTags = Array.isArray(product?.data?.concern_tags)
-                                    ? product.data?.concern_tags
-                                    : [];
-                                const productId = product?.product_id;
-                                const subheaderParts = [brand, routineStep].filter(Boolean);
-                                const tagsText = concernTags.length > 0
-                                    ? `${concernTags.length} concern tag${concernTags.length === 1 ? '' : 's'}`
-                                    : null;
-                                
-                                const subheader = [
-                                    subheaderParts.length > 0 ? subheaderParts.join(' • ') : null,
-                                    tagsText,
-                                ].filter(Boolean).join(' • ');
-                                const itemKey = String(productId || name);
-
-
-                                return (
-                                    <ListItem key={itemKey} disablePadding>
-                                        <ListItemButton
-                                            disabled={!productId}
-                                            onClick={() => {
-                                                if (productId) {
-                                                    dispatch(navigateTo(router, `/products/${productId}`));
-                                                }
-                                            }}
-                                        >
-                                            <ListItemText 
-                                                primary={<Typography variant="subtitle1">
-                                                            {name}
-                                                        </Typography>} 
-                                                secondary={subheader}
-                                            />
-                                        </ListItemButton>
-                                    </ListItem>
-                                );
-                            })}
-                        </List>
-                    </>
-                )}
+            <Paper
+                elevation={0}
+                sx={{
+                    p: 3,
+                    borderRadius: 2,
+                }}
+            >
+                <Stack spacing={2}>
+                    <Chip label='Planned Product Pipeline' />
+                    <Typography variant='h5' fontWeight={700}>
+                        (Lookfantastic &rarr; Supabase &rarr; Leida)
+                    </Typography>
+                    <Typography color='text.secondary'>
+                        We are preparing to ingest Lookfantastic&apos;s 25k-row CSV into Postgres on Supabase,
+                        then expose fast product search from that source table.
+                    </Typography>
+                    <Typography color='text.secondary'>
+                        The source table will be refreshed by a cron job whenever feed changes are detected
+                        from Awin.
+                    </Typography>
+                    <Typography color='text.secondary'>
+                        Products will then be read from that table, reshaped into Leida product records,
+                        and tuned by AI (Claude) before being written into the `products` table.
+                    </Typography>
+                </Stack>
+            </Paper>
         </Box>
     );
 }

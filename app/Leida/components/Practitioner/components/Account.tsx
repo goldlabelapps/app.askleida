@@ -2,25 +2,27 @@
 import * as React from 'react';
 import {
 	Box,
+	Grid,
 	Button,
+	Collapse,
 	Dialog,
 	DialogActions,
 	DialogContent,
 	DialogTitle,
+	LinearProgress,
 	Stack,
 	Typography,
 	useMediaQuery,
-	LinearProgress,
 } from '@mui/material';
-import AvatarUpload from '../../UI/AvatarUpload';
 import { useTheme } from '@mui/material/styles';
 import { ConfirmAction, Icon } from '../../../../NX/DesignSystem';
-import { Editable } from '../../../../Leida';
 import { setPaywall, useSupabaseAuth } from '../../../../NX/Paywall';
 import { useDispatch } from '../../../../NX/Uberedux';
-import { setPractitioner } from '..';
-import { usePractitioner } from '../hooks/usePractitioner';
+import { Editable } from '../../../../Leida';
 import { supabase } from '../../../../NX/lib/supabase';
+import { patchPractitioner, setPractitioner } from '..';
+import AvatarUpload from '../../UI/AvatarUpload';
+import { usePractitioner } from '../hooks/usePractitioner';
 
 function getPractitionerProfile(value: unknown): Record<string, unknown> | null {
 	if (!value || typeof value !== 'object') {
@@ -35,6 +37,14 @@ function getPractitionerProfile(value: unknown): Record<string, unknown> | null 
 	return record;
 }
 
+function getTextValue(value: unknown, fallback = ''): string {
+	if (typeof value !== 'string') {
+		return fallback;
+	}
+
+	return value;
+}
+
 export default function Account() {
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -44,38 +54,78 @@ export default function Account() {
 	const { user } = useSupabaseAuth();
 	const profile = getPractitionerProfile(practitionerRows[0] ?? null);
 	const open = Boolean(practitioner?.accountOpen);
+	const hasDisplayName = Boolean(profile?.display_name);
+	const isOnboarding = practitioner?.initted === true && !hasDisplayName;
 	const name = String(
 		profile?.display_name || profile?.title || user?.user_metadata?.full_name || 'Your account',
 	);
+	const clinic = getTextValue(profile?.clinic, '');
+	const website = getTextValue(profile?.website, '');
 	const email = String(profile?.email || user?.email || 'No email available');
 	const [confirmSignoutOpen, setConfirmSignoutOpen] = React.useState(false);
-	const [displayNameError, setDisplayNameError] = React.useState<string | null>(null);
-	const [displayNameDraft, setDisplayNameDraft] = React.useState(name);
-	const [isSavingDisplayName, setIsSavingDisplayName] = React.useState(false);
+	const [formError, setFormError] = React.useState<string | null>(null);
+	const [isSavingForm, setIsSavingForm] = React.useState(false);
 	const [isSigningOut, setIsSigningOut] = React.useState(false);
+
+	const [formState, setFormState] = React.useState({
+		email,
+		displayName: name,
+		clinic,
+		website,
+	});
+
 	const avatarSource =
 		typeof profile?.avatar === 'string' && profile.avatar.trim()
 			? profile.avatar.trim()
 			: undefined;
+	const initialAvatarWhenOpenedRef = React.useRef<string>(avatarSource ?? '');
 	const practitionerId = String(practitionerRows[0]?.practitioner_id ?? '');
 	const isLoadingPractitioner = Boolean(practitioner?.loading);
-	const isBusy = isLoadingPractitioner || isSavingDisplayName || isSigningOut;
-	const normalizedDraftDisplayName = displayNameDraft.trim();
+	const isBusy = isLoadingPractitioner || isSavingForm || isSigningOut;
+
+	const normalizedDraftDisplayName = formState.displayName.trim();
 	const normalizedCurrentDisplayName = name.trim();
-	const canSaveDisplayName =
-		!isBusy &&
-		normalizedDraftDisplayName.length > 0 &&
-		normalizedDraftDisplayName !== normalizedCurrentDisplayName;
+	const normalizedDraftClinic = formState.clinic.trim();
+	const normalizedCurrentClinic = clinic.trim();
+	const normalizedDraftWebsite = formState.website.trim();
+	const normalizedCurrentWebsite = website.trim();
+	const normalizedCurrentAvatar = (avatarSource ?? '').trim();
+	const normalizedInitialAvatar = initialAvatarWhenOpenedRef.current.trim();
+	const isAvatarDirty = normalizedCurrentAvatar !== normalizedInitialAvatar;
+	const isFormDirty =
+		normalizedDraftDisplayName !== normalizedCurrentDisplayName ||
+		normalizedDraftClinic !== normalizedCurrentClinic ||
+		normalizedDraftWebsite !== normalizedCurrentWebsite ||
+		isAvatarDirty;
+	const canSaveForm = !isBusy && normalizedDraftDisplayName.length > 0 && isFormDirty;
 
 	React.useEffect(() => {
-		setDisplayNameDraft(name);
-	}, [name]);
+		setFormState({
+			email,
+			displayName: name,
+			clinic,
+			website,
+		});
+	}, [email, name, clinic, website]);
+
+	React.useEffect(() => {
+		if (isOnboarding && !open) {
+			dispatch(setPractitioner('accountOpen', true));
+		}
+	}, [isOnboarding, open, dispatch]);
+
+	React.useEffect(() => {
+		if (open) {
+			initialAvatarWhenOpenedRef.current = avatarSource ?? '';
+		}
+	}, [open]);
 
 	const handleAvatarSuccess = (avatarUrl: string) => {
 		const current = practitionerRows[0] ?? {};
-		const currentData = (current.data && typeof current.data === 'object')
-			? current.data as Record<string, unknown>
-			: {};
+		const currentData =
+			current.data && typeof current.data === 'object'
+				? (current.data as Record<string, unknown>)
+				: {};
 		const updated = {
 			...current,
 			data: { ...currentData, avatar: avatarUrl },
@@ -84,66 +134,45 @@ export default function Account() {
 	};
 
 	const handleClose = () => {
-		if (isBusy) return;
+		if (isBusy || isOnboarding) return;
 		dispatch(setPractitioner('accountOpen', false));
 	};
 
-	const handleDisplayNameSave = async (newDisplayName: string) => {
+	const handleFormSave = async () => {
 		if (!practitionerId) {
-			setDisplayNameError('Unable to update your name: missing practitioner id.');
+			setFormError('Unable to update your account: missing practitioner id.');
 			return;
 		}
 
-		const normalizedName = newDisplayName.trim();
+		const normalizedName = formState.displayName.trim();
 		if (!normalizedName) {
-			setDisplayNameError('Display name cannot be empty.');
+			setFormError('Display name cannot be empty.');
 			return;
 		}
 
-		setDisplayNameError(null);
-		setIsSavingDisplayName(true);
-
-		const current = practitionerRows[0] ?? {};
-		const currentData = (current.data && typeof current.data === 'object')
-			? current.data as Record<string, unknown>
-			: {};
-		const nextData = { ...currentData, display_name: normalizedName };
+		setFormError(null);
+		setIsSavingForm(true);
 
 		try {
-			const response = await fetch('/api/practitioner', {
-				method: 'PATCH',
-				headers: {
-					'Content-Type': 'application/json',
-					Accept: 'application/json',
-				},
-				body: JSON.stringify({
-					practitioner_id: practitionerId,
-					data: nextData,
+			const result = await dispatch(
+				patchPractitioner(practitionerId, {
+					data: {
+						display_name: normalizedName,
+					clinic: normalizedDraftClinic || null,
+					website: normalizedDraftWebsite || null,
+					},
 				}),
-			});
+			);
 
-			const payload = await response.json().catch(() => null);
-			if (!response.ok) {
-				setDisplayNameError(
-					typeof payload?.message === 'string'
-						? payload.message
-						: 'Failed to update display name.'
+			if (!result?.ok) {
+				setFormError(
+					typeof result?.message === 'string'
+						? result.message
+						: 'Failed to update account.',
 				);
-				return;
 			}
-
-			const returnedRows = Array.isArray(payload?.data) ? payload.data : null;
-			const returnedRow = returnedRows && returnedRows.length > 0 ? returnedRows[0] : null;
-			const updatedRow = returnedRow
-				? returnedRow
-				: {
-					...current,
-					data: nextData,
-				};
-
-			dispatch(setPractitioner('data', [updatedRow]));
 		} finally {
-			setIsSavingDisplayName(false);
+			setIsSavingForm(false);
 		}
 	};
 
@@ -173,110 +202,169 @@ export default function Account() {
 		<Dialog
 			open={open}
 			onClose={(_, reason) => {
-				if (isBusy) return;
+				if (isBusy || isOnboarding) return;
 				if (reason === 'backdropClick' || reason === 'escapeKeyDown') {
 					handleClose();
 				}
 			}}
 			fullScreen={fullScreen}
 			fullWidth
-			maxWidth="md"
+			maxWidth="sm"
 			PaperProps={{
 				sx: (currentTheme) => ({
 					width: '100%',
 					minHeight: fullScreen ? '100%' : '70vh',
-					'@media (min-width:900px)': {
-						minWidth: `${currentTheme.breakpoints.values.md}px`,
-					},
+					
 				}),
 			}}
 		>
-			<DialogTitle sx={{ pr: 14 }}>
-				<Typography variant="body2" color="disabled">
-					{email}
-				</Typography>
-				{isBusy ? <LinearProgress /> : null}    
-			</DialogTitle>
+			
+			{isBusy ? <LinearProgress /> : null}
 
 			<DialogContent>
-				<Stack spacing={1.5} sx={{ mb: 2 }}>
-					
 
-					<Box>
+				<Typography variant="h6" sx={{ my: 2 }}>
+					Account
+				</Typography>
+
+				<Grid container spacing={2} sx={{ mb: 2 }}>
+					<Grid size={{
+						xs: 12,
+						sm: 6,
+					}} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', order: { xs: 1, sm: 2 } }}>
+						
+					</Grid>	
+					<Grid size={{
+						xs: 12,
+						sm: 6,
+					}} sx={{ display: 'flex', flexDirection: 'column', gap: 2, order: { xs: 2, sm: 1 } }}>
+
+						<Editable
+							id="email"
+							label="Email"
+							startAdornment='email'
+							variant="standard"
+							required
+							value={formState.email}
+							disabled
+						/>
+
+						<Editable
+							id="display_name"
+							label="Your name"
+							startAdornment='user'
+							variant="standard"
+							required
+							value={formState.displayName}
+							disabled={isBusy}
+							onChange={(nextValue) => {
+								setFormError(null);
+								setFormState((current) => ({
+									...current,
+									displayName: nextValue,
+								}));
+							}}
+						/>
+
+						<Editable
+							id="clinic"
+							label="Clinic name"
+							variant="standard"
+							startAdornment='medical'
+							value={formState.clinic}
+							disabled={isBusy}
+							onChange={(nextValue) => {
+								setFormError(null);
+								setFormState((current) => ({
+									...current,
+									clinic: nextValue,
+								}));
+							}}
+						/>
+
+						<Editable
+							id="website"
+							label="Website"
+							variant="standard"
+							startAdornment='link'
+							value={formState.website}
+							disabled={isBusy}
+							onChange={(nextValue) => {
+								setFormError(null);
+								setFormState((current) => ({
+									...current,
+									website: nextValue,
+								}));
+							}}
+						/>
+
+						
+					</Grid>	
+
+					<Grid size={{
+						xs: 12,
+						sm: 6,
+					}} sx={{ display: 'flex', flexDirection: 'column', gap: 2, order: { xs: 2, sm: 1 } }}>
+						
 						<AvatarUpload
+							size={128}
 							practitionerId={practitionerId}
 							currentAvatar={avatarSource}
 							displayName={name}
 							onSuccess={handleAvatarSuccess}
 							disabled={isBusy}
 						/>
-					</Box>
+						
+						<Button
+							color="primary"
+							variant="text"
+							onClick={handleRequestSignout}
+							startIcon={<Icon icon="signout" />}
+							disabled={isBusy}
+						>
+							Sign out
+						</Button>
+					</Grid>
 
+					
+				</Grid>
 
-
-					<Typography variant="body2" color="text.secondary">
-						Display name
-					</Typography>
-					<Editable
-						label="Display name"
-						value={displayNameDraft}
-						disabled={isBusy}
-						onChange={(nextValue) => {
-							setDisplayNameError(null);
-							setDisplayNameDraft(nextValue);
-						}}
-					/>
-					<Button
-						color="primary"
-						variant="contained"
-						disabled={!canSaveDisplayName}
-						onClick={() => {
-							void handleDisplayNameSave(displayNameDraft);
-						}}
-					>
-						Save name
-					</Button>
-					{displayNameError ? (
+				<Stack spacing={1.5} sx={{ mb: 2 }}>
+					{formError ? (
 						<Typography variant="body2" color="error">
-							{displayNameError}
+							{formError}
 						</Typography>
 					) : null}
-
 				</Stack>
-
-				{/* <Box>
-                    <pre>
-	                    {JSON.stringify(practitionerRows[0]?.data, null, 2)}
-                    </pre>
-                </Box> */}
-
-
-				
-
-
 			</DialogContent>
 
 			<DialogActions sx={{ px: 2, py: 2 }}>
+				
 
 				<Button
 					color="primary"
 					variant="text"
-					onClick={handleRequestSignout}
-					startIcon={<Icon icon="signout" />}
-					disabled={isBusy}
-				>
-					Sign out
-				</Button>
-
-				<Button
-					color="primary"
-					variant="outlined"
 					onClick={handleClose}
 					startIcon={<Icon icon="close" />}
-					disabled={isBusy}
+					disabled={isBusy || isOnboarding}
 				>
 					Close
 				</Button>
+
+				<Collapse in={isFormDirty} orientation="horizontal" unmountOnExit>
+					<Button
+						startIcon={<Icon icon="save" />}
+						color="primary"
+						variant="contained"
+						disabled={!canSaveForm}
+						onClick={() => {
+							void handleFormSave();
+							handleClose();
+						}}
+					>
+						Save
+					</Button>
+				</Collapse>
 			</DialogActions>
 
 			<ConfirmAction

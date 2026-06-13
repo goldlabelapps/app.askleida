@@ -9,6 +9,7 @@ export { default as BulletEditor } from './components/UI/BulletEditor';
 export { default as Header } from './components/UI/Header';
 export { default as Greeting } from './components/UI/Greeting';
 export { default as Clients } from './components/Clients/Clients';
+export { default as ClientCard } from './components/Clients/components/ClientCard';
 export { default as ClientDetail } from './components/Clients/components/ClientDetail';
 export { default as ClientNew } from './components/Clients/components/ClientNew';
 export { default as Products } from './components/Products/Products';
@@ -24,6 +25,7 @@ export { createRecommendation } from './components/Recommendations/actions/creat
 export { patchRecommendation } from './components/Recommendations/actions/patchRecommendation';
 export { deleteRecommendation } from './components/Recommendations/actions/deleteRecommendation';
 export { default as Practitioner } from './components/Practitioner/Practitioner';
+export { patchPractitioner } from './components/Practitioner/actions/patchPractitioner';
 export { default as Tips } from './components/Tips/Tips';
 export { default as TipDetail } from './components/Tips/components/TipDetail';
 export { default as TipNew } from './components/Tips/components/TipNew';

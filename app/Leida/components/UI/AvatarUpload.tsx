@@ -16,6 +16,7 @@ type AvatarUploadProps = {
     displayName?: string;
     onSuccess?: (avatarUrl: string) => void;
     disabled?: boolean;
+    size?: number;
 };
 
 export default function AvatarUpload({
@@ -24,6 +25,7 @@ export default function AvatarUpload({
     displayName,
     onSuccess,
     disabled = false,
+    size = 75,
 }: AvatarUploadProps) {
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [uploading, setUploading] = React.useState(false);
@@ -85,12 +87,12 @@ export default function AvatarUpload({
 
     return (
         <Box sx={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: 0.5 }}>
-            <Tooltip title="Change avatar" placement="bottom">
+            <Tooltip title="Change logo" placement="bottom">
                 <Box sx={{ position: 'relative', display: 'inline-flex' }}>
                     <Avatar
                         src={preview}
-                        alt={displayName ?? 'Avatar'}
-                        sx={{ width: 72, height: 72, cursor: uploading || disabled ? 'default' : 'pointer' }}
+                        alt={displayName ?? 'Logo'}
+                        sx={{ width: size, height: size, cursor: uploading || disabled ? 'default' : 'pointer' }}
                         onClick={handleClick}
                     >
                         {!preview ? <Icon icon="clients" color="primary" /> : null}

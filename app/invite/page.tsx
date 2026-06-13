@@ -15,11 +15,16 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { supabase } from '../NX/lib/supabase';
+import { Icon,  } from '../NX/DesignSystem';
+import { NX } from '../NX';
+import { defaultTenantConfig } from '../lib/tenantConfig/base';
+import { loadTenantConfigClient } from '../lib/tenantConfig/client';
 
-const MIN_PASSWORD_LENGTH = 8;
+const MIN_PASSWORD_LENGTH = 6;
 
 export default function InvitePage() {
     const router = useRouter();
+    const [config, setConfig] = React.useState(defaultTenantConfig);
     const [email, setEmail] = React.useState<string | null>(null);
     const [authChecked, setAuthChecked] = React.useState(false);
     const [hasSession, setHasSession] = React.useState(false);
@@ -28,6 +33,21 @@ export default function InvitePage() {
     const [error, setError] = React.useState<string | null>(null);
     const [success, setSuccess] = React.useState<string | null>(null);
     const [saving, setSaving] = React.useState(false);
+
+    React.useEffect(() => {
+        let active = true;
+
+        const loadTenantConfig = async () => {
+            const tenantConfig = await loadTenantConfigClient();
+            if (active) setConfig(tenantConfig.config);
+        };
+
+        void loadTenantConfig();
+
+        return () => {
+            active = false;
+        };
+    }, []);
 
     React.useEffect(() => {
         if (!success) return;
@@ -112,86 +132,94 @@ export default function InvitePage() {
     };
 
     return (
-        <Container maxWidth="sm" sx={{ py: 8 }}>
-            <Paper variant="outlined" sx={{ p: 4 }}>
-                <Stack spacing={2.5}>
-                    <Box>
-                        <Typography variant="h4" gutterBottom>
-                            Set your password
-                        </Typography>
-                        <Typography variant="body1" color="text.secondary">
-                            Finish accepting your invite by choosing a password for your account.
-                        </Typography>
-                    </Box>
-
-                    {!authChecked ? (
-                        <Stack direction="row" spacing={1.5} alignItems="center">
-                            <CircularProgress size={20} />
-                            <Typography variant="body2" color="text.secondary">
-                                Checking your invite session...
+        <NX config={config}>
+            <Container maxWidth="sm" sx={{ py: 8 }}>
+                <Paper variant="outlined" sx={{ p: 4 }}>
+                    <Stack spacing={2.5}>
+                        <Box>
+                            <Typography variant="h4" gutterBottom>
+                                Set your password
                             </Typography>
-                        </Stack>
-                    ) : null}
-
-                    {error ? <Alert severity="error">{error}</Alert> : null}
-                    {success ? <Alert severity="success">{success}</Alert> : null}
-
-                    {authChecked && !hasSession ? (
-                        <Stack spacing={2}>
-                            <Alert severity="warning">
-                                No active invite session was found. Open the latest invite email, click the link again, and then set your password here.
-                            </Alert>
-                            <Button variant="outlined" onClick={() => router.push('/')}>
-                                Back to sign in
-                            </Button>
-                        </Stack>
-                    ) : null}
-
-                    {authChecked && hasSession ? (
-                        <Box component="form" onSubmit={handleSubmit}>
-                            <Stack spacing={2}>
-                                <TextField
-                                    label="Email"
-                                    value={email || ''}
-                                    disabled
-                                    fullWidth
-                                />
-                                <TextField
-                                    label="New password"
-                                    type="password"
-                                    value={password}
-                                    onChange={(event) => setPassword(event.target.value)}
-                                    autoComplete="new-password"
-                                    fullWidth
-                                />
-                                <TextField
-                                    label="Confirm password"
-                                    type="password"
-                                    value={confirmPassword}
-                                    onChange={(event) => setConfirmPassword(event.target.value)}
-                                    autoComplete="new-password"
-                                    fullWidth
-                                />
-                                <Typography variant="body2" color="text.secondary">
-                                    Use at least {MIN_PASSWORD_LENGTH} characters.
-                                </Typography>
-                                <Stack direction="row" spacing={1.5}>
-                                    <Button type="submit" variant="contained" disabled={saving}>
-                                        {saving ? 'Saving...' : 'Set password'}
-                                    </Button>
-                                    <Button
-                                        variant="outlined"
-                                        disabled={!success}
-                                        onClick={() => router.push('/')}
-                                    >
-                                        Continue to app
-                                    </Button>
-                                </Stack>
-                            </Stack>
+                            <Typography variant="body1" color="text.secondary">
+                                Finish accepting your invite by choosing a password for your account.
+                            </Typography>
                         </Box>
-                    ) : null}
-                </Stack>
-            </Paper>
-        </Container>
+
+                        {!authChecked ? (
+                            <Stack direction="row" spacing={1.5} alignItems="center">
+                                <CircularProgress size={20} />
+                                <Typography variant="body2" color="text.secondary">
+                                    Checking your invite session...
+                                </Typography>
+                            </Stack>
+                        ) : null}
+
+                        {error ? <Alert severity="error">{error}</Alert> : null}
+                        {success ? <Alert severity="success">{success}</Alert> : null}
+
+                        {authChecked && !hasSession ? (
+                            <Stack spacing={2}>
+                                <Alert severity="warning">
+                                    No active invite session was found. Open the latest invite email, click the link again, and then set your password here.
+                                </Alert>
+                                <Button variant="outlined" onClick={() => router.push('/')}>
+                                    Back to sign in
+                                </Button>
+                            </Stack>
+                        ) : null}
+
+                        {authChecked && hasSession ? (
+                            <Box component="form" onSubmit={handleSubmit}>
+                                <Stack spacing={2}>
+                                    <TextField
+                                        variant="standard"
+                                        label="Email"
+                                        value={email || ''}
+                                        disabled
+                                        fullWidth
+                                    />
+                                    <TextField
+                                        label="New password"
+                                        type="password"
+                                        value={password}
+                                        onChange={(event) => setPassword(event.target.value)}
+                                        autoComplete="new-password"
+                                        fullWidth
+                                    />
+                                    <TextField
+                                        label="Confirm password"
+                                        type="password"
+                                        value={confirmPassword}
+                                        onChange={(event) => setConfirmPassword(event.target.value)}
+                                        autoComplete="new-password"
+                                        fullWidth
+                                    />
+                                    
+                                    <Typography variant="body2" color="text.secondary">
+                                        Use at least {MIN_PASSWORD_LENGTH} characters.
+                                    </Typography>
+
+                                    <Stack direction="row" spacing={1.5}>
+                                        <Button type="submit" variant="contained" disabled={saving}>
+                                            {saving ? 'Saving...' : 'Set password'}
+                                        </Button>
+                                        <Button
+                                            endIcon={<Icon icon="right" />}
+                                            variant="outlined"
+                                            disabled={!success}
+                                            onClick={() => router.push('/')}
+                                        >
+                                            app.askleida.com
+                                        </Button>
+                                    </Stack>
+
+                                </Stack>
+                            </Box>
+                        ) : null}
+                    </Stack>
+                </Paper>
+            </Container>
+        </NX>
     );
 }
+

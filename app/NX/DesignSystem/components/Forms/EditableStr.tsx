@@ -17,7 +17,8 @@ export interface I_EditableStr {
 	id: string;
 	dialogTitle?: string;
 	value?: string;
-	onSave?: (newValue: string) => void;
+  onSave?: (newValue: string) => void | Promise<void>;
+  disabled?: boolean;
 }
 
 
@@ -25,7 +26,8 @@ export default function EditableStr({
 	id, 
 	value = '', 
 	onSave,
-	dialogTitle = 'Editing...'
+  dialogTitle = 'Editing...',
+  disabled = false,
 }: I_EditableStr) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [editing, setEditing] = React.useState(false);
@@ -49,6 +51,7 @@ export default function EditableStr({
   }, [value]);
 
   const handleEditClick = () => {
+    if (disabled) return;
     setEditing(true);
   };
 
@@ -56,9 +59,10 @@ export default function EditableStr({
     setInputValue(e.target.value);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    if (disabled) return;
     if (onSave) {
-      onSave(inputValue);
+      await onSave(inputValue);
     }
     setEditing(false);
   };
@@ -75,7 +79,7 @@ export default function EditableStr({
           <Typography variant='h6' sx={{ flex: 1 }}>{value}</Typography>
         </Box>
       </Box>
-      <Dialog open={editing} onClose={handleCancel} fullWidth maxWidth="xs">
+      <Dialog open={editing} onClose={disabled ? undefined : handleCancel} fullWidth maxWidth="xs">
         <DialogTitle>
         	<Box sx={{ display: 'flex' }}>
         		<Typography variant="h6" component="span" sx={{mt:1}}>
@@ -85,6 +89,7 @@ export default function EditableStr({
         		<IconButton
         			sx={{mr:-2}}
         			onClick={handleCancel}
+          		disabled={disabled}
         			color="primary"
         		>
         			<Icon icon="close" />
@@ -96,10 +101,14 @@ export default function EditableStr({
             inputRef={inputRef}
             value={inputValue}
             onChange={handleInputChange}
+            disabled={disabled}
             fullWidth
             margin="dense"
             onKeyDown={(e) => {
-              if (e.key === 'Enter' && inputValue !== value) handleSave();
+              if (disabled) return;
+              if (e.key === 'Enter' && inputValue !== value) {
+                void handleSave();
+              }
               if (e.key === 'Escape') handleCancel();
             }}
           />
@@ -107,11 +116,13 @@ export default function EditableStr({
         <DialogActions sx={{px:2}}>
           <Button 
 					  sx={{ mr: 1 }}
-		  	onClick={handleSave} 
+      	onClick={() => {
+        void handleSave();
+      }} 
 			endIcon={<Icon icon="save" />}
 			color="primary" 
 			variant="contained" 
-			disabled={inputValue === value}>
+      disabled={disabled || inputValue === value}>
             Save
           </Button>
 				  

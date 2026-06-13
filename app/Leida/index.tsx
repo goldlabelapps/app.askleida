@@ -24,6 +24,7 @@ export { createRecommendation } from './components/Recommendations/actions/creat
 export { patchRecommendation } from './components/Recommendations/actions/patchRecommendation';
 export { deleteRecommendation } from './components/Recommendations/actions/deleteRecommendation';
 export { default as Practitioner } from './components/Practitioner/Practitioner';
+export { patchPractitioner } from './components/Practitioner/actions/patchPractitioner';
 export { default as Tips } from './components/Tips/Tips';
 export { default as TipDetail } from './components/Tips/components/TipDetail';
 export { default as TipNew } from './components/Tips/components/TipNew';

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Button, Checkbox, Chip, FormControlLabel, MenuItem, Popover, TextField, Typography } from '@mui/material';
+import { Box, Button, Checkbox, Chip, FormControlLabel, InputAdornment, MenuItem, Popover, TextField, Typography } from '@mui/material';
 import type { CheckboxProps } from '@mui/material';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
@@ -9,6 +9,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { Icon } from '../../../NX/DesignSystem';
 
 type EditableBaseProps = {
+	id?: string;
 	label?: string;
 	placeholder?: string;
 	disabled?: boolean;
@@ -16,7 +17,9 @@ type EditableBaseProps = {
 	autoFocus?: boolean;
 	multiline?: boolean;
 	minRows?: number;
-    variant?: 'standard' | 'outlined' | 'filled';
+	variant?: 'standard' | 'outlined' | 'filled';
+	startAdornment?: string;
+	endAdornment?: string;
 	editableType?: 'text' | 'date' | 'select' | 'chips';
 	options?: readonly string[];
 	checkboxProps?: Omit<CheckboxProps, 'checked' | 'onChange' | 'disabled' | 'required'>;
@@ -69,6 +72,7 @@ const toHumanDateLabel = (value: string): string => {
 };
 
 export default function Editable({
+	id,
 	value = '',
 	onChange,
 	label,
@@ -78,10 +82,12 @@ export default function Editable({
 	autoFocus = false,
 	multiline = false,
 	minRows,
-    variant = 'outlined',
-    editableType = 'text',
+	variant = 'outlined',
+	editableType = 'text',
 	options,
-    checkboxProps,
+	checkboxProps,
+	startAdornment,
+	endAdornment,
 }: EditableProps) {
 	const [dateAnchorEl, setDateAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
@@ -205,6 +211,7 @@ export default function Editable({
 
 		return (
 			<TextField
+				id={id}
 				select
 				fullWidth
 				variant={variant}
@@ -213,6 +220,20 @@ export default function Editable({
 				disabled={disabled}
 				required={required}
 				autoFocus={autoFocus}
+				slotProps={{
+					input: {
+						startAdornment: startAdornment ? (
+							<InputAdornment position="start">
+								<Icon icon={startAdornment} />
+							</InputAdornment>
+						) : undefined,
+						endAdornment: endAdornment ? (
+							<InputAdornment position="end">
+								<Icon icon={endAdornment} />
+							</InputAdornment>
+						) : undefined,
+					},
+				}}
 				onChange={(event) => handleTextChange?.(event.target.value)}
 			>
 				{!required ? <MenuItem value="">{selectPlaceholder}</MenuItem> : null}
@@ -229,10 +250,12 @@ export default function Editable({
 
 	return (
 		<TextField
+			id={id}
 			sx={{
 				'& .MuiInputBase-root': {
-					backgroundColor: isEmpty ? 
-						'rgba(255, 255, 255, 0.25)' : 'rgba(255, 255, 255, 0.75)',
+					backgroundColor: isEmpty
+						? 'rgba(255, 255, 255, 0.25)'
+						: 'rgba(255, 255, 255, 0.75)',
 				},
 			}}
 			fullWidth
@@ -245,6 +268,20 @@ export default function Editable({
 			autoFocus={autoFocus}
 			multiline={multiline}
 			minRows={minRows}
+			slotProps={{
+				input: {
+					startAdornment: startAdornment ? (
+						<InputAdornment position="start">
+							<Icon icon={startAdornment} />
+						</InputAdornment>
+					) : undefined,
+					endAdornment: endAdornment ? (
+						<InputAdornment position="end">
+							<Icon icon={endAdornment} />
+						</InputAdornment>
+					) : undefined,
+				},
+			}}
 			onChange={(event) => handleTextChange?.(event.target.value)}
 		/>
 	);

@@ -1,8 +1,7 @@
 "use client";
 import React from 'react';
-import { Avatar, Box, ButtonBase, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material';
+import { Avatar, Box, ButtonBase, Typography } from '@mui/material';
 import type { T_Client } from '../types';
-import { ageFromDoB } from '../../../../Leida';
 
 type T_ClientCardProps = {
     client: T_Client;
@@ -25,17 +24,9 @@ const getClientName = (client: T_Client): string => {
     return fullName || 'Unnamed client';
 };
 
-const getClientSubheader = (client: T_Client): string => {
-    const data = client?.data && typeof client.data === 'object' ? client.data : null;
-    const dateOfBirth = getText(data?.date_of_birth) || getText(client.date_of_birth);
-    return dateOfBirth ? ageFromDoB(dateOfBirth) : 'no date of birth';
-};
-
 const ClientCard: React.FC<T_ClientCardProps> = ({ client, onClick }) => {
     const clientId = getClientId(client);
     const fullName = getClientName(client);
-    const subheader = getClientSubheader(client);
-    const itemKey = clientId || fullName;
 
     return (
         <>

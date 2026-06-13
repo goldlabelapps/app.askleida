@@ -60,7 +60,6 @@ export default function Clients() {
                     <Alert severity="error">{String(clients.error)}</Alert>
                 ) : (
                     <>
-                        <List dense>
                             {list.map((client: any) => {
                                 const itemKey = String(client?.client_id || client?.id || JSON.stringify(client));
                                 return (
@@ -72,8 +71,7 @@ export default function Clients() {
                                         }}
                                     />
                                 );
-                            })}
-                        </List>
+                            })}]
                     </>
                 )}
         </Box>

@@ -7,14 +7,14 @@ import {
 	DialogActions,
 	DialogContent,
 	DialogTitle,
-	IconButton,
 	Stack,
 	Typography,
 	useMediaQuery,
+	LinearProgress,
 } from '@mui/material';
 import AvatarUpload from '../../UI/AvatarUpload';
 import { useTheme } from '@mui/material/styles';
-import { ConfirmAction, Icon } from '../../../../NX/DesignSystem';
+import { ConfirmAction, EditableStr, Icon } from '../../../../NX/DesignSystem';
 import { setPaywall, useSupabaseAuth } from '../../../../NX/Paywall';
 import { useDispatch } from '../../../../NX/Uberedux';
 import { setPractitioner } from '..';
@@ -48,11 +48,16 @@ export default function Account() {
 	);
 	const email = String(profile?.email || user?.email || 'No email available');
 	const [confirmSignoutOpen, setConfirmSignoutOpen] = React.useState(false);
+	const [displayNameError, setDisplayNameError] = React.useState<string | null>(null);
+	const [isSavingDisplayName, setIsSavingDisplayName] = React.useState(false);
+	const [isSigningOut, setIsSigningOut] = React.useState(false);
 	const avatarSource =
 		typeof profile?.avatar === 'string' && profile.avatar.trim()
 			? profile.avatar.trim()
 			: undefined;
 	const practitionerId = String(practitionerRows[0]?.practitioner_id ?? '');
+	const isLoadingPractitioner = Boolean(practitioner?.loading);
+	const isBusy = isLoadingPractitioner || isSavingDisplayName || isSigningOut;
 
 	const handleAvatarSuccess = (avatarUrl: string) => {
 		const current = practitionerRows[0] ?? {};
@@ -67,28 +72,100 @@ export default function Account() {
 	};
 
 	const handleClose = () => {
+		if (isBusy) return;
 		dispatch(setPractitioner('accountOpen', false));
 	};
 
+	const handleDisplayNameSave = async (newDisplayName: string) => {
+		if (!practitionerId) {
+			setDisplayNameError('Unable to update your name: missing practitioner id.');
+			return;
+		}
+
+		const normalizedName = newDisplayName.trim();
+		if (!normalizedName) {
+			setDisplayNameError('Display name cannot be empty.');
+			return;
+		}
+
+		setDisplayNameError(null);
+		setIsSavingDisplayName(true);
+
+		const current = practitionerRows[0] ?? {};
+		const currentData = (current.data && typeof current.data === 'object')
+			? current.data as Record<string, unknown>
+			: {};
+		const nextData = { ...currentData, display_name: normalizedName };
+
+		try {
+			const response = await fetch('/api/practitioner', {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json',
+					Accept: 'application/json',
+				},
+				body: JSON.stringify({
+					practitioner_id: practitionerId,
+					data: nextData,
+				}),
+			});
+
+			const payload = await response.json().catch(() => null);
+			if (!response.ok) {
+				setDisplayNameError(
+					typeof payload?.message === 'string'
+						? payload.message
+						: 'Failed to update display name.'
+				);
+				return;
+			}
+
+			const returnedRows = Array.isArray(payload?.data) ? payload.data : null;
+			const returnedRow = returnedRows && returnedRows.length > 0 ? returnedRows[0] : null;
+			const updatedRow = returnedRow
+				? returnedRow
+				: {
+					...current,
+					data: nextData,
+				};
+
+			dispatch(setPractitioner('data', [updatedRow]));
+		} finally {
+			setIsSavingDisplayName(false);
+		}
+	};
+
 	const handleRequestSignout = () => {
+		if (isBusy) return;
 		setConfirmSignoutOpen(true);
 	};
 
 	const handleCancelSignout = () => {
+		if (isBusy) return;
 		setConfirmSignoutOpen(false);
 	};
 
 	const handleConfirmSignout = async () => {
+		setIsSigningOut(true);
 		setConfirmSignoutOpen(false);
-		handleClose();
-		await supabase.auth.signOut();
-		dispatch(setPaywall('supabaseAuth', null));
+		try {
+			await supabase.auth.signOut();
+			dispatch(setPaywall('supabaseAuth', null));
+			dispatch(setPractitioner('accountOpen', false));
+		} finally {
+			setIsSigningOut(false);
+		}
 	};
 
 	return (
 		<Dialog
 			open={open}
-			onClose={handleClose}
+			onClose={(_, reason) => {
+				if (isBusy) return;
+				if (reason === 'backdropClick' || reason === 'escapeKeyDown') {
+					handleClose();
+				}
+			}}
 			fullScreen={fullScreen}
 			fullWidth
 			maxWidth="md"
@@ -103,12 +180,14 @@ export default function Account() {
 			}}
 		>
 			<DialogTitle sx={{ pr: 14 }}>
+				{isBusy ? <LinearProgress /> : null}
 				<Stack direction="row" spacing={2} alignItems="center">
 					<AvatarUpload
 						practitionerId={practitionerId}
 						currentAvatar={avatarSource}
 						displayName={name}
 						onSuccess={handleAvatarSuccess}
+						disabled={isBusy}
 					/>
 					<Box>
 						<Typography variant="h5">
@@ -120,15 +199,35 @@ export default function Account() {
 					</Box>
 				</Stack>
 			
-                
+    
 			</DialogTitle>
 
 			<DialogContent>
-                <Box>
+				<Stack spacing={1.5} sx={{ mb: 2 }}>
+					<Typography variant="body2" color="text.secondary">
+						Display name
+					</Typography>
+					<EditableStr
+						id="practitioner-display-name"
+						dialogTitle="Edit display name"
+						value={name}
+						disabled={isBusy}
+						onSave={(nextValue) => {
+							void handleDisplayNameSave(nextValue);
+						}}
+					/>
+					{displayNameError ? (
+						<Typography variant="body2" color="error">
+							{displayNameError}
+						</Typography>
+					) : null}
+				</Stack>
+
+				{/* <Box>
                     <pre>
 	                    {JSON.stringify(practitionerRows[0]?.data, null, 2)}
                     </pre>
-                </Box>
+                </Box> */}
 
 
 				<Button
@@ -136,6 +235,7 @@ export default function Account() {
 					variant="outlined"
 					onClick={handleRequestSignout}
 					startIcon={<Icon icon="signout" />}
+					disabled={isBusy}
 				>
 					Sign out
 				</Button>
@@ -149,6 +249,7 @@ export default function Account() {
 					variant="outlined"
 					onClick={handleClose}
 					startIcon={<Icon icon="close" />}
+					disabled={isBusy}
 				>
 					Close
 				</Button>

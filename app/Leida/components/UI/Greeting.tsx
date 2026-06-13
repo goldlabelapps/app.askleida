@@ -111,7 +111,7 @@ const Greeting: React.FC = () => {
                     <Box sx={{ width: '100%', position: 'relative' }}>
                         <Collapse in={showGameMenu} timeout={380} sx={{ width: '100%', position: 'relative', zIndex: 2 }}>
                             <Box id="game_menu_box">
-                                <GameMenu />
+                                {/* <GameMenu /> */}
                             </Box>
                         </Collapse>
                     </Box>

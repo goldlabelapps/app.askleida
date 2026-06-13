@@ -15,6 +15,7 @@ type AvatarUploadProps = {
     currentAvatar?: string;
     displayName?: string;
     onSuccess?: (avatarUrl: string) => void;
+    disabled?: boolean;
 };
 
 export default function AvatarUpload({
@@ -22,6 +23,7 @@ export default function AvatarUpload({
     currentAvatar,
     displayName,
     onSuccess,
+    disabled = false,
 }: AvatarUploadProps) {
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [uploading, setUploading] = React.useState(false);
@@ -33,7 +35,7 @@ export default function AvatarUpload({
     }, [currentAvatar]);
 
     const handleClick = () => {
-        if (!uploading) inputRef.current?.click();
+        if (!uploading && !disabled) inputRef.current?.click();
     };
 
     const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,7 +90,7 @@ export default function AvatarUpload({
                     <Avatar
                         src={preview}
                         alt={displayName ?? 'Avatar'}
-                        sx={{ width: 72, height: 72, cursor: uploading ? 'default' : 'pointer' }}
+                        sx={{ width: 72, height: 72, cursor: uploading || disabled ? 'default' : 'pointer' }}
                         onClick={handleClick}
                     >
                         {!preview ? <Icon icon="clients" color="primary" /> : null}
@@ -97,7 +99,7 @@ export default function AvatarUpload({
                     <IconButton
                         size="small"
                         onClick={handleClick}
-                        disabled={uploading}
+                        disabled={uploading || disabled}
                         aria-label="Upload avatar"
                         sx={{
                             position: 'absolute',

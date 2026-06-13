@@ -119,51 +119,39 @@ export default function Account() {
 						</Typography>
 					</Box>
 				</Stack>
-			<Box
-				sx={{
-					position: 'absolute',
-					right: 16,
-					top: 16,
-					display: 'flex',
-					alignItems: 'center',
-					gap: 1,
-				}}
-			>
-                <IconButton 
-                    color="primary"
-                    onClick={handleRequestSignout} 
-                    aria-label="sign out">
-                    <Icon icon="signout" />
-                </IconButton>
-				<IconButton
-                    color="primary"
-					onClick={handleClose}
-					aria-label="close account dialog"
-				>
-					<Icon icon="close" />
-				</IconButton>
-				
-			</Box>
+			
                 
 			</DialogTitle>
 
 			<DialogContent>
                 <Box>
                     <pre>
-	                        {JSON.stringify(practitionerRows[0]?.data, null, 2)}
+	                    {JSON.stringify(practitionerRows[0]?.data, null, 2)}
                     </pre>
                 </Box>
+
+
+				<Button
+					color="primary"
+					variant="outlined"
+					onClick={handleRequestSignout}
+					startIcon={<Icon icon="signout" />}
+				>
+					Sign out
+				</Button>
+
+
 			</DialogContent>
 
 			<DialogActions sx={{ px: 2, py: 2 }}>
-				{/* <Button
-                    fullWidth
+				<Button
 					color="primary"
 					variant="outlined"
+					onClick={handleClose}
 					startIcon={<Icon icon="close" />}
 				>
 					Close
-				</Button> */}
+				</Button>
 			</DialogActions>
 
 			<ConfirmAction

@@ -74,10 +74,18 @@ const Greeting: React.FC = () => {
 
     if (practitioner?.loading) return null;
 
+    const practitionerRows = Array.isArray(practitioner?.data) ? practitioner.data : [];
+    const firstRow = practitionerRows[0] as Record<string, unknown> | undefined;
+    const profile =
+        firstRow && typeof firstRow.data === 'object' && firstRow.data !== null
+            ? (firstRow.data as Record<string, unknown>)
+            : firstRow;
     const displayName =
-        (practitioner?.data?.data?.display_name as string | undefined) ||
-        (practitioner?.data?.display_name as string | undefined) ||
-        null;
+        typeof profile?.display_name === 'string' && profile.display_name.trim()
+            ? profile.display_name.trim()
+            : typeof firstRow?.title === 'string' && firstRow.title.trim()
+                ? firstRow.title.trim()
+                : null;
     const greetingText = displayName ? `${getTimeGreeting()}, ${displayName}` : getTimeGreeting();
 
     return (

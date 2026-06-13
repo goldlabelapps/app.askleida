@@ -60,6 +60,7 @@ export default function Account() {
 		profile?.display_name || profile?.title || user?.user_metadata?.full_name || 'Your account',
 	);
 	const clinic = getTextValue(profile?.clinic, '');
+	const website = getTextValue(profile?.website, '');
 	const email = String(profile?.email || user?.email || 'No email available');
 	const [confirmSignoutOpen, setConfirmSignoutOpen] = React.useState(false);
 	const [formError, setFormError] = React.useState<string | null>(null);
@@ -70,12 +71,14 @@ export default function Account() {
 		email,
 		displayName: name,
 		clinic,
+		website,
 	});
 
 	const avatarSource =
 		typeof profile?.avatar === 'string' && profile.avatar.trim()
 			? profile.avatar.trim()
 			: undefined;
+	const initialAvatarWhenOpenedRef = React.useRef<string>(avatarSource ?? '');
 	const practitionerId = String(practitionerRows[0]?.practitioner_id ?? '');
 	const isLoadingPractitioner = Boolean(practitioner?.loading);
 	const isBusy = isLoadingPractitioner || isSavingForm || isSigningOut;
@@ -84,9 +87,16 @@ export default function Account() {
 	const normalizedCurrentDisplayName = name.trim();
 	const normalizedDraftClinic = formState.clinic.trim();
 	const normalizedCurrentClinic = clinic.trim();
+	const normalizedDraftWebsite = formState.website.trim();
+	const normalizedCurrentWebsite = website.trim();
+	const normalizedCurrentAvatar = (avatarSource ?? '').trim();
+	const normalizedInitialAvatar = initialAvatarWhenOpenedRef.current.trim();
+	const isAvatarDirty = normalizedCurrentAvatar !== normalizedInitialAvatar;
 	const isFormDirty =
 		normalizedDraftDisplayName !== normalizedCurrentDisplayName ||
-		normalizedDraftClinic !== normalizedCurrentClinic;
+		normalizedDraftClinic !== normalizedCurrentClinic ||
+		normalizedDraftWebsite !== normalizedCurrentWebsite ||
+		isAvatarDirty;
 	const canSaveForm = !isBusy && normalizedDraftDisplayName.length > 0 && isFormDirty;
 
 	React.useEffect(() => {
@@ -94,14 +104,21 @@ export default function Account() {
 			email,
 			displayName: name,
 			clinic,
+			website,
 		});
-	}, [email, name, clinic]);
+	}, [email, name, clinic, website]);
 
 	React.useEffect(() => {
 		if (isOnboarding && !open) {
 			dispatch(setPractitioner('accountOpen', true));
 		}
 	}, [isOnboarding, open, dispatch]);
+
+	React.useEffect(() => {
+		if (open) {
+			initialAvatarWhenOpenedRef.current = avatarSource ?? '';
+		}
+	}, [open]);
 
 	const handleAvatarSuccess = (avatarUrl: string) => {
 		const current = practitionerRows[0] ?? {};
@@ -142,6 +159,7 @@ export default function Account() {
 					data: {
 						display_name: normalizedName,
 					clinic: normalizedDraftClinic || null,
+					website: normalizedDraftWebsite || null,
 					},
 				}),
 			);
@@ -205,24 +223,21 @@ export default function Account() {
 
 			<DialogContent>
 
+				<Typography variant="h6" sx={{ my: 2 }}>
+					Account
+				</Typography>
+
 				<Grid container spacing={2} sx={{ mb: 2 }}>
 					<Grid size={{
 						xs: 12,
-						md: 6,
-					}}>
-						<AvatarUpload
-							size={216}
-							practitionerId={practitionerId}
-							currentAvatar={avatarSource}
-							displayName={name}
-							onSuccess={handleAvatarSuccess}
-							disabled={isBusy}
-						/>
+						sm: 6,
+					}} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', order: { xs: 1, sm: 2 } }}>
+						
 					</Grid>	
 					<Grid size={{
 						xs: 12,
-						md: 6,
-					}}>
+						sm: 6,
+					}} sx={{ display: 'flex', flexDirection: 'column', gap: 2, order: { xs: 2, sm: 1 } }}>
 
 						<Editable
 							id="email"
@@ -267,20 +282,54 @@ export default function Account() {
 							}}
 						/>
 
+						<Editable
+							id="website"
+							label="Website"
+							variant="standard"
+							startAdornment='link'
+							value={formState.website}
+							disabled={isBusy}
+							onChange={(nextValue) => {
+								setFormError(null);
+								setFormState((current) => ({
+									...current,
+									website: nextValue,
+								}));
+							}}
+						/>
+
+						
 					</Grid>	
+
+					<Grid size={{
+						xs: 12,
+						sm: 6,
+					}} sx={{ display: 'flex', flexDirection: 'column', gap: 2, order: { xs: 2, sm: 1 } }}>
+						
+						<AvatarUpload
+							size={128}
+							practitionerId={practitionerId}
+							currentAvatar={avatarSource}
+							displayName={name}
+							onSuccess={handleAvatarSuccess}
+							disabled={isBusy}
+						/>
+						
+						<Button
+							color="primary"
+							variant="text"
+							onClick={handleRequestSignout}
+							startIcon={<Icon icon="signout" />}
+							disabled={isBusy}
+						>
+							Sign out
+						</Button>
+					</Grid>
+
+					
 				</Grid>
 
 				<Stack spacing={1.5} sx={{ mb: 2 }}>
-					
-
-					
-
-					
-
-					<Box>
-						
-					</Box>
-
 					{formError ? (
 						<Typography variant="body2" color="error">
 							{formError}
@@ -290,19 +339,11 @@ export default function Account() {
 			</DialogContent>
 
 			<DialogActions sx={{ px: 2, py: 2 }}>
-				<Button
-					color="primary"
-					variant="text"
-					onClick={handleRequestSignout}
-					startIcon={<Icon icon="signout" />}
-					disabled={isBusy}
-				>
-					Sign out
-				</Button>
+				
 
 				<Button
 					color="primary"
-					variant="outlined"
+					variant="text"
 					onClick={handleClose}
 					startIcon={<Icon icon="close" />}
 					disabled={isBusy || isOnboarding}

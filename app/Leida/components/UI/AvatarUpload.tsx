@@ -87,11 +87,11 @@ export default function AvatarUpload({
 
     return (
         <Box sx={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: 0.5 }}>
-            <Tooltip title="Change avatar" placement="bottom">
+            <Tooltip title="Change logo" placement="bottom">
                 <Box sx={{ position: 'relative', display: 'inline-flex' }}>
                     <Avatar
                         src={preview}
-                        alt={displayName ?? 'Avatar'}
+                        alt={displayName ?? 'Logo'}
                         sx={{ width: size, height: size, cursor: uploading || disabled ? 'default' : 'pointer' }}
                         onClick={handleClick}
                     >

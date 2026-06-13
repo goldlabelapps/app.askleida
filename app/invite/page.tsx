@@ -2,12 +2,13 @@
 
 import * as React from 'react';
 import type { Session } from '@supabase/supabase-js';
+import Image from 'next/image';
 import {
     Alert,
     Box,
     Button,
-    CircularProgress,
     Container,
+    LinearProgress,
     Paper,
     Stack,
     TextField,
@@ -25,6 +26,7 @@ const MIN_PASSWORD_LENGTH = 6;
 export default function InvitePage() {
     const router = useRouter();
     const [config, setConfig] = React.useState(defaultTenantConfig);
+    const [configLoaded, setConfigLoaded] = React.useState(false);
     const [email, setEmail] = React.useState<string | null>(null);
     const [authChecked, setAuthChecked] = React.useState(false);
     const [hasSession, setHasSession] = React.useState(false);
@@ -38,8 +40,15 @@ export default function InvitePage() {
         let active = true;
 
         const loadTenantConfig = async () => {
-            const tenantConfig = await loadTenantConfigClient();
-            if (active) setConfig(tenantConfig.config);
+            try {
+                const tenantConfig = await loadTenantConfigClient();
+                if (!active) return;
+                setConfig(tenantConfig.config);
+            } finally {
+                if (active) {
+                    setConfigLoaded(true);
+                }
+            }
         };
 
         void loadTenantConfig();
@@ -58,6 +67,12 @@ export default function InvitePage() {
 
         return () => window.clearTimeout(timer);
     }, [router, success]);
+
+    React.useEffect(() => {
+        if (authChecked && hasSession) {
+            router.replace('/');
+        }
+    }, [authChecked, hasSession, router]);
 
     React.useEffect(() => {
         let active = true;
@@ -131,28 +146,41 @@ export default function InvitePage() {
         setConfirmPassword('');
     };
 
+    if (!configLoaded) {
+        return null;
+    }
+
+    if (!authChecked || hasSession) {
+        return (
+            <NX config={config}>
+                <LinearProgress />
+            </NX>
+        );
+    }
+
     return (
         <NX config={config}>
             <Container maxWidth="sm" sx={{ py: 8 }}>
+
+
+                <div className="signin-avatar-wrap">
+                    <a href="https://askleida.com" className="logo-link">
+                        <Image
+                            src={`/askleida/svg/logo-dark.svg`}
+                            alt="Leida"
+                            width={110}
+                            height={22}
+                            className="logo" />
+                    </a>
+                </div>
+
                 <Paper variant="outlined" sx={{ p: 4 }}>
                     <Stack spacing={2.5}>
                         <Box>
-                            <Typography variant="h4" gutterBottom>
-                                Set your password
-                            </Typography>
                             <Typography variant="body1" color="text.secondary">
                                 Finish accepting your invite by choosing a password for your account.
                             </Typography>
                         </Box>
-
-                        {!authChecked ? (
-                            <Stack direction="row" spacing={1.5} alignItems="center">
-                                <CircularProgress size={20} />
-                                <Typography variant="body2" color="text.secondary">
-                                    Checking your invite session...
-                                </Typography>
-                            </Stack>
-                        ) : null}
 
                         {error ? <Alert severity="error">{error}</Alert> : null}
                         {success ? <Alert severity="success">{success}</Alert> : null}
@@ -162,8 +190,11 @@ export default function InvitePage() {
                                 <Alert severity="warning">
                                     No active invite session was found. Open the latest invite email, click the link again, and then set your password here.
                                 </Alert>
-                                <Button variant="outlined" onClick={() => router.push('/')}>
-                                    Back to sign in
+                                <Button 
+                                    endIcon={<Icon icon="signin" />}
+                                    variant="contained" 
+                                    onClick={() => router.push('/')}>
+                                    Sign in
                                 </Button>
                             </Stack>
                         ) : null}

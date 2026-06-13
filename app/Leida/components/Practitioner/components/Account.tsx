@@ -2,6 +2,7 @@
 import * as React from 'react';
 import {
 	Box,
+	Grid,
 	Button,
 	Collapse,
 	Dialog,
@@ -66,6 +67,7 @@ export default function Account() {
 	const [isSigningOut, setIsSigningOut] = React.useState(false);
 
 	const [formState, setFormState] = React.useState({
+		email,
 		displayName: name,
 		clinic,
 	});
@@ -89,10 +91,11 @@ export default function Account() {
 
 	React.useEffect(() => {
 		setFormState({
+			email,
 			displayName: name,
 			clinic,
 		});
-	}, [name, clinic]);
+	}, [email, name, clinic]);
 
 	React.useEffect(() => {
 		if (isOnboarding && !open) {
@@ -193,57 +196,20 @@ export default function Account() {
 				sx: (currentTheme) => ({
 					width: '100%',
 					minHeight: fullScreen ? '100%' : '70vh',
-					'@media (min-width:900px)': {
-						minWidth: `${currentTheme.breakpoints.values.md}px`,
-					},
+					
 				}),
 			}}
 		>
-			<DialogTitle sx={{ pr: 14 }}>
-				<Typography variant="body2" color="disabled">
-					{email}
-				</Typography>
-				{isBusy ? <LinearProgress /> : null}
-			</DialogTitle>
+			
+			{isBusy ? <LinearProgress /> : null}
 
 			<DialogContent>
-				<Stack spacing={1.5} sx={{ mb: 2 }}>
-					
 
-					<Editable
-						id="display_name"
-						label="Your name"
-						startAdornment='user'
-						variant="standard"
-						required
-						value={formState.displayName}
-						disabled={isBusy}
-						onChange={(nextValue) => {
-							setFormError(null);
-							setFormState((current) => ({
-								...current,
-								displayName: nextValue,
-							}));
-						}}
-					/>
-
-					<Editable
-					id="clinic"
-					label="Clinic name"
-					variant="standard"
-					startAdornment='medical'
-					value={formState.clinic}
-						disabled={isBusy}
-						onChange={(nextValue) => {
-							setFormError(null);
-							setFormState((current) => ({
-								...current,
-								clinic: nextValue,
-							}));
-						}}
-					/>
-
-					<Box>
+				<Grid container spacing={2} sx={{ mb: 2 }}>
+					<Grid size={{
+						xs: 12,
+						md: 6,
+					}}>
 						<AvatarUpload
 							size={216}
 							practitionerId={practitionerId}
@@ -252,6 +218,67 @@ export default function Account() {
 							onSuccess={handleAvatarSuccess}
 							disabled={isBusy}
 						/>
+					</Grid>	
+					<Grid size={{
+						xs: 12,
+						md: 6,
+					}}>
+
+						<Editable
+							id="email"
+							label="Email"
+							startAdornment='email'
+							variant="standard"
+							required
+							value={formState.email}
+							disabled
+						/>
+
+						<Editable
+							id="display_name"
+							label="Your name"
+							startAdornment='user'
+							variant="standard"
+							required
+							value={formState.displayName}
+							disabled={isBusy}
+							onChange={(nextValue) => {
+								setFormError(null);
+								setFormState((current) => ({
+									...current,
+									displayName: nextValue,
+								}));
+							}}
+						/>
+
+						<Editable
+							id="clinic"
+							label="Clinic name"
+							variant="standard"
+							startAdornment='medical'
+							value={formState.clinic}
+							disabled={isBusy}
+							onChange={(nextValue) => {
+								setFormError(null);
+								setFormState((current) => ({
+									...current,
+									clinic: nextValue,
+								}));
+							}}
+						/>
+
+					</Grid>	
+				</Grid>
+
+				<Stack spacing={1.5} sx={{ mb: 2 }}>
+					
+
+					
+
+					
+
+					<Box>
+						
 					</Box>
 
 					{formError ? (
@@ -285,11 +312,13 @@ export default function Account() {
 
 				<Collapse in={isFormDirty} orientation="horizontal" unmountOnExit>
 					<Button
+						startIcon={<Icon icon="save" />}
 						color="primary"
 						variant="contained"
 						disabled={!canSaveForm}
 						onClick={() => {
 							void handleFormSave();
+							handleClose();
 						}}
 					>
 						Save

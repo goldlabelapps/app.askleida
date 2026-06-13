@@ -8,6 +8,8 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { Icon } from '../../../NX/DesignSystem';
 
+type IconName = React.ComponentProps<typeof Icon>['icon'];
+
 type EditableBaseProps = {
 	id?: string;
 	label?: string;
@@ -18,8 +20,8 @@ type EditableBaseProps = {
 	multiline?: boolean;
 	minRows?: number;
 	variant?: 'standard' | 'outlined' | 'filled';
-	startAdornment?: string;
-	endAdornment?: string;
+	startAdornment?: IconName;
+	endAdornment?: IconName;
 	editableType?: 'text' | 'date' | 'select' | 'chips';
 	options?: readonly string[];
 	checkboxProps?: Omit<CheckboxProps, 'checked' | 'onChange' | 'disabled' | 'required'>;

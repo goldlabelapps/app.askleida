@@ -9,6 +9,8 @@ import {
     CircularProgress,
     List,
     Typography,
+    Paper,
+    Fab,
 } from '@mui/material';
 import { useDispatch } from '../../../NX/Uberedux';
 import { Icon, navigateTo } from '../../../NX/DesignSystem';
@@ -40,40 +42,38 @@ export default function Clients() {
             <CardHeader 
                 avatar={<>
                     {clients?.loading ? <CircularProgress size={20} /> : 
-                    <Box sx={{mt:1, ml:1}}>
+                    <Box sx={{}}>
                         <Icon icon="clients" color="primary" />
                     </Box>}
                 </>}
                 title={<Typography variant="h6">{titleText}</Typography>}
                 action={<>
-                    <Button
-                        endIcon={<Icon icon="add" />}
+                    <Fab
                         color="primary"
                         onClick={handleNew}
                     >
-                        New
-                    </Button>
+                        <Icon icon="add" />
+                    </Fab>
                 </>}
             />
-            
-                {clients?.loading ? null : clients?.error ? (
-                    <Alert severity="error">{String(clients.error)}</Alert>
-                ) : (
-                    <>
-                            {list.map((client: any) => {
-                                const itemKey = String(client?.client_id || client?.id || JSON.stringify(client));
-                                return (
-                                    <ClientCard
-                                        key={itemKey}
-                                        client={client}
-                                        onClick={(clientId) => {
-                                            dispatch(navigateTo(router, `/clients/${clientId}`));
-                                        }}
-                                    />
-                                );
-                            })}]
-                    </>
-                )}
+            {clients?.loading ? null : clients?.error ? (
+                <Alert severity="error">{String(clients.error)}</Alert>
+            ) : (
+                <>
+                {list.map((client: any) => {
+                    const itemKey = String(client?.client_id || client?.id || JSON.stringify(client));
+                    return (
+                        <ClientCard
+                            key={itemKey}
+                            client={client}
+                            onClick={(clientId) => {
+                                dispatch(navigateTo(router, `/clients/${clientId}`));
+                            }}
+                        />
+                    );
+                })}
+                </>
+            )}
         </Box>
     );
 }

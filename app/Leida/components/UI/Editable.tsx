@@ -175,14 +175,14 @@ export default function Editable({
 		return (
 			<>
 				<Button
-					variant="text"
+					variant="outlined"
 					color="primary"
 					startIcon={<Icon icon="date" />}
 					disabled={disabled}
 					onClick={handleOpenDatePicker}
-					aria-label={label || 'Select date'}
+					aria-label={'Date of birth'}
 				>
-					{humanDateLabel}
+					{label}
 				</Button>
 				<Popover
 					open={Boolean(dateAnchorEl)}

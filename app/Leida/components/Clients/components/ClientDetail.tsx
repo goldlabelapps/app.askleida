@@ -15,6 +15,7 @@ import {
     ListItem,
     ListItemText,
     Stack,
+    Paper,
 } from '@mui/material';
 import { Icon, navigateTo, ConfirmAction } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
@@ -318,7 +319,7 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
     };
 
     return (
-        <>
+        <Paper sx={{ maxWidth: 800, mx: 'auto', mt: 2, p: 0 }}>
             <Box>
                 <Collapse in={isDirty} unmountOnExit>
                     <Box
@@ -363,14 +364,25 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
                 <CardContent>
                     <Grid container spacing={4}>
                         <Grid size={{xs: 12, sm: 6}}>
+
+                            <Editable 
+                                label="Date of birth" 
+                                value={dateOfBirth} 
+                                editableType="date" 
+                                onChange={(value) => handleDataChange('date_of_birth', value)} 
+                            />
+
                            
-                            <Editable label="First name" value={firstName} placeholder="Add first name" onChange={(value) => handleDataChange('first_name', value)} />
+                            <Editable 
+                                variant="standard"
+                                label="Name" value={firstName} placeholder="Add first name" onChange={(value) => handleDataChange('first_name', value)} />
                             <Box sx={{ my: 2 }} />
-                            <Editable label="Last name" value={lastName} placeholder="Add last name" onChange={(value) => handleDataChange('last_name', value)} />
+                            <Editable
+                                variant="standard"
+                                 label="Email" value={email} placeholder="Add email" onChange={(value) => handleDataChange('email', value)} />
                             <Box sx={{ my: 2 }} />
-                            <Editable label="Email" value={email} placeholder="Add email" onChange={(value) => handleDataChange('email', value)} />
-                            <Box sx={{ my: 2 }} />
-                            <Editable label="Current medication" value={medication} placeholder="Add current medication" multiline minRows={2} onChange={(value) => handleDataChange('current_medication', value)} />
+                            <Editable 
+                            label="Current medication" value={medication} placeholder="Add current medication" multiline minRows={2} onChange={(value) => handleDataChange('current_medication', value)} />
                             <Box sx={{ my: 2 }} />
                             <Editable label="Skin overview" value={skinOverview} placeholder="Add skin overview" multiline minRows={3} onChange={(value) => handleDataChange('skin_overview', value)} />
                            
@@ -386,7 +398,8 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
                                     placeholder="Select skin type" options={SKIN_TYPE_OPTIONS} 
                                     onChange={(value) => handleDataChange('skin_type', value)} />
                                 <Box sx={{ my: 2 }} />
-                                <Editable label="Date of birth" value={dateOfBirth} editableType="date" onChange={(value) => handleDataChange('date_of_birth', value)} />
+                            
+                            
                             </Box>
                             <Box sx={{ my: 2 }} />
                             <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, px: 1.5 }}>
@@ -402,16 +415,6 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
                     </Grid>
                 </CardContent>
 
-                <CardActions>
-                    <Button
-                        fullWidth
-                        startIcon={<Icon icon="left" />}
-                        variant="text"
-                        onClick={handleClientsNavigate}
-                    >
-                        Back
-                    </Button>
-                </CardActions>
 
                 <ConfirmAction
                     open={confirmOpen}
@@ -422,7 +425,7 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
                     handleClose={handleCloseDeleteConfirm}
                 />
             </Box>
-        </>
+        </Paper>
     );
 };
 

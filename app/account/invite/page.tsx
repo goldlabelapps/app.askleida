@@ -20,6 +20,7 @@ import { Icon,  } from '../../NX/DesignSystem';
 import { NX } from '../../NX';
 import { defaultTenantConfig } from '../../lib/tenantConfig/base';
 import { loadTenantConfigClient } from '../../lib/tenantConfig/client';
+import { sessionHasPasswordAuth, sessionRequiresInvitePasswordSetup } from '../../NX/Paywall/hooks/useSupabaseAuth';
 
 const MIN_PASSWORD_LENGTH = 6;
 
@@ -30,6 +31,7 @@ export default function InvitePage() {
     const [email, setEmail] = React.useState<string | null>(null);
     const [authChecked, setAuthChecked] = React.useState(false);
     const [hasSession, setHasSession] = React.useState(false);
+    const [sessionReadyForApp, setSessionReadyForApp] = React.useState(false);
     const [password, setPassword] = React.useState('');
     const [confirmPassword, setConfirmPassword] = React.useState('');
     const [error, setError] = React.useState<string | null>(null);
@@ -69,18 +71,13 @@ export default function InvitePage() {
     }, [router, success]);
 
     React.useEffect(() => {
-        if (authChecked && hasSession) {
-            router.replace('/');
-        }
-    }, [authChecked, hasSession, router]);
-
-    React.useEffect(() => {
         let active = true;
 
         const applySession = (session: Session | null) => {
             if (!active) return;
             setEmail(session?.user?.email ?? null);
             setHasSession(Boolean(session?.user));
+            setSessionReadyForApp(Boolean(session?.user) && !sessionRequiresInvitePasswordSetup(session));
             setAuthChecked(true);
             if (session?.user) {
                 setError(null);
@@ -128,6 +125,11 @@ export default function InvitePage() {
             return;
         }
 
+        if (!email) {
+            setError('Unable to determine the invited account email. Reopen the invite link and try again.');
+            return;
+        }
+
         setSaving(true);
 
         try {
@@ -135,6 +137,28 @@ export default function InvitePage() {
 
             if (updateError) {
                 setError(updateError.message);
+                return;
+            }
+
+            const { error: signOutError } = await supabase.auth.signOut();
+
+            if (signOutError) {
+                setError(signOutError.message);
+                return;
+            }
+
+            const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
+
+            if (signInError) {
+                setError(signInError.message);
+                return;
+            }
+
+            if (!sessionHasPasswordAuth(signInData.session ?? null)) {
+                setError('Password was saved, but the account did not establish a password login session. Sign in with your new password.');
                 return;
             }
         } finally {
@@ -150,7 +174,7 @@ export default function InvitePage() {
         return null;
     }
 
-    if (!authChecked || hasSession) {
+    if (!authChecked) {
         return (
             <NX config={config}>
                 <LinearProgress />
@@ -199,7 +223,7 @@ export default function InvitePage() {
                             </Stack>
                         ) : null}
 
-                        {authChecked && hasSession ? (
+                        {authChecked && hasSession && !sessionReadyForApp ? (
                             <Box component="form" onSubmit={handleSubmit}>
                                 <Stack spacing={2}>
                                     <TextField
@@ -236,7 +260,7 @@ export default function InvitePage() {
                                         </Button>
                                         <Button
                                             endIcon={<Icon icon="right" />}
-                                            variant="outlined"
+                                            variant="text"
                                             disabled={!success}
                                             onClick={() => router.push('/?onboard=true')}
                                         >
@@ -246,6 +270,21 @@ export default function InvitePage() {
 
                                 </Stack>
                             </Box>
+                        ) : null}
+
+                        {authChecked && sessionReadyForApp ? (
+                            <Stack spacing={2}>
+                                <Alert severity="success">
+                                    Your account is already confirmed. Continue into the app.
+                                </Alert>
+                                <Button
+                                    endIcon={<Icon icon="right" />}
+                                    variant="contained"
+                                    onClick={() => router.push('/?onboard=true')}
+                                >
+                                    Continue
+                                </Button>
+                            </Stack>
                         ) : null}
                     </Stack>
                 </Paper>

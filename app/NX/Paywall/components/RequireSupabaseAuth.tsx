@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSupabaseAuth } from '../hooks/useSupabaseAuth';
-import SupabaseLogin from './SupabaseLogin';
 import { Backdrop, Box, Typography } from '@mui/material';
 import { supabase } from '../../lib/supabase';
 import { NX } from '../../../NX';
@@ -15,12 +14,11 @@ import { getTenant } from '../../../NX/lib/getTenant';
 export default function RequireSupabaseAuth({ children, publicUrl }: { children: React.ReactNode; publicUrl: string }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, loading } = useSupabaseAuth();
+  const { user, loading, requiresInvitePasswordSetup } = useSupabaseAuth();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
-  const isInvitePending = Boolean(user?.invited_at && !user.confirmed_at);
-  const shouldRedirectToInvite = isInvitePending && pathname !== '/account/invite';
+  const shouldRedirectToInvite = requiresInvitePasswordSetup && pathname !== '/account/invite';
 
   // Get config for NX wrapper
   const { config } = getTenant();

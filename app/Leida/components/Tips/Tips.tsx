@@ -12,6 +12,8 @@ import {
     ListItemButton,
     ListItemText,
     Typography,
+    Paper,
+    Fab,
 } from '@mui/material';
 import { useDispatch } from '../../../NX/Uberedux';
 import { Icon, navigateTo } from '../../../NX/DesignSystem';
@@ -69,7 +71,7 @@ export default function Tips() {
     };
 
     return (
-        <Box>
+        <Paper variant="outlined" sx={{ }}>
             <CardHeader 
                 avatar={<>
                     {tips?.loading ? <CircularProgress size={20} /> : 
@@ -79,13 +81,12 @@ export default function Tips() {
                 </>}
                 title={<Typography variant="h6">{titleText}</Typography>}
                 action={<>
-                    <Button
-                        endIcon={<Icon icon="add" />}
+                    <Fab
                         color="primary"
                         onClick={handleNew}
                     >
-                        New
-                    </Button>
+                        <Icon icon="add" />
+                    </Fab>
                 </>}
             />
                 {/* <Box sx={{ display: 'flex', px: 2, mb: 1 }}>
@@ -140,6 +141,6 @@ export default function Tips() {
                         )}
                     </>
                 )}
-        </Box>
+        </Paper>
     );
 }

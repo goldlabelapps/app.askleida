@@ -12,6 +12,7 @@ import {
     CardContent,
     CardHeader,
     IconButton,
+    Paper,
 } from '@mui/material';
 import { Icon, navigateTo } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
@@ -93,7 +94,7 @@ const TipNew: React.FC<T_TipNewProps> = ({ config }) => {
     };
 
     return (
-        <Box>
+        <Paper variant="outlined" sx={{}}>
             <CardHeader 
                 avatar={<>
                     <IconButton
@@ -104,14 +105,15 @@ const TipNew: React.FC<T_TipNewProps> = ({ config }) => {
                     </IconButton>
                 </>}
                 title={<Typography variant="h6">
-                    New
+                    Create Tip
                 </Typography>}  />
             <CardContent>
                 <Box sx={{ display: 'grid', gap: 2 }}>
                     {error ? <Alert severity="error">{error}</Alert> : null}
                     <Editable
-                        label="Title"
+                        label="New tip"
                         value={title}
+                        variant="standard"
                         placeholder="Add title"
                         required
                         onChange={setTitle}
@@ -141,15 +143,7 @@ const TipNew: React.FC<T_TipNewProps> = ({ config }) => {
                     </Fab>
                 </Box>
             </Collapse>
-            <CardActions>
-                <Button 
-                    fullWidth
-                    startIcon={<Icon icon="left" />}
-                    variant="text" onClick={handleTipsNavigate}>
-                    Back
-                </Button>
-            </CardActions>
-        </Box>
+        </Paper>
     );
 };
 

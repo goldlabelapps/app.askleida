@@ -30,27 +30,25 @@ const ClientCard: React.FC<T_ClientCardProps> = ({ client, onClick }) => {
 
     return (
         <>
-            <nav className="site-nav">
-                <div className="nav-inner">
-                    <ButtonBase  
-                        disabled={!clientId}
-                        onClick={() => {
-                            if (clientId) {
-                                onClick?.(clientId);
-                            }
-                        }} 
-                        sx={{ borderRadius: 1, px: 0.5 }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                                <Box>
-                                    <Avatar />
-                                </Box>
-                                <Box sx={{ flex: 1, ml: 2 }}>
-                                    <Typography variant="subtitle1">{fullName}</Typography>
-                                </Box>
+            <div className="nav-inner">
+                <ButtonBase  
+                    disabled={!clientId}
+                    onClick={() => {
+                        if (clientId) {
+                            onClick?.(clientId);
+                        }
+                    }} 
+                    sx={{ borderRadius: 1, px: 0.5 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                            <Box>
+                        <Avatar src={'https://app.askleida.com/shared/svg/characters/mumma.svg'} />
                             </Box>
-                    </ButtonBase>
-                </div>
-            </nav>
+                            <Box sx={{ flex: 1, ml: 2 }}>
+                                <Typography variant="subtitle1">{fullName}</Typography>
+                            </Box>
+                        </Box>
+                </ButtonBase>
+            </div>
         </>
        
     );

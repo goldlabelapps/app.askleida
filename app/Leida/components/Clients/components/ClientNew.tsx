@@ -6,6 +6,7 @@ import {
     Grid,
     Alert,
     Button,
+    IconButton,
     Collapse,
     Fab,
     Typography,
@@ -13,6 +14,7 @@ import {
     CardContent,
     CardHeader,
     Stack,
+    Paper,
 } from '@mui/material';
 import { Icon, navigateTo } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
@@ -25,14 +27,12 @@ type T_ClientNewProps = {
 };
 
 type T_FormState = {
-    first_name: string;
-    last_name: string;
+    name: string;
     email: string;
 };
 
 const initialForm: T_FormState = {
-    first_name: '',
-    last_name: '',
+    name: '',
     email: '',
 };
 
@@ -55,8 +55,7 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
     const [error, setError] = React.useState<string | null>(null);
     const [submitting, setSubmitting] = React.useState(false);
     const hasRequiredFields =
-        form.first_name.trim().length > 0
-        && form.last_name.trim().length > 0
+        form.name.trim().length > 0
         && form.email.trim().length > 0;
     const isEmailReady = isValidEmail(form.email);
     const isFormComplete =
@@ -74,12 +73,11 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
     };
 
     const handleSubmit = async () => {
-        const firstName = form.first_name.trim();
-        const lastName = form.last_name.trim();
+        const name = form.name.trim();
         const email = form.email.trim().toLowerCase();
 
-        if (!firstName || !lastName || !email) {
-            setError('First name, last name, and email are required.');
+        if (!name || !email) {
+            setError('Name and email are required.');
             return;
         }
 
@@ -93,9 +91,13 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
 
             const newClientId = await dispatch(createClient({
                 practitioner_id: user?.id ?? null,
-                first_name: firstName || null,
-                last_name: lastName || null,
+                title: name || null,
+                display_name: name || null,
                 email: email || null,
+                data: {
+                    display_name: name || null,
+                    email: email || null,
+                },
             }));
 
             dispatch(navigateTo(router, newClientId ? `/clients/${newClientId}` : '/clients'));
@@ -107,54 +109,55 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
     };
 
     return (
-        <Box>
+        <Paper sx={{  }}>
             <CardHeader 
                 avatar={<>
-                    <Icon icon="clients" color="primary" />
+                    <Box>
+                        <IconButton
+                            color="primary"
+                            onClick={handleBack}
+                        >
+                            <Icon icon="left" />
+                        </IconButton>
+                    </Box>
+                    <Box sx={{m: 1}}>
+                        <Icon icon="clients" color="primary" />
+                    </Box>
                 </>}
                 title={<Typography variant="h6">
-                    New Client
+                    Create Client
                 </Typography>}  />
             <CardContent>
                 <Stack spacing={2}>
                     {error ? <Alert severity="error">{error}</Alert> : null}
                     
                     <Grid container spacing={2}>
-                        <Grid size={{xs: 12, sm: 6}}>
-                            <Editable
-                                variant="outlined"
-                                label="First name"
-                                value={form.first_name}
-                                onChange={handleChange('first_name')}
-                                required
-                                autoFocus
-                            />
-                        </Grid>
-                        <Grid size={{ xs: 12, sm: 6 }}>
-                            <Editable
-                                variant="outlined"
-                                label="Last name"
-                                value={form.last_name}
-                                onChange={handleChange('last_name')}
-                                required
-                            />
-                        </Grid>
                         <Grid size={{ xs: 12 }}>
                             <Editable
-                                variant="outlined"
+                                autoFocus
+                                variant="standard"
                                 label="Email"
                                 value={form.email}
                                 onChange={handleChange('email')}
                                 required
                             />
                         </Grid>
+                        <Grid size={{xs: 12, sm: 6}}>
+                            <Editable
+                                variant="standard"
+                                label="Name"
+                                value={form.name}
+                                onChange={handleChange('name')}
+                                required
+                                
+                            />
+                        </Grid>
+                        
                         
                     </Grid>
                     
-                    
-                    
-                    
                 </Stack>
+
             </CardContent>
             <Collapse in={isFormComplete || submitting} unmountOnExit>
                 <Box
@@ -174,17 +177,7 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                     </Fab>
                 </Box>
             </Collapse>
-            <CardActions>
-                <Button
-                    fullWidth
-                    startIcon={<Icon icon="left" />}
-                    variant="text"
-                    onClick={handleBack}
-                >
-                    Back
-                </Button>
-            </CardActions>
-        </Box>
+        </Paper>
     );
 };
 

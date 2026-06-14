@@ -62,7 +62,7 @@ export default function InvitePage() {
         if (!success) return;
 
         const timer = window.setTimeout(() => {
-            router.replace('/');
+            router.replace('/?onboard=true');
         }, 800);
 
         return () => window.clearTimeout(timer);
@@ -238,7 +238,7 @@ export default function InvitePage() {
                                             endIcon={<Icon icon="right" />}
                                             variant="outlined"
                                             disabled={!success}
-                                            onClick={() => router.push('/')}
+                                            onClick={() => router.push('/?onboard=true')}
                                         >
                                             app.askleida.com
                                         </Button>

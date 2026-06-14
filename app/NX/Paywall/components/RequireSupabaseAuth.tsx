@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useSupabaseAuth } from '../hooks/useSupabaseAuth';
 import SupabaseLogin from './SupabaseLogin';
 import { Backdrop, Box, Typography } from '@mui/material';
@@ -14,12 +14,22 @@ import { getTenant } from '../../../NX/lib/getTenant';
 
 export default function RequireSupabaseAuth({ children, publicUrl }: { children: React.ReactNode; publicUrl: string }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { user, loading } = useSupabaseAuth();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
+  const isInvitePending = Boolean(user?.invited_at && !user.confirmed_at);
+  const shouldRedirectToInvite = isInvitePending && pathname !== '/account/invite';
+
   // Get config for NX wrapper
   const { config } = getTenant();
+
+  React.useEffect(() => {
+    if (shouldRedirectToInvite) {
+      router.replace('/account/invite');
+    }
+  }, [router, shouldRedirectToInvite]);
 
   const handleSupabaseLogin = async (email: string, password: string) => {
     setPending(true);
@@ -39,7 +49,7 @@ export default function RequireSupabaseAuth({ children, publicUrl }: { children:
 
   return (
     <NX config={config}>
-      {loading || pending ? (
+      {loading || pending || shouldRedirectToInvite ? (
         <Backdrop open 
           sx={{
             zIndex: (theme) => theme.zIndex.drawer + 1,

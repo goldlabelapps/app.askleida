@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { Icon, navigateTo } from '../../../../NX/DesignSystem'
 import { useDispatch } from '../../../../NX/Uberedux';
+import { useClients } from '../../Clients';
 
 type I_ClientDash = {
 	title: string;
@@ -26,18 +27,34 @@ const ClientDash = ({
 
 		const router = useRouter();
 		const dispatch = useDispatch();
+		const clientsState = useClients();
+		const clientCount = Array.isArray(clientsState?.list) ? clientsState.list.length : 0;
 
 		const handleNewClient = () => {
 			dispatch(navigateTo(router, '/clients/new'));
 		}
 	return (
 		<>
+			<Box sx={{ my: 2 }}>
+				<Button
+					fullWidth
+					size="large"
+					color="primary"
+					variant="contained"
+					startIcon={<Icon icon="clients" />}
+					endIcon={<Icon icon="add" />}
+					onClick={handleNewClient}
+				>
+					New Client
+				</Button>
+			</Box>
 			<Card 
 				variant='outlined' 
 				sx={{ 
 					height: '100%', 
 					display: 'flex', 
-					flexDirection: 'column' 
+					flexDirection: 'column', 
+					mb: 3
 				}}>
 				<CardActionArea 
 					onClick={cta} 
@@ -59,25 +76,14 @@ const ClientDash = ({
 							{description && <Typography variant="body2" color="text.secondary">
 								{description}
 							</Typography>}
+							<Typography variant="subtitle2" color="text.secondary">
+								{clientCount} client{clientCount === 1 ? '' : 's'}
+							</Typography>
 						</Box>
 					</CardContent>
 				</CardActionArea>
 			</Card>
 			
-			<Box sx={{my:2}}>
-				<Button
-					fullWidth
-					size="large"
-					color="primary"
-					variant="contained"
-					startIcon={<Icon icon="clients" />}
-					endIcon={<Icon icon="add" />}
-					onClick={handleNewClient}
-				>
-					New Client
-				</Button>
-			</Box>
-
 		</>
 	);
 };

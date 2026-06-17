@@ -34,6 +34,11 @@ export default function Onboarding() {
     const onboarding = useOnboarding();
     const clients = useClients();
     const recommendations = useRecommendations();
+    const onboardingEnabled = false;
+
+    if (!onboardingEnabled) {
+        return null;
+    }
     const clientsCount = Array.isArray(clients?.list) ? clients.list.length : 0;
     const recommendationsCount = Array.isArray(recommendations?.list) ? recommendations.list.length : 0;
 

@@ -1,11 +1,9 @@
 "use client";
 import React from 'react';
+import { Account } from '../Account';
 import Image from 'next/image';
 import { Box, ButtonBase } from '@mui/material';
 // import { Icon } from '../../../NX/DesignSystem';
-import {
-    Practitioner,
-} from '../Practitioner';
 
 type T_HeaderProps = {
     onHome: () => void;
@@ -27,7 +25,7 @@ const Header: React.FC<T_HeaderProps> = ({
                     />
                 </ButtonBase>
                 <Box sx={{height: 46 }}>
-                    <Practitioner />
+                    <Account />
                 </Box>
             </div>
         </nav>

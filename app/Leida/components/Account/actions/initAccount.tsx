@@ -1,10 +1,10 @@
-import { setPractitioner } from '../../Practitioner';
+import { setAccount } from '..';
 
-export const initPractitioner = (practitionerId?: string): any =>
+export const initAccount = (practitionerId?: string): any =>
     async (dispatch: any) => {
         try {
-            dispatch(setPractitioner('loading', true));
-            dispatch(setPractitioner('error', null));
+            dispatch(setAccount('loading', true));
+            dispatch(setAccount('error', null));
 
             const query = practitionerId
                 ? `?practitioner_id=${encodeURIComponent(practitionerId)}`
@@ -23,14 +23,14 @@ export const initPractitioner = (practitionerId?: string): any =>
             const payload = await response.json();
             const data = payload?.data ?? null;
 
-            dispatch(setPractitioner('data', data));
-            dispatch(setPractitioner('initted', true));
-            dispatch(setPractitioner('loading', false));
+            dispatch(setAccount('data', data));
+            dispatch(setAccount('initted', true));
+            dispatch(setAccount('loading', false));
         } catch (e: unknown) {
             const msg = e instanceof Error ? e.message : String(e);
-            dispatch(setPractitioner('data', null));
-            dispatch(setPractitioner('error', msg));
-            dispatch(setPractitioner('initted', true));
-            dispatch(setPractitioner('loading', false));
+            dispatch(setAccount('data', null));
+            dispatch(setAccount('error', msg));
+            dispatch(setAccount('initted', true));
+            dispatch(setAccount('loading', false));
         }
     };

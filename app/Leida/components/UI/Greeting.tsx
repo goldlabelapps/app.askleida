@@ -9,12 +9,12 @@ import {
 } from '@mui/material';
 import { getTimeGreeting } from '../../../Leida';
 import { CleverText } from '../../../NX/DesignSystem';
-import { usePractitioner } from '../Practitioner';
+import { useAccount } from '../Account';
 import { ClientDash } from '../../';
 import { Fade } from '@mui/material';
 
 const Greeting: React.FC = () => {
-    const practitioner = usePractitioner();
+    const account = useAccount();
     const [showGameMenu, setShowGameMenu] = React.useState(false);
     const [showCleverText, setShowCleverText] = React.useState(true);
     const gameMenuDelayTimeoutRef = React.useRef<number | null>(null);
@@ -81,10 +81,10 @@ const Greeting: React.FC = () => {
         };
     }, [showGameMenu]);
 
-    if (practitioner?.loading) return null;
+    if (account?.loading) return null;
 
-    const practitionerRows = Array.isArray(practitioner?.data) ? practitioner.data : [];
-    const firstRow = practitionerRows[0] as Record<string, unknown> | undefined;
+    const accountRows = Array.isArray(account?.data) ? account.data : [];
+    const firstRow = accountRows[0] as Record<string, unknown> | undefined;
     const profile =
         firstRow && typeof firstRow.data === 'object' && firstRow.data !== null
             ? (firstRow.data as Record<string, unknown>)

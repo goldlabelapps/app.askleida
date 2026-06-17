@@ -23,19 +23,15 @@ import {
     Products,
     ProductDetail,
     ProductNew,
-    RecommendationDetail,
-    RecommendationNew,
     TipDetail,
     TipNew,
-    Practitioner,
-    Recommendations,
+    Account,
     Tips,
     Header,
     Greeting,
 } from '../Leida';
 import { initClients, useClients } from './components/Clients';
 import { initProducts, useProducts } from './components/Products';
-import { initRecommendations, useRecommendations } from './components/Recommendations';
 import { initTips, useTips } from './components/Tips';
 import { setPaywall, useSupabaseAuth } from '../NX/Paywall';
 import { supabase } from '../NX/lib/supabase';
@@ -50,7 +46,6 @@ const Leida: React.FC<any> = ({
     const pathname = usePathname();
     const clientsState = useClients();
     const productsState = useProducts();
-    const recommendationsState = useRecommendations();
     const tipsState = useTips();
     const designSystem = useDesignSystem();
     const defaultTheme = config?.cartridges?.designSystem?.defaultTheme;
@@ -82,7 +77,7 @@ const Leida: React.FC<any> = ({
     };
 
     const handleStart = () => {
-        dispatch(navigateTo(router, '/recommendations'));
+        dispatch(navigateTo(router, '/'));
     };
 
     const handleOpenSignoutConfirm = () => setIsConfirmOpen(true);
@@ -90,20 +85,16 @@ const Leida: React.FC<any> = ({
     const routeParts = (pathname || '/').split('/').filter(Boolean);
     const isClientsRoute = routeParts[0] === 'clients';
     const isProductsRoute = routeParts[0] === 'products';
-    const isPractitionerRoute = routeParts[0] === 'practitioner';
-    const isRecommendationsRoute = routeParts[0] === 'recommendations';
+    const isAccountRoute = routeParts[0] === 'account';
     const isTipsRoute = routeParts[0] === 'tips';
     const isClientNewRoute = isClientsRoute && routeParts[1] === 'new';
     const isProductNewRoute = isProductsRoute && routeParts[1] === 'new';
-    const isRecommendationNewRoute = isRecommendationsRoute && routeParts[1] === 'new';
     const isTipNewRoute = isTipsRoute && routeParts[1] === 'new';
     const clientId = isClientsRoute && routeParts[1] ? routeParts[1] : null;
     const productId = isProductsRoute && routeParts[1] ? routeParts[1] : null;
-    const recommendationId = isRecommendationsRoute && routeParts[1] ? routeParts[1] : null;
     const tipId = isTipsRoute && routeParts[1] ? routeParts[1] : null;
     const clientList = Array.isArray(clientsState?.list) ? clientsState.list : [];
     const productList = Array.isArray(productsState?.list) ? productsState.list : [];
-    const recommendationList = Array.isArray(recommendationsState?.list) ? recommendationsState.list : [];
     const tipList = Array.isArray(tipsState?.list) ? tipsState.list : [];
     const selectedClient = clientId
         ? clientList.find((client: any) => client?.client_id === clientId) || null
@@ -113,9 +104,6 @@ const Leida: React.FC<any> = ({
         : null;
     const selectedProduct = productId
         ? productList.find((product: any) => product?.product_id === productId) || null
-        : null;
-    const selectedRecommendation = recommendationId
-        ? recommendationList.find((recommendation: any) => recommendation?.recommendation_id === recommendationId) || null
         : null;
 
     React.useEffect(() => {
@@ -136,21 +124,13 @@ const Leida: React.FC<any> = ({
         }
     }, [dispatch, isProductsRoute, user?.id, productsState?.initted, productsState?.loading]);
 
-    React.useEffect(() => {
-        if (isRecommendationsRoute && user?.id && !recommendationsState?.initted && !recommendationsState?.loading) {
-            dispatch(initRecommendations(user.id));
-        }
-    }, [dispatch, isRecommendationsRoute, user?.id, recommendationsState?.initted, recommendationsState?.loading]);
-
     const bottomNavValue = isClientsRoute
         ? 'clients'
         : isProductsRoute
             ? 'products'
-            : isRecommendationsRoute
-                ? 'recommendations'
-                : isTipsRoute
-                    ? 'tips'
-                    : 'products';
+            : isTipsRoute
+                ? 'tips'
+                : 'products';
     const bottomNavItems = [
         {
             label: 'Clients',
@@ -195,18 +175,12 @@ const Leida: React.FC<any> = ({
                         <ProductDetail config={config} product={selectedProduct} />
                     ) : isProductsRoute ? (
                         <Products />
-                    ) : isRecommendationNewRoute ? (
-                        <RecommendationNew config={config} />
-                    ) : isRecommendationsRoute && recommendationId ? (
-                        <RecommendationDetail config={config} recommendation={selectedRecommendation} />
-                    ) : isRecommendationsRoute ? (
-                        <Recommendations />
                     ) : isTipNewRoute ? (
                         <TipNew config={config} />
                     ) : isTipsRoute && tipId ? (
                         <TipDetail tip={selectedTip} />
-                    ) : isPractitionerRoute ? (
-                        <Practitioner />
+                    ) : isAccountRoute ? (
+                        <Account />
                     ) : isTipsRoute ? (
                         <Tips />
                     ) : (
@@ -235,13 +209,3 @@ const Leida: React.FC<any> = ({
 };
 
 export default Leida;
-
-/*
-<Button
-    variant="contained"
-    startIcon={<Icon icon="recommendation" />}
-    onClick={handleStart}
->
-    Start a Recommendation
-</Button>
-*/

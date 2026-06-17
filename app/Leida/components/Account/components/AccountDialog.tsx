@@ -20,11 +20,11 @@ import { setPaywall, useSupabaseAuth } from '../../../../NX/Paywall';
 import { useDispatch } from '../../../../NX/Uberedux';
 import { Editable } from '../../../../Leida';
 import { supabase } from '../../../../NX/lib/supabase';
-import { patchPractitioner, setPractitioner } from '..';
+import { patchAccount, setAccount } from '..';
 import AvatarUpload from '../../UI/AvatarUpload';
-import { usePractitioner } from '../hooks/usePractitioner';
+import { useAccount } from '../hooks/useAccount';
 
-function getPractitionerProfile(value: unknown): Record<string, unknown> | null {
+function getAccountProfile(value: unknown): Record<string, unknown> | null {
 	if (!value || typeof value !== 'object') {
 		return null;
 	}
@@ -49,13 +49,13 @@ export default function Account() {
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 	const dispatch = useDispatch();
-	const practitioner = usePractitioner();
-	const practitionerRows = Array.isArray(practitioner?.data) ? practitioner.data : [];
+	const account = useAccount();
+	const accountRows = Array.isArray(account?.data) ? account.data : [];
 	const { user } = useSupabaseAuth();
-	const profile = getPractitionerProfile(practitionerRows[0] ?? null);
-	const open = Boolean(practitioner?.accountOpen);
+	const profile = getAccountProfile(accountRows[0] ?? null);
+	const open = Boolean(account?.accountOpen);
 	const hasDisplayName = Boolean(profile?.display_name);
-	const isOnboarding = practitioner?.initted === true && !hasDisplayName;
+	const isOnboarding = account?.initted === true && !hasDisplayName;
 	const name = String(
 		profile?.display_name || profile?.title || user?.user_metadata?.full_name || 'Your account',
 	);
@@ -79,9 +79,9 @@ export default function Account() {
 			? profile.avatar.trim()
 			: undefined;
 	const initialAvatarWhenOpenedRef = React.useRef<string>(avatarSource ?? '');
-	const practitionerId = String(practitionerRows[0]?.practitioner_id ?? '');
-	const isLoadingPractitioner = Boolean(practitioner?.loading);
-	const isBusy = isLoadingPractitioner || isSavingForm || isSigningOut;
+	const accountId = String(accountRows[0]?.practitioner_id ?? '');
+	const isLoadingAccount = Boolean(account?.loading);
+	const isBusy = isLoadingAccount || isSavingForm || isSigningOut;
 
 	const normalizedDraftDisplayName = formState.displayName.trim();
 	const normalizedCurrentDisplayName = name.trim();
@@ -110,7 +110,7 @@ export default function Account() {
 
 	React.useEffect(() => {
 		if (isOnboarding && !open) {
-			dispatch(setPractitioner('accountOpen', true));
+			dispatch(setAccount('accountOpen', true));
 		}
 	}, [isOnboarding, open, dispatch]);
 
@@ -121,7 +121,7 @@ export default function Account() {
 	}, [open]);
 
 	const handleAvatarSuccess = (avatarUrl: string) => {
-		const current = practitionerRows[0] ?? {};
+		const current = accountRows[0] ?? {};
 		const currentData =
 			current.data && typeof current.data === 'object'
 				? (current.data as Record<string, unknown>)
@@ -130,16 +130,16 @@ export default function Account() {
 			...current,
 			data: { ...currentData, avatar: avatarUrl },
 		};
-		dispatch(setPractitioner('data', [updated]));
+		dispatch(setAccount('data', [updated]));
 	};
 
 	const handleClose = () => {
 		if (isBusy || isOnboarding) return;
-		dispatch(setPractitioner('accountOpen', false));
+		dispatch(setAccount('accountOpen', false));
 	};
 
 	const handleFormSave = async () => {
-		if (!practitionerId) {
+		if (!accountId) {
 			setFormError('Unable to update your account: missing practitioner id.');
 			return;
 		}
@@ -155,7 +155,7 @@ export default function Account() {
 
 		try {
 			const result = await dispatch(
-				patchPractitioner(practitionerId, {
+				patchAccount(accountId, {
 					data: {
 						display_name: normalizedName,
 					clinic: normalizedDraftClinic || null,
@@ -192,7 +192,7 @@ export default function Account() {
 		try {
 			await supabase.auth.signOut();
 			dispatch(setPaywall('supabaseAuth', null));
-			dispatch(setPractitioner('accountOpen', false));
+			dispatch(setAccount('accountOpen', false));
 		} finally {
 			setIsSigningOut(false);
 		}
@@ -308,7 +308,7 @@ export default function Account() {
 						
 						<AvatarUpload
 							size={128}
-							practitionerId={practitionerId}
+							practitionerId={accountId}
 							currentAvatar={avatarSource}
 							displayName={name}
 							onSuccess={handleAvatarSuccess}

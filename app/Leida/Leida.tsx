@@ -165,13 +165,6 @@ const Leida: React.FC<any> = ({
             icon: 'products' as const,
             href: '/products',
         },
-
-        // {
-        //     label: 'Recommendations',
-        //     value: 'recommendations',
-        //     icon: 'recommendation' as const,
-        //     href: '/recommendations',
-        // },
         
         {
             label: 'Tips',

@@ -10,11 +10,9 @@ import {
     Collapse,
     Fab,
     Typography,
-    CardActions,
     CardContent,
     CardHeader,
     Stack,
-    Paper,
 } from '@mui/material';
 import { Icon, navigateTo } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
@@ -109,7 +107,7 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
     };
 
     return (
-        <Paper sx={{  }}>
+        <>
             <CardHeader 
                 avatar={<>
                     <Box>
@@ -128,6 +126,9 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                     Create Client
                 </Typography>}  />
             <CardContent>
+
+                /clients/new
+
                 <Stack spacing={2}>
                     {error ? <Alert severity="error">{error}</Alert> : null}
                     
@@ -177,7 +178,7 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                     </Fab>
                 </Box>
             </Collapse>
-        </Paper>
+        </>
     );
 };
 

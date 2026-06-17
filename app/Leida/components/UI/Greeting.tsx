@@ -1,22 +1,25 @@
+"use client";
 import React from 'react';
 import { gsap } from 'gsap';
 import { 
     Box, 
     Collapse,
-    Container, 
-    
+    Container,     
     Stack,
 } from '@mui/material';
 import { getTimeGreeting } from '../../../Leida';
 import { CleverText } from '../../../NX/DesignSystem';
 import { usePractitioner } from '../Practitioner';
-import GameMenu from './GameMenu';
+import { ClientDash } from '../../';
+import { Fade } from '@mui/material';
 
 const Greeting: React.FC = () => {
     const practitioner = usePractitioner();
     const [showGameMenu, setShowGameMenu] = React.useState(false);
+    const [showCleverText, setShowCleverText] = React.useState(true);
     const gameMenuDelayTimeoutRef = React.useRef<number | null>(null);
     const gameMenuAnimationFrameRef = React.useRef<number | null>(null);
+    const hideOnceRef = React.useRef(false);
 
     React.useEffect(() => {
         return () => {
@@ -58,6 +61,12 @@ const Greeting: React.FC = () => {
                             scaleY: 1,
                             duration: 0.12,
                             ease: 'power1.out',
+                            onComplete: () => {
+                                if (!hideOnceRef.current) {
+                                    hideOnceRef.current = true;
+                                    setShowCleverText(false);
+                                }
+                            },
                         });
                     },
                 },
@@ -92,26 +101,42 @@ const Greeting: React.FC = () => {
         <Box sx={{ minHeight: 'calc(100vh - 220px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Container maxWidth="xs">
                 <Stack alignItems="center" textAlign="center" spacing={2}>
-                    <CleverText 
-                        options={{
-                            id: 'greeting_welcome_message',
-                            markdown: `# ${greetingText}`,
-                            // animateOncePerSession: true,
-                            onFinish: () => {
-                                if (gameMenuDelayTimeoutRef.current !== null) {
-                                    window.clearTimeout(gameMenuDelayTimeoutRef.current);
-                                }
-                                gameMenuDelayTimeoutRef.current = window.setTimeout(() => {
-                                    setShowGameMenu(true);
-                                }, 1000);
-                                // console.log('Greeting message finished typing');
-                            }
-                        }}
-                    />
+                    <Fade in={showCleverText} timeout={320} unmountOnExit>
+                        <div>
+                            <CleverText
+                                options={{
+                                    id: 'greeting_welcome_message',
+                                    markdown: `# ${greetingText}`,
+                                    onFinish: () => {
+                                        if (gameMenuDelayTimeoutRef.current !== null) {
+                                            window.clearTimeout(gameMenuDelayTimeoutRef.current);
+                                        }
+                                        gameMenuDelayTimeoutRef.current = window.setTimeout(() => {
+                                            setShowGameMenu(true);
+                                        }, 1000);
+                                    },
+                                }}
+                            />
+                        </div>
+                    </Fade>
                     <Box sx={{ width: '100%', position: 'relative' }}>
-                        <Collapse in={showGameMenu} timeout={380} sx={{ width: '100%', position: 'relative', zIndex: 2 }}>
+                        <Collapse 
+                            in={showGameMenu} 
+                            timeout={380} 
+                            sx={{ 
+                                width: '100%', 
+                                position: 'relative', 
+                                zIndex: 2,
+                            }}>
                             <Box id="game_menu_box">
-                                <GameMenu />
+                                <ClientDash
+                                    title="Clients"
+                                    description="You have 0 clients"
+                                    icon={'clients'}
+                                    cta={() => {
+                                        console.log('Clients card clicked');
+                                    }}
+                                />
                             </Box>
                         </Collapse>
                     </Box>

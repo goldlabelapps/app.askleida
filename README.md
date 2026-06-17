@@ -2,6 +2,16 @@
 
 > Production: https://app.askleida.com
 
+### Deploy to Vercel
+
+1. Install the Vercel CLI or use the Vercel dashboard.
+2. Ensure the project root is `/Users/milky/My Drive/GitHub/app.askleida`.
+3. Add required environment variables in Vercel from `.env.example`.
+4. Set the build command to `yarn build` and the output directory to `.`.
+5. Deploy and confirm the preview/prod URL.
+
+> Recommended env vars: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_ANTHROPIC_API_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`, `NEXT_PUBLIC_TENANT`, plus any provider keys you use.
+
 #### Tech Stack
 
 - Next.js 16 (App Router) + React 19 + TypeScript

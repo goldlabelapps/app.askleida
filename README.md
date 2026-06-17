@@ -1,12 +1,8 @@
-# askleida.com
+## app.askleida.com
 
-Next.js 16 application for the Leida platform.
+> Production: https://app.askleida.com
 
-## Live
-
-- Production: https://askleida.com
-
-## Tech Stack
+#### Tech Stack
 
 - Next.js 16 (App Router) + React 19 + TypeScript
 - ESLint 9 with `eslint-config-next`
@@ -15,12 +11,12 @@ Next.js 16 application for the Leida platform.
 - Anthropic API route (server-side)
 - PWA support via `@ducanh2912/next-pwa`
 
-## Prerequisites
+#### Prerequisites
 
 - Node.js 20+
 - Yarn 1.x (repo includes `yarn.lock`)
 
-## Local Development
+#### Local Development
 
 1. Install dependencies:
 
@@ -42,7 +38,7 @@ Next.js 16 application for the Leida platform.
 
 4. Open `http://localhost:1888`.
 
-## Available Scripts
+#### Available Scripts
 
 - `yarn dev` - kills existing process, installs deps, clears `.next`, then runs Next.js dev server on port `1888`.
 - `yarn build` - production build.
@@ -52,49 +48,7 @@ Next.js 16 application for the Leida platform.
 - `yarn kill` - stop process bound to local dev port(s).
 - `yarn open` - convenience script from `app/NX/lib/bash/open.sh`.
 
-## Environment Variables
-
-Copy `.env.example` to `.env.local` and fill in values.
-
-Core:
-
-- `NEXT_PUBLIC_TENANT`
-- `NEXT_PUBLIC_SITE_URL`
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
-
-Billing:
-
-- `STRIPE_SECRET_KEY`
-- `STRIPE_WEBHOOK_SECRET`
-
-AI:
-
-- `ANTHROPIC_API_KEY`
-
-Optional features:
-
-- `ENABLE_PWA_DEV` (set to `true` only when testing PWA behavior in local dev)
-- `NEXT_PUBLIC_PYTHON_URL`
-- `NEXT_PUBLIC_MAPBOX_TOKEN`
-- `NEXT_PUBLIC_IPGEOLOCATION_API_KEY`
-- `NEXT_PUBLIC_FIREBASE_API_KEY`
-- `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`
-- `NEXT_PUBLIC_FIREBASE_PROJECT_ID`
-- `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`
-- `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`
-- `NEXT_PUBLIC_FIREBASE_APP_ID`
-
-## Project Structure
-
-- `app/` - Next.js app routes and feature modules.
-- `app/api/` - API routes (clients, products, stripe, anthropic).
-- `app/Leida/` - Leida feature module (components, hooks, prompts, and actions).
-- `app/NX/` - shared UI/system modules and utilities.
-- `public/` - static assets, PWA files, tenant content.
-
-## Notes
+#### Notes
 
 - PWA/service worker is disabled by default in development (`yarn dev`). Set `ENABLE_PWA_DEV=true` in `.env.local` to test it locally.
 - Stripe integration requires valid runtime secrets for both checkout and webhook routes.

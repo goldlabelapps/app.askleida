@@ -1,7 +1,6 @@
 export type T_OnboardingData = {
     setPassword: boolean;
     createFirstClient: boolean;
-    publishFirstLivingRouting: boolean;
 };
 
 export type T_OnboardingState = {

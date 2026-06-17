@@ -16,15 +16,6 @@ export { default as ClientNew } from './components/Clients/components/ClientNew'
 export { default as Products } from './components/Products/Products';
 export { default as ProductDetail } from './components/Products/components/ProductDetail';
 export { default as ProductNew } from './components/Products/components/ProductNew';
-export { default as Recommendations } from './components/Recommendations/Recommendations';
-export { default as RecommendationDetail } from './components/Recommendations/components/RecommendationDetail';
-export { default as RecommendationNew } from './components/Recommendations/components/RecommendationNew';
-export { initRecommendations } from './components/Recommendations/actions/initRecommendations';
-export { useRecommendations } from './components/Recommendations/hooks/useRecommendations';
-export { setRecommendations } from './components/Recommendations/actions/setRecommendations';
-export { createRecommendation } from './components/Recommendations/actions/createRecommendation';
-export { patchRecommendation } from './components/Recommendations/actions/patchRecommendation';
-export { deleteRecommendation } from './components/Recommendations/actions/deleteRecommendation';
 export { default as Practitioner } from './components/Practitioner/Practitioner';
 export { patchPractitioner } from './components/Practitioner/actions/patchPractitioner';
 export { default as Onboarding } from './components/Onboarding/Onboarding';

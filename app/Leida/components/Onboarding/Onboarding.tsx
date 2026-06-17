@@ -18,7 +18,6 @@ import { navigateTo } from '../../../NX/DesignSystem';
 import { useSupabaseAuth } from '../../../NX/Paywall';
 import { useDispatch } from '../../../NX/Uberedux';
 import { useClients } from '../Clients';
-import { useRecommendations } from '../Recommendations';
 import { initOnboarding } from './actions/initOnboarding';
 import { setOnboarding } from './actions/setOnboarding';
 import { useOnboarding } from './hooks/useOnboarding';
@@ -33,14 +32,12 @@ export default function Onboarding() {
     const { user } = useSupabaseAuth();
     const onboarding = useOnboarding();
     const clients = useClients();
-    const recommendations = useRecommendations();
     const onboardingEnabled = false;
 
     if (!onboardingEnabled) {
         return null;
     }
     const clientsCount = Array.isArray(clients?.list) ? clients.list.length : 0;
-    const recommendationsCount = Array.isArray(recommendations?.list) ? recommendations.list.length : 0;
 
     React.useEffect(() => {
         if (!user?.id || onboarding?.loading || onboarding?.initted) {
@@ -56,10 +53,8 @@ export default function Onboarding() {
         }
 
         const needsClientStepSync = !getStepValue(onboarding?.data?.createFirstClient) && clientsCount > 0;
-        const needsRoutingStepSync = !getStepValue(onboarding?.data?.publishFirstLivingRouting)
-            && recommendationsCount > 0;
 
-        if (needsClientStepSync || needsRoutingStepSync) {
+        if (needsClientStepSync) {
             dispatch(initOnboarding(user.id));
         }
     }, [
@@ -67,15 +62,12 @@ export default function Onboarding() {
         user?.id,
         onboarding?.initted,
         onboarding?.data?.createFirstClient,
-        onboarding?.data?.publishFirstLivingRouting,
         clientsCount,
-        recommendationsCount,
     ]);
 
     const stepSetPassword = getStepValue(onboarding?.data?.setPassword);
     const stepCreateClient = getStepValue(onboarding?.data?.createFirstClient);
-    const stepPublishRouting = getStepValue(onboarding?.data?.publishFirstLivingRouting);
-    const completed = stepSetPassword && stepCreateClient && stepPublishRouting;
+    const completed = stepSetPassword && stepCreateClient;
     const open = Boolean(onboarding?.open);
 
     const handleClose = () => {
@@ -133,21 +125,6 @@ export default function Onboarding() {
                         ) : null}
                     </Box>
 
-                    <Box>
-                        <FormControlLabel
-                            control={<Checkbox checked={stepPublishRouting} disabled />}
-                            label="Publish first living routing"
-                        />
-                        {!stepPublishRouting ? (
-                            <Button
-                                variant="text"
-                                color="primary"
-                                onClick={() => dispatch(navigateTo(router, '/recommendations/new'))}
-                            >
-                                Publish first living routing
-                            </Button>
-                        ) : null}
-                    </Box>
                 </Stack>
             </DialogContent>
 

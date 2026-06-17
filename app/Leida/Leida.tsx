@@ -28,6 +28,7 @@ import {
     TipDetail,
     TipNew,
     Practitioner,
+    Onboarding,
     Recommendations,
     Tips,
     Header,
@@ -184,6 +185,7 @@ const Leida: React.FC<any> = ({
     return (
         <DesignSystem theme={theme as T_Theme} config={config}>
             <Feedback />
+            <Onboarding />
             <Header onHome={handleHome} />
             
             <main style={{ paddingBottom: 88 }}>

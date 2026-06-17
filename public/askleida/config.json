@@ -24,8 +24,17 @@
         "designSystem": {
             "themeSwitching": true,
             "sharing": false,
-            "defaultTheme": "light",
+            "defaultTheme": "dark",
             "themes": {
+                "dark": {
+                    "mode": "dark",
+                    "primary": "#F7F7F4",
+                    "secondary": "#FF00E6",
+                    "background": "#2C2C2A",
+                    "paper": "#2C2C2A",
+                    "text": "#F7F7F4",
+                    "border": "#000"
+                },
                 "light": {
                     "mode": "light",
                     "primary": "#2c2c2a",
@@ -34,15 +43,6 @@
                     "paper": "#FFF",
                     "border": "#d4d4d4",
                     "text": "#2c2c2a"
-                },
-                "dark": {
-                    "mode": "dark",
-                    "primary": "#F7F5F2",
-                    "secondary": "#F7F5F2",
-                    "background": "#c93379",
-                    "paper": "#c93379",
-                    "text": "#fff",
-                    "border": "#F7F5F2"
                 }
             },
             "typography": {

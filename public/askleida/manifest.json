@@ -1,8 +1,8 @@
 {
   "short_name": "Leida",
   "name": "Leida",
-  "theme_color": "#F7F5F2",
-  "background_color": "#F7F5F2",
+  "theme_color": "#2C2C2A",
+  "background_color": "#2C2C2A",
   "display": "fullscreen",
   "orientation": "any",
   "scope": "/",

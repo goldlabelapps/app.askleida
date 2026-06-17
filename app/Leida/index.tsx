@@ -10,6 +10,7 @@ export { default as Header } from './components/UI/Header';
 export { default as Greeting } from './components/UI/Greeting';
 export { default as Clients } from './components/Clients/Clients';
 export { default as ClientCard } from './components/Clients/components/ClientCard';
+export { default as ClientDash } from './components/Clients/components/ClientDash';
 export { default as ClientDetail } from './components/Clients/components/ClientDetail';
 export { default as ClientNew } from './components/Clients/components/ClientNew';
 export { default as Products } from './components/Products/Products';

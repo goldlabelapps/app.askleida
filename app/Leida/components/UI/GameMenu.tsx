@@ -19,39 +19,26 @@ const GameMenu: React.FC = () => {
 
     return (
         <>
-        <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', maxWidth: 300, gap: 1, mx: 'auto' }}>
-            {/* <Button
-                color="primary"
-                startIcon={<Icon icon="recommendation" />}
-                onClick={() => handleClick('/recommendations')}
+        <Box sx={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            width: '100%', 
+            maxWidth: 300, 
+            gap: 1, 
+            mx: 'auto',
+        }}>
+            <Button 
                 fullWidth
-            >
-                Recommendations
-            </Button> */}
-             <Button
-                    color="primary"
-                    startIcon={<Icon icon="products" />}
-                    onClick={() => handleClick('/products')}
-                    fullWidth>
-                    Products
-                </Button>
-            <Button 
+                size="large"
                 color="primary" 
+                variant="contained"
                 startIcon={<Icon icon="clients" />}
-                onClick={() => handleClick('/clients')} 
-                fullWidth>
-                Clients
+                endIcon={<Icon icon="add" />}
+                onClick={() => handleClick('/clients/new')} 
+                >
+                New Client
             </Button>
-            <Button 
-                color="primary" 
-                startIcon={<Icon icon="tips" />}
-                onClick={() => handleClick('/tips')} 
-                fullWidth 
-            >
-                Tips
-            </Button>
-                
-                
+            
         </Box>
             
         </>

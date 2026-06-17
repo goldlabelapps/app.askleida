@@ -1,5 +1,5 @@
 import Clients from './Clients';
-import { ClientCard, ClientDetail, ClientNew } from './components';
+import { ClientCard, ClientDash, ClientDetail, ClientNew } from './components';
 import { initClients } from './actions/initClients';
 import { useClients } from './hooks/useClients';
 import { setClients } from './actions/setClients';
@@ -9,6 +9,7 @@ import { deleteClient } from './actions/deleteClient';
 export {
     Clients,
     ClientCard,
+    ClientDash,
     ClientDetail,
     ClientNew,
     initClients,

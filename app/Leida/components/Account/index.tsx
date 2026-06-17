@@ -1,14 +1,19 @@
-import Practitioner from './Practitioner';
-import { initPractitioner } from './actions/initPractitioner';
-import { usePractitioner } from './hooks/usePractitioner';
-import { setPractitioner } from './actions/setPractitioner';
-import { patchPractitioner } from './actions/patchPractitioner';
+import Account from './Account';
+import { initAccount } from './actions/initAccount';
+import { useAccount } from './hooks/useAccount';
+import { setAccount } from './actions/setAccount';
+import { patchAccount } from './actions/patchAccount';
 import AvatarUpload from '../UI/AvatarUpload';
+
+import AccountDialog, { defaultAvatars } from './components';
+
 export {
-    Practitioner,
-    initPractitioner,
-    usePractitioner,
-    setPractitioner,
-    patchPractitioner,
+    Account,
+    AccountDialog,
+    defaultAvatars,
+    initAccount,
+    useAccount,
+    setAccount,
+    patchAccount,
     AvatarUpload,
 };

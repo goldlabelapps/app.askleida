@@ -25,7 +25,7 @@ import {
     ProductNew,
     TipDetail,
     TipNew,
-    Practitioner,
+    Account,
     Tips,
     Header,
     Greeting,
@@ -85,7 +85,7 @@ const Leida: React.FC<any> = ({
     const routeParts = (pathname || '/').split('/').filter(Boolean);
     const isClientsRoute = routeParts[0] === 'clients';
     const isProductsRoute = routeParts[0] === 'products';
-    const isPractitionerRoute = routeParts[0] === 'practitioner';
+    const isAccountRoute = routeParts[0] === 'account';
     const isTipsRoute = routeParts[0] === 'tips';
     const isClientNewRoute = isClientsRoute && routeParts[1] === 'new';
     const isProductNewRoute = isProductsRoute && routeParts[1] === 'new';
@@ -179,8 +179,8 @@ const Leida: React.FC<any> = ({
                         <TipNew config={config} />
                     ) : isTipsRoute && tipId ? (
                         <TipDetail tip={selectedTip} />
-                    ) : isPractitionerRoute ? (
-                        <Practitioner />
+                    ) : isAccountRoute ? (
+                        <Account />
                     ) : isTipsRoute ? (
                         <Tips />
                     ) : (

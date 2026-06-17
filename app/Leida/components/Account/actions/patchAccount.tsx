@@ -1,6 +1,6 @@
 import type { T_RootState, T_UbereduxDispatch } from '../../../../NX/Uberedux/store';
 import { setUbereduxKey } from '../../../../NX/Uberedux';
-import { setPractitioner } from './setPractitioner';
+import { setAccount } from './setAccount';
 
 type T_PatchPractitionerPayload = {
     data?: Record<string, unknown>;
@@ -34,7 +34,7 @@ const extractPractitioner = (payload: unknown): Record<string, unknown> | null =
     return record;
 };
 
-export const patchPractitioner = (
+export const patchAccount = (
     practitionerId: string,
     practitioner: T_PatchPractitionerPayload,
 ): any =>
@@ -84,12 +84,12 @@ export const patchPractitioner = (
                 ...payload,
             };
 
-            dispatch(setPractitioner('data', [updatedRow]));
-            dispatch(setPractitioner('error', null));
+            dispatch(setAccount('data', [updatedRow]));
+            dispatch(setAccount('error', null));
             return { ok: true, data: updatedRow };
         } catch (e: unknown) {
             const msg = e instanceof Error ? e.message : String(e);
-            dispatch(setPractitioner('error', msg));
+            dispatch(setAccount('error', msg));
             dispatch(setUbereduxKey({ key: 'error', value: msg }));
             return { ok: false, message: msg };
         }

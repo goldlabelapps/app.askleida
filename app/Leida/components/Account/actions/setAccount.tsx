@@ -1,7 +1,7 @@
 import type { T_RootState, T_UbereduxDispatch } from '../../../../NX/Uberedux/store';
 import { setUbereduxKey } from '../../../../NX/Uberedux';
 
-export const setPractitioner =
+export const setAccount =
     (key: string, value: any): any =>
         async (dispatch: T_UbereduxDispatch, getState: () => T_RootState) => {
             try {

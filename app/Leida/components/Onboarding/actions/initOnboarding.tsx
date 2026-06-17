@@ -1,6 +1,6 @@
 import type { T_RootState, T_UbereduxDispatch } from '../../../../NX/Uberedux/store';
 import { initClients } from '../../Clients';
-import { initPractitioner, patchPractitioner } from '../../Practitioner';
+import { initAccount, patchAccount } from '../../Account';
 import { setOnboarding } from './setOnboarding';
 
 type T_OnboardingStatus = {
@@ -43,7 +43,7 @@ export const initOnboarding = (practitionerId?: string): any =>
             );
 
             if (shouldInitPractitioner) {
-                await dispatch(initPractitioner(practitionerId));
+                await dispatch(initAccount(practitionerId));
             }
 
             const stateAfterPractitioner = getState();
@@ -97,7 +97,7 @@ export const initOnboarding = (practitionerId?: string): any =>
 
             if (shouldPersist && nextPractitionerId) {
                 await dispatch(
-                    patchPractitioner(nextPractitionerId, {
+                    patchAccount(nextPractitionerId, {
                         data: {
                             onboarding: nextOnboarding,
                         },

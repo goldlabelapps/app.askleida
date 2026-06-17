@@ -1,23 +1,23 @@
-'use client';
+ 'use client';
 import * as React from 'react';
-import type { T_Practitioner } from '../Practitioner/types';
+import type { T_Account } from './types';
 import {
     Avatar,
     IconButton,
 } from '@mui/material';
 import { useDispatch } from '../../../NX/Uberedux';
 import { useSupabaseAuth } from '../../../NX/Paywall';
-import { initPractitioner, setPractitioner, usePractitioner } from '../Practitioner';
+import { initAccount, setAccount, useAccount } from '.';
 import { Icon } from '../../../NX/DesignSystem';
-import Account from './components/Account';
+import {AccountDialog} from '../Account';
 
-export default function Practitioner() {
+export default function Account() {
 
     const { user } = useSupabaseAuth();
     const dispatch = useDispatch();
-    const practitioner = usePractitioner();
-    const practitionerRows = Array.isArray(practitioner?.data) ? practitioner.data : [];
-    const data = (practitionerRows[0] || null) as T_Practitioner | null;
+    const account = useAccount();
+    const accountRows = Array.isArray(account?.data) ? account.data : [];
+    const data = (accountRows[0] || null) as T_Account | null;
     const avatarSource =
         typeof data?.data === 'object' &&
         data?.data !== null &&
@@ -26,22 +26,22 @@ export default function Practitioner() {
             ? String((data.data as Record<string, unknown>).avatar).trim()
             : undefined;
     React.useEffect(() => {
-        if (!practitioner?.initted && !practitioner?.loading && user?.id) {
-            dispatch(initPractitioner(user.id));
+        if (!account?.initted && !account?.loading && user?.id) {
+            dispatch(initAccount(user.id));
         }
-    }, [dispatch, practitioner?.initted, practitioner?.loading, user?.id]);
+    }, [dispatch, account?.initted, account?.loading, user?.id]);
 
     const handleOpenAccount = () => {
-        dispatch(setPractitioner('accountOpen', true));
+        dispatch(setAccount('accountOpen', true));
     };
 
-    if (practitioner?.loading) return null;
+    if (account?.loading) return null;
 
     return (
         <>
             <IconButton
                 onClick={handleOpenAccount}
-                aria-label="open practitioner account"
+                aria-label="open account"
                 sx={{ p: 0.25 }}
             >
                 <Avatar src={avatarSource}>
@@ -49,7 +49,7 @@ export default function Practitioner() {
                 </Avatar>
             </IconButton>
 
-            <Account />
+            <AccountDialog />
         </>
     );
 }

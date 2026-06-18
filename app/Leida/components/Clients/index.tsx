@@ -1,5 +1,9 @@
 import Clients from './Clients';
-import { ClientCard, ClientDash, ClientDetail, ClientNew } from './components';
+import ClientCard from './components/ClientCard';
+import ClientDash from './components/ClientDash';
+import ClientDetail from './components/ClientDetail';
+import ClientList from './components/ClientList';
+import ClientNew from './components/ClientNew';
 import { initClients } from './actions/initClients';
 import { useClients } from './hooks/useClients';
 import { setClients } from './actions/setClients';
@@ -11,6 +15,7 @@ export {
     ClientCard,
     ClientDash,
     ClientDetail,
+    ClientList,
     ClientNew,
     initClients,
     useClients,

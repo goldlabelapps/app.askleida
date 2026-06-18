@@ -127,16 +127,11 @@ const Greeting: React.FC = () => {
                                 width: '100%', 
                                 position: 'relative', 
                                 zIndex: 2,
+                                border: '1px solid red',
+                                textAlign: 'left',
                             }}>
                             <Box id="game_menu_box">
-                                <ClientDash
-                                    title="Clients"
-                                    description="You have 0 clients"
-                                    icon={'clients'}
-                                    cta={() => {
-                                        console.log('Clients card clicked');
-                                    }}
-                                />
+                                <ClientDash />
                             </Box>
                         </Collapse>
                     </Box>

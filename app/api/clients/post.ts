@@ -95,6 +95,33 @@ export async function POST(req: Request) {
     return NextResponse.json(res, { status: 500 });
   }
 
+  // If an email was provided, try to create a corresponding Supabase auth user
+  try {
+    const email = normalizedData.email;
+    if (email) {
+      // Attempt to create an auth user using the service role key
+      // Set a user_metadata access_level so client can be identified as level 2
+      // If the admin API isn't available this will throw and we'll continue gracefully
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const { data: userData, error: userError } = await supabase.auth.admin.createUser({
+        email,
+        email_confirm: false,
+        user_metadata: { access_level: 2 },
+      });
+
+      if (userError) {
+        // ignore auth creation error but include info in response data
+        (data as any)._auth_error = userError.message;
+      } else if (userData) {
+        (data as any)._auth_user = userData;
+      }
+    }
+  } catch (e) {
+    // swallow errors from admin createUser so client creation still succeeds
+    (data as any)._auth_exception = e instanceof Error ? e.message : String(e);
+  }
+
   const res = makeRes({ tenant, message: 'Client created', severity: 'success', data });
   return NextResponse.json(res);
 }

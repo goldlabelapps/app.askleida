@@ -223,38 +223,35 @@ export default function Account() {
 
 			<DialogContent>
 
-				<Typography variant="h6" sx={{ my: 2 }}>
-					Account
-				</Typography>
-
 				<Grid container spacing={2} sx={{ mb: 2 }}>
 					<Grid size={{
 						xs: 12,
 						sm: 6,
-					}} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', order: { xs: 1, sm: 2 } }}>
-						
+					}} sx={{ display: 'flex', 
+					pt: 2,
+					flexDirection: 'column', 
+					gap: 2, 
+					justifyContent: 'center', 
+					alignItems: 'center', 
+					order: { xs: 1, sm: 2 } }}>
+						<AvatarUpload
+							size={200}
+							practitionerId={accountId}
+							currentAvatar={avatarSource}
+							displayName={name}
+							onSuccess={handleAvatarSuccess}
+							disabled={isBusy}
+						/>
 					</Grid>	
 					<Grid size={{
 						xs: 12,
 						sm: 6,
 					}} sx={{ display: 'flex', flexDirection: 'column', gap: 2, order: { xs: 2, sm: 1 } }}>
-
 						<Editable
-							id="email"
-							label="Email"
-							startAdornment='email'
+							id="displayName"
+							label="Name"
 							variant="standard"
-							required
-							value={formState.email}
-							disabled
-						/>
-
-						<Editable
-							id="display_name"
-							label="Your name"
 							startAdornment='user'
-							variant="standard"
-							required
 							value={formState.displayName}
 							disabled={isBusy}
 							onChange={(nextValue) => {
@@ -265,10 +262,9 @@ export default function Account() {
 								}));
 							}}
 						/>
-
 						<Editable
-							id="clinic"
-							label="Clinic name"
+							id="email"
+							label="Clinic"
 							variant="standard"
 							startAdornment='medical'
 							value={formState.clinic}
@@ -282,23 +278,6 @@ export default function Account() {
 							}}
 						/>
 
-						<Editable
-							id="website"
-							label="Website"
-							variant="standard"
-							startAdornment='link'
-							value={formState.website}
-							disabled={isBusy}
-							onChange={(nextValue) => {
-								setFormError(null);
-								setFormState((current) => ({
-									...current,
-									website: nextValue,
-								}));
-							}}
-						/>
-
-						
 					</Grid>	
 
 					<Grid size={{
@@ -306,24 +285,6 @@ export default function Account() {
 						sm: 6,
 					}} sx={{ display: 'flex', flexDirection: 'column', gap: 2, order: { xs: 2, sm: 1 } }}>
 						
-						<AvatarUpload
-							size={128}
-							practitionerId={accountId}
-							currentAvatar={avatarSource}
-							displayName={name}
-							onSuccess={handleAvatarSuccess}
-							disabled={isBusy}
-						/>
-						
-						<Button
-							color="primary"
-							variant="text"
-							onClick={handleRequestSignout}
-							startIcon={<Icon icon="signout" />}
-							disabled={isBusy}
-						>
-							Sign out
-						</Button>
 					</Grid>
 
 					
@@ -340,7 +301,15 @@ export default function Account() {
 
 			<DialogActions sx={{ px: 2, py: 2 }}>
 				
-
+				<Button
+					color="primary"
+					variant="text"
+					onClick={handleRequestSignout}
+					startIcon={<Icon icon="signout" />}
+					disabled={isBusy}
+				>
+					Sign out
+				</Button>
 				<Button
 					color="primary"
 					variant="text"

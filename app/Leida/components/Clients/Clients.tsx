@@ -7,7 +7,8 @@ import {
 } from '@mui/material';
 import { useDispatch } from '../../../NX/Uberedux';
 import { Icon, navigateTo } from '../../../NX/DesignSystem';
-import { useClients } from '../Clients';
+import { useClients, ClientList } from '../Clients';
+import { Wrapper } from '../../../Leida'
 
 export default function Clients() {
 
@@ -20,7 +21,7 @@ export default function Clients() {
     };
 
     return (
-        <Box>
+        <Wrapper>
             <Box sx={{ my: 2 }}>
                 <Button
                     fullWidth
@@ -34,8 +35,7 @@ export default function Clients() {
                     New Client
                 </Button>
             </Box>
-
-            <pre>slice: {JSON.stringify(slice, null, 2)}</pre>
-        </Box>
+            <ClientList />
+        </Wrapper>
     );
 }

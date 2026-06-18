@@ -8,6 +8,7 @@ export { default as BulletEditor } from './components/UI/BulletEditor';
 
 export { default as Header } from './components/UI/Header';
 export { default as Greeting } from './components/UI/Greeting';
+export { default as Wrapper } from './components/UI/Wrapper';
 export { default as Clients } from './components/Clients/Clients';
 export { default as ClientCard } from './components/Clients/components/ClientCard';
 export { default as ClientDash } from './components/Clients/components/ClientDash';

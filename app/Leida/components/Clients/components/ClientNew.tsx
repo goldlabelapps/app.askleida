@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { Icon, navigateTo } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
+import { useSupabaseAuth } from '../../../../NX/Paywall';
 import { Editable } from '../../../../Leida';
 import { createClient } from '../../Clients';
 
@@ -35,24 +36,44 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
 
     const router = useRouter();
     const dispatch = useDispatch();
+    const { user } = useSupabaseAuth();
 
     const [email, setEmail] = React.useState('');
     const [touched, setTouched] = React.useState(false);
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
 
     const valid = isValidEmail(email);
 
     const handleNew = async () => {
-        if (!valid) return;
-        const newClientId = await dispatch(createClient({ email }));
-        if (newClientId) {
-            // navigate to client detail or clients list
-            dispatch(navigateTo(router, '/clients'));
+        if (!valid || isSubmitting) return;
+        if (!user?.id) {
+            setTouched(true);
+            return;
         }
-    }
+
+        setIsSubmitting(true);
+
+        try {
+            const newClientId = await dispatch(createClient({
+                email,
+                practitioner_id: user.id,
+            }));
+            if (newClientId) {
+                // navigate to client detail or clients list
+                dispatch(navigateTo(router, '/clients'));
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     const handleClients = async () => {
+        if (isSubmitting) {
+            return;
+        }
+
         dispatch(navigateTo(router, '/clients'));
-    }
+    };
 
     return (
         <>
@@ -71,6 +92,7 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                         <Button
                             variant="contained"
                             startIcon={<Icon icon="clients" />}
+                            disabled={isSubmitting}
                             onClick={handleClients}
                         >
                             Clients
@@ -104,6 +126,7 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                         label="Client email"
                         startAdornment='email'
                         variant="standard"
+                        disabled={isSubmitting}
                         required
                         value={email}
                         onChange={(nextValue) => {
@@ -124,9 +147,10 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                             variant="contained"
                             startIcon={<Icon icon="clients" />}
                             endIcon={<Icon icon="add" />}
+                            disabled={isSubmitting}
                             onClick={handleNew}
                         >
-                            Add Client
+                            {isSubmitting ? 'Adding Client...' : 'Add Client'}
                         </Button>
                     </Box>
                 </Collapse>

@@ -19,6 +19,11 @@ export type T_Client = {
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const tenant = process.env.NEXT_PUBLIC_TENANT;
+
+function makeInviteRedirectUrl() {
+  return 'https://app.askleida.com/account/invite';
+}
+
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 // POST /api/clients - Create a new client
@@ -95,30 +100,26 @@ export async function POST(req: Request) {
     return NextResponse.json(res, { status: 500 });
   }
 
-  // If an email was provided, try to create a corresponding Supabase auth user
+  // If an email was provided, send a Supabase invite email for password setup.
   try {
     const email = normalizedData.email;
     if (email) {
-      // Attempt to create an auth user using the service role key
-      // Set a user_metadata access_level so client can be identified as level 2
-      // If the admin API isn't available this will throw and we'll continue gracefully
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      const { data: userData, error: userError } = await supabase.auth.admin.createUser({
-        email,
-        email_confirm: false,
-        user_metadata: { access_level: 2 },
+      const { data: inviteData, error: inviteError } = await supabase.auth.admin.inviteUserByEmail(email, {
+        redirectTo: makeInviteRedirectUrl(),
+        data: { access_level: 2 },
       });
 
-      if (userError) {
-        // ignore auth creation error but include info in response data
-        (data as any)._auth_error = userError.message;
-      } else if (userData) {
-        (data as any)._auth_user = userData;
+      if (inviteError) {
+        // ignore invite error but include info in response data
+        (data as any)._auth_error = inviteError.message;
+      } else if (inviteData) {
+        (data as any)._auth_invite = inviteData;
       }
     }
   } catch (e) {
-    // swallow errors from admin createUser so client creation still succeeds
+    // swallow errors from auth invite so client creation still succeeds
     (data as any)._auth_exception = e instanceof Error ? e.message : String(e);
   }
 

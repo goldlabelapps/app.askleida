@@ -107,10 +107,10 @@ const Leida: React.FC<any> = ({
         : null;
 
     React.useEffect(() => {
-        if (isClientsRoute && user?.id && !clientsState?.initted && !clientsState?.loading) {
+        if (user?.id && !clientsState?.initted && !clientsState?.loading) {
             dispatch(initClients(user.id));
         }
-    }, [dispatch, isClientsRoute, user?.id, clientsState?.initted, clientsState?.loading]);
+    }, [dispatch, user?.id, clientsState?.initted, clientsState?.loading]);
 
     React.useEffect(() => {
         if (isTipsRoute && user?.id && !tipsState?.initted && !tipsState?.loading) {

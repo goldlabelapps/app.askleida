@@ -19,6 +19,11 @@ export type T_Client = {
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const tenant = process.env.NEXT_PUBLIC_TENANT;
+
+function makeInviteRedirectUrl() {
+  return 'https://app.askleida.com/account/invite';
+}
+
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 // POST /api/clients - Create a new client
@@ -93,6 +98,29 @@ export async function POST(req: Request) {
   if (error) {
     const res = makeRes({ tenant, message: error.message, severity: 'error' });
     return NextResponse.json(res, { status: 500 });
+  }
+
+  // If an email was provided, send a Supabase invite email for password setup.
+  try {
+    const email = normalizedData.email;
+    if (email) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const { data: inviteData, error: inviteError } = await supabase.auth.admin.inviteUserByEmail(email, {
+        redirectTo: makeInviteRedirectUrl(),
+        data: { access_level: 2 },
+      });
+
+      if (inviteError) {
+        // ignore invite error but include info in response data
+        (data as any)._auth_error = inviteError.message;
+      } else if (inviteData) {
+        (data as any)._auth_invite = inviteData;
+      }
+    }
+  } catch (e) {
+    // swallow errors from auth invite so client creation still succeeds
+    (data as any)._auth_exception = e instanceof Error ? e.message : String(e);
   }
 
   const res = makeRes({ tenant, message: 'Client created', severity: 'success', data });

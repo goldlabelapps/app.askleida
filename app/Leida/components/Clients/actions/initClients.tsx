@@ -7,6 +7,8 @@ export const initClients = (practitionerId?: string): any =>
             dispatch(setClients('loading', true));
             dispatch(setClients('error', null));
 
+            console.log('INIT CLIENTS', practitionerId);
+
             const query = practitionerId
                 ? `?practitioner_id=${encodeURIComponent(practitionerId)}`
                 : '';

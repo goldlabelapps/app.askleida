@@ -20,6 +20,7 @@ const Greeting: React.FC = () => {
     const gameMenuDelayTimeoutRef = React.useRef<number | null>(null);
     const gameMenuAnimationFrameRef = React.useRef<number | null>(null);
     const hideOnceRef = React.useRef(false);
+    const frozenGreetingTextRef = React.useRef<string | null>(null);
 
     React.useEffect(() => {
         return () => {
@@ -97,16 +98,20 @@ const Greeting: React.FC = () => {
                 : null;
     const greetingText = displayName ? `${getTimeGreeting()}, ${displayName}` : getTimeGreeting();
 
+    if (frozenGreetingTextRef.current === null) {
+        frozenGreetingTextRef.current = greetingText;
+    }
+
     return (
         <Box sx={{ minHeight: 'calc(100vh - 220px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Container maxWidth="xs">
+            <Container>
                 <Stack alignItems="center" textAlign="center" spacing={2}>
                     <Fade in={showCleverText} timeout={320} unmountOnExit>
                         <div>
                             <CleverText
                                 options={{
                                     id: 'greeting_welcome_message',
-                                    markdown: `# ${greetingText}`,
+                                    markdown: `# ${frozenGreetingTextRef.current}`,
                                     onFinish: () => {
                                         if (gameMenuDelayTimeoutRef.current !== null) {
                                             window.clearTimeout(gameMenuDelayTimeoutRef.current);
@@ -127,16 +132,10 @@ const Greeting: React.FC = () => {
                                 width: '100%', 
                                 position: 'relative', 
                                 zIndex: 2,
+                                textAlign: 'left',
                             }}>
                             <Box id="game_menu_box">
-                                <ClientDash
-                                    title="Clients"
-                                    description="You have 0 clients"
-                                    icon={'clients'}
-                                    cta={() => {
-                                        console.log('Clients card clicked');
-                                    }}
-                                />
+                                <ClientDash />
                             </Box>
                         </Collapse>
                     </Box>

@@ -12,6 +12,7 @@ export async function GET(req: Request) {
   const url = req?.url ? new URL(req.url) : null;
   const id = url?.searchParams.get('id');
   const practitionerId = url?.searchParams.get('practitioner_id');
+  const email = url?.searchParams.get('email')?.trim().toLowerCase();
 
   if (id) {
     // Get single practitioner by id
@@ -40,6 +41,20 @@ export async function GET(req: Request) {
       return NextResponse.json(res, { status: 500 });
     }
     const res = makeRes({ tenant, message: 'Fetched practitioners by practitioner_id', severity: 'success', data });
+    return NextResponse.json(res);
+  }
+
+  if (email) {
+    const { data, error } = await supabase
+      .from('practitioners')
+      .select('*')
+      .eq('data->>email', email)
+      .order('updated', { ascending: false, nullsFirst: false });
+    if (error) {
+      const res = makeRes({ tenant, message: error.message, severity: 'error' });
+      return NextResponse.json(res, { status: 500 });
+    }
+    const res = makeRes({ tenant, message: 'Fetched practitioners by email', severity: 'success', data });
     return NextResponse.json(res);
   }
 

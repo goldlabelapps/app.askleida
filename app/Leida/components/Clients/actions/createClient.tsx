@@ -20,6 +20,32 @@ const normalizeText = (value: unknown): string | null => {
     return trimmed.length > 0 ? trimmed : null;
 };
 
+const deriveTitleFromEmail = (email: string | null): string => {
+    if (!email) {
+        return 'New client';
+    }
+
+    const localPart = email.split('@')[0]?.trim() || '';
+    if (!localPart) {
+        return 'New client';
+    }
+
+    const spaced = localPart
+        .replace(/[._-]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    if (!spaced) {
+        return 'New client';
+    }
+
+    return spaced
+        .split(' ')
+        .map((word) => word ? `${word[0].toUpperCase()}${word.slice(1)}` : '')
+        .join(' ')
+        .trim() || 'New client';
+};
+
 const getSortTimestamp = (value: unknown): number => {
     if (typeof value !== 'string') {
         return 0;
@@ -60,22 +86,17 @@ export const createClient = (client: Partial<T_Client>): any =>
     async (dispatch: T_UbereduxDispatch, getState: () => T_RootState) => {
         try {
             const data = toObject(client.data);
-            const firstName = normalizeText(client.first_name ?? data.first_name);
-            const lastName = normalizeText(client.last_name ?? data.last_name);
             const email = normalizeText(client.email ?? data.email)?.toLowerCase() ?? null;
-            const title = normalizeText(client.title) || [firstName, lastName].filter(Boolean).join(' ') || email || 'New client';
+            const title = deriveTitleFromEmail(email);
 
             const payload: Partial<T_Client> = {
                 ...client,
                 title,
-                first_name: firstName,
-                last_name: lastName,
                 email,
                 data: {
                     ...data,
-                    first_name: firstName,
-                    last_name: lastName,
                     email,
+                    display_name: title,
                 },
             };
 

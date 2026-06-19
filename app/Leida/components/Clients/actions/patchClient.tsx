@@ -1,5 +1,5 @@
 import type { T_RootState, T_UbereduxDispatch } from '../../../../NX/Uberedux/store';
-import type { T_Client } from '../types';
+import type { T_Client } from '../../../types';
 import { setUbereduxKey } from '../../../../NX/Uberedux';
 import { setFeedback } from '../../../../NX/DesignSystem';
 

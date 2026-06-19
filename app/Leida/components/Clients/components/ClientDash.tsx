@@ -7,7 +7,7 @@ import { Icon, navigateTo } from '../../../../NX/DesignSystem'
 import { useDispatch } from '../../../../NX/Uberedux';
 import { 
 	ClientList,
-} from '../../Clients';
+} from '../../../../Leida';
 import { Wrapper } from '../../../../Leida';
 
 const ClientDash = () => {

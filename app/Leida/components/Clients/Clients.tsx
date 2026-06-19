@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import { useDispatch } from '../../../NX/Uberedux';
 import { Icon, navigateTo } from '../../../NX/DesignSystem';
-import { useClients, ClientList } from '../Clients';
+import { useClients, ClientList } from '../../../Leida';
 import { Wrapper } from '../../../Leida'
 
 export default function Clients() {

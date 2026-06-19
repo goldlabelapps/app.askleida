@@ -15,7 +15,7 @@ import { Icon, navigateTo } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
 import { useSupabaseAuth } from '../../../../NX/Paywall';
 import { Editable } from '../../../../Leida';
-import { createClient } from '../../Clients';
+import { createClient } from '../../../../Leida';
 
 type T_ClientNewProps = {
     config?: unknown;

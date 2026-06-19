@@ -18,6 +18,8 @@ import {
 import {
     BottomNav,
     Clients,
+    initClients,
+    useClients,
     ClientDetail,
     ClientNew,
     Products,
@@ -31,7 +33,6 @@ import {
     Greeting,
 } from '../Leida';
 import { initAccount, useAccount } from './components/Account';
-import { initClients, useClients } from './components/Clients';
 import { initProducts, useProducts } from './components/Products';
 import { initTips, useTips } from './components/Tips';
 import { setPaywall, useSupabaseAuth } from '../NX/Paywall';
@@ -140,6 +141,7 @@ const Leida: React.FC<any> = ({
             : isTipsRoute
                 ? 'tips'
                 : 'products';
+
     const bottomNavItems = [
         {
             label: 'Clients',
@@ -166,9 +168,7 @@ const Leida: React.FC<any> = ({
     return (
         <DesignSystem theme={theme as T_Theme} config={config}>
             <Feedback />
-            {/* Onboarding disabled pending further development */}
             <Header onHome={handleHome} />
-            
             <main style={{ paddingBottom: 88 }}>
                 <Container sx={{mt:3 }}>
                     <Box sx={{ mx: 1.5 }}>
@@ -203,7 +203,7 @@ const Leida: React.FC<any> = ({
                 open={isConfirmOpen}
                 icon="signout"
                 title="Sign out?"
-                body="Are you sure you want to sign out?"
+                body="For reals?"
                 handleConfirm={handleSignout}
                 handleClose={handleCloseSignoutConfirm}
             />

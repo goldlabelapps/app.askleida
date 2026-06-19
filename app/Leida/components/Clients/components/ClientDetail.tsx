@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import type { T_Client } from '../types';
+import type { T_Client } from '../../../types';
 import { useRouter } from 'next/navigation';
 import {
     Box,
@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import { Icon, navigateTo, ConfirmAction } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
-import { deleteClient, patchClient } from '../../Clients';
+import { deleteClient, patchClient } from '../../../../Leida';
 import { Editable } from '../../../../Leida';
 
 type T_ClientRecord = T_Client & {

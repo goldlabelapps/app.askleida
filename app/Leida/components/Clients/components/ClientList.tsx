@@ -12,8 +12,8 @@ import {
 } from '@mui/material';
 import { navigateTo, Icon } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
-import { useClients } from '../../Clients';
-import type { T_Client } from '../types';
+import { useClients } from '../../../../Leida';
+import type { T_Client } from '../../../types';
 
 type T_ClientSlice = {
 	loading?: boolean;

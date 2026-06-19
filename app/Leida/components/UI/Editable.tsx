@@ -14,6 +14,8 @@ type EditableBaseProps = {
 	id?: string;
 	label?: string;
 	placeholder?: string;
+	type?: React.InputHTMLAttributes<HTMLInputElement>['type'];
+	autoComplete?: string;
 	disabled?: boolean;
 	required?: boolean;
 	autoFocus?: boolean;
@@ -79,6 +81,8 @@ export default function Editable({
 	onChange,
 	label,
 	placeholder,
+	type = 'text',
+	autoComplete,
 	disabled = false,
 	required = false,
 	autoFocus = false,
@@ -222,8 +226,10 @@ export default function Editable({
 				disabled={disabled}
 				required={required}
 				autoFocus={autoFocus}
+				autoComplete={autoComplete}
 				slotProps={{
 					input: {
+						type,
 						startAdornment: startAdornment ? (
 							<InputAdornment position="start">
 								<Icon icon={startAdornment} />
@@ -268,6 +274,8 @@ export default function Editable({
 			disabled={disabled}
 			required={required}
 			autoFocus={autoFocus}
+			type={type}
+			autoComplete={autoComplete}
 			multiline={multiline}
 			minRows={minRows}
 			slotProps={{

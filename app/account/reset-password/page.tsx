@@ -10,11 +10,11 @@ import {
     LinearProgress,
     Paper,
     Stack,
-    TextField,
     Typography,
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { NX } from '../../NX';
+import { Editable, Wrapper } from '../../Leida';
 import { supabase } from '../../NX/lib/supabase';
 import { defaultTenantConfig } from '../../lib/tenantConfig/base';
 import { loadTenantConfigClient } from '../../lib/tenantConfig/client';
@@ -149,7 +149,7 @@ export default function ResetPasswordPage() {
     return (
         <NX config={config}>
             <Container maxWidth="sm" sx={{ py: 8 }}>
-                <Paper variant="outlined" sx={{ p: 4 }}>
+                <Wrapper>
                     <Stack spacing={2.5}>
                         <Box>
                             <Typography variant="h4" gutterBottom>
@@ -175,28 +175,25 @@ export default function ResetPasswordPage() {
                         ) : (
                             <Box component="form" onSubmit={handleSubmit}>
                                 <Stack spacing={2}>
-                                    <TextField
+                                    <Editable
                                         variant="standard"
                                         label="Email"
                                         value={email || ''}
                                         disabled
-                                        fullWidth
                                     />
-                                    <TextField
+                                    <Editable
                                         label="New password"
                                         type="password"
                                         value={password}
-                                        onChange={(event) => setPassword(event.target.value)}
+                                        onChange={setPassword}
                                         autoComplete="new-password"
-                                        fullWidth
                                     />
-                                    <TextField
+                                    <Editable
                                         label="Confirm password"
                                         type="password"
                                         value={confirmPassword}
-                                        onChange={(event) => setConfirmPassword(event.target.value)}
+                                        onChange={setConfirmPassword}
                                         autoComplete="new-password"
-                                        fullWidth
                                     />
                                     <Typography variant="body2" color="text.secondary">
                                         Use at least {MIN_PASSWORD_LENGTH} characters.
@@ -213,7 +210,7 @@ export default function ResetPasswordPage() {
                             </Box>
                         )}
                     </Stack>
-                </Paper>
+                </Wrapper>
             </Container>
         </NX>
     );

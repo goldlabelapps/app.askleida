@@ -8,11 +8,11 @@ import {
     Container,
     Paper,
     Stack,
-    TextField,
     Typography,
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { NX } from '../../NX';
+import { Editable, Wrapper } from '../../Leida';
 import { supabase } from '../../NX/lib/supabase';
 import { defaultTenantConfig } from '../../lib/tenantConfig/base';
 import { loadTenantConfigClient } from '../../lib/tenantConfig/client';
@@ -85,7 +85,7 @@ export default function ForgotPasswordPage() {
     return (
         <NX config={config}>
             <Container maxWidth="sm" sx={{ py: 8 }}>
-                <Paper variant="outlined" sx={{ p: 4 }}>
+                <Wrapper>
                     <Stack spacing={2.5}>
                         <Box>
                             <Typography variant="h4" gutterBottom>
@@ -101,13 +101,12 @@ export default function ForgotPasswordPage() {
 
                         <Box component="form" onSubmit={handleSubmit}>
                             <Stack spacing={2}>
-                                <TextField
+                                <Editable
                                     label="Email"
                                     type="email"
                                     value={email}
-                                    onChange={(event) => setEmail(event.target.value)}
+                                    onChange={setEmail}
                                     autoComplete="email"
-                                    fullWidth
                                 />
                                 <Stack direction="row" spacing={1.5}>
                                     <Button type="submit" variant="contained" disabled={sending}>
@@ -120,7 +119,7 @@ export default function ForgotPasswordPage() {
                             </Stack>
                         </Box>
                     </Stack>
-                </Paper>
+                </Wrapper>
             </Container>
         </NX>
     );

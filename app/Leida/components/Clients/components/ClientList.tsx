@@ -109,20 +109,20 @@ const ClientList = () => {
 				</Alert>
 			) : null}
 
-			{!loading && !hasError && list.length === 0 ? null : <Box>
-					<Button
-						fullWidth
-						size="large"
-						color="primary"
-						variant="contained"
-						startIcon={<Icon icon="clients" />}
-						endIcon={<Icon icon="add" />}
-						onClick={handleClientNew}
-						sx={{mb: 1}}
-					>
-						New Client
-					</Button>
-				</Box>}
+			<Box>
+				<Button
+					fullWidth
+					size="large"
+					color="primary"
+					variant="contained"
+					startIcon={<Icon icon="clients" />}
+					endIcon={<Icon icon="add" />}
+					onClick={handleClientNew}
+					sx={{ mb: 1 }}
+				>
+					New Client
+				</Button>
+			</Box>
 
 			<Stack spacing={1}>
 				{paginatedList.map((client, index) => {

@@ -248,7 +248,7 @@ export default function InvitePage() {
 
     return (
         <NX config={config}>
-            <Container maxWidth="sm" sx={{ py: 8 }}>
+            <Container maxWidth="xs" sx={{ py: 8 }}>
                 <div className="signin-avatar-wrap">
                     <a href="https://askleida.com" className="logo-link">
                         <Image
@@ -261,7 +261,7 @@ export default function InvitePage() {
                 </div>
                 <Wrapper>
                     <Stack spacing={2.5}>
-                        <Box>
+                        <Box sx={{my:2}}>
                             <Typography variant="body1">
                                 Hi <strong>{email}</strong>,
                             </Typography>

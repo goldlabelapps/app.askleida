@@ -123,14 +123,6 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                     here when your practitioner has published it"
                 </Typography>
 
-                {!valid && touched ? (
-                    <Box sx={{ m: 2 }}>
-                        <Alert severity="info" variant="outlined" sx={{ mt: 1 }}>
-                            Please enter a valid email address
-                        </Alert>
-                    </Box>
-                ) : null}
-
 
                 <Box sx={{ m: 2 }}>
                     
@@ -158,7 +150,6 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                             size="large"
                             color="primary"
                             variant="contained"
-                            startIcon={<Icon icon="clients" />}
                             endIcon={<Icon icon="add" />}
                             disabled={isSubmitting}
                             onClick={handleNew}

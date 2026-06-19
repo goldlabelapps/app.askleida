@@ -1,14 +1,29 @@
 import { setAccount } from '..';
 
-export const initAccount = (practitionerId?: string): any =>
+const getAccountQuery = (lookupValue?: string) => {
+    if (!lookupValue) {
+        return '';
+    }
+
+    const trimmedValue = lookupValue.trim();
+    if (!trimmedValue) {
+        return '';
+    }
+
+    if (trimmedValue.includes('@')) {
+        return `?email=${encodeURIComponent(trimmedValue.toLowerCase())}`;
+    }
+
+    return `?practitioner_id=${encodeURIComponent(trimmedValue)}`;
+};
+
+export const initAccount = (lookupValue?: string): any =>
     async (dispatch: any) => {
         try {
             dispatch(setAccount('loading', true));
             dispatch(setAccount('error', null));
 
-            const query = practitionerId
-                ? `?practitioner_id=${encodeURIComponent(practitionerId)}`
-                : '';
+            const query = getAccountQuery(lookupValue);
             const response = await fetch(`/api/practitioner${query}`, {
                 method: 'GET',
                 headers: {

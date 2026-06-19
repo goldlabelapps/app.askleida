@@ -4,15 +4,23 @@ import { setFeedback } from '../../../../NX/DesignSystem';
 export const initClients = (practitionerId?: string): any =>
     async (dispatch: any) => {
         try {
+
+            console.log('practitionerId', practitionerId);
+
             dispatch(setClients('loading', true));
             dispatch(setClients('error', null));
-
-            console.log('INIT CLIENTS', practitionerId);
 
             const query = practitionerId
                 ? `?practitioner_id=${encodeURIComponent(practitionerId)}`
                 : '';
-            const response = await fetch(`/api/clients${query}`, {
+            const requestPath = `/api/clients${query}`;
+            const requestUrl = typeof window === 'undefined'
+                ? requestPath
+                : new URL(requestPath, window.location.origin).toString();
+
+            console.log('CLIENTS FETCH URL', requestUrl);
+
+            const response = await fetch(requestPath, {
                 method: 'GET',
                 headers: {
                     Accept: 'application/json',

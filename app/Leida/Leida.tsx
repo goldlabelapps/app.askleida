@@ -30,6 +30,7 @@ import {
     Header,
     Greeting,
 } from '../Leida';
+import { initAccount, useAccount } from './components/Account';
 import { initClients, useClients } from './components/Clients';
 import { initProducts, useProducts } from './components/Products';
 import { initTips, useTips } from './components/Tips';
@@ -44,6 +45,7 @@ const Leida: React.FC<any> = ({
     const router = useRouter();
     const { user } = useSupabaseAuth();
     const pathname = usePathname();
+    const accountState = useAccount();
     const clientsState = useClients();
     const productsState = useProducts();
     const tipsState = useTips();
@@ -52,6 +54,10 @@ const Leida: React.FC<any> = ({
     const themeSwitching = config?.cartridges?.designSystem?.themeSwitching;
     const themeMode = designSystem?.themeMode || defaultTheme;
     const [isConfirmOpen, setIsConfirmOpen] = React.useState(false);
+    const accountRows = Array.isArray(accountState?.data) ? accountState.data : [];
+    const practitionerId = typeof accountRows[0]?.practitioner_id === 'string'
+        ? accountRows[0].practitioner_id.trim()
+        : '';
 
     React.useEffect(() => {
         if (!designSystem?.themeMode && defaultTheme) {
@@ -76,11 +82,6 @@ const Leida: React.FC<any> = ({
         dispatch(navigateTo(router, '/'));
     };
 
-    const handleStart = () => {
-        dispatch(navigateTo(router, '/'));
-    };
-
-    const handleOpenSignoutConfirm = () => setIsConfirmOpen(true);
     const handleCloseSignoutConfirm = () => setIsConfirmOpen(false);
     const routeParts = (pathname || '/').split('/').filter(Boolean);
     const isClientsRoute = routeParts[0] === 'clients';
@@ -107,10 +108,18 @@ const Leida: React.FC<any> = ({
         : null;
 
     React.useEffect(() => {
-        if (user?.id && !clientsState?.initted && !clientsState?.loading) {
-            dispatch(initClients(user.id));
+        if (user?.email && !accountState?.initted && !accountState?.loading) {
+            dispatch(initAccount(user.email));
         }
-    }, [dispatch, user?.id, clientsState?.initted, clientsState?.loading]);
+    }, [dispatch, user?.email, accountState?.initted, accountState?.loading]);
+
+    React.useEffect(() => {
+        if (practitionerId && !clientsState?.initted && !clientsState?.loading) {
+            console.log('practitionerId', practitionerId);
+            console.log('user', user);
+            // dispatch(initClients(practitionerId));
+        }
+    }, [dispatch, practitionerId, clientsState?.initted, clientsState?.loading]);
 
     React.useEffect(() => {
         if (isTipsRoute && user?.id && !tipsState?.initted && !tipsState?.loading) {

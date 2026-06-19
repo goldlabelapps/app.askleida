@@ -5,17 +5,17 @@ import {
     Box,
     Button,
     Collapse,
-    Paper,
+    Grid,
     Typography,
-    Alert,
-    AppBar,
-    Toolbar,
 } from '@mui/material';
 import { Icon, navigateTo } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
 import { useSupabaseAuth } from '../../../../NX/Paywall';
-import { Editable } from '../../../../Leida';
-import { createClient } from '../../../../Leida';
+import { 
+    createClient,
+    Editable,
+    Wrapper,
+ } from '../../../../Leida';
 
 type T_ClientNewProps = {
     config?: unknown;
@@ -78,7 +78,7 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
     return (
         <>
         
-            <Paper variant="outlined" sx={{ p: 1.5, width: '100%' }}>
+            <Wrapper>
 
                 <Box>
                     <Button
@@ -92,57 +92,46 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                         Clients
                     </Button>
                 </Box>
-               
-                    <Toolbar>
-                    
-                        <Typography
-                            variant="h6"
-                            sx={{ flexGrow: 1 }}
-                        >
-                            New Client
-                        </Typography>
-
-                        <Button
-                            variant="contained"
-                            startIcon={<Icon icon="clients" />}
-                            disabled={isSubmitting}
-                            onClick={handleClients}
-                        >
-                            Clients
-                        </Button>
-                    
-                    </Toolbar>
-
-
-                <Typography
-                    variant="body1"
-                    sx={{ m: 2 }}>
-                    Clients get an email to set up their account. 
-                    They'll be asked to create a password and will
-                    see a page which says Living Routine will appear 
-                    here when your practitioner has published it"
-                </Typography>
-
 
                 <Box sx={{ m: 2 }}>
-                    
-                    <Editable
-                        id="client_email"
-                        label="Client email"
-                        startAdornment='email'
-                        variant="standard"
-                        disabled={isSubmitting}
-                        required
-                        value={email}
-                        onChange={(nextValue) => {
-                            const v = typeof nextValue === 'string' ? nextValue : String(nextValue || '');
-                            setEmail(v);
-                            if (!touched) setTouched(true);
-                        }}
-                    />
+
+                    <Grid container spacing={2} alignItems="center">
+                        <Grid size={{
+                            xs: 12,
+                            sm: 6,
+                        }}>
+                            <Editable
+                                id="client_email"
+                                label="New Client's email"
+                                startAdornment='email'
+                                variant="standard"
+                                disabled={isSubmitting}
+                                required
+                                value={email}
+                                onChange={(nextValue) => {
+                                    const v = typeof nextValue === 'string' ? nextValue : String(nextValue || '');
+                                    setEmail(v);
+                                    if (!touched) setTouched(true);
+                                }}
+                            />
+                        </Grid>
+                        <Grid size={{
+                            xs: 12,
+                            sm: 6,
+                        }}>
+                            <Typography
+                                variant="body1"
+                                sx={{ }}>
+                                Clients get an email to set up their account.
+                                They'll be asked to create a password and will
+                                see a page which says Living Routine will appear
+                                here when your practitioner has published it"
+                            </Typography>
+                        </Grid>
+                    </Grid>
+
                     
                 </Box>
-
                 <Collapse in={valid}>
                     <Box sx={{ my: 1 }}>
                         <Button
@@ -158,7 +147,7 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                         </Button>
                     </Box>
                 </Collapse>
-            </Paper>
+            </Wrapper>
         </>
     );
 };

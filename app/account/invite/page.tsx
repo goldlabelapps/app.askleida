@@ -1,5 +1,4 @@
 'use client';
-
 import * as React from 'react';
 import type { Session } from '@supabase/supabase-js';
 import Image from 'next/image';
@@ -9,7 +8,6 @@ import {
     Button,
     Container,
     LinearProgress,
-    Paper,
     Stack,
     TextField,
     Typography,
@@ -22,7 +20,14 @@ import { defaultTenantConfig } from '../../lib/tenantConfig/base';
 import { loadTenantConfigClient } from '../../lib/tenantConfig/client';
 import { sessionHasPasswordAuth, sessionRequiresInvitePasswordSetup } from '../../NX/Paywall/hooks/useSupabaseAuth';
 
+import { Wrapper } from '../../Leida';
+
 const MIN_PASSWORD_LENGTH = 6;
+
+type PractitionerRow = {
+    practitioner_id?: string;
+    data?: Record<string, unknown> | null;
+};
 
 export default function InvitePage() {
     const router = useRouter();
@@ -37,6 +42,64 @@ export default function InvitePage() {
     const [error, setError] = React.useState<string | null>(null);
     const [success, setSuccess] = React.useState<string | null>(null);
     const [saving, setSaving] = React.useState(false);
+
+    const markPractitionerVerified = React.useCallback(async (inviteEmail: string) => {
+        const query = inviteEmail.includes('@')
+            ? `?email=${encodeURIComponent(inviteEmail.toLowerCase())}`
+            : '';
+
+        const practitionerResponse = await fetch(`/api/practitioner${query}`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            },
+        });
+
+        if (!practitionerResponse.ok) {
+            throw new Error(`Failed to fetch practitioner (${practitionerResponse.status})`);
+        }
+
+        const practitionerPayload = await practitionerResponse.json();
+        const practitionerRows = Array.isArray(practitionerPayload?.data)
+            ? practitionerPayload.data as PractitionerRow[]
+            : [];
+        const practitioner = practitionerRows[0] ?? null;
+
+        const practitionerId = typeof practitioner?.practitioner_id === 'string'
+            ? practitioner.practitioner_id.trim()
+            : '';
+
+        if (!practitionerId) {
+            throw new Error('Unable to find practitioner record for this invite account.');
+        }
+
+        const existingData = practitioner?.data && typeof practitioner.data === 'object' && !Array.isArray(practitioner.data)
+            ? practitioner.data
+            : {};
+
+        if (existingData.verified === true) {
+            return;
+        }
+
+        const patchResponse = await fetch('/api/practitioner', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+            body: JSON.stringify({
+                practitioner_id: practitionerId,
+                data: {
+                    ...existingData,
+                    verified: true,
+                },
+            }),
+        });
+
+        if (!patchResponse.ok) {
+            throw new Error(`Failed to mark practitioner as verified (${patchResponse.status})`);
+        }
+    }, []);
 
     React.useEffect(() => {
         let active = true;
@@ -161,11 +224,13 @@ export default function InvitePage() {
                 setError('Password was saved, but the account did not establish a password login session. Sign in with your new password.');
                 return;
             }
+
+            await markPractitionerVerified(email);
         } finally {
             setSaving(false);
         }
 
-        setSuccess('Password set. You can continue into the app now.');
+        setSuccess('Password set. Welcome to Leida');
         setPassword('');
         setConfirmPassword('');
     };
@@ -185,8 +250,6 @@ export default function InvitePage() {
     return (
         <NX config={config}>
             <Container maxWidth="sm" sx={{ py: 8 }}>
-
-
                 <div className="signin-avatar-wrap">
                     <a href="https://askleida.com" className="logo-link">
                         <Image
@@ -197,12 +260,11 @@ export default function InvitePage() {
                             className="logo" />
                     </a>
                 </div>
-
-                <Paper variant="outlined" sx={{ p: 4 }}>
+                <Wrapper>
                     <Stack spacing={2.5}>
                         <Box>
                             <Typography variant="body1" color="text.secondary">
-                                Finish accepting your invite by choosing a password for your account.
+                                Accept your invite by choosing a password
                             </Typography>
                         </Box>
 
@@ -212,7 +274,9 @@ export default function InvitePage() {
                         {authChecked && !hasSession ? (
                             <Stack spacing={2}>
                                 <Alert severity="warning">
-                                    No active invite session was found. Open the latest invite email, click the link again, and then set your password here.
+                                    No active invite session was found. 
+                                    Open the latest invite email, click the link again, 
+                                    and then set your password here.
                                 </Alert>
                                 <Button 
                                     endIcon={<Icon icon="signin" />}
@@ -275,7 +339,7 @@ export default function InvitePage() {
                         {authChecked && sessionReadyForApp ? (
                             <Stack spacing={2}>
                                 <Alert severity="success">
-                                    Your account is already confirmed. Continue into the app.
+                                    Welcome back
                                 </Alert>
                                 <Button
                                     endIcon={<Icon icon="right" />}
@@ -287,7 +351,7 @@ export default function InvitePage() {
                             </Stack>
                         ) : null}
                     </Stack>
-                </Paper>
+                </Wrapper>
             </Container>
         </NX>
     );

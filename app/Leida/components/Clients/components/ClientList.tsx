@@ -64,9 +64,7 @@ const getErrorMessage = (error: unknown): string => {
 	return 'Unable to load clients.';
 };
 
-	const handleNew = () => {
-		dispatch(navigateTo(router, '/clients/new'));
-	};
+
 
 const ClientList = () => {
 
@@ -111,18 +109,7 @@ const ClientList = () => {
 				</Alert>
 			) : null}
 
-			{!loading && !hasError && list.length === 0 ? (
-				<Box>
-					<Button
-						fullWidth
-						endIcon={<Icon icon="add" />}
-						onClick={handleClientNew}
-					>
-						Add first client
-					</Button>
-				</Box>
-				
-			) : <Box>
+			{!loading && !hasError && list.length === 0 ? null : <Box>
 					<Button
 						fullWidth
 						size="large"
@@ -131,6 +118,7 @@ const ClientList = () => {
 						startIcon={<Icon icon="clients" />}
 						endIcon={<Icon icon="add" />}
 						onClick={handleClientNew}
+						sx={{mb: 1}}
 					>
 						New Client
 					</Button>

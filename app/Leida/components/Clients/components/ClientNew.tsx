@@ -15,7 +15,7 @@ import { Icon, navigateTo } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
 import { useSupabaseAuth } from '../../../../NX/Paywall';
 import { Editable } from '../../../../Leida';
-import { createClient } from '../../Clients';
+import { createClient } from '../../../../Leida';
 
 type T_ClientNewProps = {
     config?: unknown;
@@ -79,6 +79,19 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
         <>
         
             <Paper variant="outlined" sx={{ p: 1.5, width: '100%' }}>
+
+                <Box>
+                    <Button
+                        fullWidth
+                        size="large"
+                        color="primary"
+                        variant="contained"
+                        startIcon={<Icon icon="left" />}
+                        onClick={handleClients}
+                    >
+                        Clients
+                    </Button>
+                </Box>
                
                     <Toolbar>
                     
@@ -110,14 +123,6 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                     here when your practitioner has published it"
                 </Typography>
 
-                {!valid && touched ? (
-                    <Box sx={{ m: 2 }}>
-                        <Alert severity="info" variant="outlined" sx={{ mt: 1 }}>
-                            Please enter a valid email address
-                        </Alert>
-                    </Box>
-                ) : null}
-
 
                 <Box sx={{ m: 2 }}>
                     
@@ -145,7 +150,6 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                             size="large"
                             color="primary"
                             variant="contained"
-                            startIcon={<Icon icon="clients" />}
                             endIcon={<Icon icon="add" />}
                             disabled={isSubmitting}
                             onClick={handleNew}

@@ -11,8 +11,6 @@ import { useDispatch } from '../../../NX/Uberedux';
 import { Icon, navigateTo } from '../../../NX/DesignSystem';
 import type { I_Icon } from '../../../NX/types';
 
-
-
 export interface I_BottomNavItem {
 	label: string;
 	value: string;

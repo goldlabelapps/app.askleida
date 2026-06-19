@@ -1,4 +1,4 @@
-import { setClients } from '../../Clients';
+import { setClients } from '../../../../Leida';
 import { setFeedback } from '../../../../NX/DesignSystem';
 
 export const initClients = (practitionerId?: string): any =>

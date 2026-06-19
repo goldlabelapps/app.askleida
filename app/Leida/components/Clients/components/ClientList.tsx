@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import type { T_Client } from '../../../types';
 import { useRouter } from 'next/navigation';
 import {
 	Alert,
@@ -12,8 +13,7 @@ import {
 } from '@mui/material';
 import { navigateTo, Icon } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
-import { useClients } from '../../Clients';
-import type { T_Client } from '../types';
+import { useClients, RenderClient } from '../../../../Leida';
 
 type T_ClientSlice = {
 	loading?: boolean;
@@ -64,12 +64,16 @@ const getErrorMessage = (error: unknown): string => {
 	return 'Unable to load clients.';
 };
 
+	const handleNew = () => {
+		dispatch(navigateTo(router, '/clients/new'));
+	};
+
 const ClientList = () => {
+
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const clients = useClients() as T_ClientSlice;
 	const [page, setPage] = React.useState(1);
-
 	const loading = Boolean(clients?.loading);
 	const errorMessage = getErrorMessage(clients?.error);
 	const hasError = Boolean(errorMessage);
@@ -92,10 +96,6 @@ const ClientList = () => {
 		const start = (page - 1) * PAGE_SIZE;
 		return list.slice(start, start + PAGE_SIZE);
 	}, [list, page]);
-
-	const handleClientNavigate = (clientId: string) => {
-		dispatch(navigateTo(router, `/clients/${clientId}`));
-	};
 
 	const handleClientNew = () => {
 		dispatch(navigateTo(router, `/clients/new`));
@@ -122,28 +122,27 @@ const ClientList = () => {
 					</Button>
 				</Box>
 				
-			) : null}
+			) : <Box>
+					<Button
+						fullWidth
+						size="large"
+						color="primary"
+						variant="contained"
+						startIcon={<Icon icon="clients" />}
+						endIcon={<Icon icon="add" />}
+						onClick={handleClientNew}
+					>
+						New Client
+					</Button>
+				</Box>}
 
 			<Stack spacing={1}>
 				{paginatedList.map((client, index) => {
-					const clientId = getClientId(client);
-					const label = getClientButtonLabel(client);
-
-					return (
-						<Button
-							key={clientId || `${label}-${index}`}
-							fullWidth
-							variant="outlined"
-							disabled={!clientId}
-							onClick={() => {
-								if (clientId) {
-									handleClientNavigate(clientId);
-								}
-							}}
-						>
-							{label}
-						</Button>
-					);
+					return <RenderClient
+						key={`client_${index}`}
+						mode="list"
+						client={client}
+					/>;
 				})}
 			</Stack>
 

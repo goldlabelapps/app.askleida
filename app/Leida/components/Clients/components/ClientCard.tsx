@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { Avatar, Box, ButtonBase, Typography } from '@mui/material';
-import type { T_Client } from '../types';
+import type { T_Client } from '../../../types';
 
 type T_ClientCardProps = {
     client: T_Client;

@@ -27,7 +27,7 @@ export default function Clients() {
                     fullWidth
                     size="large"
                     color="primary"
-                    variant="outlined"
+                    variant="contained"
                     startIcon={<Icon icon="clients" />}
                     endIcon={<Icon icon="add" />}
                     onClick={handleNew}

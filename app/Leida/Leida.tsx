@@ -115,9 +115,9 @@ const Leida: React.FC<any> = ({
 
     React.useEffect(() => {
         if (practitionerId && !clientsState?.initted && !clientsState?.loading) {
-            console.log('practitionerId', practitionerId);
-            console.log('user', user);
-            // dispatch(initClients(practitionerId));
+            // console.log('practitionerId', practitionerId);
+            // console.log('user', user);
+            dispatch(initClients(practitionerId));
         }
     }, [dispatch, practitionerId, clientsState?.initted, clientsState?.loading]);
 

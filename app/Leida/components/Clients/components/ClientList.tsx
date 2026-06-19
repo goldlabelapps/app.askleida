@@ -157,8 +157,8 @@ const ClientList = () => {
 					/>
 				</Box>
 			) : null}
-
-			<pre>{JSON.stringify(clients, null, 2)}</pre>
+{/* 
+			<pre>{JSON.stringify(clients, null, 2)}</pre> */}
 		</Box>
 	);
 };

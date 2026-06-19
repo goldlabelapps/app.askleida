@@ -109,21 +109,6 @@ const ClientList = () => {
 				</Alert>
 			) : null}
 
-			<Box>
-				<Button
-					fullWidth
-					size="large"
-					color="primary"
-					variant="contained"
-					startIcon={<Icon icon="clients" />}
-					endIcon={<Icon icon="add" />}
-					onClick={handleClientNew}
-					sx={{ mb: 1 }}
-				>
-					New Client
-				</Button>
-			</Box>
-
 			<Stack spacing={1}>
 				{paginatedList.map((client, index) => {
 					return <RenderClient

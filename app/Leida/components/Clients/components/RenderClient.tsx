@@ -68,7 +68,7 @@ const RenderClient: React.FC<I_RenderClient> = ({
 
     if (mode === 'list') {
         return (<>
-            <Card variant="outlined" sx={{ position: 'relative' }}>
+            <>
                 {isDeleting ? (
                     <Box
                         sx={{
@@ -87,10 +87,10 @@ const RenderClient: React.FC<I_RenderClient> = ({
                 <CardContent sx={{ py: 1.5, '&:last-child': { pb: 1.5 } }}>
                     <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
                         <Box>
-                            <Typography variant="subtitle1">{title}</Typography>
-                            {email ? (
+                            <Typography variant="body1">{title}</Typography>
+                            {/* {email ? (
                                 <Typography variant="body2" color="text.secondary">{email}</Typography>
-                            ) : null}
+                            ) : null} */}
                         </Box>
 
                         <IconButton
@@ -103,8 +103,8 @@ const RenderClient: React.FC<I_RenderClient> = ({
                         </IconButton>
                     </Stack>
                 </CardContent>
-                <pre>client: {JSON.stringify(client, null, 2)}</pre>
-            </Card>
+                {/* <pre>client: {JSON.stringify(client, null, 2)}</pre> */}
+            </>
 
             <ConfirmAction
                 open={confirmOpen}

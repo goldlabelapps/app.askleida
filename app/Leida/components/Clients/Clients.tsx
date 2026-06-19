@@ -7,21 +7,33 @@ import {
 } from '@mui/material';
 import { useDispatch } from '../../../NX/Uberedux';
 import { Icon, navigateTo } from '../../../NX/DesignSystem';
-import { ClientList } from '../../../Leida';
-import { Wrapper } from '../../../Leida'
+import { 
+    ClientList, 
+    Wrapper,
+} from '../../../Leida';
 
 export default function Clients() {
 
     const router = useRouter();
     const dispatch = useDispatch();
     
-    const handleNew = () => {
+    const handleClientNew = () => {
         dispatch(navigateTo(router, '/clients/new'));
     };
 
-    return (
-        <Wrapper>
-            <ClientList />
-        </Wrapper>
+    return (<>
+                <Box sx={{ mb: 1 }}>
+                    <Button
+                        color="primary"
+                        endIcon={<Icon icon="add" />}
+                        onClick={handleClientNew}
+                    >
+                        New Client
+                    </Button>
+                </Box>
+                <Wrapper>
+                    <ClientList />
+                </Wrapper>
+            </>
     );
 }

@@ -262,8 +262,11 @@ export default function InvitePage() {
                 <Wrapper>
                     <Stack spacing={2.5}>
                         <Box>
-                            <Typography variant="body1" color="text.secondary">
-                                Welcome to Leida{email ? `, ${email}` : ''}. Accept your invite by choosing a password.
+                            <Typography variant="body1">
+                                Hi <strong>{email}</strong>,
+                            </Typography>
+                            <Typography variant="body1">
+                                Accept your invite by choosing a password
                             </Typography>
                         </Box>
 
@@ -293,6 +296,7 @@ export default function InvitePage() {
                                         label="New password"
                                         type="password"
                                         value={password}
+                                        variant="standard"
                                         onChange={setPassword}
                                         autoComplete="new-password"
                                     />
@@ -300,6 +304,7 @@ export default function InvitePage() {
                                         label="Confirm password"
                                         type="password"
                                         value={confirmPassword}
+                                        variant="standard"
                                         onChange={setConfirmPassword}
                                         autoComplete="new-password"
                                     />
@@ -310,7 +315,6 @@ export default function InvitePage() {
                                             type="submit" 
                                             variant="contained" 
                                             disabled={saving}>
-                                            
                                             {saving ? 'Saving...' : 'Set password'}
                                         </Button>
                                     </Stack>

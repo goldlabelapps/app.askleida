@@ -45,18 +45,9 @@ export async function POST(req: Request) {
   // Sanitize and normalize legacy fields (moved into data)
   body.email = body.email?.trim().toLowerCase() || null;
   body.title = body.title?.trim() || null;
-  body.first_name = body.first_name?.trim() || null;
-  body.last_name = body.last_name?.trim() || null;
-  body.date_of_birth = body.date_of_birth?.trim() || null;
   body.practitioner_id = body.practitioner_id?.trim() || null;
 
   const errors: { field: string; message: string }[] = [];
-  const dataDateOfBirth =
-    typeof body.data?.date_of_birth === 'string' ? body.data.date_of_birth : null;
-  const finalDateOfBirth = body.date_of_birth || dataDateOfBirth;
-  if (finalDateOfBirth && Number.isNaN(Date.parse(finalDateOfBirth))) {
-    errors.push({ field: 'date_of_birth', message: 'date_of_birth must be a valid date string' });
-  }
   if (body.data !== undefined && body.data !== null && typeof body.data !== 'object') {
     errors.push({ field: 'data', message: 'data must be a JSON object' });
   }
@@ -69,17 +60,13 @@ export async function POST(req: Request) {
     ? { ...body.data }
     : {};
 
+  // Strip deprecated profile fields from the persisted client data blob.
+  delete (dataObject as Record<string, unknown>).first_name;
+  delete (dataObject as Record<string, unknown>).last_name;
+  delete (dataObject as Record<string, unknown>).date_of_birth;
+
   const normalizedData = {
     ...dataObject,
-    first_name:
-      body.first_name ??
-      (typeof dataObject.first_name === 'string' ? dataObject.first_name.trim() || null : null),
-    last_name:
-      body.last_name ??
-      (typeof dataObject.last_name === 'string' ? dataObject.last_name.trim() || null : null),
-    date_of_birth:
-      finalDateOfBirth ??
-      (typeof dataObject.date_of_birth === 'string' ? dataObject.date_of_birth.trim() || null : null),
     email:
       body.email ??
       (typeof dataObject.email === 'string' ? dataObject.email.trim().toLowerCase() || null : null),

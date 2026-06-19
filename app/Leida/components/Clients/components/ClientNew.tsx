@@ -79,6 +79,19 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
         <>
         
             <Paper variant="outlined" sx={{ p: 1.5, width: '100%' }}>
+
+                <Box>
+                    <Button
+                        fullWidth
+                        size="large"
+                        color="primary"
+                        variant="contained"
+                        startIcon={<Icon icon="left" />}
+                        onClick={handleClients}
+                    >
+                        Clients
+                    </Button>
+                </Box>
                
                     <Toolbar>
                     

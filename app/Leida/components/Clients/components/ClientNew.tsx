@@ -71,28 +71,29 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
         if (isSubmitting) {
             return;
         }
+        dispatch(navigateTo(router, '/clients'));
+    };
 
+    const handleClientNew = async () => {
+        if (isSubmitting) {
+            return;
+        }
         dispatch(navigateTo(router, '/clients'));
     };
 
     return (
         <>
-        
+            <Box sx={{ mb: 1 }}>
+                <Button
+                    startIcon={<Icon icon="left" />}
+                    onClick={handleClients}
+                    
+                >
+                    Clients
+                </Button>
+            </Box>
+            
             <Wrapper>
-
-                <Box>
-                    <Button
-                        fullWidth
-                        size="large"
-                        color="primary"
-                        variant="contained"
-                        startIcon={<Icon icon="left" />}
-                        onClick={handleClients}
-                    >
-                        Clients
-                    </Button>
-                </Box>
-
                 <Box sx={{ m: 2 }}>
 
                     <Grid container spacing={2} alignItems="center">
@@ -119,34 +120,37 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                             xs: 12,
                             sm: 6,
                         }}>
-                            <Typography
-                                variant="body1"
-                                sx={{ }}>
-                                Clients get an email to set up their account.
-                                They'll be asked to create a password and will
-                                see a page which says Living Routine will appear
-                                here when your practitioner has published it"
-                            </Typography>
+                            <Collapse in={valid}>
+                                <Box sx={{ my: 1 }}>
+                                    <Button
+                                        fullWidth
+                                        size="large"
+                                        color="primary"
+                                        variant="contained"
+                                        endIcon={<Icon icon="add" />}
+                                        disabled={isSubmitting}
+                                        onClick={handleNew}
+                                    >
+                                        {isSubmitting ? 'Adding Client...' : 'Add Client'}
+                                    </Button>
+                                </Box>
+                            </Collapse>
+                            <Collapse in={!valid}>
+                                <Typography
+                                    variant="body1"
+                                    sx={{ my: 2 }}>
+                                    Clients get an email to set up their account.
+                                    They'll be asked to create a password and will
+                                    see a page which says Living Routine will appear
+                                    here when your practitioner has published it
+                                </Typography>
+                            </Collapse>
                         </Grid>
                     </Grid>
 
                     
                 </Box>
-                <Collapse in={valid}>
-                    <Box sx={{ my: 1 }}>
-                        <Button
-                            fullWidth
-                            size="large"
-                            color="primary"
-                            variant="contained"
-                            endIcon={<Icon icon="add" />}
-                            disabled={isSubmitting}
-                            onClick={handleNew}
-                        >
-                            {isSubmitting ? 'Adding Client...' : 'Add Client'}
-                        </Button>
-                    </Box>
-                </Collapse>
+                
             </Wrapper>
         </>
     );

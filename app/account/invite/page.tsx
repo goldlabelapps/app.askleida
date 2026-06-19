@@ -9,18 +9,17 @@ import {
     Container,
     LinearProgress,
     Stack,
-    TextField,
     Typography,
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { supabase } from '../../NX/lib/supabase';
-import { Icon,  } from '../../NX/DesignSystem';
+import { Icon } from '../../NX/DesignSystem';
 import { NX } from '../../NX';
 import { defaultTenantConfig } from '../../lib/tenantConfig/base';
 import { loadTenantConfigClient } from '../../lib/tenantConfig/client';
 import { sessionHasPasswordAuth, sessionRequiresInvitePasswordSetup } from '../../NX/Paywall/hooks/useSupabaseAuth';
 
-import { Wrapper } from '../../Leida';
+import { Wrapper, Editable } from '../../Leida';
 
 const MIN_PASSWORD_LENGTH = 6;
 
@@ -264,7 +263,7 @@ export default function InvitePage() {
                     <Stack spacing={2.5}>
                         <Box>
                             <Typography variant="body1" color="text.secondary">
-                                Accept your invite by choosing a password
+                                Welcome to Leida{email ? `, ${email}` : ''}. Accept your invite by choosing a password.
                             </Typography>
                         </Box>
 
@@ -290,45 +289,29 @@ export default function InvitePage() {
                         {authChecked && hasSession && !sessionReadyForApp ? (
                             <Box component="form" onSubmit={handleSubmit}>
                                 <Stack spacing={2}>
-                                    <TextField
-                                        variant="standard"
-                                        label="Email"
-                                        value={email || ''}
-                                        disabled
-                                        fullWidth
-                                    />
-                                    <TextField
+                                    <Editable
                                         label="New password"
                                         type="password"
                                         value={password}
-                                        onChange={(event) => setPassword(event.target.value)}
+                                        onChange={setPassword}
                                         autoComplete="new-password"
-                                        fullWidth
                                     />
-                                    <TextField
+                                    <Editable
                                         label="Confirm password"
                                         type="password"
                                         value={confirmPassword}
-                                        onChange={(event) => setConfirmPassword(event.target.value)}
+                                        onChange={setConfirmPassword}
                                         autoComplete="new-password"
-                                        fullWidth
                                     />
-                                    
-                                    <Typography variant="body2" color="text.secondary">
-                                        Use at least {MIN_PASSWORD_LENGTH} characters.
-                                    </Typography>
 
                                     <Stack direction="row" spacing={1.5}>
-                                        <Button type="submit" variant="contained" disabled={saving}>
+                                        <Button 
+                                            fullWidth
+                                            type="submit" 
+                                            variant="contained" 
+                                            disabled={saving}>
+                                            
                                             {saving ? 'Saving...' : 'Set password'}
-                                        </Button>
-                                        <Button
-                                            endIcon={<Icon icon="right" />}
-                                            variant="text"
-                                            disabled={!success}
-                                            onClick={() => router.push('/?onboard=true')}
-                                        >
-                                            app.askleida.com
                                         </Button>
                                     </Stack>
 
@@ -339,7 +322,7 @@ export default function InvitePage() {
                         {authChecked && sessionReadyForApp ? (
                             <Stack spacing={2}>
                                 <Alert severity="success">
-                                    Welcome back
+                                    Done.
                                 </Alert>
                                 <Button
                                     endIcon={<Icon icon="right" />}

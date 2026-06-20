@@ -92,8 +92,8 @@ const Home: React.FC = () => {
                 patchAccount(accountId, {
                     data: {
                         display_name: normalizedDraftDisplayName,
+                        clinic: normalizedDraftClinic || null,
                     },
-                    clinic: normalizedDraftClinic || null,
                 }),
             );
 

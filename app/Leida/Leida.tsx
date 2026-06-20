@@ -27,7 +27,7 @@ import {
     Account,
     Tips,
     Header,
-    Greeting,
+    Home,
 } from '../Leida';
 import { initAccount, useAccount } from './components/Account';
 import { initTips, useTips } from './components/Tips';
@@ -114,9 +114,20 @@ const Leida: React.FC<any> = ({
         }
     }, [dispatch, isTipsRoute, user?.id, tipsState?.initted, tipsState?.loading]);
 
-    const bottomNavValue = isClientsRoute ? 'clients' : 'tips';
+    const bottomNavValue = isClientsRoute
+        ? 'clients'
+        : isTipsRoute
+            ? 'tips'
+            : 'account';
 
     const bottomNavItems = [
+        {
+            label: 'Account',
+            value: 'account',
+            icon: 'user' as const,
+            href: '/',
+        },
+
         {
             label: 'Clients',
             value: 'clients',
@@ -154,7 +165,7 @@ const Leida: React.FC<any> = ({
                     ) : isTipsRoute ? (
                         <Tips />
                     ) : (
-                        <Greeting />
+                        <Home />
                     )}
                     </Box>
                 </Container>

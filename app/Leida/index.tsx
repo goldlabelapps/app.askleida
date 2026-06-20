@@ -7,7 +7,7 @@ export { default as Editable } from './components/UI/Editable';
 export { default as BulletEditor } from './components/UI/BulletEditor';
 
 export { default as Header } from './components/UI/Header';
-export { default as Greeting } from './components/UI/Greeting';
+export { default as Home } from './components/Home/Home';
 export { default as Wrapper } from './components/UI/Wrapper';
 export { default as Clients } from './components/Clients/Clients';
 export { default as ClientCard } from './components/Clients/components/ClientCard';

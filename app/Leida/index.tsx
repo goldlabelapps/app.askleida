@@ -23,6 +23,7 @@ export { patchClient } from './components/Clients/actions/patchClient';
 export { deleteClient } from './components/Clients/actions/deleteClient';
 export { useClients } from './components/Clients/hooks/useClients';
 export { default as Account } from './components/Account/Account';
+export { AccountDialogContent } from './components/Account';
 export { patchAccount } from './components/Account/actions/patchAccount';
 export { default as Tips } from './components/Tips/Tips';
 export { default as TipDetail } from './components/Tips/components/TipDetail';

@@ -5,11 +5,12 @@ import { setAccount } from './actions/setAccount';
 import { patchAccount } from './actions/patchAccount';
 import AvatarUpload from '../UI/AvatarUpload';
 
-import AccountDialog, { defaultAvatars } from './components';
+import AccountDialog, { AccountDialogContent, defaultAvatars } from './components';
 
 export {
     Account,
     AccountDialog,
+    AccountDialogContent,
     defaultAvatars,
     initAccount,
     useAccount,

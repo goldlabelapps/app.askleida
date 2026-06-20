@@ -1,27 +1,21 @@
 'use client';
 import * as React from 'react';
 import {
-	Box,
-	Grid,
 	Button,
 	Collapse,
 	Dialog,
 	DialogActions,
 	DialogContent,
-	DialogTitle,
 	LinearProgress,
-	Stack,
-	Typography,
 	useMediaQuery,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { ConfirmAction, Icon } from '../../../../NX/DesignSystem';
 import { setPaywall, useSupabaseAuth } from '../../../../NX/Paywall';
 import { useDispatch } from '../../../../NX/Uberedux';
-import { Editable } from '../../../../Leida';
+import { AccountDialogContent } from '../../../../Leida';
 import { supabase } from '../../../../NX/lib/supabase';
 import { patchAccount, setAccount } from '..';
-import AvatarUpload from '../../UI/AvatarUpload';
 import { useAccount } from '../hooks/useAccount';
 
 function getAccountProfile(value: unknown): Record<string, unknown> | null {
@@ -222,81 +216,29 @@ export default function Account() {
 			{isBusy ? <LinearProgress /> : null}
 
 			<DialogContent>
-
-				<Grid container spacing={2} sx={{ mb: 2 }}>
-					<Grid size={{
-						xs: 12,
-						sm: 6,
-					}} sx={{ display: 'flex', 
-					pt: 2,
-					flexDirection: 'column', 
-					gap: 2, 
-					justifyContent: 'center', 
-					alignItems: 'center', 
-					order: { xs: 1, sm: 2 } }}>
-						<AvatarUpload
-							size={200}
-							practitionerId={accountId}
-							currentAvatar={avatarSource}
-							displayName={name}
-							onSuccess={handleAvatarSuccess}
-							disabled={isBusy}
-						/>
-					</Grid>	
-					<Grid size={{
-						xs: 12,
-						sm: 6,
-					}} sx={{ display: 'flex', flexDirection: 'column', gap: 2, order: { xs: 2, sm: 1 } }}>
-						<Editable
-							id="displayName"
-							label="Name"
-							variant="standard"
-							startAdornment='user'
-							value={formState.displayName}
-							disabled={isBusy}
-							onChange={(nextValue) => {
-								setFormError(null);
-								setFormState((current) => ({
-									...current,
-									displayName: nextValue,
-								}));
-							}}
-						/>
-						<Editable
-							id="email"
-							label="Clinic"
-							variant="standard"
-							startAdornment='medical'
-							value={formState.clinic}
-							disabled={isBusy}
-							onChange={(nextValue) => {
-								setFormError(null);
-								setFormState((current) => ({
-									...current,
-									clinic: nextValue,
-								}));
-							}}
-						/>
-
-					</Grid>	
-
-					<Grid size={{
-						xs: 12,
-						sm: 6,
-					}} sx={{ display: 'flex', flexDirection: 'column', gap: 2, order: { xs: 2, sm: 1 } }}>
-						
-					</Grid>
-
-					
-				</Grid>
-
-				<Stack spacing={1.5} sx={{ mb: 2 }}>
-					{formError ? (
-						<Typography variant="body2" color="error">
-							{formError}
-						</Typography>
-					) : null}
-				</Stack>
+				<AccountDialogContent
+					accountId={accountId}
+					avatarSource={avatarSource}
+					displayName={formState.displayName}
+					clinic={formState.clinic}
+					isBusy={isBusy}
+					formError={formError}
+					onAvatarSuccess={handleAvatarSuccess}
+					onDisplayNameChange={(nextValue) => {
+						setFormError(null);
+						setFormState((current) => ({
+							...current,
+							displayName: nextValue,
+						}));
+					}}
+					onClinicChange={(nextValue) => {
+						setFormError(null);
+						setFormState((current) => ({
+							...current,
+							clinic: nextValue,
+						}));
+					}}
+				/>
 			</DialogContent>
 
 			<DialogActions sx={{ px: 2, py: 2 }}>

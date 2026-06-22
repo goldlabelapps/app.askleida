@@ -1,6 +1,7 @@
 import type { T_RootState, T_UbereduxDispatch } from '../../../../NX/Uberedux/store';
 import { setUbereduxKey } from '../../../../NX/Uberedux';
 import { setFeedback } from '../../../../NX/DesignSystem';
+import { LIVING_ROUTINE_KEY } from '../lib/constants';
 
 const toObject = (value: unknown): Record<string, unknown> => {
     if (!value || typeof value !== 'object' || Array.isArray(value)) {
@@ -51,7 +52,7 @@ export const deleteLivingRoutine = (clientId: string): any =>
             const existingJson = await existingRes.json();
             const existingClient = extractClient(existingJson) || {};
             const existingData = toObject(existingClient.data);
-            const { livingRoutine: _livingRoutine, ...withoutRoutine } = existingData;
+            const { [LIVING_ROUTINE_KEY]: _livingRoutine, ...withoutRoutine } = existingData;
 
             const patchRes = await fetch('/api/clients', {
                 method: 'PATCH',

@@ -202,7 +202,7 @@ const Leida: React.FC<any> = ({
         },
     ];
 
-    if (!accessLevel) return null;
+    // if (!accessLevel) return null;
 
     if (accessLevel === 2) {
         return <LivingRoutine clientId={authenticatedClientId} />;

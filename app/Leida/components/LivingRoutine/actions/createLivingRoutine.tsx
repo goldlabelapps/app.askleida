@@ -1,6 +1,7 @@
 import type { T_RootState, T_UbereduxDispatch } from '../../../../NX/Uberedux/store';
 import { setUbereduxKey } from '../../../../NX/Uberedux';
 import { setFeedback } from '../../../../NX/DesignSystem';
+import { LIVING_ROUTINE_KEY } from '../lib/constants';
 
 const toObject = (value: unknown): Record<string, unknown> => {
     if (!value || typeof value !== 'object' || Array.isArray(value)) {
@@ -65,7 +66,7 @@ export const createLivingRoutine = (
                     client_id: normalizedClientId,
                     data: {
                         ...existingData,
-                        livingRoutine: routine,
+                        [LIVING_ROUTINE_KEY]: routine,
                     },
                 }),
             });
@@ -77,7 +78,7 @@ export const createLivingRoutine = (
 
             const updatedClient = extractClient(patchJson) || existingClient;
             const updatedData = toObject(updatedClient.data);
-            const nextRoutine = updatedData.livingRoutine ?? null;
+            const nextRoutine = updatedData[LIVING_ROUTINE_KEY] ?? null;
 
             const state = getState();
             const current = state?.redux?.livingRoutine || {};

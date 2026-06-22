@@ -3,13 +3,19 @@ import React from 'react';
 import {
     Alert,
     Box,
+    Button,
     Card,
     CardContent,
     Chip,
     Divider,
+    LinearProgress,
     Stack,
     Typography,
 } from '@mui/material';
+import { ConfirmAction, Icon } from '../../../NX/DesignSystem';
+import { setPaywall, useSupabaseAuth } from '../../../NX/Paywall';
+import { useDispatch } from '../../../NX/Uberedux';
+import { supabase } from '../../../NX/lib/supabase';
 import { useLivingRoutine } from '../../../Leida';
 
 type T_LivingRoutine = {
@@ -48,7 +54,12 @@ const toStringArray = (value: unknown): string[] => {
 };
 
 const LivingRoutine: React.FC<T_LivingRoutine> = ({ clientId }) => {
+    const dispatch = useDispatch();
+    const { user } = useSupabaseAuth();
     const routineState = useLivingRoutine();
+    const email = String(user?.email || 'No email available');
+    const [confirmSignoutOpen, setConfirmSignoutOpen] = React.useState(false);
+    const [isSigningOut, setIsSigningOut] = React.useState(false);
     const routine = toObject(routineState?.routine);
     const productsFromState = Array.isArray(routine.products)
         ? routine.products
@@ -71,6 +82,28 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ clientId }) => {
             'Focus on simple, repeatable actions each day. Small consistent steps drive long-term progress.',
             'Use this routine as your daily reference. If anything feels unclear, contact your practitioner for clarification.',
         ];
+    const isBusy = isSigningOut;
+
+    const handleRequestSignout = () => {
+        if (isBusy) return;
+        setConfirmSignoutOpen(true);
+    };
+
+    const handleCancelSignout = () => {
+        if (isBusy) return;
+        setConfirmSignoutOpen(false);
+    };
+
+    const handleConfirmSignout = async () => {
+        setIsSigningOut(true);
+        setConfirmSignoutOpen(false);
+        try {
+            await supabase.auth.signOut();
+            dispatch(setPaywall('supabaseAuth', null));
+        } finally {
+            setIsSigningOut(false);
+        }
+    };
 
     React.useEffect(() => {
         console.log('[LivingRoutine] client_id:', clientId);
@@ -78,14 +111,37 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ clientId }) => {
 
     return (
         <Box sx={{ maxWidth: 860, mx: 'auto', px: 2, py: 3 }}>
+            {isBusy ? <LinearProgress sx={{ mb: 2 }} /> : null}
+
             <Stack spacing={2.5}>
                 <Box>
-                    <Typography variant="h4" sx={{ fontWeight: 700, mb: 0.5 }}>
-                        Your Living Routine
-                    </Typography>
-                    <Typography variant="body1" color="text.secondary">
-                        This is your personalized routine space. Your practitioner can update this plan over time.
-                    </Typography>
+                    <Stack
+                        direction={{ xs: 'column', sm: 'row' }}
+                        justifyContent="space-between"
+                        alignItems={{ xs: 'flex-start', sm: 'center' }}
+                        spacing={1.5}
+                    >
+                        <Box>
+                            <Typography variant="h4" sx={{ fontWeight: 700, mb: 0.5 }}>
+                                Your Living Routine
+                            </Typography>
+                            <Typography variant="body1" color="text.secondary">
+                                This is your personalized routine space. Your practitioner can update this plan over time.
+                            </Typography>
+                        </Box>
+
+                        <Button
+                            color="primary"
+                            variant="text"
+                            onClick={handleRequestSignout}
+                            startIcon={<Icon icon="signout" />}
+                            disabled={isBusy}
+                            sx={{ alignSelf: { xs: 'flex-end', sm: 'auto' } }}
+                        >
+                            Sign out
+                        </Button>
+                    </Stack>
+
                     <Stack direction="row" spacing={1} sx={{ mt: 1.5 }}>
                         <Chip label={`Client: ${clientId}`} size="small" />
                         <Chip label="Placeholder content" size="small" color="warning" variant="outlined" />
@@ -151,6 +207,15 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ clientId }) => {
                     </CardContent>
                 </Card>
             </Stack>
+
+            <ConfirmAction
+                open={confirmSignoutOpen}
+                icon="signout"
+                title="Sign out?"
+                body={`You are signed in as ${email}. Do you want to sign out now?`}
+                handleConfirm={handleConfirmSignout}
+                handleClose={handleCancelSignout}
+            />
         </Box>
     );
 };

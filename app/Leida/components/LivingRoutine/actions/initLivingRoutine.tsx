@@ -1,5 +1,6 @@
 import { setFeedback } from '../../../../NX/DesignSystem';
 import { setLivingRoutine } from '../../../../Leida';
+import { LIVING_ROUTINE_KEY } from '../lib/constants';
 
 const toObject = (value: unknown): Record<string, unknown> => {
     if (!value || typeof value !== 'object' || Array.isArray(value)) {
@@ -34,7 +35,7 @@ export const initLivingRoutine = (clientId?: string): any =>
             const payload = await response.json();
             const client = toObject(payload?.data);
             const clientData = toObject(client.data);
-            const routine = clientData.livingRoutine ?? null;
+            const routine = clientData[LIVING_ROUTINE_KEY] ?? null;
 
             dispatch(setLivingRoutine('clientId', normalizedClientId));
             dispatch(setLivingRoutine('client', client));

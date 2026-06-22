@@ -1,6 +1,6 @@
 export { default as Leida } from './Leida';
-export { getTimeGreeting } from './prompts/getTimeGreeting';
-export { ageFromDoB } from './prompts/ageFromDoB';
+export { getTimeGreeting } from './lib/getTimeGreeting';
+export { ageFromDoB } from './lib/ageFromDoB';
 export { default as Signin } from './components/UI/Signin';
 export { default as BottomNav } from './components/UI/BottomNav';
 export { default as Editable } from './components/UI/Editable';
@@ -8,6 +8,7 @@ export { default as BulletEditor } from './components/UI/BulletEditor';
 
 export { default as Header } from './components/UI/Header';
 export { default as Home } from './components/Home/Home';
+export { default as LivingRoutine } from './components/LivingRoutine';
 export { default as Wrapper } from './components/UI/Wrapper';
 export { default as Clients } from './components/Clients/Clients';
 export { default as ClientCard } from './components/Clients/components/ClientCard';
@@ -24,7 +25,11 @@ export { deleteClient } from './components/Clients/actions/deleteClient';
 export { useClients } from './components/Clients/hooks/useClients';
 export { default as Account } from './components/Account/Account';
 export { AccountDialogContent } from './components/Account';
+export { initAccount } from './components/Account/actions/initAccount';
+export { useAccount } from './components/Account/hooks/useAccount';
 export { patchAccount } from './components/Account/actions/patchAccount';
 export { default as Tips } from './components/Tips/Tips';
 export { default as TipDetail } from './components/Tips/components/TipDetail';
 export { default as TipNew } from './components/Tips/components/TipNew';
+export { initTips } from './components/Tips/actions/initTips';
+export { useTips } from './components/Tips/hooks/useTips';

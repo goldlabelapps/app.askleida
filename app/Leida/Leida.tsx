@@ -4,6 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import {
     Box,
     Container,
+    Typography,
 } from '@mui/material';
 import type { T_Theme } from '../NX/types';
 import { useDispatch } from '../NX/Uberedux';
@@ -15,6 +16,8 @@ import {
     ConfirmAction,
     navigateTo,
 } from '../NX/DesignSystem';
+import { setPaywall, useSupabaseAuth } from '../NX/Paywall';
+import { supabase } from '../NX/lib/supabase';
 import {
     BottomNav,
     Clients,
@@ -28,11 +31,13 @@ import {
     Tips,
     Header,
     Home,
+    LivingRoutine,
+    initAccount,
+    useAccount,
+    initTips,
+    useTips,
 } from '../Leida';
-import { initAccount, useAccount } from './components/Account';
-import { initTips, useTips } from './components/Tips';
-import { setPaywall, useSupabaseAuth } from '../NX/Paywall';
-import { supabase } from '../NX/lib/supabase';
+
 
 const Leida: React.FC<any> = ({
     config,
@@ -41,6 +46,9 @@ const Leida: React.FC<any> = ({
     const dispatch = useDispatch();
     const router = useRouter();
     const { user } = useSupabaseAuth();
+    const accessLevel = Number(user?.user_metadata?.access_level ?? 0);
+    const authenticatedClientId = String(user?.user_metadata?.client_id ?? user?.id ?? 'unknown');
+    const authenticatedClientRoute = `/client/${authenticatedClientId}`;
     const pathname = usePathname();
     const accountState = useAccount();
     const clientsState = useClients();
@@ -54,6 +62,12 @@ const Leida: React.FC<any> = ({
     const practitionerId = typeof accountRows[0]?.practitioner_id === 'string'
         ? accountRows[0].practitioner_id.trim()
         : '';
+
+    React.useEffect(() => {
+        if (user) {
+            console.log('[Leida] user access_level:', user.user_metadata?.access_level ?? 'not set');
+        }
+    }, [user]);
 
     React.useEffect(() => {
         if (!designSystem?.themeMode && defaultTheme) {
@@ -81,6 +95,7 @@ const Leida: React.FC<any> = ({
     const handleCloseSignoutConfirm = () => setIsConfirmOpen(false);
     const routeParts = (pathname || '/').split('/').filter(Boolean);
     const isClientsRoute = routeParts[0] === 'clients';
+    const isClientRoutineRoute = routeParts[0] === 'client';
     const isAccountRoute = routeParts[0] === 'account';
     const isTipsRoute = routeParts[0] === 'tips';
     const isClientNewRoute = isClientsRoute && routeParts[1] === 'new';
@@ -114,6 +129,27 @@ const Leida: React.FC<any> = ({
         }
     }, [dispatch, isTipsRoute, user?.id, tipsState?.initted, tipsState?.loading]);
 
+    React.useEffect(() => {
+        if (accessLevel !== 2) {
+            return;
+        }
+
+        if (!authenticatedClientId || authenticatedClientId === 'unknown') {
+            return;
+        }
+
+        if (pathname !== authenticatedClientRoute) {
+            dispatch(navigateTo(router, authenticatedClientRoute));
+        }
+    }, [
+        accessLevel,
+        authenticatedClientId,
+        authenticatedClientRoute,
+        dispatch,
+        pathname,
+        router,
+    ]);
+
     const bottomNavValue = isClientsRoute
         ? 'clients'
         : isTipsRoute
@@ -142,6 +178,31 @@ const Leida: React.FC<any> = ({
             href: '/tips',
         },
     ];
+
+    if (!accessLevel) return null;
+
+    if (accessLevel === 2) {
+        return <LivingRoutine clientId={authenticatedClientId} />;
+    }
+
+    if (isClientRoutineRoute) {
+        return (
+            <DesignSystem theme={theme as T_Theme} config={config}>
+                <main>
+                    <Container sx={{ mt: 3 }}>
+                        <Box sx={{ mx: 1.5 }}>
+                            <Typography variant="h6" sx={{ mb: 1 }}>
+                                Client View Only
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                This route is reserved for client accounts.
+                            </Typography>
+                        </Box>
+                    </Container>
+                </main>
+            </DesignSystem>
+        );
+    }
 
     return (
         <DesignSystem theme={theme as T_Theme} config={config}>

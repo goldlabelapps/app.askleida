@@ -36,6 +36,8 @@ import {
     useAccount,
     initTips,
     useTips,
+    initLivingRoutine,
+    useLivingRoutine,
 } from '../Leida';
 
 
@@ -53,6 +55,7 @@ const Leida: React.FC<any> = ({
     const accountState = useAccount();
     const clientsState = useClients();
     const tipsState = useTips();
+    const livingRoutineState = useLivingRoutine();
     const designSystem = useDesignSystem();
     const defaultTheme = config?.cartridges?.designSystem?.defaultTheme;
     const themeSwitching = config?.cartridges?.designSystem?.themeSwitching;
@@ -128,6 +131,26 @@ const Leida: React.FC<any> = ({
             dispatch(initTips(user.id));
         }
     }, [dispatch, isTipsRoute, user?.id, tipsState?.initted, tipsState?.loading]);
+
+    React.useEffect(() => {
+        if (accessLevel !== 2) {
+            return;
+        }
+
+        if (!authenticatedClientId || authenticatedClientId === 'unknown') {
+            return;
+        }
+
+        if (!livingRoutineState?.initted && !livingRoutineState?.loading) {
+            dispatch(initLivingRoutine(authenticatedClientId));
+        }
+    }, [
+        accessLevel,
+        authenticatedClientId,
+        dispatch,
+        livingRoutineState?.initted,
+        livingRoutineState?.loading,
+    ]);
 
     React.useEffect(() => {
         if (accessLevel !== 2) {

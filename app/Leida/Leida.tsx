@@ -4,6 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import {
     Box,
     Container,
+    Typography,
 } from '@mui/material';
 import type { T_Theme } from '../NX/types';
 import { useDispatch } from '../NX/Uberedux';
@@ -15,6 +16,8 @@ import {
     ConfirmAction,
     navigateTo,
 } from '../NX/DesignSystem';
+import { setPaywall, useSupabaseAuth } from '../NX/Paywall';
+import { supabase } from '../NX/lib/supabase';
 import {
     BottomNav,
     Clients,
@@ -22,21 +25,19 @@ import {
     useClients,
     ClientDetail,
     ClientNew,
-    Products,
-    ProductDetail,
-    ProductNew,
     TipDetail,
     TipNew,
     Account,
     Tips,
     Header,
-    Greeting,
+    Home,
+    LivingRoutine,
+    initAccount,
+    useAccount,
+    initTips,
+    useTips,
 } from '../Leida';
-import { initAccount, useAccount } from './components/Account';
-import { initProducts, useProducts } from './components/Products';
-import { initTips, useTips } from './components/Tips';
-import { setPaywall, useSupabaseAuth } from '../NX/Paywall';
-import { supabase } from '../NX/lib/supabase';
+
 
 const Leida: React.FC<any> = ({
     config,
@@ -45,10 +46,12 @@ const Leida: React.FC<any> = ({
     const dispatch = useDispatch();
     const router = useRouter();
     const { user } = useSupabaseAuth();
+    const accessLevel = Number(user?.user_metadata?.access_level ?? 0);
+    const authenticatedClientId = String(user?.user_metadata?.client_id ?? user?.id ?? 'unknown');
+    const authenticatedClientRoute = `/client/${authenticatedClientId}`;
     const pathname = usePathname();
     const accountState = useAccount();
     const clientsState = useClients();
-    const productsState = useProducts();
     const tipsState = useTips();
     const designSystem = useDesignSystem();
     const defaultTheme = config?.cartridges?.designSystem?.defaultTheme;
@@ -59,6 +62,12 @@ const Leida: React.FC<any> = ({
     const practitionerId = typeof accountRows[0]?.practitioner_id === 'string'
         ? accountRows[0].practitioner_id.trim()
         : '';
+
+    React.useEffect(() => {
+        if (user) {
+            console.log('[Leida] user access_level:', user.user_metadata?.access_level ?? 'not set');
+        }
+    }, [user]);
 
     React.useEffect(() => {
         if (!designSystem?.themeMode && defaultTheme) {
@@ -86,26 +95,20 @@ const Leida: React.FC<any> = ({
     const handleCloseSignoutConfirm = () => setIsConfirmOpen(false);
     const routeParts = (pathname || '/').split('/').filter(Boolean);
     const isClientsRoute = routeParts[0] === 'clients';
-    const isProductsRoute = routeParts[0] === 'products';
+    const isClientRoutineRoute = routeParts[0] === 'client';
     const isAccountRoute = routeParts[0] === 'account';
     const isTipsRoute = routeParts[0] === 'tips';
     const isClientNewRoute = isClientsRoute && routeParts[1] === 'new';
-    const isProductNewRoute = isProductsRoute && routeParts[1] === 'new';
     const isTipNewRoute = isTipsRoute && routeParts[1] === 'new';
     const clientId = isClientsRoute && routeParts[1] ? routeParts[1] : null;
-    const productId = isProductsRoute && routeParts[1] ? routeParts[1] : null;
     const tipId = isTipsRoute && routeParts[1] ? routeParts[1] : null;
     const clientList = Array.isArray(clientsState?.list) ? clientsState.list : [];
-    const productList = Array.isArray(productsState?.list) ? productsState.list : [];
     const tipList = Array.isArray(tipsState?.list) ? tipsState.list : [];
     const selectedClient = clientId
         ? clientList.find((client: any) => client?.client_id === clientId) || null
         : null;
     const selectedTip = tipId
         ? tipList.find((tip: any) => tip?.tip_id === tipId) || null
-        : null;
-    const selectedProduct = productId
-        ? productList.find((product: any) => product?.product_id === productId) || null
         : null;
 
     React.useEffect(() => {
@@ -116,8 +119,6 @@ const Leida: React.FC<any> = ({
 
     React.useEffect(() => {
         if (practitionerId && !clientsState?.initted && !clientsState?.loading) {
-            // console.log('practitionerId', practitionerId);
-            // console.log('user', user);
             dispatch(initClients(practitionerId));
         }
     }, [dispatch, practitionerId, clientsState?.initted, clientsState?.loading]);
@@ -129,20 +130,40 @@ const Leida: React.FC<any> = ({
     }, [dispatch, isTipsRoute, user?.id, tipsState?.initted, tipsState?.loading]);
 
     React.useEffect(() => {
-        if (isProductsRoute && !productsState?.initted && !productsState?.loading) {
-            dispatch(initProducts());
+        if (accessLevel !== 2) {
+            return;
         }
-    }, [dispatch, isProductsRoute, user?.id, productsState?.initted, productsState?.loading]);
+
+        if (!authenticatedClientId || authenticatedClientId === 'unknown') {
+            return;
+        }
+
+        if (pathname !== authenticatedClientRoute) {
+            dispatch(navigateTo(router, authenticatedClientRoute));
+        }
+    }, [
+        accessLevel,
+        authenticatedClientId,
+        authenticatedClientRoute,
+        dispatch,
+        pathname,
+        router,
+    ]);
 
     const bottomNavValue = isClientsRoute
         ? 'clients'
-        : isProductsRoute
-            ? 'products'
-            : isTipsRoute
-                ? 'tips'
-                : 'products';
+        : isTipsRoute
+            ? 'tips'
+            : 'account';
 
     const bottomNavItems = [
+        {
+            label: 'Account',
+            value: 'account',
+            icon: 'user' as const,
+            href: '/',
+        },
+
         {
             label: 'Clients',
             value: 'clients',
@@ -151,19 +172,37 @@ const Leida: React.FC<any> = ({
         },
 
         {
-            label: 'Products',
-            value: 'products',
-            icon: 'products' as const,
-            href: '/products',
-        },
-        
-        {
             label: 'Tips',
             value: 'tips',
             icon: 'tips' as const,
             href: '/tips',
         },
     ];
+
+    if (!accessLevel) return null;
+
+    if (accessLevel === 2) {
+        return <LivingRoutine clientId={authenticatedClientId} />;
+    }
+
+    if (isClientRoutineRoute) {
+        return (
+            <DesignSystem theme={theme as T_Theme} config={config}>
+                <main>
+                    <Container sx={{ mt: 3 }}>
+                        <Box sx={{ mx: 1.5 }}>
+                            <Typography variant="h6" sx={{ mb: 1 }}>
+                                Client View Only
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                This route is reserved for client accounts.
+                            </Typography>
+                        </Box>
+                    </Container>
+                </main>
+            </DesignSystem>
+        );
+    }
 
     return (
         <DesignSystem theme={theme as T_Theme} config={config}>
@@ -178,12 +217,6 @@ const Leida: React.FC<any> = ({
                         <ClientDetail config={config} client={selectedClient} />
                     ) : isClientsRoute ? (
                         <Clients />
-                    ) : isProductNewRoute ? (
-                        <ProductNew config={config} />
-                    ) : isProductsRoute && productId ? (
-                        <ProductDetail config={config} product={selectedProduct} />
-                    ) : isProductsRoute ? (
-                        <Products />
                     ) : isTipNewRoute ? (
                         <TipNew config={config} />
                     ) : isTipsRoute && tipId ? (
@@ -193,7 +226,7 @@ const Leida: React.FC<any> = ({
                     ) : isTipsRoute ? (
                         <Tips />
                     ) : (
-                        <Greeting />
+                        <Home />
                     )}
                     </Box>
                 </Container>

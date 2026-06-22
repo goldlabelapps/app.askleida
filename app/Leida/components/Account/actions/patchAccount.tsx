@@ -76,7 +76,11 @@ export const patchAccount = (
 
             const responsePayload = await response.json().catch(() => null);
             if (!response.ok) {
-                throw new Error(responsePayload?.message || `Failed to update practitioner (${response.status})`);
+                throw new Error(
+                    responsePayload?.meta?.message
+                    || responsePayload?.message
+                    || `Failed to update practitioner (${response.status})`,
+                );
             }
 
             const updatedRow = extractPractitioner(responsePayload) || {

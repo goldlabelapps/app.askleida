@@ -265,9 +265,6 @@ export default function InvitePage() {
                             <Typography variant="body1">
                                 Hi <strong>{email}</strong>,
                             </Typography>
-                            <Typography variant="body1">
-                                Accept your invite by choosing a password
-                            </Typography>
                         </Box>
 
                         {error ? <Alert severity="error">{error}</Alert> : null}
@@ -296,7 +293,7 @@ export default function InvitePage() {
                                         label="New password"
                                         type="password"
                                         value={password}
-                                        variant="standard"
+                                        variant="outlined"
                                         onChange={setPassword}
                                         autoComplete="new-password"
                                     />
@@ -304,14 +301,15 @@ export default function InvitePage() {
                                         label="Confirm password"
                                         type="password"
                                         value={confirmPassword}
-                                        variant="standard"
+                                        variant="outlined"
                                         onChange={setConfirmPassword}
                                         autoComplete="new-password"
                                     />
 
-                                    <Stack direction="row" spacing={1.5}>
+                                    <Stack direction="row" spacing={2}>
                                         <Button 
                                             fullWidth
+                                            size="large"
                                             type="submit" 
                                             variant="contained" 
                                             disabled={saving}>
@@ -325,15 +323,13 @@ export default function InvitePage() {
 
                         {authChecked && sessionReadyForApp ? (
                             <Stack spacing={2}>
-                                <Alert severity="success">
-                                    Done.
-                                </Alert>
+                                
                                 <Button
-                                    endIcon={<Icon icon="right" />}
+                                    endIcon={<Icon icon="rocket" />}
                                     variant="contained"
                                     onClick={() => router.push('/?onboard=true')}
                                 >
-                                    Continue
+                                    Continue to Leida
                                 </Button>
                             </Stack>
                         ) : null}

@@ -1,0 +1,1 @@
+export const LIVING_ROUTINE_KEY = 'livingRoutine';

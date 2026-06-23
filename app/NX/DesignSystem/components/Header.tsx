@@ -44,7 +44,7 @@ export default function Header({
 				position="fixed"
 				color="default"
 				sx={{
-					boxShadow: 0,
+					boxShadow: 'none',
 					background: theme.palette?.background?.default || 'inherit',
 				}}>
 				<Container maxWidth="md">

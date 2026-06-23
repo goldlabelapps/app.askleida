@@ -22,15 +22,6 @@ export default function Clients() {
     };
 
     return (<>
-                <Box sx={{ mb: 1 }}>
-                    <Button
-                        color="primary"
-                        endIcon={<Icon icon="add" />}
-                        onClick={handleClientNew}
-                    >
-                        New Client
-                    </Button>
-                </Box>
                 <Wrapper>
                     <ClientList />
                 </Wrapper>

@@ -68,7 +68,7 @@ const ProductHeader: FC<{ product?: I_Product }> = ({ product }) => {
         position="fixed"
         color="default"
         sx={{
-          boxShadow: 0,
+          boxShadow: 'none',
           background: theme.palette?.background?.default || 'inherit',
         }}>
         <Container maxWidth="md">

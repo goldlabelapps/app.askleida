@@ -99,13 +99,11 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                     <Grid container spacing={2} alignItems="center">
                         <Grid size={{
                             xs: 12,
-                            sm: 6,
                         }}>
                             <Editable
                                 id="client_email"
-                                label="New Client's email"
                                 startAdornment='email'
-                                variant="standard"
+                                variant="outlined"
                                 disabled={isSubmitting}
                                 required
                                 value={email}
@@ -118,20 +116,18 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                         </Grid>
                         <Grid size={{
                             xs: 12,
-                            sm: 6,
                         }}>
                             <Collapse in={valid}>
                                 <Box sx={{ my: 1 }}>
                                     <Button
-                                        fullWidth
                                         size="large"
                                         color="primary"
                                         variant="contained"
-                                        endIcon={<Icon icon="add" />}
+                                        endIcon={<Icon icon="send" />}
                                         disabled={isSubmitting}
                                         onClick={handleNew}
                                     >
-                                        {isSubmitting ? 'Adding Client...' : 'Add Client'}
+                                        {isSubmitting ? 'Inviting Client...' : 'Invite Client'}
                                     </Button>
                                 </Box>
                             </Collapse>
@@ -139,7 +135,7 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                                 <Typography
                                     variant="body1"
                                     sx={{ my: 2 }}>
-                                    Clients get an email to set up their account.
+                                    Clients get an email invitation to set up their account.
                                     They'll be asked to create a password and will
                                     see a page which says Living Routine will appear
                                     here when your practitioner has published it

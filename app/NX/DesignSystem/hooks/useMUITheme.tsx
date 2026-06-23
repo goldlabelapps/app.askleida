@@ -29,10 +29,15 @@ export function useMUITheme(t: T_Theme) {
     return size;
   }
   return createTheme({
+    shadows: Array(25).fill('none') as any,
     palette: {
       mode: (t.mode as 'light' | 'dark') ?? 'light',
       primary: { main: getColor(t.primary) },
       secondary: { main: getColor(t.secondary) },
+      success: { main: getColor(t.primary) },
+      info: { main: getColor(t.primary) },
+      warning: { main: getColor(t.primary) },
+      error: { main: getColor(t.primary) },
       background: {
         default: getColor(t.background),
         paper: getColor(t.paper, '#FFF'),
@@ -69,7 +74,6 @@ export function useMUITheme(t: T_Theme) {
           },
           containedPrimary: {
             fontWeight: 'bold',
-            boxShadow: 'none',
           },
         },
       },

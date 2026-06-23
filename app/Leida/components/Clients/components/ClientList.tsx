@@ -4,12 +4,13 @@ import type { T_Client } from '../../../types';
 import { useRouter } from 'next/navigation';
 import {
 	Alert,
+	AlertTitle,
 	Box,
-	Button,
 	LinearProgress,
 	Pagination,
 	Stack,
 	Typography,
+	Fab,
 } from '@mui/material';
 import { navigateTo, Icon } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
@@ -101,11 +102,46 @@ const ClientList = () => {
 
 	return (
 		<Box>
+			<Box sx={{ mb: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+				<Typography variant="overline">
+					Clients
+				</Typography>
+				<Fab
+					color="secondary"
+					onClick={handleClientNew}>
+					<Icon icon="add" />
+				</Fab>
+			</Box>
+			
 			{loading ? <LinearProgress sx={{ mb: 2 }} /> : null}
 
 			{hasError ? (
 				<Alert severity="error" sx={{ mb: 2 }}>
 					{errorMessage}
+				</Alert>
+			) : null}
+
+			{!loading && !hasError && list.length === 0 ? (
+				<Alert 
+					severity="success"
+					variant="outlined" 
+					sx={{ mb: 2 }}
+					action={<>
+						<Fab
+							color="secondary"
+							onClick={handleClientNew}>
+							<Icon icon="add" />
+						</Fab>
+					</>}	
+				>
+					<AlertTitle>
+						<Typography variant="body2">
+							No clients yet
+						</Typography>
+					</AlertTitle>
+					<Typography variant="body2">
+						Create your first client to get started.
+					</Typography>
 				</Alert>
 			) : null}
 

@@ -1,11 +1,11 @@
 "use client";
 import React from 'react';
-import { Button, Collapse, Stack } from '@mui/material';
+import { Button, Collapse, Grid, Stack } from '@mui/material';
 import { Icon } from '../../../NX/DesignSystem';
 import { useSupabaseAuth } from '../../../NX/Paywall';
 import { useDispatch } from '../../../NX/Uberedux';
 import { patchAccount, setAccount, useAccount } from '../Account';
-import { AccountEditor } from '../../index';
+import { AccountEditor, ClientList } from '../../../Leida';
 import Wrapper from '../UI/Wrapper';
 
 function getAccountProfile(value: unknown): Record<string, unknown> | null {
@@ -31,6 +31,7 @@ const Home: React.FC = () => {
         profile?.display_name || profile?.title || user?.user_metadata?.full_name || 'Your account',
     );
     const clinic = typeof profile?.clinic === 'string' ? profile.clinic : '';
+    const website = typeof profile?.website === 'string' ? profile.website : '';
     const accountId = String(accountRows[0]?.practitioner_id ?? '');
     const avatarSource =
         typeof profile?.avatar === 'string' && profile.avatar.trim()
@@ -41,6 +42,7 @@ const Home: React.FC = () => {
     const [formState, setFormState] = React.useState({
         displayName,
         clinic,
+        website,
     });
     const isBusy = Boolean(account?.loading) || isSavingForm;
 
@@ -48,17 +50,21 @@ const Home: React.FC = () => {
     const normalizedCurrentDisplayName = displayName.trim();
     const normalizedDraftClinic = formState.clinic.trim();
     const normalizedCurrentClinic = clinic.trim();
+    const normalizedDraftWebsite = formState.website.trim();
+    const normalizedCurrentWebsite = website.trim();
     const isFormDirty =
         normalizedDraftDisplayName !== normalizedCurrentDisplayName
-        || normalizedDraftClinic !== normalizedCurrentClinic;
+        || normalizedDraftClinic !== normalizedCurrentClinic
+        || normalizedDraftWebsite !== normalizedCurrentWebsite;
     const canSaveForm = !isBusy && normalizedDraftDisplayName.length > 0 && isFormDirty;
 
     React.useEffect(() => {
         setFormState({
             displayName,
             clinic,
+            website,
         });
-    }, [displayName, clinic]);
+    }, [displayName, clinic, website]);
 
     const handleAvatarSuccess = (avatarUrl: string) => {
         const current = accountRows[0] ?? {};
@@ -93,6 +99,7 @@ const Home: React.FC = () => {
                     data: {
                         display_name: normalizedDraftDisplayName,
                         clinic: normalizedDraftClinic || null,
+                        website: normalizedDraftWebsite || null,
                     },
                 }),
             );
@@ -111,29 +118,48 @@ const Home: React.FC = () => {
 
     return (
         <Wrapper>
-            <AccountEditor
-                accountId={accountId}
-                avatarSource={avatarSource}
-                displayName={formState.displayName}
-                clinic={formState.clinic}
-                isBusy={isBusy}
-                formError={formError}
-                onAvatarSuccess={handleAvatarSuccess}
-                onDisplayNameChange={(nextValue) => {
-                    setFormError(null);
-                    setFormState((current) => ({
-                        ...current,
-                        displayName: nextValue,
-                    }));
-                }}
-                onClinicChange={(nextValue) => {
-                    setFormError(null);
-                    setFormState((current) => ({
-                        ...current,
-                        clinic: nextValue,
-                    }));
-                }}
-            />
+            <Grid container spacing={2} sx={{ mb: 2 }}>
+                <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>   
+                    <AccountEditor
+                        accountId={accountId}
+                        avatarSource={avatarSource}
+                        displayName={formState.displayName}
+                        clinic={formState.clinic}
+                        website={formState.website}
+                        isBusy={isBusy}
+                        formError={formError}
+                        onAvatarSuccess={handleAvatarSuccess}
+                        onDisplayNameChange={(nextValue) => {
+                            setFormError(null);
+                            setFormState((current) => ({
+                                ...current,
+                                displayName: nextValue,
+                            }));
+                        }}
+                        onClinicChange={(nextValue) => {
+                            setFormError(null);
+                            setFormState((current) => ({
+                                ...current,
+                                clinic: nextValue,
+                            }));
+                        }}
+                        onWebsiteChange={(nextValue) => {
+                            setFormError(null);
+                            setFormState((current) => ({
+                                ...current,
+                                website: nextValue,
+                            }));
+                        }}
+                    />
+                </Grid>     
+                <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <ClientList />
+                </Grid>  
+            </Grid>  
+
+            
+            
+            
 
             <Stack direction="row" justifyContent="flex-end">
                 <Collapse in={isFormDirty} orientation="horizontal" unmountOnExit>

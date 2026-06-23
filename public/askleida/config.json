@@ -37,8 +37,8 @@
                 },
                 "light": {
                     "mode": "light",
-                    "primary": "#2c2c2a",
-                    "secondary": "#364450",
+                    "primary": "#6B3183",
+                    "secondary": "#8734AB",
                     "background": "#F7F7F4",
                     "paper": "#FFF",
                     "border": "#d4d4d4",

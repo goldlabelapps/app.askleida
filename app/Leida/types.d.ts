@@ -89,10 +89,12 @@ export type T_AccountEditor = {
     avatarSource?: string;
     displayName: string;
     clinic: string;
+    website?: string;
     isBusy?: boolean;
     formError?: string | null;
     onAvatarSuccess?: (avatarUrl: string) => void;
     onDisplayNameChange?: (value: string) => void;
     onClinicChange?: (value: string) => void;
+    onWebsiteChange?: (value: string) => void;
     readOnly?: boolean;
 };

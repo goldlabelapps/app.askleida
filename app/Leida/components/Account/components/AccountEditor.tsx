@@ -4,7 +4,7 @@ import { Grid, Stack, Typography } from '@mui/material';
 import { Editable } from '../../../../Leida';
 import AvatarUpload from '../../UI/AvatarUpload';
 
-type T_AccountDialogContent = {
+type T_AccountEditor = {
 	accountId: string;
 	avatarSource?: string;
 	displayName: string;
@@ -17,7 +17,7 @@ type T_AccountDialogContent = {
 	readOnly?: boolean;
 };
 
-export default function AccountDialogContent({
+export default function AccountEditor({
 	accountId,
 	avatarSource,
 	displayName,
@@ -28,7 +28,7 @@ export default function AccountDialogContent({
 	onDisplayNameChange,
 	onClinicChange,
 	readOnly = false,
-}: T_AccountDialogContent) {
+}: T_AccountEditor) {
 	const isDisabled = isBusy || readOnly;
 	const handleAvatarSuccess = onAvatarSuccess ?? (() => undefined);
 	const handleDisplayNameChange = onDisplayNameChange ?? (() => undefined);

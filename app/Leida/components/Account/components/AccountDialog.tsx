@@ -13,7 +13,7 @@ import { useTheme } from '@mui/material/styles';
 import { ConfirmAction, Icon } from '../../../../NX/DesignSystem';
 import { setPaywall, useSupabaseAuth } from '../../../../NX/Paywall';
 import { useDispatch } from '../../../../NX/Uberedux';
-import { AccountDialogContent } from '../../../../Leida';
+import { AccountEditor } from '../../../../Leida';
 import { supabase } from '../../../../NX/lib/supabase';
 import { patchAccount, setAccount } from '..';
 import { useAccount } from '../hooks/useAccount';
@@ -216,7 +216,7 @@ export default function Account() {
 			{isBusy ? <LinearProgress /> : null}
 
 			<DialogContent>
-				<AccountDialogContent
+				<AccountEditor
 					accountId={accountId}
 					avatarSource={avatarSource}
 					displayName={formState.displayName}

@@ -1,3 +1,3 @@
 export { default } from './AccountDialog';
-export { default as AccountDialogContent } from './AccountDialogContent';
+export { default as AccountEditor } from './AccountEditor';
 export { defaultAvatars } from './avatars';

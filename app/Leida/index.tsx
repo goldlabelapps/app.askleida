@@ -30,7 +30,7 @@ export { patchClient } from './components/Clients/actions/patchClient';
 export { deleteClient } from './components/Clients/actions/deleteClient';
 export { useClients } from './components/Clients/hooks/useClients';
 export { default as Account } from './components/Account/Account';
-export { AccountDialogContent } from './components/Account';
+export { AccountEditor } from './components/Account';
 export { initAccount } from './components/Account/actions/initAccount';
 export { useAccount } from './components/Account/hooks/useAccount';
 export { patchAccount } from './components/Account/actions/patchAccount';

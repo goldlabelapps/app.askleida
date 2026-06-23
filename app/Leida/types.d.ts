@@ -11,6 +11,8 @@ export type IconName = ComponentProps<typeof Icon>['icon'];
 export type EditableBaseProps = {
     id?: string;
     label?: string;
+    type?: string;
+    autoComplete?: string;
     placeholder?: string;
     disabled?: boolean;
     required?: boolean;

@@ -1,7 +1,7 @@
 'use client';
 import * as React from 'react';
 import { Box, Grid, Stack, Typography } from '@mui/material';
-import type { T_AccountEditor } from '../../../../types';
+import type { T_AccountEditor } from '../../../types';
 import { Editable } from '../../../../Leida';
 import AvatarUpload from '../../UI/AvatarUpload';
 

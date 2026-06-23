@@ -20,12 +20,18 @@ export async function GET(req: Request) {
       .from('practitioners')
       .select('*')
       .eq('practitioner_id', id)
-      .single();
+      .limit(1);
     if (error) {
       const res = makeRes({ tenant, message: error.message, severity: 'error' });
       return NextResponse.json(res, { status: 404 });
     }
-    const res = makeRes({ tenant, message: 'Fetched practitioner', severity: 'success', data });
+    const row = Array.isArray(data) ? data[0] ?? null : null;
+    if (!row) {
+      const res = makeRes({ tenant, message: 'Practitioner not found', severity: 'error' });
+      return NextResponse.json(res, { status: 404 });
+    }
+
+    const res = makeRes({ tenant, message: 'Fetched practitioner', severity: 'success', data: row });
     return NextResponse.json(res);
   }
 

@@ -3,6 +3,7 @@ import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import {
     Box,
+    Button,
     Container,
     Typography,
 } from '@mui/material';
@@ -80,8 +81,6 @@ const Leida: React.FC<LeidaProps> = ({
     const dispatch = useDispatch();
     const router = useRouter();
     const { user } = useSupabaseAuth();
-    const authenticatedClientId = String(user?.user_metadata?.client_id ?? user?.id ?? 'unknown');
-    const authenticatedClientRoute = `/client/${authenticatedClientId}`;
     const pathname = usePathname();
     const accountState = useAccount();
     const accountRows: PractitionerAccountRow[] = Array.isArray(accountState?.data) ? accountState.data as PractitionerAccountRow[] : [];
@@ -89,6 +88,14 @@ const Leida: React.FC<LeidaProps> = ({
     const clientsState = useClients();
     const tipsState = useTips();
     const livingRoutineState = useLivingRoutine();
+    const metadataClientId = typeof user?.user_metadata?.client_id === 'string'
+        ? user.user_metadata.client_id.trim()
+        : '';
+    const stateClientId = typeof (livingRoutineState as any)?.currentClient?.client_id === 'string'
+        ? String((livingRoutineState as any).currentClient.client_id).trim()
+        : '';
+    const authenticatedClientId = metadataClientId || stateClientId || 'unknown';
+    const authenticatedClientRoute = `/client/${authenticatedClientId}`;
     const designSystem = useDesignSystem();
     const defaultTheme = config?.cartridges?.designSystem?.defaultTheme;
     const themeSwitching = config?.cartridges?.designSystem?.themeSwitching;
@@ -185,7 +192,7 @@ const Leida: React.FC<LeidaProps> = ({
     ]);
 
     React.useEffect(() => {
-        if (accessLevel !== 2) {
+        if (accessLevel >= 3) {
             return;
         }
 
@@ -236,11 +243,15 @@ const Leida: React.FC<LeidaProps> = ({
 
     // if (!accessLevel) return null;
 
-    if (accessLevel === 2) {
+    if (!accountState?.initted) {
+        return null;
+    }
+
+    if (accessLevel < 3) {
         return <LivingRoutine clientId={authenticatedClientId} accessLevel={accessLevel} />;
     }
 
-    if (isClientRoutineRoute) {
+    if (isClientRoutineRoute && pathname !== authenticatedClientRoute) {
         return (
             <DesignSystem theme={theme as T_Theme} config={config}>
                 <main>
@@ -249,9 +260,12 @@ const Leida: React.FC<LeidaProps> = ({
                             <Typography variant="h6" sx={{ mb: 1 }}>
                                 Client View Only
                             </Typography>
-                            <Typography variant="body2" color="text.secondary">
+                            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                                 This route is reserved for client accounts.
                             </Typography>
+                            <Button variant="contained" onClick={handleSignout}>
+                                Sign Out
+                            </Button>
                         </Box>
                     </Container>
                 </main>

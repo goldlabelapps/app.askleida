@@ -91,11 +91,19 @@ export async function POST(req: Request) {
   try {
     const email = normalizedData.email;
     if (email) {
+      const createdClientRow = Array.isArray(data) ? data[0] : null;
+      const clientIdForAuth = typeof createdClientRow?.client_id === 'string'
+        ? createdClientRow.client_id.trim()
+        : '';
+
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const { data: inviteData, error: inviteError } = await supabase.auth.admin.inviteUserByEmail(email, {
         redirectTo: makeInviteRedirectUrl(),
-        data: { access_level: 2 },
+        data: {
+          access_level: 2,
+          ...(clientIdForAuth ? { client_id: clientIdForAuth } : {}),
+        },
       });
 
       if (inviteError) {

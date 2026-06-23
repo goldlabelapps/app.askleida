@@ -39,6 +39,7 @@ export const initLivingRoutine = (clientId?: string): any =>
 
             dispatch(setLivingRoutine('clientId', normalizedClientId));
             dispatch(setLivingRoutine('client', client));
+            dispatch(setLivingRoutine('currentClient', client));
             dispatch(setLivingRoutine('routine', routine));
             dispatch(setLivingRoutine('initted', true));
             dispatch(setLivingRoutine('loading', false));
@@ -50,6 +51,7 @@ export const initLivingRoutine = (clientId?: string): any =>
                 severity: 'error',
             }));
             dispatch(setLivingRoutine('client', null));
+            dispatch(setLivingRoutine('currentClient', null));
             dispatch(setLivingRoutine('routine', null));
             dispatch(setLivingRoutine('error', msg));
             dispatch(setLivingRoutine('initted', true));

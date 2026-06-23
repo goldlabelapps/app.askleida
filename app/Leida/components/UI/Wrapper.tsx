@@ -1,11 +1,7 @@
 "use client";
 import React from 'react';
-import { Account } from '../Account';
-import Image from 'next/image';
 import { 
-    Box, 
-    ButtonBase,
-    useTheme,
+    Box,
     type Theme,
 } from '@mui/material';
 // import { Icon } from '../../../NX/DesignSystem';
@@ -22,9 +18,10 @@ const Wrapper: React.FC<T_Wrapper> = ({
             border: (theme: Theme) => `1px solid ${theme.palette.divider}`,
             borderRadius: 5,
             p: 2,
+            mx: 2,
             backgroundColor: (theme: Theme) => theme.palette.background.paper,
         }}>
-                {children}
+            {children}
         </Box>
     );
 };

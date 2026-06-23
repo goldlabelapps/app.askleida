@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import {
 	Alert,
 	Box,
-	Button,
 	LinearProgress,
 	Pagination,
 	Stack,
@@ -101,11 +100,21 @@ const ClientList = () => {
 
 	return (
 		<Box>
+			<Typography variant="overline" sx={{ mb: 1 }}>
+				Client List
+			</Typography>
+			
 			{loading ? <LinearProgress sx={{ mb: 2 }} /> : null}
 
 			{hasError ? (
 				<Alert severity="error" sx={{ mb: 2 }}>
 					{errorMessage}
+				</Alert>
+			) : null}
+
+			{!loading && !hasError && list.length === 0 ? (
+				<Alert severity="info" sx={{ mb: 2 }}>
+					No clients yet. Create your first client to get started.
 				</Alert>
 			) : null}
 

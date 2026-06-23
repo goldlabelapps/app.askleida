@@ -221,6 +221,7 @@ export default function Account() {
 					avatarSource={avatarSource}
 					displayName={formState.displayName}
 					clinic={formState.clinic}
+					website={formState.website}
 					isBusy={isBusy}
 					formError={formError}
 					onAvatarSuccess={handleAvatarSuccess}
@@ -236,6 +237,13 @@ export default function Account() {
 						setFormState((current) => ({
 							...current,
 							clinic: nextValue,
+						}));
+					}}
+					onWebsiteChange={(nextValue) => {
+						setFormError(null);
+						setFormState((current) => ({
+							...current,
+							website: nextValue,
 						}));
 					}}
 				/>

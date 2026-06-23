@@ -4,10 +4,13 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
     Alert,
+    Avatar,
     Box,
     Button,
     ButtonBase,
     CardContent,
+    Container,
+    Grid,
     LinearProgress,
     Typography,
 } from '@mui/material';
@@ -57,13 +60,21 @@ const toStringArray = (value: unknown): string[] => {
         .filter((item) => item.length > 0);
 };
 
+const pickString = (value: unknown): string => {
+    return typeof value === 'string' ? value.trim() : '';
+};
+
 const LivingRoutine: React.FC<T_LivingRoutine> = ({ clientId, accessLevel }) => {
     const dispatch = useDispatch();
     const pathname = usePathname();
     const { user } = useSupabaseAuth();
     const routineState = useLivingRoutine();
     const currentClient = toObject(routineState?.currentClient);
+    const currentClientData = toObject(currentClient.data);
     const practitioner = routineState?.practitioner ?? null;
+    const practitionerObject = toObject(practitioner);
+    const practitionerData = toObject(practitionerObject.data);
+    const practitionerProfile = toObject(practitionerData.profile);
     const practitionerLoading = Boolean(routineState?.practitionerLoading);
     const practitionerError = typeof routineState?.practitionerError === 'string'
         ? routineState.practitionerError
@@ -71,6 +82,7 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ clientId, accessLevel }) => 
     const email = String(user?.email || 'No email available');
     const [confirmSignoutOpen, setConfirmSignoutOpen] = React.useState(false);
     const [isSigningOut, setIsSigningOut] = React.useState(false);
+    const [isRoutineAlertVisible, setIsRoutineAlertVisible] = React.useState(true);
     const routine = toObject(routineState?.routine);
     const productsFromState = Array.isArray(routine.products)
         ? routine.products
@@ -98,6 +110,21 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ clientId, accessLevel }) => 
             'Focus on simple, repeatable actions each day. Small consistent steps drive long-term progress.',
             // 'Use this routine as your daily reference. If anything feels unclear, contact your practitioner for clarification.',
         ];
+    const clientTitle = pickString(currentClient.title);
+    const clientDisplayName = pickString(currentClientData.display_name) || clientTitle || 'Unknown client';
+    const clientEmail = pickString(currentClientData.email);
+    const practitionerName =
+        pickString(practitionerData.display_name) ||
+        pickString(practitionerData.name) ||
+        pickString(practitionerProfile.name) ||
+        pickString(practitionerObject.title) ||
+        'Unknown practitioner';
+    const practitionerEmail = pickString(practitionerData.email);
+    const practitionerClinic = pickString(practitionerData.clinic);
+    const practitionerWebsite = pickString(practitionerData.website);
+    const practitionerAvatar = pickString(practitionerData.avatar);
+    const practitionerOnboarding = toObject(practitionerData.onboarding);
+    const practitionerOnboardingStatus = pickString(practitionerOnboarding.status);
     const isBusy = isSigningOut;
 
     const handleRequestSignout = () => {
@@ -133,110 +160,15 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ clientId, accessLevel }) => 
     }, [dispatch, effectiveClientId, user?.email]);
 
     return (
-        <>
+        <><Container maxWidth="md" sx={{ mb: 2 }}>
         <Box sx={{height: 16}} />
-
-            <Typography variant="h6" sx={{ my: 2 }}>
-                Current Client
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                client_id: {effectiveClientId || 'unknown'}
-            </Typography>
-            <pre>
-                {JSON.stringify(currentClient, null, 2)}
-            </pre>
-
-            <Typography variant="h6" sx={{ my: 2 }}>
-                Practitioner
-            </Typography>
-            {practitionerLoading ? (
-                <Typography variant="body2" color="text.secondary">
-                    Loading practitioner...
-                </Typography>
-            ) : null}
-            {practitionerError ? (
-                <Typography variant="body2" color="error.main" sx={{ mb: 1 }}>
-                    {practitionerError}
-                </Typography>
-            ) : null}
-
-            <pre>
-                {JSON.stringify(practitioner, null, 2)}
-            </pre>
-
-
-
-            <Wrapper>
-                {isBusy ? <LinearProgress sx={{ mb: 2 }} /> : null}
-
-                <Alert severity="info" sx={{ }}
-                    action={<>
-                        <Button
-                            color="primary"
-                            variant="text"
-                            onClick={handleRequestSignout}
-                            startIcon={<Icon icon="signout" />}
-                            disabled={isBusy}
-                        >
-                            Logout
-                        </Button>
-                    </>}
-                >
-                    {routineState?.loading
-                        ? 'Loading your routine...'
-                        : 'Your latest routine details will appear here once your practitioner publishes updates.'}
-                </Alert>
-
-                <CardContent>
-
-                    <Typography variant="h6" sx={{ my: 2 }}>
-                        Blurb
-                    </Typography>
-                    {overviewParagraphs.map((paragraph) => (
-                        <Typography key={paragraph} variant="body2" color="text.secondary">
-                            {paragraph}
-                        </Typography>
-                    ))}
-
-                    <Typography variant="h6" sx={{ my: 2 }}>
-                        Products
-                    </Typography>
-                    {products.map((product) => (
-                        <Box key={product.name}>
-                            <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-                                {product.name}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                {product.cadence}
-                            </Typography>
-                        </Box>
-                    ))}
-
-                    <Typography variant="h6" sx={{ my: 2 }}>
-                        Tips
-                    </Typography>
-                    {tips.map((tip, index) => (
-                        <Box key={tip}>
-                            <Typography variant="body2">
-                                {`${index + 1}. ${tip}`}
-                            </Typography>
-                        </Box>
-                    ))}
-
-                    
-                    
-                </CardContent>
-                <ConfirmAction
-                    open={confirmSignoutOpen}
-                    icon="signout"
-                    title="Sign out?"
-                    body={`You are signed in as ${email}. Do you want to sign out now?`}
-                    handleConfirm={handleConfirmSignout}
-                    handleClose={handleCancelSignout}
-                />
-            </Wrapper>
-
-            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', pt: 3 }}>
+            
+            <Box sx={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                width: '100%', 
+                pb: 2
+            }}>
 
                 <ButtonBase
                     component="a"
@@ -249,13 +181,168 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ clientId, accessLevel }) => 
                     <Image
                         src={'/askleida/svg/logo-dark.svg'}
                         alt="Leida"
-                        width={110}
-                        height={22}
-                        className="logo"
+                        width={220}
+                        height={44}
                     />
                 </ButtonBase>
 
             </Box>
+            <Wrapper>
+                {isBusy ? <LinearProgress sx={{ mb: 2 }} /> : null}
+
+                {isRoutineAlertVisible ? (
+                    <Alert severity="info" sx={{ }}
+                        action={<>
+                            <Button
+                                color="primary"
+                                variant="text"
+                                onClick={() => setIsRoutineAlertVisible(false)}
+                                startIcon={<Icon icon="tick" />}
+                                disabled={isBusy}
+                            >
+                                OK
+                            </Button>
+                        </>}
+                    >
+                        {routineState?.loading
+                            ? 'Loading your routine...'
+                            : 'Your latest routine details will appear here once your practitioner publishes updates.'}
+                    </Alert>
+                ) : null}
+
+                <CardContent>
+
+                    <Grid container spacing={2} sx={{ mb: 2 }}>
+                        <Grid size={{ xs: 12, sm: 6 }}>
+                            <Box
+                                sx={{
+                                    mb: 2,
+                                    p: 2,
+                                }}
+                            >
+                                <Typography variant="h5" sx={{ mb: 1 }}>
+                                    Hello {clientDisplayName}, 
+                                </Typography>
+                                {/* <Typography variant="body2">
+                                    {clientEmail || 'Not provided'}
+                                </Typography> */}
+
+                                <Typography variant="overline" sx={{ my: 2 }}>
+                                    Routine
+                                </Typography>
+                                {overviewParagraphs.map((paragraph) => (
+                                    <Typography key={paragraph} variant="body2">
+                                        {paragraph}
+                                    </Typography>
+                                ))}
+
+                                <Typography variant="overline" sx={{ my: 2 }}>
+                                    Tips
+                                </Typography>
+                                {tips.map((tip, index) => (
+                                    <Box key={tip}>
+                                        <Typography variant="body2">
+                                            {`${index + 1}. ${tip}`}
+                                        </Typography>
+                                    </Box>
+                                ))}
+
+                            </Box>
+                        </Grid>
+                        <Grid size={{ xs: 12, sm: 6 }}>
+                            {practitionerLoading ? (
+                                <Typography variant="body2">
+                                    Loading practitioner...
+                                </Typography>
+                            ) : null}
+                            {practitionerError ? (
+                                <Typography variant="body2" color="error.main" sx={{ mb: 1 }}>
+                                    {practitionerError}
+                                </Typography>
+                            ) : null}
+
+                            <Box
+                                sx={{
+                                    mb: 3,
+                                    p: 2,
+                                    borderRadius: 2,
+                                    border: '1px solid',
+                                    borderColor: 'divider',
+                                    bgcolor: 'background.paper',
+                                }}
+                            >
+                                <Typography variant="overline" sx={{ fontWeight: 700, mb: 1 }}>
+                                    Practitioner
+                                </Typography>
+                                <Avatar
+                                    src={practitionerAvatar || undefined}
+                                    alt={practitionerName}
+                                    sx={{ width: 72, height: 72 }}
+                                >
+                                    {practitionerName.slice(0, 1).toUpperCase()}
+                                </Avatar>
+                                <Typography variant="body2">
+                                    {practitionerName}
+                                </Typography>
+                                <Typography variant="body2">
+                                    {practitionerEmail || 'Not provided'}
+                                </Typography>
+                                <Typography variant="body2">
+                                    {practitionerClinic || 'Not provided'}
+                                </Typography>
+
+                                <Typography variant="body2">
+                                    {practitionerWebsite || 'Not provided'}
+                                </Typography>
+
+                                <Typography variant="h6" sx={{ my: 2 }}>
+                                    Products
+                                </Typography>
+                                {products.map((product) => (
+                                    <Box key={product.name}>
+                                        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                                            {product.name}
+                                        </Typography>
+                                        <Typography variant="body2">
+                                            {product.cadence}
+                                        </Typography>
+                                    </Box>
+                                ))}
+
+
+                            </Box>
+                        </Grid>
+                    
+                    </Grid>
+
+                    
+                </CardContent>
+                <ConfirmAction
+                    open={confirmSignoutOpen}
+                    icon="signout"
+                    title="Sign out?"
+                    body={`You are signed in as ${email}. Do you want to sign out now?`}
+                    handleConfirm={handleConfirmSignout}
+                    handleClose={handleCancelSignout}
+                />
+            </Wrapper>
+
+            <Box sx={{ 
+                mt:2,
+                display: 'flex', justifyContent: 'center', width: '100%' }}>
+                <Button
+                    color="primary"
+                    variant="text"
+                    onClick={handleRequestSignout}
+                    startIcon={<Icon icon="signout" />}
+                    disabled={isBusy}
+                >
+                    Logout
+                </Button>
+            </Box>
+            
+        </Container>
+            
         </>
     );
 };

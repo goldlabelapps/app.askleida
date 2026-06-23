@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { makeRes } from '../lib/makeRes';
+import { makeRes } from '../../lib/makeRes';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
 
       try {
         // Fetch auth user by email
-        const { data: authData, error: authError } = await supabase.auth.admin.getUserByEmail(email);
+        const { data: listData, error: authError } = await supabase.auth.admin.listUsers();
 
         if (authError) {
           skipped++;
@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
           continue;
         }
 
-        const authUser = authData?.user;
+        const authUser = listData?.users?.find((u) => u.email?.toLowerCase() === email) ?? null;
         if (!authUser) {
           skipped++;
           results.push({

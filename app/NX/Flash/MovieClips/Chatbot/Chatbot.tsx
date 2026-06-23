@@ -58,7 +58,7 @@ const Chatbot = (props: I_Chatbot) => {
                 overflow: 'hidden',
             }}
         >
-            <AppBar position="static" elevation={1} sx={{ background: 0, boxShadow: 0, mt: 2 }}>
+            <AppBar position="static" elevation={0} sx={{ background: 0, boxShadow: 'none', mt: 2 }}>
                 <Toolbar>
                     <Box sx={{ height: 50, mt: 1, cursor: 'pointer' }}
                         onClick={() => router.push('/')}>

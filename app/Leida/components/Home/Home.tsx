@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { Button, Collapse, Stack } from '@mui/material';
+import { Button, Collapse, Grid, Stack } from '@mui/material';
 import { Icon } from '../../../NX/DesignSystem';
 import { useSupabaseAuth } from '../../../NX/Paywall';
 import { useDispatch } from '../../../NX/Uberedux';
@@ -118,42 +118,48 @@ const Home: React.FC = () => {
 
     return (
         <Wrapper>
-            
-            <AccountEditor
-                accountId={accountId}
-                avatarSource={avatarSource}
-                displayName={formState.displayName}
-                clinic={formState.clinic}
-                website={formState.website}
-                isBusy={isBusy}
-                formError={formError}
-                onAvatarSuccess={handleAvatarSuccess}
-                onDisplayNameChange={(nextValue) => {
-                    setFormError(null);
-                    setFormState((current) => ({
-                        ...current,
-                        displayName: nextValue,
-                    }));
-                }}
-                onClinicChange={(nextValue) => {
-                    setFormError(null);
-                    setFormState((current) => ({
-                        ...current,
-                        clinic: nextValue,
-                    }));
-                }}
-                onWebsiteChange={(nextValue) => {
-                    setFormError(null);
-                    setFormState((current) => ({
-                        ...current,
-                        website: nextValue,
-                    }));
-                }}
-            />
+            <Grid container spacing={2} sx={{ mb: 2 }}>
+                <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>   
+                    <AccountEditor
+                        accountId={accountId}
+                        avatarSource={avatarSource}
+                        displayName={formState.displayName}
+                        clinic={formState.clinic}
+                        website={formState.website}
+                        isBusy={isBusy}
+                        formError={formError}
+                        onAvatarSuccess={handleAvatarSuccess}
+                        onDisplayNameChange={(nextValue) => {
+                            setFormError(null);
+                            setFormState((current) => ({
+                                ...current,
+                                displayName: nextValue,
+                            }));
+                        }}
+                        onClinicChange={(nextValue) => {
+                            setFormError(null);
+                            setFormState((current) => ({
+                                ...current,
+                                clinic: nextValue,
+                            }));
+                        }}
+                        onWebsiteChange={(nextValue) => {
+                            setFormError(null);
+                            setFormState((current) => ({
+                                ...current,
+                                website: nextValue,
+                            }));
+                        }}
+                    />
+                </Grid>     
+                <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <ClientList />
+                </Grid>  
+            </Grid>  
 
-            <Stack>
-                <ClientList />
-            </Stack>
+            
+            
+            
 
             <Stack direction="row" justifyContent="flex-end">
                 <Collapse in={isFormDirty} orientation="horizontal" unmountOnExit>

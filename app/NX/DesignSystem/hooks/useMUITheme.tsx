@@ -29,6 +29,7 @@ export function useMUITheme(t: T_Theme) {
     return size;
   }
   return createTheme({
+    shadows: Array(25).fill('none') as any,
     palette: {
       mode: (t.mode as 'light' | 'dark') ?? 'light',
       primary: { main: getColor(t.primary) },
@@ -73,7 +74,6 @@ export function useMUITheme(t: T_Theme) {
           },
           containedPrimary: {
             fontWeight: 'bold',
-            boxShadow: 'none',
           },
         },
       },

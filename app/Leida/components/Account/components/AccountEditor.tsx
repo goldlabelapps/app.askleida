@@ -99,17 +99,18 @@ export default function AccountEditor({
 	const handleDisplayNameChange = onDisplayNameChange ?? (() => undefined);
 	const handleClinicChange = onClinicChange ?? (() => undefined);
 	const handleWebsiteChange = onWebsiteChange ?? (() => undefined);
+	const normalizedWebsite = website ?? '';
 
 	const [editingField, setEditingField] = React.useState<EditField>(null);
 	const [draftDisplayName, setDraftDisplayName] = React.useState(displayName);
 	const [draftClinic, setDraftClinic] = React.useState(clinic);
-	const [draftWebsite, setDraftWebsite] = React.useState(website);
+	const [draftWebsite, setDraftWebsite] = React.useState(normalizedWebsite);
 
 	React.useEffect(() => {
 		setDraftDisplayName(displayName);
 		setDraftClinic(clinic);
-		setDraftWebsite(website);
-	}, [displayName, clinic, website]);
+		setDraftWebsite(normalizedWebsite);
+	}, [displayName, clinic, normalizedWebsite]);
 
 	const handleSave = (field: EditField) => {
 		if (field === 'displayName') {
@@ -128,7 +129,7 @@ export default function AccountEditor({
 		} else if (field === 'clinic') {
 			setDraftClinic(clinic);
 		} else if (field === 'website') {
-			setDraftWebsite(website);
+			setDraftWebsite(normalizedWebsite);
 		}
 		setEditingField(null);
 	};
@@ -139,7 +140,6 @@ export default function AccountEditor({
 				<Grid
 					size={{
 						xs: 12,
-						sm: 6,
 					}}
 					sx={{
 						display: 'flex',
@@ -148,7 +148,6 @@ export default function AccountEditor({
 						gap: 2,
 						justifyContent: 'center',
 						alignItems: 'center',
-						order: { xs: 1, sm: 2 },
 					}}
 				>
 					<AvatarUpload
@@ -163,7 +162,6 @@ export default function AccountEditor({
 				<Grid
 					size={{
 						xs: 12,
-						sm: 6,
 					}}
 					sx={{ display: 'flex', flexDirection: 'column', gap: 2, order: { xs: 2, sm: 1 } }}
 				>
@@ -198,7 +196,7 @@ export default function AccountEditor({
 						id="website"
 						label="Website"
 						icon="link"
-						value={website}
+						value={normalizedWebsite}
 						isEditing={editingField === 'website'}
 						draftValue={draftWebsite}
 						onEdit={() => setEditingField('website')}

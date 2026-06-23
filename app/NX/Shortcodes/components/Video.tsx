@@ -105,7 +105,7 @@ export default function Video({ src }: VideoProps) {
             backgroundColor: 'rgba(0,0,0,0.75)',
             color: '#fff',
             zIndex: 3,
-            boxShadow: '0 4px 16px rgba(0,0,0,0.25)',
+            boxShadow: 'none',
             backdropFilter: 'blur(2px)',
             '&:hover': { backgroundColor: 'rgba(0,0,0,0.9)' },
           }}

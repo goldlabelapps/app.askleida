@@ -38,6 +38,8 @@ export default function Editable({
 	value = '',
 	onChange,
 	label,
+	type,
+	autoComplete,
 	placeholder,
 	disabled = false,
 	required = false,
@@ -235,6 +237,8 @@ export default function Editable({
 				id={id}
 				fullWidth
 				variant={variant}
+				type={type}
+				autoComplete={autoComplete}
 				placeholder={placeholder}
 				value={normalizedValue}
 				disabled={disabled}

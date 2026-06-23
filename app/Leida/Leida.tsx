@@ -6,7 +6,7 @@ import {
     Container,
     Typography,
 } from '@mui/material';
-import type { T_Theme } from '../NX/types';
+import type { T_Config, T_Theme } from '../NX/types';
 import { useDispatch } from '../NX/Uberedux';
 import { 
     DesignSystem, 
@@ -40,19 +40,52 @@ import {
     useLivingRoutine,
 } from '../Leida';
 
+type LeidaProps = {
+    config?: T_Config;
+};
 
-const Leida: React.FC<any> = ({
+type PractitionerAccountRow = {
+    practitioner_id?: string | null;
+    data?: Record<string, unknown> | null;
+};
+
+type RoutedClient = {
+    client_id?: string | null;
+};
+
+type RoutedTip = {
+    tip_id?: string | null;
+};
+
+const toNumericAccessLevel = (value: unknown) => {
+    const normalizedValue = typeof value === 'string' ? value.trim() : value;
+    const parsedValue = Number(normalizedValue);
+    return Number.isFinite(parsedValue) ? parsedValue : null;
+};
+
+const resolveAccessLevel = (accountRow: PractitionerAccountRow | null) => {
+    const practitionerData = accountRow?.data;
+    if (!practitionerData || typeof practitionerData !== 'object' || Array.isArray(practitionerData)) {
+        return 0;
+    }
+
+    return toNumericAccessLevel(practitionerData.access_level) ?? 0;
+};
+
+
+const Leida: React.FC<LeidaProps> = ({
     config,
 }) => {
     
     const dispatch = useDispatch();
     const router = useRouter();
     const { user } = useSupabaseAuth();
-    const accessLevel = Number(user?.user_metadata?.access_level ?? 0);
     const authenticatedClientId = String(user?.user_metadata?.client_id ?? user?.id ?? 'unknown');
     const authenticatedClientRoute = `/client/${authenticatedClientId}`;
     const pathname = usePathname();
     const accountState = useAccount();
+    const accountRows: PractitionerAccountRow[] = Array.isArray(accountState?.data) ? accountState.data as PractitionerAccountRow[] : [];
+    const accessLevel = resolveAccessLevel(accountRows[0] ?? null);
     const clientsState = useClients();
     const tipsState = useTips();
     const livingRoutineState = useLivingRoutine();
@@ -61,16 +94,15 @@ const Leida: React.FC<any> = ({
     const themeSwitching = config?.cartridges?.designSystem?.themeSwitching;
     const themeMode = designSystem?.themeMode || defaultTheme;
     const [isConfirmOpen, setIsConfirmOpen] = React.useState(false);
-    const accountRows = Array.isArray(accountState?.data) ? accountState.data : [];
     const practitionerId = typeof accountRows[0]?.practitioner_id === 'string'
         ? accountRows[0].practitioner_id.trim()
         : '';
 
     React.useEffect(() => {
         if (user) {
-            console.log('[Leida] user access_level:', user.user_metadata?.access_level ?? 'not set');
+            console.log('[Leida] practitioner access level:', accessLevel);
         }
-    }, [user]);
+    }, [accessLevel, user]);
 
     React.useEffect(() => {
         if (!designSystem?.themeMode && defaultTheme) {
@@ -108,10 +140,10 @@ const Leida: React.FC<any> = ({
     const clientList = Array.isArray(clientsState?.list) ? clientsState.list : [];
     const tipList = Array.isArray(tipsState?.list) ? tipsState.list : [];
     const selectedClient = clientId
-        ? clientList.find((client: any) => client?.client_id === clientId) || null
+        ? clientList.find((client: RoutedClient) => client?.client_id === clientId) || null
         : null;
     const selectedTip = tipId
-        ? tipList.find((tip: any) => tip?.tip_id === tipId) || null
+        ? tipList.find((tip: RoutedTip) => tip?.tip_id === tipId) || null
         : null;
 
     React.useEffect(() => {
@@ -205,7 +237,7 @@ const Leida: React.FC<any> = ({
     // if (!accessLevel) return null;
 
     if (accessLevel === 2) {
-        return <LivingRoutine clientId={authenticatedClientId} />;
+        return <LivingRoutine clientId={authenticatedClientId} accessLevel={accessLevel} />;
     }
 
     if (isClientRoutineRoute) {

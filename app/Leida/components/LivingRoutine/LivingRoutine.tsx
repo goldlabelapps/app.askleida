@@ -20,6 +20,7 @@ import { useLivingRoutine } from '../../../Leida';
 
 type T_LivingRoutine = {
     clientId: string;
+    accessLevel: number;
 };
 
 const placeholderTips = [
@@ -53,7 +54,7 @@ const toStringArray = (value: unknown): string[] => {
         .filter((item) => item.length > 0);
 };
 
-const LivingRoutine: React.FC<T_LivingRoutine> = ({ clientId }) => {
+const LivingRoutine: React.FC<T_LivingRoutine> = ({ clientId, accessLevel }) => {
     const dispatch = useDispatch();
     const { user } = useSupabaseAuth();
     const routineState = useLivingRoutine();
@@ -107,7 +108,8 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ clientId }) => {
 
     React.useEffect(() => {
         console.log('[LivingRoutine] client_id:', clientId);
-    }, [clientId]);
+        console.log('[LivingRoutine] accessLevel:', accessLevel);
+    }, [accessLevel, clientId]);
 
     return (
         <Box sx={{ maxWidth: 860, mx: 'auto', px: 2, py: 3 }}>
@@ -144,6 +146,7 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ clientId }) => {
 
                     <Stack direction="row" spacing={1} sx={{ mt: 1.5 }}>
                         <Chip label={`Client: ${clientId}`} size="small" />
+                        <Chip label={`Access Level: ${accessLevel}`} size="small" color="info" variant="outlined" />
                         <Chip label="Placeholder content" size="small" color="warning" variant="outlined" />
                     </Stack>
                 </Box>

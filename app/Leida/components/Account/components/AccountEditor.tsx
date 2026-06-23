@@ -1,23 +1,11 @@
 'use client';
 import * as React from 'react';
-import { Grid, Stack, Typography } from '@mui/material';
+import { Box, Grid, Stack, Typography } from '@mui/material';
+import type { T_AccountEditor } from '../../../../types';
 import { Editable } from '../../../../Leida';
 import AvatarUpload from '../../UI/AvatarUpload';
 
-type T_AccountDialogContent = {
-	accountId: string;
-	avatarSource?: string;
-	displayName: string;
-	clinic: string;
-	isBusy?: boolean;
-	formError?: string | null;
-	onAvatarSuccess?: (avatarUrl: string) => void;
-	onDisplayNameChange?: (value: string) => void;
-	onClinicChange?: (value: string) => void;
-	readOnly?: boolean;
-};
-
-export default function AccountDialogContent({
+export default function AccountEditor({
 	accountId,
 	avatarSource,
 	displayName,
@@ -28,7 +16,7 @@ export default function AccountDialogContent({
 	onDisplayNameChange,
 	onClinicChange,
 	readOnly = false,
-}: T_AccountDialogContent) {
+}: T_AccountEditor) {
 	const isDisabled = isBusy || readOnly;
 	const handleAvatarSuccess = onAvatarSuccess ?? (() => undefined);
 	const handleDisplayNameChange = onDisplayNameChange ?? (() => undefined);
@@ -68,10 +56,11 @@ export default function AccountDialogContent({
 					}}
 					sx={{ display: 'flex', flexDirection: 'column', gap: 2, order: { xs: 2, sm: 1 } }}
 				>
+                    <Box sx={{ height: 16 }}/>
 					<Editable
 						id="displayName"
 						label="Name"
-						variant="standard"
+						variant="outlined"
 						startAdornment="user"
 						value={displayName}
 						disabled={isDisabled}
@@ -80,7 +69,7 @@ export default function AccountDialogContent({
 					<Editable
 						id="clinic"
 						label="Clinic"
-						variant="standard"
+						variant="outlined"
 						startAdornment="medical"
 						value={clinic}
 						disabled={isDisabled}

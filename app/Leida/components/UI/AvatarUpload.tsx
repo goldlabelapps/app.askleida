@@ -105,8 +105,8 @@ export default function AvatarUpload({
                         aria-label="Upload avatar"
                         sx={{
                             position: 'absolute',
-                            bottom: -4,
-                            right: -4,
+                            bottom: 12,
+                            right: 12,
                             bgcolor: 'background.paper',
                             border: '1px solid',
                             borderColor: 'divider',

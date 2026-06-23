@@ -5,7 +5,7 @@ import { Icon } from '../../../NX/DesignSystem';
 import { useSupabaseAuth } from '../../../NX/Paywall';
 import { useDispatch } from '../../../NX/Uberedux';
 import { patchAccount, setAccount, useAccount } from '../Account';
-import { AccountDialogContent } from '../../index';
+import { AccountEditor } from '../../index';
 import Wrapper from '../UI/Wrapper';
 
 function getAccountProfile(value: unknown): Record<string, unknown> | null {
@@ -111,7 +111,7 @@ const Home: React.FC = () => {
 
     return (
         <Wrapper>
-            <AccountDialogContent
+            <AccountEditor
                 accountId={accountId}
                 avatarSource={avatarSource}
                 displayName={formState.displayName}

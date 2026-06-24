@@ -2,7 +2,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import type { T_Client } from '../../../types';
-import { 
+import {
     CircularProgress,
     Card,
     CardContent,
@@ -21,12 +21,12 @@ import {
     deleteClient,
 } from '../../../../Leida';
 
-export type I_RenderClient = {
+export type I_ClientItem = {
     client: T_Client;
     mode?: 'list' | 'detail' | 'card' | 'list-v1';
 };
 
-const RenderClient: React.FC<I_RenderClient> = ({ 
+const ClientItem: React.FC<I_ClientItem> = ({
     client,
     mode = 'list',
 }) => {
@@ -77,9 +77,9 @@ const RenderClient: React.FC<I_RenderClient> = ({
 
         return <>
             <ListItemButton onClick={handleClick}>
-                <ListItemText 
-                    primary={title} 
-                    // secondary={clientId ? `${clientId}` : undefined}    
+                <ListItemText
+                    primary={title}
+                    // secondary={clientId ? `${clientId}` : undefined}
                 />
                 {/* <ListItemIcon>
                     <Icon icon="right" />
@@ -140,7 +140,7 @@ const RenderClient: React.FC<I_RenderClient> = ({
             />
         </>);
     }
-    
+
     return (<>
         <Box sx={{ border: '1px solid green', p: 1, my: 1 }}>
             <pre>client: {JSON.stringify(client, null, 2)}</pre>
@@ -148,4 +148,4 @@ const RenderClient: React.FC<I_RenderClient> = ({
     </>);
 };
 
-export default RenderClient;
+export default ClientItem;

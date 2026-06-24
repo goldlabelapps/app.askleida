@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import { navigateTo, Icon } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
-import { useClients, RenderClient } from '../../../../Leida';
+import { useClients, ClientItem } from '../../../../Leida';
 
 type T_ClientSlice = {
 	loading?: boolean;
@@ -163,7 +163,7 @@ const ClientList = () => {
 
 			<List dense disablePadding>
 				{paginatedList.map((client, index) => {
-					return <RenderClient
+					return <ClientItem
 						key={`client_${index}`}
 						mode="list"
 						client={client}

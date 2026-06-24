@@ -305,7 +305,7 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
                         open={confirmSignoutOpen}
                         icon="signout"
                         title="Sign out?"
-                        body={`You are signed in as ${email}. Do you want to sign out now?`}
+                        body={`${clientDisplayName}, you are signed in as ${email}. Do you want to sign out now?`}
                         handleConfirm={handleConfirmSignout}
                         handleClose={handleCancelSignout}
                     />

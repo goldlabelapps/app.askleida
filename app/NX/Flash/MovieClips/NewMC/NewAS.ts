@@ -10,7 +10,6 @@ export default class NewAS {
     }
 
     init() {
-        console.log('NewAS init');
         if (this.onDone) {
             this.onDone();
         }
@@ -18,6 +17,5 @@ export default class NewAS {
     }
 
     destroy() {
-        console.log('NewAS destroyed');
     }
 }

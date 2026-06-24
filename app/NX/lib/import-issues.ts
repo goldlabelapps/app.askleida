@@ -50,7 +50,6 @@ async function createIssue(token: string, owner: string, repo: string, title: st
       { title, body },
       { headers: { Authorization: `token ${token}` } }
     );
-    console.log(`Created issue: ${title}`);
     return res.data;
   } catch (err: any) {
     console.error(`Failed to create issue: ${title}`);
@@ -106,7 +105,6 @@ async function processDirectory(dir: string, token: string, owner: string, repo:
         const existing = await getIssueByTitle(token, owner, repo, title);
         await delay(500);
         if (existing) {
-          console.log(`Issue already exists: ${title} (ID: ${existing.number})`);
           failedLookups = 0;
         } else {
           const created = await createIssue(token, owner, repo, title, body);
@@ -128,7 +126,6 @@ async function processDirectory(dir: string, token: string, owner: string, repo:
           const existing = await getIssueByTitle(token, owner, repo, issue.title);
           await delay(500);
           if (existing) {
-            console.log(`Issue already exists: ${issue.title} (ID: ${existing.number})`);
             failedLookups = 0;
           } else {
             const created = await createIssue(token, owner, repo, issue.title, issue.body);
@@ -152,7 +149,6 @@ async function processDirectory(dir: string, token: string, owner: string, repo:
 
 async function main() {
   const [,, owner, repo, exportPath] = process.argv;
-  console.log('Args:', { owner, repo, exportPath });
   if (!owner || !repo || !exportPath) {
     console.error('Usage: ts-node import-issues.ts <OWNER> <REPO> <PATH_TO_EXPORT>');
     process.exit(1);
@@ -161,7 +157,6 @@ async function main() {
     console.error('Directory does not exist:', exportPath);
     process.exit(1);
   }
-  console.log('Starting import for', { owner, repo, exportPath });
   await processDirectory(exportPath, GITHUB_TOKEN as string, owner, repo);
 }
 

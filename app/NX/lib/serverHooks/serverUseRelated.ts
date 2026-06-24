@@ -15,8 +15,6 @@ export function serverUseRelated(
     slug: string,
  }[] {
 
-    console.log('serverUseRelated', tags);
-
     const related = [
         {
             title: 'Related Page 1',

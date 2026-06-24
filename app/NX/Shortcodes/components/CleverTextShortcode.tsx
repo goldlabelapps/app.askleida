@@ -17,9 +17,6 @@ export default function CleverTextShortcode({
       <CleverText options={{ 
         id: 'cleverText', 
         markdown: text,
-        onFinish: () => {
-          // console.log('CleverTextShortcode');
-        },
       }} />
     </Box>
   );

@@ -36,7 +36,6 @@ export default function SupabaseAuth() {
     };
 
     const onAvatarSave = (newAvatar: string) => {
-        // console.log('new avatar url', newAvatar);
         dispatch(updateAccount('avatar', newAvatar, `You have a new avatar`));
     };
 

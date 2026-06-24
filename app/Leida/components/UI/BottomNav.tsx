@@ -73,7 +73,7 @@ export default function BottomNav({
 							key={item.value}
 							value={item.value}
 							label={item.label}
-							icon={<Icon icon={item.icon} />}
+							icon={<Icon icon={item.icon} color="primary" />}
 							onClick={item.onClick}
 							disabled={item.disabled}
 						/>

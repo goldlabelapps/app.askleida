@@ -312,6 +312,7 @@ export default function InvitePage() {
                                             size="large"
                                             type="submit" 
                                             variant="contained" 
+                                            endIcon={<Icon icon="save" />}
                                             disabled={saving}>
                                             {saving ? 'Saving...' : 'Set password'}
                                         </Button>
@@ -325,11 +326,12 @@ export default function InvitePage() {
                             <Stack spacing={2}>
                                 
                                 <Button
-                                    endIcon={<Icon icon="rocket" />}
+                                    size="large"
+                                    endIcon={<Icon icon="right" />}
                                     variant="contained"
                                     onClick={() => router.push('/?onboard=true')}
                                 >
-                                    Continue to Leida
+                                    Get started
                                 </Button>
                             </Stack>
                         ) : null}

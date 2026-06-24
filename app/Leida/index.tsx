@@ -45,3 +45,4 @@ export { default as TipNew } from './components/Tips/components/TipNew';
 export { initTips } from './components/Tips/actions/initTips';
 export { useTips } from './components/Tips/hooks/useTips';
 export { useLeida } from './hooks/useLeida';
+export { useAccessLevel } from './hooks/useAccessLevel';

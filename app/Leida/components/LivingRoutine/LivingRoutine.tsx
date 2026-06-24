@@ -1,7 +1,6 @@
 "use client";
 import React from 'react';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
 import {
     Alert,
     Avatar,
@@ -25,7 +24,6 @@ import {
 } from '../../../Leida';
 
 type T_LivingRoutine = {
-    clientId: string;
     accessLevel: number;
 };
 
@@ -64,11 +62,13 @@ const pickString = (value: unknown): string => {
     return typeof value === 'string' ? value.trim() : '';
 };
 
-const LivingRoutine: React.FC<T_LivingRoutine> = ({ clientId, accessLevel }) => {
+const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
     const dispatch = useDispatch();
-    const pathname = usePathname();
     const { user } = useSupabaseAuth();
     const routineState = useLivingRoutine();
+    const [authClientRecord, setAuthClientRecord] = React.useState<Record<string, unknown> | null>(null);
+    const [authClientLoading, setAuthClientLoading] = React.useState(false);
+    const [authClientError, setAuthClientError] = React.useState<string | null>(null);
     const currentClient = toObject(routineState?.currentClient);
     const currentClientData = toObject(currentClient.data);
     const practitioner = routineState?.practitioner ?? null;
@@ -82,7 +82,7 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ clientId, accessLevel }) => 
     const email = String(user?.email || 'No email available');
     const [confirmSignoutOpen, setConfirmSignoutOpen] = React.useState(false);
     const [isSigningOut, setIsSigningOut] = React.useState(false);
-    const [isRoutineAlertVisible, setIsRoutineAlertVisible] = React.useState(true);
+    const [isRoutineAlertVisible, setIsRoutineAlertVisible] = React.useState(false);
     const routine = toObject(routineState?.routine);
     const productsFromState = Array.isArray(routine.products)
         ? routine.products
@@ -96,11 +96,7 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ clientId, accessLevel }) => 
         : [];
     const tipsFromState = toStringArray(routine.tips);
     const overviewFromState = toStringArray(routine.overview);
-    const pathClientId = React.useMemo(() => {
-        const parts = (pathname || '/').split('/').filter(Boolean);
-        return parts[0] === 'client' && parts[1] ? parts[1] : '';
-    }, [pathname]);
-    const effectiveClientId = pathClientId || clientId;
+    const resolvedAuthClientId = pickString(authClientRecord?.client_id);
 
     const tips = tipsFromState.length > 0 ? tipsFromState : placeholderTips;
     const products = productsFromState.length > 0 ? productsFromState : placeholderProducts;
@@ -125,6 +121,10 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ clientId, accessLevel }) => 
     const practitionerAvatar = pickString(practitionerData.avatar);
     const practitionerOnboarding = toObject(practitionerData.onboarding);
     const practitionerOnboardingStatus = pickString(practitionerOnboarding.status);
+    const loadedClientId = pickString(currentClient.client_id);
+    const loadedPractitionerId = pickString(practitionerObject.practitioner_id);
+    const hasLoadedClient = Boolean(loadedClientId);
+    const hasLoadedPractitioner = Boolean(loadedPractitionerId);
     const isBusy = isSigningOut;
 
     const handleRequestSignout = () => {
@@ -149,19 +149,95 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ clientId, accessLevel }) => 
     };
 
     React.useEffect(() => {
-        console.log('[LivingRoutine] client_id (prop):', clientId);
-        console.log('[LivingRoutine] client_id (path):', pathClientId);
-        console.log('[LivingRoutine] client_id (effective):', effectiveClientId);
+        console.log('[LivingRoutine] auth uuid:', user?.id || 'unknown');
+        console.log('[LivingRoutine] client_id (resolved):', resolvedAuthClientId || 'unknown');
         console.log('[LivingRoutine] accessLevel:', accessLevel);
-    }, [accessLevel, clientId, effectiveClientId, pathClientId]);
+    }, [accessLevel, resolvedAuthClientId, user?.id]);
 
     React.useEffect(() => {
-        dispatch(initCurrentClient(effectiveClientId, user?.email || ''));
-    }, [dispatch, effectiveClientId, user?.email]);
+        const authUserId = pickString(user?.id);
+
+        if (accessLevel !== 2 || !authUserId) {
+            setAuthClientRecord(null);
+            setAuthClientError(null);
+            setAuthClientLoading(false);
+            return;
+        }
+
+        let cancelled = false;
+        const controller = new AbortController();
+
+        const loadClientById = async () => {
+            try {
+                setAuthClientLoading(true);
+                setAuthClientError(null);
+
+                const response = await fetch(`/api/clients?client_id=${encodeURIComponent(authUserId)}`, {
+                    method: 'GET',
+                    headers: {
+                        Accept: 'application/json',
+                    },
+                    signal: controller.signal,
+                });
+
+                const payload = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(payload?.meta?.message || `Failed to fetch client (${response.status})`);
+                }
+
+                const row = toObject(payload?.data);
+                if (!row.client_id || typeof row.client_id !== 'string') {
+                    throw new Error(`No client found for client_id ${authUserId}`);
+                }
+
+                if (!cancelled) {
+                    setAuthClientRecord(row);
+                }
+            } catch (e: unknown) {
+                if (cancelled || controller.signal.aborted) {
+                    return;
+                }
+
+                const message = e instanceof Error ? e.message : String(e);
+                setAuthClientRecord(null);
+                setAuthClientError(message);
+            } finally {
+                if (!cancelled) {
+                    setAuthClientLoading(false);
+                }
+            }
+        };
+
+        loadClientById();
+
+        return () => {
+            cancelled = true;
+            controller.abort();
+        };
+    }, [accessLevel, user?.id]);
+
+    React.useEffect(() => {
+        if (!resolvedAuthClientId) {
+            return;
+        }
+
+        dispatch(initCurrentClient(resolvedAuthClientId, user?.email || ''));
+    }, [dispatch, resolvedAuthClientId, user?.email]);
+
+    if (!hasLoadedClient || !hasLoadedPractitioner) {
+        return null;
+    }
 
     return (
         <><Container maxWidth="md" sx={{ mb: 2 }}>
         <Box sx={{height: 16}} />
+            {/* <pre>{JSON.stringify({
+                authUuid: user?.id || null,
+                loading: authClientLoading,
+                error: authClientError,
+                client: authClientRecord,
+            }, null, 2)}</pre> */}
             
             <Box sx={{ 
                 display: 'flex', 

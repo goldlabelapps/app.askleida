@@ -151,17 +151,10 @@ export const patchClient = (
                 payload.title = normalizeText(client.title) ?? null;
             }
 
-            if (Object.prototype.hasOwnProperty.call(client, 'first_name')) {
-                payload.first_name = normalizeText(client.first_name);
+            if (Object.prototype.hasOwnProperty.call(client, 'display_name')) {
+                payload.display_name = normalizeText(client.display_name);
             }
 
-            if (Object.prototype.hasOwnProperty.call(client, 'last_name')) {
-                payload.last_name = normalizeText(client.last_name);
-            }
-
-            if (Object.prototype.hasOwnProperty.call(client, 'date_of_birth')) {
-                payload.date_of_birth = normalizeText(client.date_of_birth);
-            }
 
             if (Object.prototype.hasOwnProperty.call(client, 'email')) {
                 payload.email = normalizeText(client.email);

@@ -116,12 +116,12 @@ const ClientList = () => {
 				</Typography>
 				
 				<Button
-					variant="contained"
-					size="small"
+					variant="outlined"
+					size="large"
 					onClick={handleClientNew}
 					endIcon={<Icon icon="add" />}
 				>
-					New
+					New Client
 				</Button>
 				{/* <Fab
 					size="small"
@@ -129,8 +129,6 @@ const ClientList = () => {
 					<Icon icon="add" />
 				</Fab> */}
 			</Box>
-			<Divider sx={{ mb: 2 }} />
-			
 			{loading ? <LinearProgress sx={{ mb: 2 }} /> : null}
 
 			{hasError ? (

@@ -6,6 +6,7 @@ import {
     Avatar,
     Box,
     Button,
+    IconButton,
     ButtonBase,
     CardContent,
     Container,
@@ -157,6 +158,8 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
             return;
         }
 
+
+        
         let cancelled = false;
         const controller = new AbortController();
 
@@ -223,39 +226,53 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
     }
 
     return (
-        <><Container maxWidth="md" sx={{ mb: 2 }}>
-        <Box sx={{height: 16}} />
-            {/* <pre>{JSON.stringify({
-                authUuid: user?.id || null,
-                loading: authClientLoading,
-                error: authClientError,
-                client: authClientRecord,
-            }, null, 2)}</pre> */}
-            
-            <Box sx={{ 
-                display: 'flex', 
-                justifyContent: 'center', 
-                width: '100%', 
-                pb: 2
-            }}>
+        <>
+        
+                <nav className="site-nav">
+                    <div className="nav-inner">
 
-                <ButtonBase
-                    component="a"
-                    href="https://askleida.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    sx={{ display: 'inline-flex' }}
-                    aria-label="Open AskLeida website"
-                >
-                    <Image
-                        src={'/askleida/svg/logo-dark.svg'}
-                        alt="Leida"
-                        width={220}
-                        height={44}
-                    />
-                </ButtonBase>
 
-            </Box>
+                        <ButtonBase>
+                            {/*  */}
+                            <Avatar
+                                src={practitionerAvatar || undefined}
+                                alt={practitionerName}
+                                sx={{ width: 50, height: 50 }}
+                            >
+                                {practitionerName.slice(0, 1).toUpperCase()}
+                            </Avatar>
+                        </ButtonBase>
+                        
+                        <Typography variant="h6" sx={{ml: 2}}>
+                            {practitionerClinic || ''}
+                        </Typography>
+
+                        <Box sx={{ flexGrow: 1 }} />
+    
+                        <IconButton
+                            color="primary"
+                            disabled={isBusy}
+                            onClick={() => {
+                                if (practitionerWebsite) {
+                                    window.open(practitionerWebsite, '_blank', 'noopener,noreferrer');
+                                }
+                            }}>
+                            <Icon icon="link" />
+                        </IconButton>
+
+                        {/* <IconButton
+                            color="primary"
+                            disabled={isBusy}
+                            
+                        >
+                            <Icon icon="email" />
+                        </IconButton> */}
+
+                    </div>
+                </nav>
+        
+        <Container maxWidth="md" sx={{ mb: 2 }}>
+            <Box sx={{height: 16}} />
             <Wrapper>
                 {isBusy ? <LinearProgress sx={{ mb: 2 }} /> : null}
 
@@ -280,7 +297,6 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
                 ) : null}
 
                 <CardContent>
-
                     <Grid container spacing={2} sx={{ mb: 2 }}>
                         <Grid size={{ xs: 12, sm: 6 }}>
                             <Box
@@ -292,20 +308,22 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
                                 <Typography variant="h5" sx={{ mb: 1 }}>
                                     Hello {clientDisplayName}, 
                                 </Typography>
+                                
                                 {/* <Typography variant="body2">
                                     {clientEmail || 'Not provided'}
                                 </Typography> */}
 
-                                <Typography variant="overline" sx={{ my: 2 }}>
-                                    Routine
+                                <Typography variant="overline" sx={{ my: 3 }}>
+                                    Your Routine
                                 </Typography>
+
                                 {overviewParagraphs.map((paragraph) => (
-                                    <Typography key={paragraph} variant="body2">
+                                    <Typography key={paragraph} variant="body1">
                                         {paragraph}
                                     </Typography>
                                 ))}
 
-                                <Typography variant="overline" sx={{ my: 2 }}>
+                                <Typography variant="overline" sx={{ my: 3 }}>
                                     Tips
                                 </Typography>
                                 {tips.map((tip, index) => (
@@ -319,17 +337,6 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
                             </Box>
                         </Grid>
                         <Grid size={{ xs: 12, sm: 6 }}>
-                            {practitionerLoading ? (
-                                <Typography variant="body2">
-                                    Loading practitioner...
-                                </Typography>
-                            ) : null}
-                            {practitionerError ? (
-                                <Typography variant="body2" color="error.main" sx={{ mb: 1 }}>
-                                    {practitionerError}
-                                </Typography>
-                            ) : null}
-
                             <Box
                                 sx={{
                                     mb: 3,
@@ -340,33 +347,11 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
                                     bgcolor: 'background.paper',
                                 }}
                             >
-                                <Typography variant="overline" sx={{ fontWeight: 700, mb: 1 }}>
-                                    Practitioner
-                                </Typography>
-                                <Avatar
-                                    src={practitionerAvatar || undefined}
-                                    alt={practitionerName}
-                                    sx={{ width: 72, height: 72 }}
-                                >
-                                    {practitionerName.slice(0, 1).toUpperCase()}
-                                </Avatar>
-                                <Typography variant="body2">
-                                    {practitionerName}
-                                </Typography>
-                                <Typography variant="body2">
-                                    {practitionerEmail || 'Not provided'}
-                                </Typography>
-                                <Typography variant="body2">
-                                    {practitionerClinic || 'Not provided'}
-                                </Typography>
-
-                                <Typography variant="body2">
-                                    {practitionerWebsite || 'Not provided'}
-                                </Typography>
-
+                                
                                 <Typography variant="h6" sx={{ my: 2 }}>
                                     Products
                                 </Typography>
+
                                 {products.map((product) => (
                                     <Box key={product.name}>
                                         <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
@@ -382,6 +367,14 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
                             </Box>
                         </Grid>
                     
+
+
+                        <Grid size={{ xs: 12 }}>
+                            <Typography variant="h6" sx={{ m: 2 }}>
+                                Love from {practitionerName}
+                            </Typography>
+                        </Grid>
+
                     </Grid>
 
                     
@@ -399,6 +392,24 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
             <Box sx={{ 
                 mt:2,
                 display: 'flex', justifyContent: 'center', width: '100%' }}>
+                <Box sx={{mt:0.5}}>
+                    <ButtonBase
+                        component="a"
+                        href="https://askleida.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        sx={{ display: 'inline-flex' }}
+                        aria-label="Open AskLeida website"
+                    >
+                        <Image
+                            src={'/askleida/svg/logo-dark.svg'}
+                            alt="Leida"
+                            width={110}
+                            height={22}
+                            className="logo"
+                        />
+                    </ButtonBase>
+                </Box>
                 <Button
                     color="primary"
                     variant="text"
@@ -406,8 +417,9 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
                     startIcon={<Icon icon="signout" />}
                     disabled={isBusy}
                 >
-                    Logout
                 </Button>
+
+                
             </Box>
             
         </Container>

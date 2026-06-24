@@ -7,6 +7,7 @@ import {
     Collapse,
     Grid,
     Typography,
+    Divider,
 } from '@mui/material';
 import { Icon, navigateTo } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
@@ -83,22 +84,38 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
 
     return (
         <>
-            <Box sx={{ mb: 1 }}>
-                <Button
-                    startIcon={<Icon icon="left" />}
-                    onClick={handleClients}
-                    
-                >
-                    Clients
-                </Button>
-            </Box>
+            
             
             <Wrapper>
-                <Box sx={{ m: 2 }}>
 
+                <Box sx={{
+                    m: 2,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                }}>
+
+                    <Typography variant="overline" sx={{ mt: 1 }}>
+                        New Client
+                    </Typography>
+
+                    <Button
+                        variant="outlined"
+                        size="large"
+                        onClick={handleClients}
+                        startIcon={<Icon icon="left" />}
+                    >
+                        Clients
+                    </Button>
+                    
+                </Box>
+                <Divider sx={{ mb: 2 }} />
+
+                <Box sx={{}}>
                     <Grid container spacing={2} alignItems="center">
                         <Grid size={{
                             xs: 12,
+                            md: 6,
                         }}>
                             <Editable
                                 id="client_email"
@@ -116,6 +133,7 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                         </Grid>
                         <Grid size={{
                             xs: 12,
+                            md: 6
                         }}>
                             <Collapse in={valid}>
                                 <Box sx={{ my: 1 }}>
@@ -127,7 +145,7 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                                         disabled={isSubmitting}
                                         onClick={handleNew}
                                     >
-                                        {isSubmitting ? 'Inviting Client...' : 'Invite Client'}
+                                        {isSubmitting ? 'Inviting...' : 'Send Invite'}
                                     </Button>
                                 </Box>
                             </Collapse>
@@ -135,18 +153,14 @@ const ClientNew: React.FC<T_ClientNewProps> = ({ config }) => {
                                 <Typography
                                     variant="body1"
                                     sx={{ my: 2 }}>
-                                    Clients get an email invitation to set up their account.
-                                    They'll be asked to create a password and will
-                                    see a page which says Living Routine will appear
-                                    here when your practitioner has published it
+                                    Clients get an email invitation with a link. 
+                                    They're asked to create a password and get forwarded 
+                                    to their Living Routine
                                 </Typography>
                             </Collapse>
                         </Grid>
                     </Grid>
-
-                    
                 </Box>
-                
             </Wrapper>
         </>
     );

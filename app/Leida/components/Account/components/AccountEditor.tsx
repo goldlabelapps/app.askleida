@@ -137,36 +137,47 @@ export default function AccountEditor({
 	return (
 		<>
 			<Grid container spacing={2}>
+
 				<Grid
 					size={{
 						xs: 12,
 						md: 6,
 					}}
-					sx={{
-						display: 'flex',
-						pt: 2,
-						flexDirection: 'column',
-						gap: 2,
-						justifyContent: 'center',
-						alignItems: 'center',
-					}}
+					// sx={{
+					// 	display: 'flex',
+					// 	pt: 2,
+					// 	flexDirection: 'column',
+					// 	gap: 2,
+					// 	justifyContent: 'center',
+					// 	alignItems: 'center',
+					// }}
 				>
-					<AvatarUpload
-						size={200}
-						practitionerId={accountId}
-						currentAvatar={avatarSource}
-						displayName={displayName}
-						onSuccess={handleAvatarSuccess}
-						disabled={isDisabled}
-					/>
+					<Box sx={{m:2}}>
+
+						<Typography variant="overline" sx={{ m: 2 }}>
+							Account
+						</Typography>
+						<Box sx={{ height: 16 }} />
+						<AvatarUpload
+							size={200}
+							practitionerId={accountId}
+							currentAvatar={avatarSource}
+							displayName={displayName}
+							onSuccess={handleAvatarSuccess}
+							disabled={isDisabled}
+						/>
+					</Box>
 				</Grid>
+				
 				<Grid
 					size={{
 						xs: 12,
 						md: 6,
 					}}
 				>
-					<Box sx={{ height: 16 }} />
+					
+
+					<Box sx={{ height: 60 }} />
 					<EditableField
 						id="displayName"
 						label="Name"
@@ -207,6 +218,9 @@ export default function AccountEditor({
 						disabled={isDisabled}
 					/>
 				</Grid>
+
+				
+				
 			</Grid>
 
 			<Stack spacing={1.5} sx={{ mb: 2 }}>

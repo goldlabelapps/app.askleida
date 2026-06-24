@@ -18,10 +18,8 @@ const getClientId = (client: T_Client): string => {
 
 const getClientName = (client: T_Client): string => {
     const data = client?.data && typeof client.data === 'object' ? client.data : null;
-    const firstName = getText(data?.first_name) || getText(client.first_name);
-    const lastName = getText(data?.last_name) || getText(client.last_name);
-    const fullName = `${firstName} ${lastName}`.trim();
-    return fullName || 'Unnamed client';
+    const displayName = getText(data?.display_name) || getText(client.display_name);
+    return displayName || 'Unnamed client';
 };
 
 const ClientCard: React.FC<T_ClientCardProps> = ({ client, onClick }) => {

@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import type { T_Client } from '../../../types';
 import { 
     CircularProgress,
@@ -12,8 +13,9 @@ import {
     ListItemButton,
     ListItemText,
     ListItemIcon,
+    Divider,
 } from '@mui/material';
-import { Icon, ConfirmAction } from '../../../../NX/DesignSystem';
+import { Icon, ConfirmAction, navigateTo } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
 import {
     deleteClient,
@@ -28,6 +30,7 @@ const RenderClient: React.FC<I_RenderClient> = ({
     client,
     mode = 'list',
 }) => {
+    const router = useRouter();
     const dispatch = useDispatch();
     const [confirmOpen, setConfirmOpen] = React.useState(false);
     const [isDeleting, setIsDeleting] = React.useState(false);
@@ -35,10 +38,7 @@ const RenderClient: React.FC<I_RenderClient> = ({
         ? client.data as Record<string, unknown>
         : {};
     const displayName = typeof clientData.display_name === 'string' ? clientData.display_name.trim() : '';
-    const firstName = typeof clientData.first_name === 'string' ? clientData.first_name.trim() : '';
-    const lastName = typeof clientData.last_name === 'string' ? clientData.last_name.trim() : '';
-    const fullName = [firstName, lastName].filter(Boolean).join(' ');
-    const title = displayName || fullName || 'Unnamed client';
+    const title = displayName || (typeof client.title === 'string' ? client.title.trim() : 'Unnamed client');
     const clientId = typeof client.client_id === 'string'
         ? client.client_id.trim()
         : typeof client.id === 'string'
@@ -69,16 +69,23 @@ const RenderClient: React.FC<I_RenderClient> = ({
     };
 
     if (mode === 'list') {
+        const handleClick = () => {
+            if (clientId) {
+                dispatch(navigateTo(router, `/clients/${clientId}`));
+            }
+        };
+
         return <>
-            <ListItemButton>
+            <ListItemButton onClick={handleClick}>
                 <ListItemText 
                     primary={title} 
                     // secondary={clientId ? `${clientId}` : undefined}    
                 />
-                <ListItemIcon>
+                {/* <ListItemIcon>
                     <Icon icon="right" />
-                </ListItemIcon>
+                </ListItemIcon> */}
             </ListItemButton>
+            <Divider component="li" />
             {/* <pre>client: {JSON.stringify(client, null, 2)}</pre> */}
         </>;
     }

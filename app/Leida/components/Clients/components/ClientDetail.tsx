@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import { Icon, navigateTo, ConfirmAction } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
-import { deleteClient, patchClient } from '../../../../Leida';
+import { deleteClient, patchClient, Wrapper } from '../../../../Leida';
 import { Editable } from '../../../../Leida';
 
 type T_ClientRecord = T_Client & {
@@ -156,9 +156,8 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
     const isDirty = !areClientsEqual(originalClient, draftClient);
     const activeClient = draftClient ?? client ?? null;
     const clientData = getDataObject(activeClient?.data);
-    const firstName = getStringValue(clientData.first_name) || getStringValue(activeClient?.first_name) || '';
-    const lastName = getStringValue(clientData.last_name) || getStringValue(activeClient?.last_name) || '';
-    const fullName = `${firstName} ${lastName}`.trim() || getStringValue(activeClient?.title) || 'Unnamed client';
+    const displayName = getStringValue(clientData.display_name) || '';
+    const fullName = displayName || getStringValue(activeClient?.title) || 'Unnamed client';
     const email = getStringValue(clientData.email) || getStringValue(activeClient?.email) || '';
     const skinType = getStringValue(clientData.skin_type) || getStringValue(activeClient?.skin_type) || '';
     const medication = getStringValue(clientData.current_medication) || getStringValue(activeClient?.current_medication) || '';
@@ -211,8 +210,7 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
         }
 
         const draftData = getDataObject(draftClient.data);
-        const normalizedFirstName = getStringValue(draftData.first_name) || '';
-        const normalizedLastName = getStringValue(draftData.last_name) || '';
+        const normalizedDisplayName = getStringValue(draftData.display_name) || '';
         const normalizedEmail = getStringValue(draftData.email) || '';
         const normalizedDateOfBirth = getStringValue(draftData.date_of_birth) || '';
         const normalizedSkinType = getStringValue(draftData.skin_type) || '';
@@ -227,15 +225,13 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
                 ? getStringValue(draftData.concern_tags)!.split(',').map((item) => item.trim()).filter((item) => item.length > 0)
                 : [];
         const nextTitle = getStringValue(draftClient.title)
-            || [normalizedFirstName, normalizedLastName].filter(Boolean).join(' ')
+            || normalizedDisplayName
             || normalizedEmail
             || 'Client';
 
         setIsPatching(true);
         const success = await dispatch(patchClient(clientId, {
             title: nextTitle,
-            first_name: normalizedFirstName || null,
-            last_name: normalizedLastName || null,
             email: normalizedEmail || null,
             date_of_birth: normalizedDateOfBirth || null,
             skin_type: normalizedSkinType || null,
@@ -244,8 +240,7 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
             personal_notes: normalizedPersonalNotes || null,
             data: {
                 ...draftData,
-                first_name: normalizedFirstName || null,
-                last_name: normalizedLastName || null,
+                display_name: normalizedDisplayName || null,
                 email: normalizedEmail || null,
                 date_of_birth: normalizedDateOfBirth || null,
                 skin_type: normalizedSkinType || null,
@@ -319,42 +314,22 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
     };
 
     return (
-        <Paper sx={{ maxWidth: 800, mx: 'auto', mt: 2, p: 0 }}>
+        <Wrapper>
             <Box>
-                <Collapse in={isDirty} unmountOnExit>
-                    <Box
-                        sx={{
-                            position: 'fixed',
-                            right: { xs: 16, sm: 24 },
-                            bottom: { xs: 16, sm: 24 },
-                            zIndex: (theme) => theme.zIndex.appBar + 1,
-                        }}
-                    >
-
-                        <Fab
-                            color="primary"
-                            disabled={isPatching}
-                            onClick={handlePatch}
-                            
-                        >
-                            <Icon icon="save" />
-                        </Fab>
-                    </Box>
-                </Collapse>
-
                 <CardHeader
                     avatar={<>
-                        <IconButton color="primary" onClick={handleClientsNavigate}>
-                            <Icon icon="clients" />
-                        </IconButton>
+                        
+                        <Button 
+                            variant="outlined"
+                            size="large"
+                            startIcon={<Icon icon="left" />}
+                            color="primary"
+                            onClick={handleClientsNavigate}>
+                            Clients
+                        </Button>
                     </>}
                     action={<>
-                        <Button
-                            endIcon={<Icon icon="add" />}
-                            color="primary"
-                            onClick={handleNew}>
-                            New
-                        </Button>
+                        
                         <IconButton color="primary" onClick={handleOpenDeleteConfirm}>
                             <Icon icon="delete" />
                         </IconButton>
@@ -362,7 +337,17 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
                 />
 
                 <CardContent>
-                    <Grid container spacing={4}>
+
+                    <Editable
+                        variant="outlined"
+                        value={displayName} 
+                        placeholder="Display name" 
+                        onChange={(value) => handleDataChange('display_name', value)} 
+                    />
+                    <Box sx={{ my: 2 }} />
+                    {/* <pre>{JSON.stringify(draftClient, null, 2)}</pre> */}
+
+                    {/* <Grid container spacing={4}>
                         <Grid size={{xs: 12, sm: 6}}>
 
                             <Editable 
@@ -373,10 +358,7 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
                             />
 
                            
-                            <Editable 
-                                variant="standard"
-                                label="Name" value={firstName} placeholder="Add first name" onChange={(value) => handleDataChange('first_name', value)} />
-                            <Box sx={{ my: 2 }} />
+                            
                             <Editable
                                 variant="standard"
                                  label="Email" value={email} placeholder="Add email" onChange={(value) => handleDataChange('email', value)} />
@@ -406,14 +388,34 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
                                 <Editable label="Pregnant" value={isPregnant} onChange={(value) => handleBooleanDataChange('is_pregnant', value === true)} />
                                 <Editable label="Breastfeeding" value={isBreastfeeding} onChange={(value) => handleBooleanDataChange('is_breastfeeding', value === true)} />
                             </Box>
+                            
                             <Box sx={{ my: 2 }} />
+
                             <Editable value={concernTags} editableType="chips" options={CONCERN_TAG_OPTIONS} onChange={handleConcernTagsChange} />
+                            
                             <Box sx={{ my: 2 }} />
+                            
                             <Editable label="Personal notes" value={personalNotes} placeholder="Add personal notes" multiline minRows={3} onChange={(value) => handleDataChange('personal_notes', value)} />
                             
                         </Grid>
-                    </Grid>
+                    </Grid> */}
                 </CardContent>
+                <CardActions sx={{ display: 'block', width: '100%' }}>
+                    <Collapse in={isDirty} unmountOnExit>
+                        <Box sx={{ mx: 1}}>
+                            <Button
+                                size="large"
+                                fullWidth
+                                endIcon={<Icon icon="save" />}
+                                variant="contained"
+                                color="primary"
+                                disabled={isPatching}
+                                onClick={handlePatch}>
+                                Save Changes
+                            </Button>
+                        </Box>
+                    </Collapse>
+                </CardActions>
 
 
                 <ConfirmAction
@@ -425,7 +427,7 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
                     handleClose={handleCloseDeleteConfirm}
                 />
             </Box>
-        </Paper>
+        </Wrapper>
     );
 };
 

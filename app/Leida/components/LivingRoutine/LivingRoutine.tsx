@@ -206,13 +206,7 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
 
     return (
         <>
-                <Container sx={{ mt: 3 }}>
-                    <Box sx={{ mx: 1.5 }}>
-                        <Typography component="h1" variant="h3" sx={{ mb: 2 }}>
-                            Access Level: {accessLevel}
-                        </Typography>
-                    </Box>
-                </Container>
+
         
                 <nav className="site-nav">
                     <div className="nav-inner">

@@ -124,10 +124,12 @@ const Leida: React.FC<LeidaProps> = ({
         : null;
 
     React.useEffect(() => {
-        if (user?.email && !accountState?.initted && !accountState?.loading) {
-            dispatch(initAccount(user.email));
+        const practitionerLookupValue = user?.id || user?.email;
+
+        if (practitionerLookupValue && !accountState?.initted && !accountState?.loading) {
+            dispatch(initAccount(practitionerLookupValue));
         }
-    }, [dispatch, user?.email, accountState?.initted, accountState?.loading]);
+    }, [dispatch, user?.id, user?.email, accountState?.initted, accountState?.loading]);
 
     React.useEffect(() => {
         if (practitionerId && !clientsState?.initted && !clientsState?.loading) {
@@ -211,12 +213,24 @@ const Leida: React.FC<LeidaProps> = ({
         },
     ];
 
+    const accessLevelDebug = (
+        <Typography component="h1" variant="h3" sx={{ mb: 2 }}>
+            Access Level: {accessLevel}
+        </Typography>
+    );
+    
+
     // if (!accessLevel) return null;
 
     if (accessLevel === 0) {
         return (
             <DesignSystem theme={theme as T_Theme} config={config}>
                 <main>
+                    {/* <Container sx={{ mt: 3 }}>
+                        <Box sx={{ mx: 1.5 }}>
+                            {accessLevelDebug}
+                        </Box>
+                    </Container> */}
                     <LinearProgress />
                 </main>
             </DesignSystem>
@@ -225,7 +239,23 @@ const Leida: React.FC<LeidaProps> = ({
     
 
     if (!accountState?.initted) {
-        return null;
+        return (
+            <DesignSystem theme={theme as T_Theme} config={config}>
+                <main>
+                    <Container sx={{ mt: 3 }}>
+                        <Box sx={{ mx: 1.5 }}>
+                            <Typography variant="h6" sx={{ mb: 1 }}>
+                                Waiting for account state
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                                source: {accessLevelSource || 'none'} | account initted: {String(accountState?.initted)} | account loading: {String(accountState?.loading)} | user email: {user?.email || 'missing'}
+                            </Typography>
+                            <LinearProgress />
+                        </Box>
+                    </Container>
+                </main>
+            </DesignSystem>
+        );
     }
 
     if (accessLevel === 2) {
@@ -257,7 +287,6 @@ const Leida: React.FC<LeidaProps> = ({
     return (
         <DesignSystem theme={theme as T_Theme} config={config}>
             <Feedback />
-            
             <Header onHome={handleHome} />
             <main style={{ paddingBottom: 88 }}>
                 <Container sx={{mt:3 }}>

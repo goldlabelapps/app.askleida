@@ -51,7 +51,6 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
     const { user } = useSupabaseAuth();
     const routineState = useLivingRoutine();
     const [authClientRecord, setAuthClientRecord] = React.useState<Record<string, unknown> | null>(null);
-    const [authClientLoading, setAuthClientLoading] = React.useState(false);
     const [authClientError, setAuthClientError] = React.useState<string | null>(null);
     const currentClient = toObject(routineState?.currentClient);
     const currentClientData = toObject(currentClient.data);
@@ -127,9 +126,6 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
         const authUserId = pickString(user?.id);
 
         if (accessLevel !== 2 || !authUserId) {
-            setAuthClientRecord(null);
-            setAuthClientError(null);
-            setAuthClientLoading(false);
             return;
         }
 
@@ -138,7 +134,6 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
 
         const loadClientById = async () => {
             try {
-                setAuthClientLoading(true);
                 setAuthClientError(null);
 
                 const response = await fetch(`/api/clients?client_id=${encodeURIComponent(authUserId)}`, {
@@ -171,10 +166,6 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
                 const message = e instanceof Error ? e.message : String(e);
                 setAuthClientRecord(null);
                 setAuthClientError(message);
-            } finally {
-                if (!cancelled) {
-                    setAuthClientLoading(false);
-                }
             }
         };
 
@@ -195,11 +186,33 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
     }, [dispatch, resolvedAuthClientId, user?.email]);
 
     if (!hasLoadedClient || !hasLoadedPractitioner) {
-        return null;
+        return (
+            <Container sx={{ mt: 3 }}>
+                <Box sx={{ mx: 1.5 }}>
+                    <Typography component="h1" variant="h3" sx={{ mb: 2 }}>
+                        Access Level: {accessLevel}
+                    </Typography>
+                    <Typography variant="h6" sx={{ mb: 1 }}>
+                        Waiting for living routine data
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                        client loaded: {String(hasLoadedClient)} | practitioner loaded: {String(hasLoadedPractitioner)} | auth client id: {resolvedAuthClientId || 'missing'} | user id: {pickString(user?.id) || 'missing'}
+                    </Typography>
+                    <LinearProgress />
+                </Box>
+            </Container>
+        );
     }
 
     return (
         <>
+                <Container sx={{ mt: 3 }}>
+                    <Box sx={{ mx: 1.5 }}>
+                        <Typography component="h1" variant="h3" sx={{ mb: 2 }}>
+                            Access Level: {accessLevel}
+                        </Typography>
+                    </Box>
+                </Container>
         
                 <nav className="site-nav">
                     <div className="nav-inner">

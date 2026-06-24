@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { Button, Collapse, Grid, Stack } from '@mui/material';
+import { Box, Button, Collapse, Grid, Stack } from '@mui/material';
 import { Icon } from '../../../NX/DesignSystem';
 import { useSupabaseAuth } from '../../../NX/Paywall';
 import { useDispatch } from '../../../NX/Uberedux';
@@ -119,7 +119,7 @@ const Home: React.FC = () => {
     return (
         <Wrapper>
             <Grid container spacing={2} sx={{ mb: 2 }}>
-                <Grid size={{ xs: 12 }}>   
+                <Grid size={{ xs: 12, md:6 }}>   
                     <AccountEditor
                         accountId={accountId}
                         avatarSource={avatarSource}
@@ -151,20 +151,13 @@ const Home: React.FC = () => {
                             }));
                         }}
                     />
-                </Grid>     
-                <Grid size={{ xs: 12 }} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <ClientList />
-                </Grid>  
-            </Grid>  
-
-            
-            
-            
-
-            <Stack direction="row" justifyContent="flex-end">
-                <Collapse in={isFormDirty} orientation="horizontal" unmountOnExit>
                     <Button
+                        fullWidth
+                        size="large"
                         startIcon={<Icon icon="save" />}
+                        sx={{
+                            display: !canSaveForm ? 'none' : 'flex'
+                        }}
                         color="primary"
                         variant="contained"
                         disabled={!canSaveForm}
@@ -172,10 +165,15 @@ const Home: React.FC = () => {
                             void handleFormSave();
                         }}
                     >
-                        Save
+                        Update account
                     </Button>
-                </Collapse>
-            </Stack>
+                </Grid>     
+                <Grid size={{ xs: 12, md: 6 }} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <ClientList />
+                </Grid>  
+            </Grid>  
+
+            
         </Wrapper>
     );
 };

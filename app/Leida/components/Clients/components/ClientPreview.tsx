@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { Button, Typography } from '@mui/material';
 import { Icon, navigateTo } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
-import { Wrapper } from '../../../../Leida';
+import { LivingRoutine, Wrapper } from '../../../../Leida';
 
 type ClientPreviewProps = {
     clientId?: string | null;
@@ -19,27 +19,40 @@ const ClientPreview: React.FC<ClientPreviewProps> = ({ clientId }) => {
     };
 
     return (
-        <Wrapper>
-            <Button
-                variant="outlined"
-                size="large"
-                startIcon={<Icon icon="left" />}
-                color="primary"
-                onClick={handleBack}
-                sx={{ mb: 2 }}
-            >
-                Back
-            </Button>
-            <Typography variant="h6" sx={{ mb: 1 }}>
-                Routine Preview
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-                Placeholder: routine preview experience will be added here.
-            </Typography>
-            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
-                Client ID: {clientId || 'Not provided'}
-            </Typography>
-        </Wrapper>
+        <>
+            <Wrapper>
+                <Button
+                    variant="outlined"
+                    size="large"
+                    startIcon={<Icon icon="left" />}
+                    color="primary"
+                    onClick={handleBack}
+                    sx={{ mb: 2 }}
+                >
+                    Back
+                </Button>
+                <Typography variant="h6" sx={{ mb: 1 }}>
+                    Routine Preview
+                </Typography>
+                <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
+                    Client ID: {clientId || 'Not provided'}
+                </Typography>
+            </Wrapper>
+
+            {clientId ? (
+                <LivingRoutine
+                    accessLevel={2}
+                    previewMode
+                    previewClientId={clientId}
+                />
+            ) : (
+                <Wrapper>
+                    <Typography variant="body2" color="text.secondary">
+                        Missing client id. Open preview from a client record.
+                    </Typography>
+                </Wrapper>
+            )}
+        </>
     );
 };
 

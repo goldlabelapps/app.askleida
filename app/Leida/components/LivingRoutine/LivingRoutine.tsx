@@ -20,6 +20,7 @@ import { useDispatch } from '../../../NX/Uberedux';
 import { supabase } from '../../../NX/lib/supabase';
 import { 
     initCurrentClient,
+    initLivingRoutine,
     RenderProducts,
     Wrapper,
     useLivingRoutine,
@@ -27,6 +28,8 @@ import {
 
 type T_LivingRoutine = {
     accessLevel: number;
+    previewClientId?: string | null;
+    previewMode?: boolean;
 };
 
 const placeholderProducts = [
@@ -46,7 +49,7 @@ const pickString = (value: unknown): string => {
     return typeof value === 'string' ? value.trim() : '';
 };
 
-const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
+const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel, previewClientId = null, previewMode = false }) => {
     const dispatch = useDispatch();
     const { user } = useSupabaseAuth();
     const routineState = useLivingRoutine();
@@ -78,6 +81,8 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
             .filter((item): item is { name: string; cadence: string } => Boolean(item))
         : [];
     const resolvedAuthClientId = pickString(authClientRecord?.client_id);
+    const resolvedPreviewClientId = pickString(previewClientId);
+    const isPreviewMode = Boolean(previewMode);
 
     const products = productsFromState.length > 0 ? productsFromState : placeholderProducts;
     const clientDisplayName = pickString(currentClientData.display_name) || 'Unknown client';
@@ -102,6 +107,7 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
     const isBusy = isSigningOut;
 
     const handleRequestSignout = () => {
+        if (isPreviewMode) return;
         if (isBusy) return;
         setConfirmSignoutOpen(true);
     };
@@ -125,7 +131,7 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
     React.useEffect(() => {
         const authUserId = pickString(user?.id);
 
-        if (accessLevel !== 2 || !authUserId) {
+        if (isPreviewMode || accessLevel !== 2 || !authUserId) {
             return;
         }
 
@@ -175,15 +181,33 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
             cancelled = true;
             controller.abort();
         };
-    }, [accessLevel, user?.id]);
+    }, [accessLevel, isPreviewMode, user?.id]);
 
     React.useEffect(() => {
-        if (!resolvedAuthClientId) {
+        if (!resolvedPreviewClientId) {
+            return;
+        }
+
+        dispatch(initCurrentClient(resolvedPreviewClientId, user?.email || ''));
+
+        if (!routineState?.initted && !routineState?.loading) {
+            dispatch(initLivingRoutine(resolvedPreviewClientId));
+        }
+    }, [
+        dispatch,
+        resolvedPreviewClientId,
+        routineState?.initted,
+        routineState?.loading,
+        user?.email,
+    ]);
+
+    React.useEffect(() => {
+        if (resolvedPreviewClientId || !resolvedAuthClientId) {
             return;
         }
 
         dispatch(initCurrentClient(resolvedAuthClientId, user?.email || ''));
-    }, [dispatch, resolvedAuthClientId, user?.email]);
+    }, [dispatch, resolvedAuthClientId, resolvedPreviewClientId, user?.email]);
 
     if (!hasLoadedClient || !hasLoadedPractitioner) {
         return (
@@ -226,15 +250,17 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
 
                         <Box sx={{ flexGrow: 1 }} />
                         <Typography variant="body2" sx={{ ml: 2 }}>
-                            {email || ''}
+                            {isPreviewMode ? `Previewing ${clientDisplayName}` : email || ''}
                         </Typography>
-                        <IconButton
-                            color="primary"
-                            onClick={handleRequestSignout}
-                            disabled={isBusy}
-                        >
-                            <Icon icon="signout" />
-                        </IconButton>
+                        {!isPreviewMode ? (
+                            <IconButton
+                                color="primary"
+                                onClick={handleRequestSignout}
+                                disabled={isBusy}
+                            >
+                                <Icon icon="signout" />
+                            </IconButton>
+                        ) : null}
                         
 
                     </div>
@@ -301,14 +327,16 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
 
                         
                     </CardContent>
-                    <ConfirmAction
-                        open={confirmSignoutOpen}
-                        icon="signout"
-                        title="Sign out?"
-                        body={`${clientDisplayName}, you are signed in as ${email}. Do you want to sign out now?`}
-                        handleConfirm={handleConfirmSignout}
-                        handleClose={handleCancelSignout}
-                    />
+                    {!isPreviewMode ? (
+                        <ConfirmAction
+                            open={confirmSignoutOpen}
+                            icon="signout"
+                            title="Sign out?"
+                            body={`${clientDisplayName}, you are signed in as ${email}. Do you want to sign out now?`}
+                            handleConfirm={handleConfirmSignout}
+                            handleClose={handleCancelSignout}
+                        />
+                    ) : null}
                 </Wrapper>
             </Box>
 

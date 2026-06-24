@@ -16,6 +16,7 @@ import {
     ListItemText,
     Stack,
     Paper,
+    Typography,
 } from '@mui/material';
 import { Icon, navigateTo, ConfirmAction } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
@@ -40,8 +41,7 @@ const getStringValue = (value: unknown): string | null => {
         return null;
     }
 
-    const trimmed = value.trim();
-    return trimmed ? trimmed : null;
+    return value || null;
 };
 
 const getBooleanValue = (value: unknown): boolean => {
@@ -337,12 +337,24 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
                 />
 
                 <CardContent>
-
+                    <Typography variant="overline">
+                        {email}
+                    </Typography>
                     <Editable
+                        label="Name"
                         variant="outlined"
                         value={displayName} 
                         placeholder="Display name" 
                         onChange={(value) => handleDataChange('display_name', value)} 
+                    />
+                    <Box sx={{ my: 2 }} />
+                    <Editable 
+                        label="Skin overview" 
+                        value={skinOverview} 
+                        multiline 
+                        minRows={3} 
+                        onChange={(value) => handleDataChange('skin_overview', value)}
+                        sx={{ '& textarea': { lineHeight: 1.6 } }}
                     />
                     <Box sx={{ my: 2 }} />
                     {/* <pre>{JSON.stringify(draftClient, null, 2)}</pre> */}
@@ -364,9 +376,9 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
                                  label="Email" value={email} placeholder="Add email" onChange={(value) => handleDataChange('email', value)} />
                             <Box sx={{ my: 2 }} />
                             <Editable 
-                            label="Current medication" value={medication} placeholder="Add current medication" multiline minRows={2} onChange={(value) => handleDataChange('current_medication', value)} />
+                            label="Current medication" value={medication} placeholder="Add current medication" multiline minRows={2} onChange={(value) => handleDataChange('current_medication', value)} sx={{ '& textarea': { lineHeight: 1.6 } }} />
                             <Box sx={{ my: 2 }} />
-                            <Editable label="Skin overview" value={skinOverview} placeholder="Add skin overview" multiline minRows={3} onChange={(value) => handleDataChange('skin_overview', value)} />
+                            <Editable label="Skin overview" value={skinOverview} placeholder="Add skin overview" multiline minRows={3} onChange={(value) => handleDataChange('skin_overview', value)} sx={{ '& textarea': { lineHeight: 1.6 } }} />
                            
                         </Grid>
                         <Grid size={{ xs: 12, sm: 6 }}>
@@ -395,7 +407,7 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
                             
                             <Box sx={{ my: 2 }} />
                             
-                            <Editable label="Personal notes" value={personalNotes} placeholder="Add personal notes" multiline minRows={3} onChange={(value) => handleDataChange('personal_notes', value)} />
+                            <Editable label="Personal notes" value={personalNotes} placeholder="Add personal notes" multiline minRows={3} onChange={(value) => handleDataChange('personal_notes', value)} sx={{ '& textarea': { lineHeight: 1.6 } }} />
                             
                         </Grid>
                     </Grid> */}

@@ -20,6 +20,7 @@ import { useDispatch } from '../../../NX/Uberedux';
 import { supabase } from '../../../NX/lib/supabase';
 import { 
     initCurrentClient,
+    RenderProducts,
     Wrapper,
     useLivingRoutine,
 } from '../../../Leida';
@@ -28,16 +29,9 @@ type T_LivingRoutine = {
     accessLevel: number;
 };
 
-const placeholderTips = [
-    'Take a 10 minute walk after your largest meal.',
-    // 'Aim for consistent sleep and wake times for 5 days this week.',
-    // 'Hydrate before caffeine in the morning.',
-];
-
 const placeholderProducts = [
-    { name: 'Protein Support (Placeholder)', cadence: '1 scoop each morning' },
-    // { name: 'Magnesium Blend (Placeholder)', cadence: '1 capsule with dinner' },
-    // { name: 'Omega-3 (Placeholder)', cadence: '2 softgels with lunch' },
+    { name: 'Medik8 Surface Radiance Cleanse 150ml', cadence: 'Acting as the second step in your double cleansing routine, the non-stripping face wash utilises a blend of l-mandelic, l-lactic and salicylic acids to provide a gentle exfoliation, helping to decongest the pores and reduce texture' },
+    { name: 'The Body Shop Vitamin C Glow Revealing Serum 30ml', cadence: 'Featuring four bestselling formulas, the Hair Gain Holiday Hair Kit refreshes, nourishes and revives dry, lacklustre lengths, while plumping fine strands with full-bodied moisture. ' },
 ];
 
 const toObject = (value: unknown): Record<string, unknown> => {
@@ -46,17 +40,6 @@ const toObject = (value: unknown): Record<string, unknown> => {
     }
 
     return value as Record<string, unknown>;
-};
-
-const toStringArray = (value: unknown): string[] => {
-    if (!Array.isArray(value)) {
-        return [];
-    }
-
-    return value
-        .filter((item): item is string => typeof item === 'string')
-        .map((item) => item.trim())
-        .filter((item) => item.length > 0);
 };
 
 const pickString = (value: unknown): string => {
@@ -95,20 +78,12 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
             })
             .filter((item): item is { name: string; cadence: string } => Boolean(item))
         : [];
-    const tipsFromState = toStringArray(routine.tips);
-    const overviewFromState = toStringArray(routine.overview);
     const resolvedAuthClientId = pickString(authClientRecord?.client_id);
 
-    const tips = tipsFromState.length > 0 ? tipsFromState : placeholderTips;
     const products = productsFromState.length > 0 ? productsFromState : placeholderProducts;
-    const overviewParagraphs = overviewFromState.length > 0
-        ? overviewFromState
-        : [
-            'Focus on simple, repeatable actions each day. Small consistent steps drive long-term progress.',
-            // 'Use this routine as your daily reference. If anything feels unclear, contact your practitioner for clarification.',
-        ];
     const clientDisplayName = pickString(currentClientData.display_name) || 'Unknown client';
     const clientEmail = pickString(currentClientData.email);
+    const skinOverview = pickString(currentClientData.skin_overview);
     const practitionerName =
         pickString(practitionerData.display_name) ||
         pickString(practitionerData.name) ||
@@ -158,8 +133,6 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
             return;
         }
 
-
-        
         let cancelled = false;
         const controller = new AbortController();
 
@@ -299,12 +272,7 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
                 <CardContent>
                     <Grid container spacing={2} sx={{ mb: 2 }}>
                         <Grid size={{ xs: 12, sm: 6 }}>
-                            <Box
-                                sx={{
-                                    mb: 2,
-                                    p: 2,
-                                }}
-                            >
+                            <Box>
                                 <Typography variant="h5" sx={{ mb: 1 }}>
                                     Hello {clientDisplayName}, 
                                 </Typography>
@@ -314,57 +282,17 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
                                 </Typography> */}
 
                                 <Typography variant="overline" sx={{ my: 3 }}>
-                                    Your Routine
+                                    Skin Overview
                                 </Typography>
 
-                                {overviewParagraphs.map((paragraph) => (
-                                    <Typography key={paragraph} variant="body1">
-                                        {paragraph}
-                                    </Typography>
-                                ))}
-
-                                <Typography variant="overline" sx={{ my: 3 }}>
-                                    Tips
+                                <Typography variant="body1">
+                                    {skinOverview || 'Routine and tips are coming soon.'}
                                 </Typography>
-                                {tips.map((tip, index) => (
-                                    <Box key={tip}>
-                                        <Typography variant="body2">
-                                            {`${index + 1}. ${tip}`}
-                                        </Typography>
-                                    </Box>
-                                ))}
 
                             </Box>
                         </Grid>
                         <Grid size={{ xs: 12, sm: 6 }}>
-                            <Box
-                                sx={{
-                                    mb: 3,
-                                    p: 2,
-                                    borderRadius: 2,
-                                    border: '1px solid',
-                                    borderColor: 'divider',
-                                    bgcolor: 'background.paper',
-                                }}
-                            >
-                                
-                                <Typography variant="h6" sx={{ my: 2 }}>
-                                    Products
-                                </Typography>
-
-                                {products.map((product) => (
-                                    <Box key={product.name}>
-                                        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-                                            {product.name}
-                                        </Typography>
-                                        <Typography variant="body2">
-                                            {product.cadence}
-                                        </Typography>
-                                    </Box>
-                                ))}
-
-
-                            </Box>
+                            <RenderProducts products={products} />
                         </Grid>
                     
 

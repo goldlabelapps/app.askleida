@@ -213,24 +213,12 @@ const Leida: React.FC<LeidaProps> = ({
         },
     ];
 
-    const accessLevelDebug = (
-        <Typography component="h1" variant="h3" sx={{ mb: 2 }}>
-            Access Level: {accessLevel}
-        </Typography>
-    );
-    
-
-    // if (!accessLevel) return null;
+    if (!accessLevel) return null;
 
     if (accessLevel === 0) {
         return (
             <DesignSystem theme={theme as T_Theme} config={config}>
                 <main>
-                    {/* <Container sx={{ mt: 3 }}>
-                        <Box sx={{ mx: 1.5 }}>
-                            {accessLevelDebug}
-                        </Box>
-                    </Container> */}
                     <LinearProgress />
                 </main>
             </DesignSystem>
@@ -244,9 +232,6 @@ const Leida: React.FC<LeidaProps> = ({
                 <main>
                     <Container sx={{ mt: 3 }}>
                         <Box sx={{ mx: 1.5 }}>
-                            <Typography variant="h6" sx={{ mb: 1 }}>
-                                Waiting for account state
-                            </Typography>
                             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                                 source: {accessLevelSource || 'none'} | account initted: {String(accountState?.initted)} | account loading: {String(accountState?.loading)} | user email: {user?.email || 'missing'}
                             </Typography>

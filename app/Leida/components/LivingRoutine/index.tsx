@@ -7,3 +7,4 @@ export { patchLivingRoutine } from './actions/patchLivingRoutine';
 export { deleteLivingRoutine } from './actions/deleteLivingRoutine';
 export { useLivingRoutine } from './hooks/useLivingRoutine';
 export { RenderProducts } from './components';
+export { default as exampleProducts } from './lib/exampleProducts.json';

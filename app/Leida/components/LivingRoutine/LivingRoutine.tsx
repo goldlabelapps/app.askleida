@@ -189,15 +189,6 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
         return (
             <Container sx={{ mt: 3 }}>
                 <Box sx={{ mx: 1.5 }}>
-                    <Typography component="h1" variant="h3" sx={{ mb: 2 }}>
-                        Access Level: {accessLevel}
-                    </Typography>
-                    <Typography variant="h6" sx={{ mb: 1 }}>
-                        Waiting for living routine data
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                        client loaded: {String(hasLoadedClient)} | practitioner loaded: {String(hasLoadedPractitioner)} | auth client id: {resolvedAuthClientId || 'missing'} | user id: {pickString(user?.id) || 'missing'}
-                    </Typography>
                     <LinearProgress />
                 </Box>
             </Container>
@@ -207,28 +198,10 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
     return (
         <>
 
-        
+            <Container maxWidth="md" sx={{ }}>
                 <nav className="site-nav">
                     <div className="nav-inner">
-
-
-                        <ButtonBase>
-                            {/*  */}
-                            <Avatar
-                                src={practitionerAvatar || undefined}
-                                alt={practitionerName}
-                                sx={{ width: 50, height: 50 }}
-                            >
-                                {practitionerName.slice(0, 1).toUpperCase()}
-                            </Avatar>
-                        </ButtonBase>
                         
-                        <Typography variant="h6" sx={{ml: 2}}>
-                            {practitionerClinic || ''}
-                        </Typography>
-
-                        <Box sx={{ flexGrow: 1 }} />
-    
                         <IconButton
                             color="primary"
                             disabled={isBusy}
@@ -237,97 +210,112 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
                                     window.open(practitionerWebsite, '_blank', 'noopener,noreferrer');
                                 }
                             }}>
-                            <Icon icon="link" />
-                        </IconButton>
+                            <Avatar
+                                src={practitionerAvatar || undefined}
+                                alt={practitionerName}
+                                sx={{ width: 50, height: 50 }}
+                            >
+                                {practitionerName.slice(0, 1).toUpperCase()}
+                            </Avatar>
 
-                        {/* <IconButton
+                            </IconButton>
+
+                        <Typography variant="h6" sx={{ ml: 2 }}>
+                            {practitionerClinic || ''}
+                        </Typography>
+
+                        <Box sx={{ flexGrow: 1 }} />
+                        <Typography variant="body2" sx={{ ml: 2 }}>
+                            {email || ''}
+                        </Typography>
+                        <IconButton
                             color="primary"
+                            onClick={handleRequestSignout}
                             disabled={isBusy}
-                            
                         >
-                            <Icon icon="email" />
-                        </IconButton> */}
+                            <Icon icon="signout" />
+                        </IconButton>
+                        
 
                     </div>
                 </nav>
+        </Container>
         
         <Container maxWidth="md" sx={{ mb: 2 }}>
             <Box sx={{height: 16}} />
-            <Wrapper>
-                {isBusy ? <LinearProgress sx={{ mb: 2 }} /> : null}
+            <Box sx={{px:4}}>
+                <Wrapper>
+                    {isBusy ? <LinearProgress sx={{ mb: 2 }} /> : null}
 
-                {isRoutineAlertVisible ? (
-                    <Alert severity="info" sx={{ }}
-                        action={<>
-                            <Button
-                                color="primary"
-                                variant="text"
-                                onClick={() => setIsRoutineAlertVisible(false)}
-                                startIcon={<Icon icon="tick" />}
-                                disabled={isBusy}
-                            >
-                                OK
-                            </Button>
-                        </>}
-                    >
-                        {routineState?.loading
-                            ? 'Loading your routine...'
-                            : 'Your latest routine details will appear here once your practitioner publishes updates.'}
-                    </Alert>
-                ) : null}
+                    {isRoutineAlertVisible ? (
+                        <Alert severity="info" sx={{ }}
+                            action={<>
+                                <Button
+                                    
+                                    color="primary"
+                                    variant="text"
+                                    onClick={() => setIsRoutineAlertVisible(false)}
+                                    startIcon={<Icon icon="tick" />}
+                                    disabled={isBusy}
+                                >
+                                    OK
+                                </Button>
+                            </>}
+                        >
+                            {routineState?.loading
+                                ? 'Loading your routine...'
+                                : 'Your latest routine details will appear here once your practitioner publishes updates.'}
+                        </Alert>
+                    ) : null}
 
-                <CardContent>
-                    <Grid container spacing={2} sx={{ mb: 2 }}>
-                        <Grid size={{ xs: 12, sm: 6 }}>
-                            <Box>
-                                <Typography variant="h5" sx={{ mb: 1 }}>
-                                    Hello {clientDisplayName}, 
+                    <CardContent>
+                        <Grid container sx={{ mb: 2 }}>
+                            <Grid size={{ xs: 12, sm: 6 }}>
+                                <Box>
+                                    <Typography variant="h5" sx={{ mb: 1 }}>
+                                        Hello {clientDisplayName}, 
+                                    </Typography>
+
+                                    <Typography variant="overline" sx={{ my: 3 }}>
+                                        Skin Overview
+                                    </Typography>
+
+                                    <Typography variant="body1">
+                                        {skinOverview || ''}
+                                    </Typography>
+
+                                </Box>
+                            </Grid>
+                            
+                            <Grid size={{ xs: 12, sm: 6 }}>
+                                <RenderProducts products={products} />
+                            </Grid>
+
+                            <Grid size={{ xs: 12 }}>
+                                <Typography variant="h6" sx={{ m: 2 }}>
+                                    Love from {practitionerName}
                                 </Typography>
-                                
-                                {/* <Typography variant="body2">
-                                    {clientEmail || 'Not provided'}
-                                </Typography> */}
+                            </Grid>
 
-                                <Typography variant="overline" sx={{ my: 3 }}>
-                                    Skin Overview
-                                </Typography>
-
-                                <Typography variant="body1">
-                                    {skinOverview || 'Routine and tips are coming soon.'}
-                                </Typography>
-
-                            </Box>
-                        </Grid>
-                        <Grid size={{ xs: 12, sm: 6 }}>
-                            <RenderProducts products={products} />
-                        </Grid>
-                    
-
-
-                        <Grid size={{ xs: 12 }}>
-                            <Typography variant="h6" sx={{ m: 2 }}>
-                                Love from {practitionerName}
-                            </Typography>
                         </Grid>
 
-                    </Grid>
-
-                    
-                </CardContent>
-                <ConfirmAction
-                    open={confirmSignoutOpen}
-                    icon="signout"
-                    title="Sign out?"
-                    body={`You are signed in as ${email}. Do you want to sign out now?`}
-                    handleConfirm={handleConfirmSignout}
-                    handleClose={handleCancelSignout}
-                />
-            </Wrapper>
+                        
+                    </CardContent>
+                    <ConfirmAction
+                        open={confirmSignoutOpen}
+                        icon="signout"
+                        title="Sign out?"
+                        body={`You are signed in as ${email}. Do you want to sign out now?`}
+                        handleConfirm={handleConfirmSignout}
+                        handleClose={handleCancelSignout}
+                    />
+                </Wrapper>
+            </Box>
 
             <Box sx={{ 
-                mt:2,
+                m: 2,
                 display: 'flex', justifyContent: 'center', width: '100%' }}>
-                <Box sx={{mt:0.5}}>
+                <Box sx={{mb:3}}>
                     <ButtonBase
                         component="a"
                         href="https://askleida.com"
@@ -345,18 +333,7 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
                         />
                     </ButtonBase>
                 </Box>
-                <Button
-                    color="primary"
-                    variant="text"
-                    onClick={handleRequestSignout}
-                    startIcon={<Icon icon="signout" />}
-                    disabled={isBusy}
-                >
-                </Button>
-
-                
             </Box>
-            
         </Container>
             
         </>

@@ -106,8 +106,7 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
             'Focus on simple, repeatable actions each day. Small consistent steps drive long-term progress.',
             // 'Use this routine as your daily reference. If anything feels unclear, contact your practitioner for clarification.',
         ];
-    const clientTitle = pickString(currentClient.title);
-    const clientDisplayName = pickString(currentClientData.display_name) || clientTitle || 'Unknown client';
+    const clientDisplayName = pickString(currentClientData.display_name) || 'Unknown client';
     const clientEmail = pickString(currentClientData.email);
     const practitionerName =
         pickString(practitionerData.display_name) ||

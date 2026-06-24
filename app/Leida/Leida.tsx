@@ -257,8 +257,7 @@ const Leida: React.FC<LeidaProps> = ({
     return (
         <DesignSystem theme={theme as T_Theme} config={config}>
             <Feedback />
-            <pre>{JSON.stringify(leidaState, null, 2)}</pre>
-            {/* accessLevel {accessLevel} */}
+            
             <Header onHome={handleHome} />
             <main style={{ paddingBottom: 88 }}>
                 <Container sx={{mt:3 }}>

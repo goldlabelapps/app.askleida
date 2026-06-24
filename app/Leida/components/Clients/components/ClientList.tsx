@@ -104,7 +104,7 @@ const ClientList = () => {
 		<Box>
 			<Box sx={{ mb: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 				<Typography variant="overline">
-					Clients
+					Your clients
 				</Typography>
 				<Fab
 					color="secondary"
@@ -128,7 +128,7 @@ const ClientList = () => {
 					sx={{ mb: 2 }}
 					action={<>
 						<Fab
-							color="secondary"
+							color="default"
 							onClick={handleClientNew}>
 							<Icon icon="add" />
 						</Fab>

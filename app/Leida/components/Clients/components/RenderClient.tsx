@@ -9,6 +9,9 @@ import {
     IconButton,
     Stack,
     Typography,
+    ListItemButton,
+    ListItemText,
+    ListItemIcon,
 } from '@mui/material';
 import { Icon, ConfirmAction } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
@@ -18,7 +21,7 @@ import {
 
 export type I_RenderClient = {
     client: T_Client;
-    mode?: 'list' | 'detail' | 'card';
+    mode?: 'list' | 'detail' | 'card' | 'list-v1';
 };
 
 const RenderClient: React.FC<I_RenderClient> = ({ 
@@ -28,15 +31,14 @@ const RenderClient: React.FC<I_RenderClient> = ({
     const dispatch = useDispatch();
     const [confirmOpen, setConfirmOpen] = React.useState(false);
     const [isDeleting, setIsDeleting] = React.useState(false);
-
     const clientData = client?.data && typeof client.data === 'object' && !Array.isArray(client.data)
         ? client.data as Record<string, unknown>
         : {};
+    const displayName = typeof clientData.display_name === 'string' ? clientData.display_name.trim() : '';
     const firstName = typeof clientData.first_name === 'string' ? clientData.first_name.trim() : '';
     const lastName = typeof clientData.last_name === 'string' ? clientData.last_name.trim() : '';
     const fullName = [firstName, lastName].filter(Boolean).join(' ');
-    const title = fullName || (typeof client.title === 'string' ? client.title.trim() : '') || 'Unnamed client';
-    const email = typeof clientData.email === 'string' ? clientData.email.trim() : '';
+    const title = displayName || fullName || 'Unnamed client';
     const clientId = typeof client.client_id === 'string'
         ? client.client_id.trim()
         : typeof client.id === 'string'
@@ -67,8 +69,23 @@ const RenderClient: React.FC<I_RenderClient> = ({
     };
 
     if (mode === 'list') {
+        return <>
+            <ListItemButton>
+                <ListItemText 
+                    primary={title} 
+                    secondary={clientId ? `ID: ${clientId}` : undefined}    
+                />
+                <ListItemIcon>
+                    <Icon icon="right" color="primary" />
+                </ListItemIcon>
+            </ListItemButton>
+            <pre>client: {JSON.stringify(client, null, 2)}</pre>
+        </>;
+    }
+
+    if (mode === 'list-v1') {
         return (<>
-            <>
+            <Card>
                 {isDeleting ? (
                     <Box
                         sx={{
@@ -93,18 +110,18 @@ const RenderClient: React.FC<I_RenderClient> = ({
                             ) : null} */}
                         </Box>
 
-                        <IconButton
+                        {/* <IconButton
                             color="primary"
                             aria-label={`Delete ${title}`}
                             onClick={handleOpenDeleteConfirm}
                             disabled={!clientId || isDeleting}
                         >
                             <Icon icon="delete" />
-                        </IconButton>
+                        </IconButton> */}
                     </Stack>
                 </CardContent>
                 {/* <pre>client: {JSON.stringify(client, null, 2)}</pre> */}
-            </>
+            </Card>
 
             <ConfirmAction
                 open={confirmOpen}

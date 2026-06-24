@@ -119,7 +119,7 @@ const Home: React.FC = () => {
     return (
         <Wrapper>
             <Grid container spacing={2} sx={{ mb: 2 }}>
-                <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>   
+                <Grid size={{ xs: 12 }}>   
                     <AccountEditor
                         accountId={accountId}
                         avatarSource={avatarSource}
@@ -152,7 +152,7 @@ const Home: React.FC = () => {
                         }}
                     />
                 </Grid>     
-                <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <Grid size={{ xs: 12 }} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <ClientList />
                 </Grid>  
             </Grid>  

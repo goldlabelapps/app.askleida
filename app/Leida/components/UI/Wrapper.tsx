@@ -18,7 +18,6 @@ const Wrapper: React.FC<T_Wrapper> = ({
             border: (theme: Theme) => `1px solid ${theme.palette.divider}`,
             borderRadius: 5,
             p: 2,
-            mx: 2,
             backgroundColor: (theme: Theme) => theme.palette.background.paper,
         }}>
             {children}

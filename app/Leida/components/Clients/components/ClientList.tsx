@@ -4,13 +4,15 @@ import type { T_Client } from '../../../types';
 import { useRouter } from 'next/navigation';
 import {
 	Alert,
+	Button,
 	AlertTitle,
 	Box,
 	LinearProgress,
 	Pagination,
-	Stack,
+	List,
 	Typography,
 	Fab,
+	Divider,
 } from '@mui/material';
 import { navigateTo, Icon } from '../../../../NX/DesignSystem';
 import { useDispatch } from '../../../../NX/Uberedux';
@@ -102,16 +104,32 @@ const ClientList = () => {
 
 	return (
 		<Box>
-			<Box sx={{ mb: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-				<Typography variant="overline">
-					Your clients
+			<Box sx={{ 
+				m: 2,
+				display: 'flex', 
+				alignItems: 'center', 
+				justifyContent: 'space-between',
+			}}>
+				
+				<Typography variant="overline" sx={{mt:1}}>
+					Clients
 				</Typography>
-				<Fab
-					color="secondary"
+				
+				<Button
+					variant="contained"
+					size="small"
+					onClick={handleClientNew}
+					endIcon={<Icon icon="add" />}
+				>
+					New
+				</Button>
+				{/* <Fab
+					size="small"
 					onClick={handleClientNew}>
 					<Icon icon="add" />
-				</Fab>
+				</Fab> */}
 			</Box>
+			<Divider sx={{ mb: 2 }} />
 			
 			{loading ? <LinearProgress sx={{ mb: 2 }} /> : null}
 
@@ -145,7 +163,7 @@ const ClientList = () => {
 				</Alert>
 			) : null}
 
-			<Stack spacing={1}>
+			<List dense disablePadding>
 				{paginatedList.map((client, index) => {
 					return <RenderClient
 						key={`client_${index}`}
@@ -153,7 +171,7 @@ const ClientList = () => {
 						client={client}
 					/>;
 				})}
-			</Stack>
+			</List>
 
 			{list.length > PAGE_SIZE ? (
 				<Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
@@ -161,7 +179,6 @@ const ClientList = () => {
 						count={pageCount}
 						page={page}
 						onChange={(_, nextPage) => setPage(nextPage)}
-						color="primary"
 					/>
 				</Box>
 			) : null}

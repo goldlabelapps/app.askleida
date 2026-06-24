@@ -72,8 +72,40 @@ export async function POST(req: Request) {
       (typeof dataObject.email === 'string' ? dataObject.email.trim().toLowerCase() || null : null),
   };
 
+  // If an email is provided, invite the auth user first so we can use their
+  // UID as the client_id, keeping the auth identity and client record in sync.
+  let authUserId: string | null = null;
+  let authInviteError: string | null = null;
+
+  const inviteEmail = normalizedData.email;
+  if (inviteEmail) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const { data: inviteData, error: inviteError } = await supabase.auth.admin.inviteUserByEmail(inviteEmail, {
+        redirectTo: makeInviteRedirectUrl(),
+        data: {
+          access_level: 2,
+        },
+      });
+
+      if (inviteError) {
+        authInviteError = inviteError.message;
+      } else if (inviteData?.user?.id) {
+        authUserId = inviteData.user.id;
+      }
+    } catch (e) {
+      authInviteError = e instanceof Error ? e.message : String(e);
+    }
+  }
+
+  // Use the auth UID as client_id when available so the two records share the
+  // same primary identifier. Fall back to any caller-supplied id or let the
+  // database generate one.
+  const resolvedClientId = authUserId ?? body.client_id ?? undefined;
+
   const payload: T_Client = {
-    ...(body.client_id ? { client_id: body.client_id } : {}),
+    ...(resolvedClientId ? { client_id: resolvedClientId } : {}),
     ...(body.practitioner_id ? { practitioner_id: body.practitioner_id } : {}),
     title: body.title,
     data: normalizedData,
@@ -87,37 +119,23 @@ export async function POST(req: Request) {
     return NextResponse.json(res, { status: 500 });
   }
 
-  // If an email was provided, send a Supabase invite email for password setup.
-  try {
-    const email = normalizedData.email;
-    if (email) {
-      const createdClientRow = Array.isArray(data) ? data[0] : null;
-      const clientIdForAuth = typeof createdClientRow?.client_id === 'string'
-        ? createdClientRow.client_id.trim()
-        : '';
-
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const { data: inviteData, error: inviteError } = await supabase.auth.admin.inviteUserByEmail(email, {
-        redirectTo: makeInviteRedirectUrl(),
-        data: {
+  // Now that we have the definitive client_id, patch it into the auth user's
+  // metadata so the client can resolve their own record after login.
+  if (authUserId) {
+    const finalClientId = (Array.isArray(data) && data[0]?.client_id) ? data[0].client_id : authUserId;
+    try {
+      await supabase.auth.admin.updateUserById(authUserId, {
+        user_metadata: {
           access_level: 2,
-          ...(clientIdForAuth ? { client_id: clientIdForAuth } : {}),
+          client_id: finalClientId,
         },
       });
-
-      if (inviteError) {
-        // ignore invite error but include info in response data
-        (data as any)._auth_error = inviteError.message;
-      } else if (inviteData) {
-        (data as any)._auth_invite = inviteData;
-      }
+    } catch {
+      // non-fatal — metadata patch failure shouldn't block the response
     }
-  } catch (e) {
-    // swallow errors from auth invite so client creation still succeeds
-    (data as any)._auth_exception = e instanceof Error ? e.message : String(e);
   }
 
-  const res = makeRes({ tenant, message: 'Client created', severity: 'success', data });
+  const resMeta = authInviteError ? { _auth_error: authInviteError } : undefined;
+  const res = makeRes({ tenant, message: 'Client created', severity: 'success', data, meta: resMeta });
   return NextResponse.json(res);
 }

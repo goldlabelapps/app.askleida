@@ -140,6 +140,7 @@ export default function AccountEditor({
 				<Grid
 					size={{
 						xs: 12,
+						md: 6,
 					}}
 					sx={{
 						display: 'flex',
@@ -162,8 +163,8 @@ export default function AccountEditor({
 				<Grid
 					size={{
 						xs: 12,
+						md: 6,
 					}}
-					sx={{ display: 'flex', flexDirection: 'column', gap: 2, order: { xs: 2, sm: 1 } }}
 				>
 					<Box sx={{ height: 16 }} />
 					<EditableField

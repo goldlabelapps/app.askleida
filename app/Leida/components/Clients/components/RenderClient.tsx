@@ -73,13 +73,13 @@ const RenderClient: React.FC<I_RenderClient> = ({
             <ListItemButton>
                 <ListItemText 
                     primary={title} 
-                    secondary={clientId ? `ID: ${clientId}` : undefined}    
+                    // secondary={clientId ? `${clientId}` : undefined}    
                 />
                 <ListItemIcon>
-                    <Icon icon="right" color="primary" />
+                    <Icon icon="right" />
                 </ListItemIcon>
             </ListItemButton>
-            <pre>client: {JSON.stringify(client, null, 2)}</pre>
+            {/* <pre>client: {JSON.stringify(client, null, 2)}</pre> */}
         </>;
     }
 

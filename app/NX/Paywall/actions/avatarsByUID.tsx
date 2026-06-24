@@ -5,7 +5,6 @@ import { setPaywall } from '../../Paywall';
 export const avatarsByUID = () =>
     async (dispatch: Dispatch, getState: () => any) => {
         try {
-            // console.log("avatarCRUD", action);
             const uid = getState()?.redux?.paywall?.uid ?? null;
             if (!uid) return;
 

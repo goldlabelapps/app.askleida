@@ -82,12 +82,6 @@ const Leida: React.FC<LeidaProps> = ({
     const [isConfirmOpen, setIsConfirmOpen] = React.useState(false);
 
     React.useEffect(() => {
-        if (user) {
-            console.log('[Leida] resolved access level:', accessLevel, accessLevelSource);
-        }
-    }, [accessLevel, accessLevelSource, user]);
-
-    React.useEffect(() => {
         if (!designSystem?.themeMode && defaultTheme) {
             dispatch(setDesignSystem("themeMode", defaultTheme));
             dispatch(setDesignSystem("themeSwitching", themeSwitching));
@@ -218,8 +212,6 @@ const Leida: React.FC<LeidaProps> = ({
     ];
 
     // if (!accessLevel) return null;
-
-    console.log('[Leida] accessLevel:', accessLevel);
 
     if (accessLevel === 0) {
         return (

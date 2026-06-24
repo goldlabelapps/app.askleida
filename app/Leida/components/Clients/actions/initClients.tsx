@@ -4,9 +4,6 @@ import { setFeedback } from '../../../../NX/DesignSystem';
 export const initClients = (practitionerId?: string): any =>
     async (dispatch: any) => {
         try {
-
-            // console.log('practitionerId', practitionerId);
-
             dispatch(setClients('loading', true));
             dispatch(setClients('error', null));
 
@@ -17,8 +14,6 @@ export const initClients = (practitionerId?: string): any =>
             const requestUrl = typeof window === 'undefined'
                 ? requestPath
                 : new URL(requestPath, window.location.origin).toString();
-
-            // console.log('CLIENTS FETCH URL', requestUrl);
 
             const response = await fetch(requestPath, {
                 method: 'GET',

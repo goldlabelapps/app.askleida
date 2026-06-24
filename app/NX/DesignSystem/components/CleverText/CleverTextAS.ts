@@ -8,7 +8,6 @@ export default class CleverTextAS {
     }
 
     init() {
-        // console.log('CleverText init');
         const el = this.mc?.current;
         if (el) {
             el.style.opacity = '0';
@@ -18,7 +17,6 @@ export default class CleverTextAS {
     }
 
     fadeIn() {
-        // console.log('CleverText fadeIn');
         const el = this.mc?.current;
         if (el) {
             gsap.to(el, {
@@ -30,7 +28,6 @@ export default class CleverTextAS {
     }
 
     destroy() {
-        // console.log('CleverTextAS destroyed');
     }
 
 }

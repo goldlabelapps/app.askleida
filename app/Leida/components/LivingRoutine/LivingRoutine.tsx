@@ -149,12 +149,6 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
     };
 
     React.useEffect(() => {
-        console.log('[LivingRoutine] auth uuid:', user?.id || 'unknown');
-        console.log('[LivingRoutine] client_id (resolved):', resolvedAuthClientId || 'unknown');
-        console.log('[LivingRoutine] accessLevel:', accessLevel);
-    }, [accessLevel, resolvedAuthClientId, user?.id]);
-
-    React.useEffect(() => {
         const authUserId = pickString(user?.id);
 
         if (accessLevel !== 2 || !authUserId) {

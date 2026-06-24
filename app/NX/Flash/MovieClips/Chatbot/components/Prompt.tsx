@@ -29,7 +29,6 @@ const Prompt = () => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('add message');
 
         const newChunk = {
             time: Date.now(),

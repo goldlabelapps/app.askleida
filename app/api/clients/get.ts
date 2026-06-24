@@ -10,15 +10,15 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
 // GET /api/clients - List all clients or fetch by id
 export async function GET(req: Request) {
   const url = req?.url ? new URL(req.url) : null;
-  const id = url?.searchParams.get('id');
+  const clientId = url?.searchParams.get('client_id') || url?.searchParams.get('id');
   const practitionerId = url?.searchParams.get('practitioner_id');
   const email = url?.searchParams.get('email')?.trim().toLowerCase();
-  if (id) {
+  if (clientId) {
     // Get single client by id
     const { data, error } = await supabase
       .from('clients')
       .select('*')
-      .eq('client_id', id)
+      .eq('client_id', clientId)
       .limit(1);
     if (error) {
       const res = makeRes({ tenant, message: error.message, severity: 'error' });

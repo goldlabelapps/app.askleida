@@ -12,13 +12,6 @@ export const initCurrentClient = (clientId?: string, email?: string): any =>
     async (dispatch: any) => {
         const normalizedClientId = typeof clientId === 'string' ? clientId.trim() : '';
         const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
-        console.log('[initCurrentClient] start', {
-            clientId,
-            normalizedClientId,
-            email,
-            normalizedEmail,
-        });
-
         if (!normalizedClientId && !normalizedEmail) {
             console.log('[initCurrentClient] abort: missing client id');
             dispatch(setLivingRoutine('currentClient', null));
@@ -27,7 +20,6 @@ export const initCurrentClient = (clientId?: string, email?: string): any =>
             dispatch(setLivingRoutine('practitionerError', 'Missing client id and email'));
             return;
         }
-
         dispatch(setLivingRoutine('practitionerLoading', true));
         dispatch(setLivingRoutine('practitionerError', null));
 
@@ -35,19 +27,12 @@ export const initCurrentClient = (clientId?: string, email?: string): any =>
             let currentClient: Record<string, unknown> = {};
 
             if (normalizedClientId) {
-                const clientUrl = `/api/clients?id=${encodeURIComponent(normalizedClientId)}`;
-                console.log('[initCurrentClient] fetching client by id', { clientUrl });
+                const clientUrl = `/api/clients?client_id=${encodeURIComponent(normalizedClientId)}`;
                 const clientRes = await fetch(clientUrl, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
                 });
                 const clientJson = await clientRes.json();
-                console.log('[initCurrentClient] client-by-id response', {
-                    ok: clientRes.ok,
-                    status: clientRes.status,
-                    body: clientJson,
-                });
-
                 if (clientRes.ok) {
                     currentClient = toObject(clientJson?.data);
                 } else if (normalizedEmail) {
@@ -59,7 +44,7 @@ export const initCurrentClient = (clientId?: string, email?: string): any =>
 
             if ((!currentClient.client_id || typeof currentClient.client_id !== 'string') && normalizedEmail) {
                 const clientByEmailUrl = `/api/clients?email=${encodeURIComponent(normalizedEmail)}`;
-                console.log('[initCurrentClient] fetching client by email', { clientByEmailUrl });
+                // console.log('[initCurrentClient] fetching client by email', { clientByEmailUrl });
                 const clientByEmailRes = await fetch(clientByEmailUrl, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
@@ -111,12 +96,9 @@ export const initCurrentClient = (clientId?: string, email?: string): any =>
             if (!practitionerRes.ok) {
                 throw new Error(practitionerJson?.meta?.message || 'Failed to fetch practitioner');
             }
-
-            console.log('[initCurrentClient] success: practitioner saved');
             dispatch(setLivingRoutine('practitioner', practitionerJson?.data ?? null));
         } catch (e: unknown) {
             const msg = e instanceof Error ? e.message : 'Failed to load practitioner';
-            console.log('[initCurrentClient] error', { message: msg, error: e });
             dispatch(setLivingRoutine('currentClient', null));
             dispatch(setLivingRoutine('practitioner', null));
             dispatch(setLivingRoutine('practitionerError', msg));

@@ -1,0 +1,172 @@
+{
+    "meta": {
+        "time": "Wed 24th Jun 2026, 12:56pm and 28s",
+        "tenant": "askleida",
+        "baseURL": "http://localhost:1888/api",
+        "severity": "success",
+        "message": "Fetched products"
+    },
+    "data": [
+        {
+            "product_id": "bb5367a2-b9e7-44b1-b0ca-1fe0df5c1562",
+            "practitioner_id": "e738a17e-6da9-4445-9365-d72bfda52b60",
+            "title": "The Body Shop Vitamin C Glow Revealing Serum 30ml",
+            "created": "2026-06-15T17:58:52.789187+00:00",
+            "updated": "2026-06-15T17:58:52.789187+00:00",
+            "data": {
+                "name": "The Body Shop Vitamin C Glow Revealing Serum 30ml",
+                "price": 30,
+                "source": "awin_lookfantastic",
+                "awinRow": {
+                    "id": "25584",
+                    "data": {
+                        "currency": "GBP",
+                        "language": "",
+                        "category_id": "114",
+                        "description": "Reveal a smooth, radiant-looking complexion with The Body Shop's Vitamin C Glow Serum. Formulated with the brand’s highest concentration of natural-origin vitamin C and bakuchiol, the lightweight, fast-absorbing serum helps to even the appearance of skin tone and texture.  Melting effortlessly into the skin, the formula helps visibly brighten, improve clarity and reduce the appearance of dark spots, all while providing up to 24 hours of hydration.",
+                        "merchant_id": "2082",
+                        "store_price": "",
+                        "aw_deep_link": "https://www.awin1.com/pclick.php?p=44897438175&a=2817868&m=2082",
+                        "aw_image_url": "https://images2.productserve.com/?w=200&h=200&bg=white&trim=5&t=letterbox&url=ssl%3As4.thcdn.com%2Fproductimg%2F1600%2F1600%2F17886928-1505339890739781.jpg&feedId=2082&k=cc1e3808ad0160a565f5d71e7ae2e9c5f870074e",
+                        "data_feed_id": "2082",
+                        "last_updated": "",
+                        "product_name": "The Body Shop Vitamin C Glow Revealing Serum 30ml",
+                        "search_price": "30.00",
+                        "aw_product_id": "44897438175",
+                        "category_name": "Skincare",
+                        "delivery_cost": "0.00",
+                        "display_price": "GBP30.00",
+                        "merchant_name": "LOOKFANTASTIC UK",
+                        "merchant_category": "Skin Care",
+                        "merchant_deep_link": "https://www.lookfantastic.com/p/the-body-shop-glow-serum-vitamin-c-30ml/17886928/?switchcurrency=GBP&shippingcountry=GB",
+                        "merchant_image_url": "https://s4.thcdn.com/productimg/1600/1600/17886928-1505339890739781.jpg",
+                        "merchant_product_id": "17886928"
+                    },
+                    "currency": "GBP",
+                    "created_at": "2026-06-15T16:52:36.779Z",
+                    "unique_key": "17886928",
+                    "description": "Reveal a smooth, radiant-looking complexion with The Body Shop's Vitamin C Glow Serum. Formulated with the brand’s highest concentration of natural-origin vitamin C and bakuchiol, the lightweight, fast-absorbing serum helps to even the appearance of skin tone and texture.  Melting effortlessly into the skin, the formula helps visibly brighten, improve clarity and reduce the appearance of dark spots, all while providing up to 24 hours of hydration.",
+                    "aw_deep_link": "https://www.awin1.com/pclick.php?p=44897438175&a=2817868&m=2082",
+                    "product_name": "The Body Shop Vitamin C Glow Revealing Serum 30ml",
+                    "search_price": "30",
+                    "aw_product_id": "44897438175",
+                    "category_name": "Skincare",
+                    "merchant_product_id": "17886928"
+                },
+                "category": "Skincare",
+                "description": "Reveal a smooth, radiant-looking complexion with The Body Shop's Vitamin C Glow Serum. Formulated with the brand’s highest concentration of natural-origin vitamin C and bakuchiol, the lightweight, fast-absorbing serum helps to even the appearance of skin tone and texture.  Melting effortlessly into the skin, the formula helps visibly brighten, improve clarity and reduce the appearance of dark spots, all while providing up to 24 hours of hydration."
+            }
+        },
+        {
+            "product_id": "199d0825-23ac-4f85-9d79-13fa4891b984",
+            "practitioner_id": "5f62bd98-ef38-48cd-b16a-ca1f17440870",
+            "title": "Hair Gain Holiday Hair Kit",
+            "created": "2026-06-15T17:45:30.719185+00:00",
+            "updated": "2026-06-15T17:45:30.719185+00:00",
+            "data": {
+                "name": "Hair Gain Holiday Hair Kit",
+                "price": 49.5,
+                "source": "awin_lookfantastic",
+                "awinRow": {
+                    "id": "25274",
+                    "data": {
+                        "currency": "GBP",
+                        "language": "",
+                        "category_id": "115",
+                        "description": "Featuring four bestselling formulas, the Hair Gain Holiday Hair Kit refreshes, nourishes and revives dry, lacklustre lengths, while plumping fine strands with full-bodied moisture. Packed and perfectly sized in a clear travel case for hand luggage, gym bags and weekends away.  Set Contents:  Hydrating Shampoo 70ml A silky cleanser that gently removes build-up and impurities from the scalp and strands while a vitamin-rich blend adds softness and shine.  Hydrating Conditioner 70ml Infused with marshmallow root, this creamy conditioner quenches ends to diminish the look of brittleness.  Peptide Puff Dry Shampoo 5g Developed with Hair Gain’s Scalp Matrix technology, caffeine and red clover extract, this tap-in dry shampoo refreshes with an undetectable finish.  Hair Mask 50ml Encouraging fuller-looking and softer-feeling strands, this rich mask features AnaGain™ to support optimal conditions for healthy hair growth.",
+                        "merchant_id": "2082",
+                        "store_price": "",
+                        "aw_deep_link": "https://www.awin1.com/pclick.php?p=44609073407&a=2817868&m=2082",
+                        "aw_image_url": "https://images2.productserve.com/?w=200&h=200&bg=white&trim=5&t=letterbox&url=ssl%3As4.thcdn.com%2Fproductimg%2F1600%2F1600%2F17780716-2295330857205742.jpg&feedId=2082&k=169169c3f66ba6b8416de3fead03926d2b6d69b9",
+                        "data_feed_id": "2082",
+                        "last_updated": "",
+                        "product_name": "Hair Gain Holiday Hair Kit",
+                        "search_price": "49.50",
+                        "aw_product_id": "44609073407",
+                        "category_name": "Haircare",
+                        "delivery_cost": "0.00",
+                        "display_price": "GBP49.50",
+                        "merchant_name": "LOOKFANTASTIC UK",
+                        "merchant_category": "Hair Care",
+                        "merchant_deep_link": "https://www.lookfantastic.com/p/hair-gain-holiday-hair-kit/17780716/?switchcurrency=GBP&shippingcountry=GB",
+                        "merchant_image_url": "https://s4.thcdn.com/productimg/1600/1600/17780716-2295330857205742.jpg",
+                        "merchant_product_id": "17780716"
+                    },
+                    "currency": "GBP",
+                    "created_at": "2026-06-15T16:52:36.195Z",
+                    "unique_key": "17780716",
+                    "description": "Featuring four bestselling formulas, the Hair Gain Holiday Hair Kit refreshes, nourishes and revives dry, lacklustre lengths, while plumping fine strands with full-bodied moisture. Packed and perfectly sized in a clear travel case for hand luggage, gym bags and weekends away.  Set Contents:  Hydrating Shampoo 70ml A silky cleanser that gently removes build-up and impurities from the scalp and strands while a vitamin-rich blend adds softness and shine.  Hydrating Conditioner 70ml Infused with marshmallow root, this creamy conditioner quenches ends to diminish the look of brittleness.  Peptide Puff Dry Shampoo 5g Developed with Hair Gain’s Scalp Matrix technology, caffeine and red clover extract, this tap-in dry shampoo refreshes with an undetectable finish.  Hair Mask 50ml Encouraging fuller-looking and softer-feeling strands, this rich mask features AnaGain™ to support optimal conditions for healthy hair growth.",
+                    "aw_deep_link": "https://www.awin1.com/pclick.php?p=44609073407&a=2817868&m=2082",
+                    "product_name": "Hair Gain Holiday Hair Kit",
+                    "search_price": "49.5",
+                    "aw_product_id": "44609073407",
+                    "category_name": "Haircare",
+                    "merchant_product_id": "17780716"
+                },
+                "category": "Haircare",
+                "description": "Featuring four bestselling formulas, the Hair Gain Holiday Hair Kit refreshes, nourishes and revives dry, lacklustre lengths, while plumping fine strands with full-bodied moisture. Packed and perfectly sized in a clear travel case for hand luggage, gym bags and weekends away.  Set Contents:  Hydrating Shampoo 70ml A silky cleanser that gently removes build-up and impurities from the scalp and strands while a vitamin-rich blend adds softness and shine.  Hydrating Conditioner 70ml Infused with marshmallow root, this creamy conditioner quenches ends to diminish the look of brittleness.  Peptide Puff Dry Shampoo 5g Developed with Hair Gain’s Scalp Matrix technology, caffeine and red clover extract, this tap-in dry shampoo refreshes with an undetectable finish.  Hair Mask 50ml Encouraging fuller-looking and softer-feeling strands, this rich mask features AnaGain™ to support optimal conditions for healthy hair growth."
+            }
+        },
+        {
+            "product_id": "2e72e37f-548a-4815-a01f-de5c1ed32489",
+            "practitioner_id": "784eea9e-8309-46c3-9d71-dcdc71f2cc00",
+            "title": "Gatineau Golden Glow Face & Body Duo 450ml - Light/Medium",
+            "created": "2026-06-15T17:44:51.463677+00:00",
+            "updated": "2026-06-15T17:44:51.463677+00:00",
+            "data": {
+                "name": "Gatineau Golden Glow Face & Body Duo 450ml - Light/Medium",
+                "price": 75,
+                "source": "awin_lookfantastic",
+                "awinRow": {
+                    "id": "25466",
+                    "data": {
+                        "currency": "GBP",
+                        "language": "",
+                        "category_id": "114",
+                        "description": "Double down on your glow with the Gatineau Golden Glow Face & Body Duo in Light/Medium. Whether building a subtle glow or maintaining sun-kissed skin all year round, the face and body duo offers natural-looking, streak-free results.  Build your body tan using the Gradual Tan, a fast-absorbing formula enriched with coconut oil, vitamin E and sugar cane-derived DHA. Then add radiance to your complexion with the Face Serum, powered by Marina BioRetinol, seven molecular weights of hyaluronic acid and the brand’s Tri-Golden Glow Complex (sunflower, turmeric and jojoba). Where skincare meets self-tan, the duo hydrates and visibly smooths skin while developing bronzed colour for seamless-looking results.  Set Contents:    Golden Glow Gradual Tan 400ml  Golden Glow Gradual Tan Face Serum Light Medium 50ml",
+                        "merchant_id": "2082",
+                        "store_price": "",
+                        "aw_deep_link": "https://www.awin1.com/pclick.php?p=44916917724&a=2817868&m=2082",
+                        "aw_image_url": "https://images2.productserve.com/?w=200&h=200&bg=white&trim=5&t=letterbox&url=ssl%3As4.thcdn.com%2Fproductimg%2F1600%2F1600%2F17813287-1585340180259638.jpg&feedId=2082&k=24ceba6d6bf27e5bcba702347731a12ac2c1194b",
+                        "data_feed_id": "2082",
+                        "last_updated": "",
+                        "product_name": "Gatineau Golden Glow Face & Body Duo 450ml - Light/Medium",
+                        "search_price": "75.00",
+                        "aw_product_id": "44916917724",
+                        "category_name": "Skincare",
+                        "delivery_cost": "0.00",
+                        "display_price": "GBP75.00",
+                        "merchant_name": "LOOKFANTASTIC UK",
+                        "merchant_category": "Body Care",
+                        "merchant_deep_link": "https://www.lookfantastic.com/p/gatineau-golden-glow-face-body-duo-450ml-light-medium/17813287/?switchcurrency=GBP&shippingcountry=GB",
+                        "merchant_image_url": "https://s4.thcdn.com/productimg/1600/1600/17813287-1585340180259638.jpg",
+                        "merchant_product_id": "17813287"
+                    },
+                    "currency": "GBP",
+                    "created_at": "2026-06-15T16:52:36.195Z",
+                    "unique_key": "17813287",
+                    "description": "Double down on your glow with the Gatineau Golden Glow Face & Body Duo in Light/Medium. Whether building a subtle glow or maintaining sun-kissed skin all year round, the face and body duo offers natural-looking, streak-free results.  Build your body tan using the Gradual Tan, a fast-absorbing formula enriched with coconut oil, vitamin E and sugar cane-derived DHA. Then add radiance to your complexion with the Face Serum, powered by Marina BioRetinol, seven molecular weights of hyaluronic acid and the brand’s Tri-Golden Glow Complex (sunflower, turmeric and jojoba). Where skincare meets self-tan, the duo hydrates and visibly smooths skin while developing bronzed colour for seamless-looking results.  Set Contents:    Golden Glow Gradual Tan 400ml  Golden Glow Gradual Tan Face Serum Light Medium 50ml",
+                    "aw_deep_link": "https://www.awin1.com/pclick.php?p=44916917724&a=2817868&m=2082",
+                    "product_name": "Gatineau Golden Glow Face & Body Duo 450ml - Light/Medium",
+                    "search_price": "75",
+                    "aw_product_id": "44916917724",
+                    "category_name": "Skincare",
+                    "merchant_product_id": "17813287"
+                },
+                "category": "Skincare",
+                "description": "Double down on your glow with the Gatineau Golden Glow Face & Body Duo in Light/Medium. Whether building a subtle glow or maintaining sun-kissed skin all year round, the face and body duo offers natural-looking, streak-free results.  Build your body tan using the Gradual Tan, a fast-absorbing formula enriched with coconut oil, vitamin E and sugar cane-derived DHA. Then add radiance to your complexion with the Face Serum, powered by Marina BioRetinol, seven molecular weights of hyaluronic acid and the brand’s Tri-Golden Glow Complex (sunflower, turmeric and jojoba). Where skincare meets self-tan, the duo hydrates and visibly smooths skin while developing bronzed colour for seamless-looking results.  Set Contents:    Golden Glow Gradual Tan 400ml  Golden Glow Gradual Tan Face Serum Light Medium 50ml"
+            }
+        },
+        {
+            "product_id": "db528eb2-76ad-4e88-9fb4-bf36e284905c",
+            "practitioner_id": "f3dde5b6-b389-4493-a480-a414689a6023",
+            "title": "Medik8 Surface Radiance Cleanse 150ml",
+            "created": "2026-06-12T11:25:21.752494+00:00",
+            "updated": "2026-06-12T11:25:21.752494+00:00",
+            "data": {
+                "image": "https://picsum.photos/1200/630.jpg",
+                "description": "Acting as the second step in your double cleansing routine, the non-stripping face wash utilises a blend of l-mandelic, l-lactic and salicylic acids to provide a gentle exfoliation, helping to decongest the pores and reduce texture. Glycerin, an ingredient recognised for its humectant properties, delivers a boost of moisture with every cleanse, while mangosteen defends against environmental aggressors that can contribute to premature skin ageing."
+            }
+        }
+    ]
+}

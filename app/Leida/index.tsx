@@ -21,6 +21,7 @@ export { patchLivingRoutine } from './components/LivingRoutine/actions/patchLivi
 export { deleteLivingRoutine } from './components/LivingRoutine/actions/deleteLivingRoutine';
 export { useLivingRoutine } from './components/LivingRoutine/hooks/useLivingRoutine';
 export { RenderProducts } from './components/LivingRoutine';
+export { exampleProducts } from './components/LivingRoutine';
 export { default as Wrapper } from './components/UI/Wrapper';
 export { default as Clients } from './components/Clients/Clients';
 export { default as ClientCard } from './components/Clients/components/ClientCard';

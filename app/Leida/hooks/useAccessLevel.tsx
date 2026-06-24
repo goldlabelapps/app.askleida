@@ -70,7 +70,6 @@ export function useAccessLevel({
 }: UseAccessLevelOptions): UseAccessLevelResult {
     const [clientRecordAccessLevel, setClientRecordAccessLevel] = React.useState<number | null>(null);
     const [clientLookupError, setClientLookupError] = React.useState<string | null>(null);
-    const [isFetchingClient, setIsFetchingClient] = React.useState(false);
 
     const accountObject = toObject(accountState);
     const accountData = accountObject.data;
@@ -80,9 +79,12 @@ export function useAccessLevel({
             ? [accountData]
             : [];
     const practitionerRow = toObject(accountRows[0]);
+    const isAccountLoading = Boolean(accountObject.loading);
+    const isAccountInitted = Boolean(accountObject.initted);
 
     const practitionerId = pickString(practitionerRow.practitioner_id);
     const practitionerAccessLevel = pickAccessLevelFromRecord(practitionerRow);
+    const resolvedPractitionerAccessLevel = practitionerAccessLevel ?? (practitionerId ? 3 : null);
 
     const userMetadata = toObject(user?.user_metadata);
     const appMetadata = toObject(user?.app_metadata);
@@ -101,7 +103,7 @@ export function useAccessLevel({
     const authenticatedClientId = metadataClientId || stateClientId;
 
     const hasResolvedAccessLevel =
-        practitionerAccessLevel !== null ||
+        resolvedPractitionerAccessLevel !== null ||
         metadataAccessLevel !== null ||
         currentClientAccessLevel !== null ||
         clientRecordAccessLevel !== null;
@@ -109,13 +111,18 @@ export function useAccessLevel({
     const shouldFetchClientRecord =
         Boolean(user) &&
         Boolean(authenticatedClientId) &&
-        practitionerAccessLevel === null &&
+        isAccountInitted &&
+        !isAccountLoading &&
+        resolvedPractitionerAccessLevel === null &&
         metadataAccessLevel === null &&
         currentClientAccessLevel === null;
+    const isFetchingClient =
+        shouldFetchClientRecord &&
+        clientRecordAccessLevel === null &&
+        clientLookupError === null;
 
     React.useEffect(() => {
         if (!shouldFetchClientRecord) {
-            setIsFetchingClient(false);
             return;
         }
 
@@ -124,7 +131,6 @@ export function useAccessLevel({
 
         const loadClientAccessLevel = async () => {
             try {
-                setIsFetchingClient(true);
                 setClientLookupError(null);
 
                 const response = await fetch(`/api/clients?client_id=${encodeURIComponent(authenticatedClientId)}`, {
@@ -161,10 +167,6 @@ export function useAccessLevel({
 
                 const message = e instanceof Error ? e.message : String(e);
                 setClientLookupError(message);
-            } finally {
-                if (!cancelled) {
-                    setIsFetchingClient(false);
-                }
             }
         };
 
@@ -176,9 +178,9 @@ export function useAccessLevel({
         };
     }, [authenticatedClientId, shouldFetchClientRecord]);
 
-    if (practitionerAccessLevel !== null) {
+    if (resolvedPractitionerAccessLevel !== null) {
         return {
-            accessLevel: practitionerAccessLevel,
+            accessLevel: resolvedPractitionerAccessLevel,
             source: 'practitioner',
             practitionerId,
             authenticatedClientId,
@@ -225,7 +227,7 @@ export function useAccessLevel({
         source: 'none',
         practitionerId,
         authenticatedClientId,
-        isResolving: isFetchingClient && !hasResolvedAccessLevel,
+        isResolving: (!isAccountInitted || isAccountLoading || isFetchingClient) && !hasResolvedAccessLevel,
         clientLookupError,
     };
 }

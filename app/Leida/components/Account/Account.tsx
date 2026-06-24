@@ -26,10 +26,12 @@ export default function Account() {
             ? String((data.data as Record<string, unknown>).avatar).trim()
             : undefined;
     React.useEffect(() => {
-        if (!account?.initted && !account?.loading && user?.email) {
-            dispatch(initAccount(user.email));
+        const practitionerLookupValue = user?.id || user?.email;
+
+        if (!account?.initted && !account?.loading && practitionerLookupValue) {
+            dispatch(initAccount(practitionerLookupValue));
         }
-    }, [dispatch, account?.initted, account?.loading, user?.email]);
+    }, [dispatch, account?.initted, account?.loading, user?.id, user?.email]);
 
     const handleOpenAccount = () => {
         dispatch(setAccount('accountOpen', true));

@@ -2,7 +2,7 @@ declare module "*.css";
 
 import type { ComponentProps, ReactNode } from 'react';
 import type { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import type { CheckboxProps } from '@mui/material';
+import type { CheckboxProps, SxProps, Theme } from '@mui/material';
 import type { Icon } from '../DesignSystem';
 import type { T_Config } from '../types';
 
@@ -25,6 +25,7 @@ export type EditableBaseProps = {
     editableType?: 'text' | 'date' | 'select' | 'chips';
     options?: readonly string[];
     checkboxProps?: Omit<CheckboxProps, 'checked' | 'onChange' | 'disabled' | 'required'>;
+    sx?: SxProps<Theme>;
 };
 
 export type EditableTextProps = EditableBaseProps & {

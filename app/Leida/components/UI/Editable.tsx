@@ -15,6 +15,7 @@ import {
 	Typography,
 } from '@mui/material';
 import type { CheckboxProps } from '@mui/material';
+import type { SxProps, Theme } from '@mui/material';
 import type {
 	EditableProps,
 	EditableTextProps,
@@ -52,8 +53,14 @@ export default function Editable({
 	checkboxProps,
 	startAdornment,
 	endAdornment,
+	sx,
 }: EditableProps) {
 	const [dateAnchorEl, setDateAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+	const mergedSx: SxProps<Theme> = Array.isArray(sx)
+		? [textFieldSx, ...sx]
+		: sx
+			? [textFieldSx, sx]
+			: textFieldSx;
 
 	const handleOpenDatePicker = (event: React.MouseEvent<HTMLButtonElement>) => {
 		setDateAnchorEl(event.currentTarget);
@@ -189,7 +196,7 @@ export default function Editable({
 					disabled={disabled}
 					required={required}
 					autoFocus={autoFocus}
-					sx={textFieldSx}
+					sx={mergedSx}
 					slotProps={{
 						select: {
 							sx: {
@@ -246,7 +253,7 @@ export default function Editable({
 				autoFocus={autoFocus}
 				multiline={multiline}
 				minRows={minRows}
-				sx={textFieldSx}
+				sx={mergedSx}
 				slotProps={{
 					input: {
 						startAdornment: startAdornment ? (

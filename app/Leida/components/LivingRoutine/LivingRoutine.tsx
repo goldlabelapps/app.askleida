@@ -32,11 +32,6 @@ type T_LivingRoutine = {
     previewMode?: boolean;
 };
 
-const placeholderProducts = [
-    { name: 'Medik8 Surface Radiance Cleanse 150ml', cadence: 'Acting as the second step in your double cleansing routine, the non-stripping face wash utilises a blend of l-mandelic, l-lactic and salicylic acids to provide a gentle exfoliation, helping to decongest the pores and reduce texture' },
-    { name: 'The Body Shop Vitamin C Glow Revealing Serum 30ml', cadence: 'Featuring four bestselling formulas, the Hair Gain Holiday Hair Kit refreshes, nourishes and revives dry, lacklustre lengths, while plumping fine strands with full-bodied moisture. ' },
-];
-
 const toObject = (value: unknown): Record<string, unknown> => {
     if (!value || typeof value !== 'object' || Array.isArray(value)) {
         return {};
@@ -70,21 +65,9 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel, previewClientId
     const [isSigningOut, setIsSigningOut] = React.useState(false);
     const [isRoutineAlertVisible, setIsRoutineAlertVisible] = React.useState(false);
     const routine = toObject(routineState?.routine);
-    const productsFromState = Array.isArray(routine.products)
-        ? routine.products
-            .map((item) => {
-                const record = toObject(item);
-                const name = typeof record.name === 'string' ? record.name.trim() : '';
-                const cadence = typeof record.cadence === 'string' ? record.cadence.trim() : '';
-                return name ? { name, cadence: cadence || 'Use as directed.' } : null;
-            })
-            .filter((item): item is { name: string; cadence: string } => Boolean(item))
-        : [];
     const resolvedAuthClientId = pickString(authClientRecord?.client_id);
     const resolvedPreviewClientId = pickString(previewClientId);
     const isPreviewMode = Boolean(previewMode);
-
-    const products = productsFromState.length > 0 ? productsFromState : placeholderProducts;
     const clientDisplayName = pickString(currentClientData.display_name) || 'Unknown client';
     const clientEmail = pickString(currentClientData.email);
     const skinOverview = pickString(currentClientData.skin_overview);
@@ -295,15 +278,15 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel, previewClientId
                     ) : null}
 
                     <CardContent>
-                        <Grid container sx={{ mb: 2 }}>
-                            <Grid size={{ xs: 12, sm: 6 }}>
+                        <Grid container spacing={2}>
+                            <Grid size={{ xs: 12, sm: 7 }}>
                                 <Box>
                                     <Typography variant="h5" sx={{ mb: 1 }}>
-                                        Hello {clientDisplayName}, 
+                                        Hi {clientDisplayName}, 
                                     </Typography>
 
                                     <Typography variant="overline" sx={{ my: 3 }}>
-                                        Skin Overview
+                                        Your notes
                                     </Typography>
 
                                     <Typography variant="body1">
@@ -313,19 +296,17 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel, previewClientId
                                 </Box>
                             </Grid>
                             
-                            <Grid size={{ xs: 12, sm: 6 }}>
-                                <RenderProducts products={products} />
+                            <Grid size={{ xs: 12, sm: 5 }}>
+                                <RenderProducts />
                             </Grid>
 
                             <Grid size={{ xs: 12 }}>
-                                <Typography variant="h6" sx={{ m: 2 }}>
-                                    Love from {practitionerName}
+                                <Typography variant="h6" sx={{ my: 2 }}>
+                                    Love from {practitionerName} @ {practitionerClinic}
                                 </Typography>
                             </Grid>
 
                         </Grid>
-
-                        
                     </CardContent>
                     {!isPreviewMode ? (
                         <ConfirmAction

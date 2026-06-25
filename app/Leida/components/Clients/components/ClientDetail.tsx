@@ -184,6 +184,15 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
         dispatch(navigateTo(router, '/clients/new'));
     };
 
+    const handleClientPreviewNavigate = () => {
+        if (!clientId) {
+            dispatch(navigateTo(router, '/client-preview'));
+            return;
+        }
+
+        dispatch(navigateTo(router, `/client-preview/${encodeURIComponent(clientId)}`));
+    };
+
     const handleOpenDeleteConfirm = () => {
         setConfirmOpen(true);
     };
@@ -329,7 +338,15 @@ const ClientDetail: React.FC<T_ClientDetailProps> = ({
                         </Button>
                     </>}
                     action={<>
-                        
+                        <Button
+                            variant="outlined"
+                            size="large"
+                            startIcon={<Icon icon="spy" />}
+                            color="primary"
+                            onClick={handleClientPreviewNavigate}
+                        >
+                            Routine Preview
+                        </Button>
                         <IconButton color="primary" onClick={handleOpenDeleteConfirm}>
                             <Icon icon="delete" />
                         </IconButton>

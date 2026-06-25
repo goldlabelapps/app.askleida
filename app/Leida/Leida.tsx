@@ -33,6 +33,7 @@ import {
     Tips,
     Header,
     Home,
+    ClientPreview,
     LivingRoutine,
     initAccount,
     useAccount,
@@ -109,10 +110,12 @@ const Leida: React.FC<LeidaProps> = ({
     const isClientsRoute = routeParts[0] === 'clients';
     const isClientRoutineRoute = routeParts[0] === 'client';
     const isAccountRoute = routeParts[0] === 'account';
+    const isClientPreviewRoute = routeParts[0] === 'client-preview';
     const isTipsRoute = routeParts[0] === 'tips';
     const isClientNewRoute = isClientsRoute && routeParts[1] === 'new';
     const isTipNewRoute = isTipsRoute && routeParts[1] === 'new';
     const clientId = isClientsRoute && routeParts[1] ? routeParts[1] : null;
+    const previewClientId = isClientPreviewRoute && routeParts[1] ? routeParts[1] : null;
     const tipId = isTipsRoute && routeParts[1] ? routeParts[1] : null;
     const clientList = Array.isArray(clientsState?.list) ? clientsState.list : [];
     const tipList = Array.isArray(tipsState?.list) ? tipsState.list : [];
@@ -288,6 +291,8 @@ const Leida: React.FC<LeidaProps> = ({
                         <TipDetail tip={selectedTip} />
                     ) : isAccountRoute ? (
                         <Account />
+                    ) : isClientPreviewRoute ? (
+                        <ClientPreview clientId={previewClientId} />
                     ) : isTipsRoute ? (
                         <Tips />
                     ) : (

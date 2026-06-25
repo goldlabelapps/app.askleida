@@ -20,6 +20,7 @@ import { useDispatch } from '../../../NX/Uberedux';
 import { supabase } from '../../../NX/lib/supabase';
 import { 
     initCurrentClient,
+    initLivingRoutine,
     RenderProducts,
     Wrapper,
     useLivingRoutine,
@@ -27,12 +28,9 @@ import {
 
 type T_LivingRoutine = {
     accessLevel: number;
+    previewClientId?: string | null;
+    previewMode?: boolean;
 };
-
-const placeholderProducts = [
-    { name: 'Medik8 Surface Radiance Cleanse 150ml', cadence: 'Acting as the second step in your double cleansing routine, the non-stripping face wash utilises a blend of l-mandelic, l-lactic and salicylic acids to provide a gentle exfoliation, helping to decongest the pores and reduce texture' },
-    { name: 'The Body Shop Vitamin C Glow Revealing Serum 30ml', cadence: 'Featuring four bestselling formulas, the Hair Gain Holiday Hair Kit refreshes, nourishes and revives dry, lacklustre lengths, while plumping fine strands with full-bodied moisture. ' },
-];
 
 const toObject = (value: unknown): Record<string, unknown> => {
     if (!value || typeof value !== 'object' || Array.isArray(value)) {
@@ -46,7 +44,7 @@ const pickString = (value: unknown): string => {
     return typeof value === 'string' ? value.trim() : '';
 };
 
-const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
+const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel, previewClientId = null, previewMode = false }) => {
     const dispatch = useDispatch();
     const { user } = useSupabaseAuth();
     const routineState = useLivingRoutine();
@@ -67,19 +65,9 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
     const [isSigningOut, setIsSigningOut] = React.useState(false);
     const [isRoutineAlertVisible, setIsRoutineAlertVisible] = React.useState(false);
     const routine = toObject(routineState?.routine);
-    const productsFromState = Array.isArray(routine.products)
-        ? routine.products
-            .map((item) => {
-                const record = toObject(item);
-                const name = typeof record.name === 'string' ? record.name.trim() : '';
-                const cadence = typeof record.cadence === 'string' ? record.cadence.trim() : '';
-                return name ? { name, cadence: cadence || 'Use as directed.' } : null;
-            })
-            .filter((item): item is { name: string; cadence: string } => Boolean(item))
-        : [];
     const resolvedAuthClientId = pickString(authClientRecord?.client_id);
-
-    const products = productsFromState.length > 0 ? productsFromState : placeholderProducts;
+    const resolvedPreviewClientId = pickString(previewClientId);
+    const isPreviewMode = Boolean(previewMode);
     const clientDisplayName = pickString(currentClientData.display_name) || 'Unknown client';
     const clientEmail = pickString(currentClientData.email);
     const skinOverview = pickString(currentClientData.skin_overview);
@@ -102,6 +90,7 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
     const isBusy = isSigningOut;
 
     const handleRequestSignout = () => {
+        if (isPreviewMode) return;
         if (isBusy) return;
         setConfirmSignoutOpen(true);
     };
@@ -125,7 +114,7 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
     React.useEffect(() => {
         const authUserId = pickString(user?.id);
 
-        if (accessLevel !== 2 || !authUserId) {
+        if (isPreviewMode || accessLevel !== 2 || !authUserId) {
             return;
         }
 
@@ -175,15 +164,33 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
             cancelled = true;
             controller.abort();
         };
-    }, [accessLevel, user?.id]);
+    }, [accessLevel, isPreviewMode, user?.id]);
 
     React.useEffect(() => {
-        if (!resolvedAuthClientId) {
+        if (!resolvedPreviewClientId) {
+            return;
+        }
+
+        dispatch(initCurrentClient(resolvedPreviewClientId, user?.email || ''));
+
+        if (!routineState?.initted && !routineState?.loading) {
+            dispatch(initLivingRoutine(resolvedPreviewClientId));
+        }
+    }, [
+        dispatch,
+        resolvedPreviewClientId,
+        routineState?.initted,
+        routineState?.loading,
+        user?.email,
+    ]);
+
+    React.useEffect(() => {
+        if (resolvedPreviewClientId || !resolvedAuthClientId) {
             return;
         }
 
         dispatch(initCurrentClient(resolvedAuthClientId, user?.email || ''));
-    }, [dispatch, resolvedAuthClientId, user?.email]);
+    }, [dispatch, resolvedAuthClientId, resolvedPreviewClientId, user?.email]);
 
     if (!hasLoadedClient || !hasLoadedPractitioner) {
         return (
@@ -226,15 +233,17 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
 
                         <Box sx={{ flexGrow: 1 }} />
                         <Typography variant="body2" sx={{ ml: 2 }}>
-                            {email || ''}
+                            {isPreviewMode ? `Previewing ${clientDisplayName}` : email || ''}
                         </Typography>
-                        <IconButton
-                            color="primary"
-                            onClick={handleRequestSignout}
-                            disabled={isBusy}
-                        >
-                            <Icon icon="signout" />
-                        </IconButton>
+                        {!isPreviewMode ? (
+                            <IconButton
+                                color="primary"
+                                onClick={handleRequestSignout}
+                                disabled={isBusy}
+                            >
+                                <Icon icon="signout" />
+                            </IconButton>
+                        ) : null}
                         
 
                     </div>
@@ -269,15 +278,15 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
                     ) : null}
 
                     <CardContent>
-                        <Grid container sx={{ mb: 2 }}>
-                            <Grid size={{ xs: 12, sm: 6 }}>
+                        <Grid container spacing={2}>
+                            <Grid size={{ xs: 12, sm: 7 }}>
                                 <Box>
                                     <Typography variant="h5" sx={{ mb: 1 }}>
-                                        Hello {clientDisplayName}, 
+                                        Hi {clientDisplayName}, 
                                     </Typography>
 
                                     <Typography variant="overline" sx={{ my: 3 }}>
-                                        Skin Overview
+                                        Your notes
                                     </Typography>
 
                                     <Typography variant="body1">
@@ -287,28 +296,28 @@ const LivingRoutine: React.FC<T_LivingRoutine> = ({ accessLevel }) => {
                                 </Box>
                             </Grid>
                             
-                            <Grid size={{ xs: 12, sm: 6 }}>
-                                <RenderProducts products={products} />
+                            <Grid size={{ xs: 12, sm: 5 }}>
+                                <RenderProducts />
                             </Grid>
 
                             <Grid size={{ xs: 12 }}>
-                                <Typography variant="h6" sx={{ m: 2 }}>
-                                    Love from {practitionerName}
+                                <Typography variant="h6" sx={{ my: 2 }}>
+                                    Love from {practitionerName} @ {practitionerClinic}
                                 </Typography>
                             </Grid>
 
                         </Grid>
-
-                        
                     </CardContent>
-                    <ConfirmAction
-                        open={confirmSignoutOpen}
-                        icon="signout"
-                        title="Sign out?"
-                        body={`You are signed in as ${email}. Do you want to sign out now?`}
-                        handleConfirm={handleConfirmSignout}
-                        handleClose={handleCancelSignout}
-                    />
+                    {!isPreviewMode ? (
+                        <ConfirmAction
+                            open={confirmSignoutOpen}
+                            icon="signout"
+                            title="Sign out?"
+                            body={`${clientDisplayName}, you are signed in as ${email}. Do you want to sign out now?`}
+                            handleConfirm={handleConfirmSignout}
+                            handleClose={handleCancelSignout}
+                        />
+                    ) : null}
                 </Wrapper>
             </Box>
 

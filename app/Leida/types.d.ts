@@ -99,3 +99,28 @@ export type T_AccountEditor = {
     onWebsiteChange?: (value: string) => void;
     readOnly?: boolean;
 };
+
+export type T_LivingRoutineProduct = {
+    name?: string;
+    cadence?: string;
+};
+
+export type T_RenderProducts = {
+    products: T_LivingRoutineProduct[];
+};
+
+export type T_ExampleProduct = {
+    title?: string;
+    data?: {
+        name?: string;
+        image?: string;
+        category?: string;
+        description?: string;
+        awinRow?: {
+            data?: {
+                merchant_deep_link?: string;
+                merchant_image_url?: string;
+            };
+        };
+    };
+};

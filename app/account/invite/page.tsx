@@ -6,7 +6,9 @@ import {
     Alert,
     Box,
     Button,
+    Checkbox,
     Container,
+    FormControlLabel,
     LinearProgress,
     Stack,
     Typography,
@@ -38,6 +40,7 @@ export default function InvitePage() {
     const [sessionReadyForApp, setSessionReadyForApp] = React.useState(false);
     const [password, setPassword] = React.useState('');
     const [confirmPassword, setConfirmPassword] = React.useState('');
+    const [showPasswords, setShowPasswords] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
     const [success, setSuccess] = React.useState<string | null>(null);
     const [saving, setSaving] = React.useState(false);
@@ -291,7 +294,7 @@ export default function InvitePage() {
                                 <Stack spacing={2}>
                                     <Editable
                                         label="New password"
-                                        type="password"
+                                        type={showPasswords ? 'text' : 'password'}
                                         value={password}
                                         variant="outlined"
                                         onChange={setPassword}
@@ -299,11 +302,21 @@ export default function InvitePage() {
                                     />
                                     <Editable
                                         label="Confirm password"
-                                        type="password"
+                                        type={showPasswords ? 'text' : 'password'}
                                         value={confirmPassword}
                                         variant="outlined"
                                         onChange={setConfirmPassword}
                                         autoComplete="new-password"
+                                    />
+
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={showPasswords}
+                                                onChange={(_, checked) => setShowPasswords(checked)}
+                                            />
+                                        }
+                                        label="Show passwords"
                                     />
 
                                     <Stack direction="row" spacing={2}>

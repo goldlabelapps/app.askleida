@@ -12,6 +12,7 @@ export { default as BulletEditor } from './components/UI/BulletEditor';
 
 export { default as Header } from './components/UI/Header';
 export { default as Home } from './components/Home/Home';
+export { default as ClientPreview } from './components/Clients/components/ClientPreview';
 export { default as LivingRoutine } from './components/LivingRoutine';
 export { setLivingRoutine } from './components/LivingRoutine/actions/setLivingRoutine';
 export { initLivingRoutine } from './components/LivingRoutine/actions/initLivingRoutine';
@@ -29,7 +30,7 @@ export { default as ClientDash } from './components/Clients/components/ClientDas
 export { default as ClientDetail } from './components/Clients/components/ClientDetail';
 export { default as ClientList } from './components/Clients/components/ClientList';
 export { default as ClientNew } from './components/Clients/components/ClientNew';
-export { default as RenderClient } from './components/Clients/components/RenderClient';
+export { default as ClientItem } from './components/Clients/components/ClientItem';
 export { setClients } from './components/Clients/actions/setClients';
 export { initClients } from './components/Clients/actions/initClients';
 export { createClient } from './components/Clients/actions/createClient';
